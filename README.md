@@ -1,4 +1,4 @@
-fiware-rsss
+fiware-rss
 ===========
 
-FIWARE RSSS
+FIWARE RSS
