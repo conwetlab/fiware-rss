@@ -1,0 +1,104 @@
+/**
+ * Revenue Settlement and Sharing System GE
+ * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
+ * Telefonica Investigacion y Desarrollo, S.A.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * 
+ */
+package es.tid.fiware.rss.exception.test;
+
+import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.RSSExceptionType;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
+
+/**
+ * 
+ */
+public class RSSExceptionTest {
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    /**
+     * Test method for {@link es.tid.fiware.rss.exception.RSSException#GRETAException(java.lang.String)}.
+     */
+    @Test
+    @Ignore
+    public void testGRETAExceptionString() {
+        String msg = "Mensaje de error";
+        // Call method
+        RSSException exception = new RSSException(msg);
+
+        Assert.assertTrue("Message not equal (" + exception.getMessage() + ")",
+            exception.getMessage().compareTo(msg) == 0);
+        Assert.assertEquals("ExceptionType not equal (" + exception.getExceptionType() + ")",
+            RSSExceptionType.GENERIC_EXCEPTION, exception.getExceptionType());
+    }
+
+    /**
+     * Test method for
+     * {@link es.tid.fiware.rss.exception.RSSException#GRETAException(es.tid.fiware.rss.exception.InterfaceExceptionType, java.lang.Object[])}
+     * .
+     */
+    @Test
+    @Ignore
+    public void testGRETAExceptionInterfaceExceptionTypeObjectArray() {
+        Object[] args = { "Mensaje de error" };
+        // Call method
+        RSSException exception = new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+
+        Assert.assertTrue(
+            "Message not equal (" + exception.getMessage() + ")",
+            exception.getMessage().compareTo(
+                String.format(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID.getFormatText(), args)) == 0);
+        Assert.assertEquals("ExceptionType not equal (" + exception.getExceptionType() + ")",
+            UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, exception.getExceptionType());
+    }
+
+    /**
+     * Test method for {@link es.tid.fiware.rss.exception.RSSException#getExceptionType()}.
+     */
+    @Test
+    @Ignore
+    public void testGetExceptionType() {
+        Object[] args = { "Mensaje de error" };
+        // Call method
+        RSSException exception = new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+
+        Assert.assertEquals("ExceptionType not equal (" + exception.getExceptionType() + ")",
+            UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, exception.getExceptionType());
+    }
+}

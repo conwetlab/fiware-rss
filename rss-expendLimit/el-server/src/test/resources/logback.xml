@@ -1,0 +1,65 @@
+<configuration scan="true" scanPeriod="30 minutes">
+
+    <jmxConfigurator />  
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+    <!-- To define where the log files will be saved -->
+    <property name="LOG_PATH" value="" />
+
+	<!--
+		Insert the current time formatted as "yyyyMMdd'T'HHmmss" under the key
+		"bySecond" into the logger context. This value will be available to
+		all subsequent configuration elements.
+	-->
+	<timestamp key="bySecond" datePattern="yyyyMMdd'_'HHmmss" />
+	
+	
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!--
+			encoders are assigned the type
+			ch.qos.logback.classic.encoder.PatternLayoutEncoder by default
+		-->
+		<encoder>
+			<pattern>%-5level %date{HH:mm:ss.SSS} %class{0}:%method - %msg%n - %ex{full}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>logs/expendLimit-${bySecond}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>expendLimit-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-5level %date{HH:mm:ss.SSS} %class{0}:%method - %msg%n - %ex{full}</pattern>
+		</layout>
+	</appender>
+
+	<logger name="org.springframework" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    <logger name="org.hibernate" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    <logger name="org.dbunit" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    <logger name=" ch.qos.logback" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>

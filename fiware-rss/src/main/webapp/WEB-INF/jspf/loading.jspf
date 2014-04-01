@@ -1,0 +1,13 @@
+ <!-- DIV PARA EL LOADING.... -->
+ <div id="loading" style="position:absolute;margin-top:10%;margin-left:45%;visibility:hidden;z-index:15;">
+     <table cellpadding="25" cellspacing="0" border="1" bordercolor="#3965B5" bgcolor="white" align="center">
+         <tr height="100%" align="center">
+             <td width="100%"  style="	font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 10px;color: #003A90;text-decoration: none;">
+                 <center>
+                     <img align="top" alt="Indicator" src="<%=request.getContextPath()%>/resources/img/indicator.gif" />
+                     Please Wait...
+                 </center>
+             </td>
+         </tr>
+     </table>
+ </div>

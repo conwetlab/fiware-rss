@@ -1,0 +1,66 @@
+<configuration scan="true" scanPeriod="30 minutes">
+
+    <jmxConfigurator />  
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+    <!-- To define where the log files will be saved -->
+    <property name="LOG_PATH" value="${catalina.base}/logs" />
+
+    <!--
+        Insert the current time formatted as "yyyyMMdd'T'HHmmss" under the key
+        "bySecond" into the logger context. This value will be available to
+        all subsequent configuration elements.
+    -->
+    <!-- timestamp key="bySecond" datePattern="yyyyMMdd'_'HHmmss" /-->
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd" />
+    
+    
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--
+            encoders are assigned the type
+            ch.qos.logback.classic.encoder.PatternLayoutEncoder by default
+        -->
+        <encoder>
+            <pattern>%-5level %date{yyyy-MM-dd HH:mm:ss.SSS} %class{0}:%method - %msg%n - %ex{full}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- appender name="FILE" class="ch.qos.logback.core.FileAppender"-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/expendLimit/expendLimit.log</file>       
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover month -->
+            <!-- fileNamePattern>main-%d{yyyy-MM-dd}.%i.txt</fileNamePattern-->
+            <!-- rollover day -->
+            <fileNamePattern>${LOG_PATH}/expendLimit/expendLimit-%d.%i.log</fileNamePattern>
+            <!-- Number of files to keep -->
+            <maxHistory>182</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 10MB -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%-5level %date{yyyy-MM-dd HH:mm:ss.SSS} %class{0}:%method - %msg%n - %ex{full}</pattern>
+        </layout>
+    </appender>
+
+    <logger name="org.springframework" level="${log.default.level}" />
+
+    <logger name="org.hibernate" level="${log.default.level}" />
+
+    <logger name="org.dbunit" level="${log.default.level}" />
+
+    <logger name="ch.qos.logback" level="${log.default.level}" />
+
+    <logger name="org.apache.cxf.interceptor" level="${log.cxf.level}" />
+
+    <logger name="es.tid.fiware" level="${log.application.level}" />
+
+    <root level="${log.default.level}">
+        <!-- appender-ref ref="STDOUT"/-->
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
