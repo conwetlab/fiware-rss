@@ -6,4 +6,4 @@ You find all the information on Revenue Settlement and Sharing System in its pag
 
 http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system
 
-Note that you don't need this repository code if you install it using form the packages at repository: https://forge.fi-ware.org/frs/?group_id=7  
+Note that you don't need this repository code if you install it using the packages at repository: https://forge.fi-ware.org/frs/?group_id=7  
