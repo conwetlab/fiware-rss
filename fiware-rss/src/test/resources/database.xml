@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- Load all properties in classpath -->
+    <context:property-placeholder location="classpath*:*.properties"/>
+    
+    <bean id="rssProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    	<constructor-arg value="rss.properties" name="filename" type="java.lang.String"></constructor-arg>
+    	<!-- <property name="filename" value="database.properties"></property>-->
+    </bean>
+    <bean id="databaseProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    	<constructor-arg value="database.properties" name="filename" type="java.lang.String"></constructor-arg>
+    </bean>
+    <bean id="oauthProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    	<constructor-arg value="oauth.properties" name="filename" type="java.lang.String"></constructor-arg>
+    </bean>
+
+    <!-- Database config -->
+        
+    <bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${database.driverClassName}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+		<!-- Pool settings -->
+	    <property name="initialSize" value="25"/>
+        <property name="maxActive" value="50"/>
+        <property name="maxIdle" value="25"/>
+        <property name="maxWait" value="5000"/>
+        <property name="poolPreparedStatements" value="true" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="300"/>
+        <property name="testOnBorrow" value="true" />
+       	<property name="validationQuery" value="SELECT 1 FROM DUAL"/>
+	</bean>
+    
+    
+    <!-- Transaction manager definition -->     
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    
+     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>  
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.connection.autocommit">false</prop>
+                <prop key="current_session_context_class">thread</prop>
+          		<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+                <!-- Tunning config x integration environment -->
+                <prop key="hibernate.jdbc.batch_size">16</prop>
+                <prop key="hibernate.default_batch_fetch_size">8</prop>
+                <prop key="hibernate.connection.release_mode">after_transaction</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.connection.autoReconnect">true</prop> 
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <prop key="hibernate.cache.use_query_cache">false</prop>
+                <!-- prop key="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</prop-->
+            </props> 
+        </property>
+        <property name="packagesToScan">
+            <list>
+               <value>es.tid.fiware.rss.model</value>
+            </list>
+        </property>
+    </bean>  
+  
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">  
+      <property name="sessionFactory" ref="sessionFactory" />
+   </bean> 
+    
+
+</beans>

@@ -1,0 +1,157 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>rss-expendLimit</artifactId>
+		<groupId>es.tid.fiware.rss</groupId>
+		<version>1.0.0</version>
+	</parent>
+
+	<groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+	<artifactId>el-server</artifactId>
+	<packaging>war</packaging>
+	<name>el-server</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<maven.build.timestamp.format>yyyyMMdd_HHmm</maven.build.timestamp.format>
+	        <buildNumber>${maven.build.timestamp}</buildNumber>
+        	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		    <pathToFilters>../..</pathToFilters>
+		    <httpclient.version>4.0.1</httpclient.version>		
+	</properties>
+
+	<dependencies>
+        <!-- Internal dependencies -->
+        <dependency>
+            <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+            <artifactId>el-dao</artifactId>
+            <version>${expenditureLimit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+            <artifactId>el-api</artifactId>
+            <version>${expenditureLimit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+            <artifactId>el-processing</artifactId>
+            <version>${expenditureLimit.version}</version>
+        </dependency>
+       <dependency>
+           <groupId>es.tid.fiware.rss.core</groupId>
+           <artifactId>rss-common</artifactId>
+           <version>${core.version}</version>
+       </dependency>   
+       <dependency>
+           <groupId>es.tid.fiware.rss.core</groupId>
+           <artifactId>rss-model</artifactId>
+           <version>${core.version}</version>
+       </dependency>   
+        <dependency>
+           <groupId>es.tid.fiware.rss.core</groupId>
+           <artifactId>rss-exception</artifactId>
+           <version>${core.version}</version>
+       </dependency>
+       <dependency>
+           <groupId>es.tid.fiware.rss.core</groupId>
+           <artifactId>rss-dao</artifactId>
+           <version>${core.version}</version>
+       </dependency> 
+       <dependency>
+           <groupId>es.tid.fiware.rss.core</groupId>
+           <artifactId>rss-oauth</artifactId>
+           <version>${core.version}</version>
+       </dependency> 
+        <!-- 3rd party dependencies -->
+        <dependency>
+            <groupId>org.codehaus.castor</groupId>
+            <artifactId>castor</artifactId>
+            <version>${castor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons-lang.version}</version>
+        </dependency>
+        <dependency>
+	       <groupId>org.apache.httpcomponents</groupId>
+	       <artifactId>httpclient</artifactId>
+           <version>${httpclient.version}</version>
+        </dependency>
+        <!-- Resolve conflict version -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+           <groupId>com.fasterxml.jackson.jaxrs</groupId>
+           <artifactId>jackson-jaxrs-json-provider</artifactId>
+           <version>${jackson.version}</version>
+        </dependency>
+        
+        
+        
+        <!-- TEST SCOPE -->
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${org.dbunit.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- RUNTIME SCOPE -->
+        <dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib-nodep.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+	</dependencies>	
+	<build>
+        <finalName>expenditureLimit</finalName>
+    </build>
+</project>

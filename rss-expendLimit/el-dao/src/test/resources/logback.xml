@@ -1,0 +1,113 @@
+<configuration scan="true" scanPeriod="30 minutes">
+
+    <jmxConfigurator />  
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+    <!-- To define where the log files will be saved -->
+    <property name="LOG_PATH" value="" />
+
+	<!--
+		Insert the current time formatted as "yyyyMMdd'T'HHmmss" under the key
+		"bySecond" into the logger context. This value will be available to
+		all subsequent configuration elements.
+	-->
+	<timestamp key="bySecond" datePattern="yyyyMMdd'_'HHmmss" />
+	
+	
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!--
+			encoders are assigned the type
+			ch.qos.logback.classic.encoder.PatternLayoutEncoder by default
+		-->
+		<encoder>
+			<pattern>%-5level %date{HH:mm:ss.SSS} %class{0}:%method - %msg%n - %ex{full}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>logs/main-${bySecond}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>main-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-5level %date{HH:mm:ss.SSS} %class{0}:%method - %msg%n - %ex{full}</pattern>
+		</layout>
+	</appender>
+
+<!-- 
+	<appender name="FILE_AXIS" class="ch.qos.logback.core.FileAppender">
+	</appender>
+-->
+
+	<!--
+		<rollingPolicy
+		class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+		<fileNamePattern>tests.%i.log.zip</fileNamePattern>
+		<minIndex>1</minIndex> <maxIndex>3</maxIndex> </rollingPolicy>
+		<triggeringPolicy
+		class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+		<maxFileSize>50MB</maxFileSize> </triggeringPolicy>
+	-->
+
+	<!--
+		GMAIL APPENDER <appender name="EMAIL"
+		class="ch.qos.logback.classic.net.SMTPAppender">
+		<SMTPHost>smtp.gmail.com</SMTPHost> <SMTPPort>465</SMTPPort>
+		<SSL>true</SSL> <Username>YOUR_USERNAME@gmail.com</Username>
+		<Password>YOUR_GMAIL_PASSWORD</Password> <To>EMAIL-DESTINATION</To>
+		<To>ANOTHER_EMAIL_DESTINATION</To> <To> ... </To>
+		<From>YOUR_USERNAME@gmail.com</From> <Subject>TESTING: %logger{20} -
+		%m</Subject> <layout class="ch.qos.logback.classic.PatternLayout">
+		<Pattern>%date %-5level %logger{35} - %message%n</Pattern> </layout>
+		</appender>
+	-->
+
+	<!--
+		DATABASE APPENDER <appender name="DB"
+		class="ch.qos.logback.classic.db.DBAppender"> <connectionSource
+		class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+		<driverClass>com.mysql.jdbc.Driver</driverClass>
+		<url>jdbc:mysql://host_name:3306/datebase_name</url>
+		<user>username</user> <password>password</password>
+		</connectionSource> </appender>
+	-->
+
+	<!--
+		C3P0 POOL <appender name="DB"
+		class="ch.qos.logback.classic.db.DBAppender"> <connectionSource
+		class="ch.qos.logback.core.db.DataSourceConnectionSource"> <dataSource
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<driverClass>com.mysql.jdbc.Driver</driverClass>
+		<jdbcUrl>jdbc:mysql://${serverName}:${port}/${dbName}</jdbcUrl>
+		<user>${user}</user> <password>${password}</password> </dataSource>
+		</connectionSource> </appender>
+	-->
+	<logger name="org.springframework" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    <logger name="org.hibernate" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    <logger name="org.dbunit" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    <logger name=" ch.qos.logback" level="WARN">
+        <appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+    </logger>
+    
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
