@@ -1,0 +1,61 @@
+# Eclipse IDE File
+.classpath
+.project
+.springBeans
+.settings
+target
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+.classpath
+.springBeans
+target
+classes
+.tmproj
+*.esproj
+.checkstyle
+nbproject
+nbactions.xml
+cobertura.ser
+
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*.iml
+*~
+*.sass-cache
+
+# Dreamweaver added files
+_notes
+dwsync.xml
+
+# Komodo
+*.komodoproject
+.komodotools
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+intermediate
+publish
+.idea
+
+# Folders for CXF-generated source from WSDLs
+org
+com
+
+# META-INF folders
+META-INF
+
+git.properties

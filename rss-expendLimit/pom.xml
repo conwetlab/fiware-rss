@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>rss</artifactId>
+    <groupId>es.tid.fiware</groupId>
+    <version>1.0.0</version>
+  </parent>
+  <groupId>es.tid.fiware.rss</groupId>
+  <artifactId>rss-expendLimit</artifactId>
+  <packaging>pom</packaging>
+  <name>rss-expendLimit</name>  
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <modules>
+	<module>el-model</module>
+	<module>el-dao</module>
+	<module>el-api</module>
+	<module>el-server</module>
+	<module>el-processing</module>
+  </modules>  
+  
+</project>

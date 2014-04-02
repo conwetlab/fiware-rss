@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "perTransaction"
+      FT_MAX_AMOUNT = "50"
+      TX_NOTIF_AMOUNTS = ""/>
+ 
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="2" 
+      TX_END_USER_ID = "noUserId"
+      TX_APPPROVIDER_ID ="-1" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "daily"
+      FT_MAX_AMOUNT = "100"
+      TX_NOTIF_AMOUNTS = "[80, 90, 95]"/>
+      
+   <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "noUserId"
+      TX_APPPROVIDER_ID ="-1" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "daily"
+      FT_MAX_AMOUNT = "100"
+      TX_NOTIF_AMOUNTS = "[25]"/>  
+
+      
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "noUserId"
+      TX_APPPROVIDER_ID ="-1" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "weekly"
+      FT_MAX_AMOUNT = "150"
+      TX_NOTIF_AMOUNTS = "[80, 90, 95]"/>  
+
+      
+    <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "noUserId"
+      TX_APPPROVIDER_ID ="-1" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "monthly"
+      FT_MAX_AMOUNT = "300"
+      TX_NOTIF_AMOUNTS = "[80, 90, 95]"/>
+
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "monthly"
+      FT_MAX_AMOUNT = "100"
+      TX_NOTIF_AMOUNTS = "[70, 85, 90]"/>
+
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="app123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "daily"
+      FT_MAX_AMOUNT = "50"
+      TX_NOTIF_AMOUNTS = "[40, 45]"/>
+
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "noUserId"
+      TX_APPPROVIDER_ID ="app123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "daily"
+      FT_MAX_AMOUNT = "80"
+      TX_NOTIF_AMOUNTS = "[90, 95]"/>
+
+  <DBE_EXPEND_LIMIT NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="-1" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "daily"
+      FT_MAX_AMOUNT = "70"
+      TX_NOTIF_AMOUNTS = "[75]"/>
+
+    <DBE_EXPEND_CONTROL NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="app123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "daily"
+      FT_EXPENSED_AMOUNT = "41"
+      DT_NEXT_PERIOD_START = "2012-07-01 00:00:00.0"
+      TX_NOTIFICATIONS = "[40]"/>
+
+  <DBE_EXPEND_CONTROL NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="app123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "weekly"
+      FT_EXPENSED_AMOUNT = "41"
+      DT_NEXT_PERIOD_START = "2012-07-01 00:00:00.0"
+      TX_NOTIFICATIONS = ""/>
+
+  <DBE_EXPEND_CONTROL NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userId01"
+      TX_APPPROVIDER_ID ="app123456" 
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      TX_EL_TYPE = "monthly"
+      FT_EXPENSED_AMOUNT = "41"
+      DT_NEXT_PERIOD_START = "2012-07-01 00:00:00.0"
+      TX_NOTIFICATIONS = ""/>
+      
+   <DBE_EXPEND_CONTROL NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userIdUpdate"
+      TX_APPPROVIDER_ID ="app123456" 
+      TX_EL_TYPE = "daily"
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      FT_EXPENSED_AMOUNT = "41"
+      DT_NEXT_PERIOD_START = "2013-05-01 00:00:00.0"
+      TX_NOTIFICATIONS = "[20]"/>
+      
+   <DBE_EXPEND_CONTROL NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userIdUpdate"
+      TX_APPPROVIDER_ID ="app123456" 
+      TX_EL_TYPE = "weekly"
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      FT_EXPENSED_AMOUNT = "41"
+      DT_NEXT_PERIOD_START = "2013-05-06 00:00:00.0"
+      TX_NOTIFICATIONS = "[40]"/>
+      
+   <DBE_EXPEND_CONTROL NU_SERVICE_ID ="1" 
+      TX_END_USER_ID = "userIdUpdate"
+      TX_APPPROVIDER_ID ="app123456" 
+      TX_EL_TYPE = "monthly"
+      NU_CURRENCY_ID = "1"
+      NU_OB_ID ="1"
+      NU_COUNTRY_ID ="1"
+      FT_EXPENSED_AMOUNT = "41"
+      DT_NEXT_PERIOD_START = "2013-05-01 00:00:00.0"
+      TX_NOTIFICATIONS = "[40]"/>
+  
+</dataset>
