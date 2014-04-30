@@ -1,0 +1,1473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>generic_report_from_dbe</name>
+    <description>report for Google partner operations</description>
+    <extended_description>A partir de las tablas DBE se genera una estructura de datos genérica que se vuelca en un fichero csv.
+
+Parametros utilizados:
+
+app_list	--&gt; lista de aplicaciones. Entrecomilladas y separadas por comas.	
+baseDir		--&gt; ruta raíz.
+obName		--&gt; nombre de la operadora.
+ob_id		--&gt; identificador de la operadora.
+partnerName	--&gt; nombre del partner.	
+period		--&gt; periodo de generación. Formato YYYYMM
+</extended_description>
+    <trans_version>1.0.</trans_version>
+    <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
+    <directory>&#47;</directory>
+    <parameters>
+        <parameter>
+            <name>appProviderId</name>
+            <default_value>TelecomItalia</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>appProviderName</name>
+            <default_value>Telecom Italia</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>baseDir</name>
+            <default_value>c:</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>countryId</name>
+            <default_value>1</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>countryName</name>
+            <default_value>ES</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>endPeriod</name>
+            <default_value>2013-12</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>obId</name>
+            <default_value>1</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>obName</name>
+            <default_value>4CaaSt</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>startPeriod</name>
+            <default_value>2013-01</default_value>
+            <description/>
+        </parameter>
+    </parameters>
+    <log>
+<trans-log-table><connection/>
+<schema/>
+<table/>
+<size_limit_lines/>
+<interval/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>TRANSNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>STATUS</id><enabled>Y</enabled><name>STATUS</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name><subject/></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name><subject/></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name><subject/></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name><subject/></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name><subject/></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name><subject/></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>STARTDATE</id><enabled>Y</enabled><name>STARTDATE</name></field><field><id>ENDDATE</id><enabled>Y</enabled><name>ENDDATE</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>DEPDATE</id><enabled>Y</enabled><name>DEPDATE</name></field><field><id>REPLAYDATE</id><enabled>Y</enabled><name>REPLAYDATE</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field></trans-log-table>
+<perf-log-table><connection/>
+<schema/>
+<table/>
+<interval/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>SEQ_NR</id><enabled>Y</enabled><name>SEQ_NR</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>TRANSNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>STEPNAME</id><enabled>Y</enabled><name>STEPNAME</name></field><field><id>STEP_COPY</id><enabled>Y</enabled><name>STEP_COPY</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>INPUT_BUFFER_ROWS</id><enabled>Y</enabled><name>INPUT_BUFFER_ROWS</name></field><field><id>OUTPUT_BUFFER_ROWS</id><enabled>Y</enabled><name>OUTPUT_BUFFER_ROWS</name></field></perf-log-table>
+<channel-log-table><connection/>
+<schema/>
+<table/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>LOGGING_OBJECT_TYPE</id><enabled>Y</enabled><name>LOGGING_OBJECT_TYPE</name></field><field><id>OBJECT_NAME</id><enabled>Y</enabled><name>OBJECT_NAME</name></field><field><id>OBJECT_COPY</id><enabled>Y</enabled><name>OBJECT_COPY</name></field><field><id>REPOSITORY_DIRECTORY</id><enabled>Y</enabled><name>REPOSITORY_DIRECTORY</name></field><field><id>FILENAME</id><enabled>Y</enabled><name>FILENAME</name></field><field><id>OBJECT_ID</id><enabled>Y</enabled><name>OBJECT_ID</name></field><field><id>OBJECT_REVISION</id><enabled>Y</enabled><name>OBJECT_REVISION</name></field><field><id>PARENT_CHANNEL_ID</id><enabled>Y</enabled><name>PARENT_CHANNEL_ID</name></field><field><id>ROOT_CHANNEL_ID</id><enabled>Y</enabled><name>ROOT_CHANNEL_ID</name></field></channel-log-table>
+<step-log-table><connection/>
+<schema/>
+<table/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>TRANSNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>STEPNAME</id><enabled>Y</enabled><name>STEPNAME</name></field><field><id>STEP_COPY</id><enabled>Y</enabled><name>STEP_COPY</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>LOG_FIELD</id><enabled>N</enabled><name>LOG_FIELD</name></field></step-log-table>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <step_performance_capturing_size_limit>100</step_performance_capturing_size_limit>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <created_user>-</created_user>
+  <created_date>2012&#47;10&#47;08 14:13:57.734</created_date>
+  <modified_user>-</modified_user>
+  <modified_date>2012&#47;10&#47;08 14:13:57.734</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>HOWTO EXECUTE ON COMMAND-LINE:
+pan -file:&quot;mis ejemplos&#47;google_reports&#47;generate_common_report_fields_with_params.ktr&quot; -param:period=&apos;201211&apos; -param:application_list=&apos;18297&apos;,&apos;3567&apos; &#47;norep</note>
+      <xloc>25</xloc>
+      <yloc>375</yloc>
+      <width>926</width>
+      <heigth>40</heigth>
+      <fontname>Arial</fontname>
+      <fontsize>10</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>165</backgroundcolorgreen>
+      <backgroundcolorblue>0</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>DBE_TRANSACTION                                                                           GENERIC FIELDS               
+======================================                                      =============================
+TX_END_USER_ID                                          							    MSISDN                
+TC_TRANSACTION_TYPE                               							    OPERATION                    
+TX_TRANSACTION_ID                                  								    TRANSACTION_ID               
+TC_TRANSACTION_STATUS                          								    TRANSACTION_STATUS           
+TX_REFERENCE_CODE                                   							    CORRELATION_ID               
+--------------------------                                        								    -----------------------      
+--------------------------                                           								----------------------      
+TX_PB_CORRELATION_ID                               							   EXTERNALTRANSACTION_ID       
+TS_REQUEST                                              								   RATING_TIMESTAMP             
+FT_INTERNAL_AMOUNT-FT_INTERNAL_TAX_AMOUNT   				   AMOUNT_BEF_TAXES             
+FT_INTERNAL_TAX_AMOUNT                     									  TAXES_AMOUNT                 
+FT_INTERNAL_AMOUNT                        									      TOTAL_AMOUNT                 
+NU_CURRENCY_ID (join con tabla de monedas)   						   CURRENCY                     
+----------------------------------------------                  								 -------------------------    
+NU_CLIENT_OB_ID + NU_CLIENT_COUNTRY_ID       				   OPERATOR_CODE                
+TX_PRODUCT_CLASS                            							       PRODUCT_CLASS    
+TX_REQUEST_AMOUNT_DESC                                                  DESCRIPTION_TEXT             
+------------------------                       												   -------------------------    
+TX_APPLICATION_ID                                                                 APP_ID                 
+TX_REFUND_REASON                                                              TX_REFUND_REASON                     
+                
+</note>
+      <xloc>25</xloc>
+      <yloc>450</yloc>
+      <width>714</width>
+      <heigth>354</heigth>
+      <fontname>Arial</fontname>
+      <fontsize>10</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>165</backgroundcolorgreen>
+      <backgroundcolorblue>0</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+    <notepad>
+      <note>     {BASE_DIR}      
+      └── {PARTNER_NAME}
+           └── {OB_NAME}
+                ├── conciliation_ob (RW) =&gt; manual
+                ├── conciliation_partner (RW) =&gt; manual
+                ├── generated (RO)  =&gt; automatic generic 
+                ├── edit (RW) =&gt; manual
+                ├── formated (RW)  =&gt; automatic partner_format 
+                └── sent (RW) =&gt; empty</note>
+      <xloc>775</xloc>
+      <yloc>450</yloc>
+      <width>366</width>
+      <heigth>145</heigth>
+      <fontname>Arial</fontname>
+      <fontsize>10</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>165</backgroundcolorgreen>
+      <backgroundcolorblue>0</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>bmps</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>JNDI</access>
+    <database>bmps</database>
+    <port>1521</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>dbe</name>
+    <server/>
+    <type>ORACLE</type>
+    <access>JNDI</access>
+    <database>dbe</database>
+    <port>-1</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>INT_BMPS20</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>BMRS</database>
+    <port>1521</port>
+    <username>bmps_v5_0_0</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb1ba362cdc3fd89</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>INT_RSS20</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>BMRS</database>
+    <port>1521</port>
+    <username>rss_v5_0_0</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb1ba362cdc3fd89</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>QA BMPS</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>JNDI</access>
+    <database>bmps</database>
+    <port>1521</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>QA RSS</name>
+    <server/>
+    <type>ORACLE</type>
+    <access>JNDI</access>
+    <database>rss</database>
+    <port>-1</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>QA_BMPS_2_1</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>BMRS</database>
+    <port>1521</port>
+    <username>bmps</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb1ba362cdc3fd89</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>QA_RSS_2_1</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>BMRS</database>
+    <port>1521</port>
+    <username>rss</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb1ba362cdc3fd89</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>rss</name>
+    <server>10.95.26.99</server>
+    <type>ORACLE</type>
+    <access>JNDI</access>
+    <database>rss</database>
+    <port>1521</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>settlement</name>
+    <server/>
+    <type>MYSQL</type>
+    <access>JNDI</access>
+    <database>settlement</database>
+    <port>1521</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.zeroDateTimeBehavior</code><attribute>convertToNull</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Dynamic SQL row</from><to>substring msisdn</to><enabled>Y</enabled> </hop>  <hop> <from>Formula</from><to>rename fields for generic report</to><enabled>Y</enabled> </hop>  <hop> <from>Get input fields into vars</from><to>Set transformation constants</to><enabled>Y</enabled> </hop>  <hop> <from>Mapper Transaction Status</from><to>Formula</to><enabled>Y</enabled> </hop>  <hop> <from>Mapper Transaction Type</from><to>Switch &#47; Case status</to><enabled>Y</enabled> </hop>  <hop> <from>Set transformation constants</from><to>generate dinamic query</to><enabled>Y</enabled> </hop>  <hop> <from>Switch &#47; Case status</from><to>Mapper Transaction Status</to><enabled>Y</enabled> </hop>  <hop> <from>Switch &#47; Case status</from><to>line filtered: check status</to><enabled>Y</enabled> </hop>  <hop> <from>generate dinamic query</from><to>Dynamic SQL row</to><enabled>Y</enabled> </hop>  <hop> <from>rename fields for generic report</from><to>generate generic report</to><enabled>Y</enabled> </hop>  <hop> <from>substring msisdn</from><to>Mapper Transaction Type</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Dynamic SQL row</name>
+    <type>DynamicSQLRow</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>settlement</connection>
+    <rowlimit>9999999</rowlimit>
+    <sql>SELECT dt.tx_end_user_id AS tx_end_user_id,
+       dt.tc_transaction_type AS tc_transaction_type,
+       dt.tx_transaction_id AS tx_transaction_id,
+       dt.tc_transaction_status AS tc_transaction_status,
+       dt.tx_reference_code AS tx_reference_code,
+       dt.tx_org_transaction_id AS tx_org_transaction_id,
+       dt.ts_request AS ts_request, dt.ft_request_amount AS amount_bef_taxes,
+       dt.ft_request_tax_amount AS ft_total_tax_amount,
+       dt.ft_request_total_amount AS ft_total_amount,
+       bc.tx_iso4217_code AS tx_iso4217_code,
+       dt.tx_product_class AS product_class,
+       boc.tx_mnc_itu_t212 AS tx_mnc_itu_t212,
+       dt.tx_pb_correlation_id AS pb_correlation_id,
+       dt.tx_request_amount_desc AS tx_request_amount_desc,
+       dt.tx_application_id, dt.tx_refund_reason AS tx_refund_reason
+  FROM dbe_transaction dt, bm_ob_country boc, bm_currency bc</sql>
+    <outer_join>N</outer_join>
+    <replace_vars>N</replace_vars>
+    <sql_fieldname>finalQuery</sql_fieldname>
+    <query_only_on_change>N</query_only_on_change>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>425</xloc>
+      <yloc>125</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Formula</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <formula><field_name>startPeriod</field_name>
+<formula_string>SUBSTITUTE([startPeriod];&quot;&#47;&quot;;&quot;-&quot;)</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>startPeriod</replace_field>
+</formula>
+       <formula><field_name>endPeriod</field_name>
+<formula_string>SUBSTITUTE([endPeriod];&quot;&#47;&quot;;&quot;-&quot;)</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>endPeriod</replace_field>
+</formula>
+       <formula><field_name>fileName</field_name>
+<formula_string>[baseDir]&amp;&quot;\&quot;&amp;[appProviderName]&amp;&quot;\&quot;&amp;[obName]&amp;&quot;_&quot;&amp;[countryName]&amp;&quot;\generated\generic_report_&quot;&amp;[appProviderName]&amp;&quot;_&quot;&amp;[obName]&amp;&quot;_&quot;&amp;[countryName]&amp;&quot;_&quot;&amp;[startPeriod]&amp;&quot;_&quot;&amp;[endPeriod]</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field/>
+</formula>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>825</xloc>
+      <yloc>150</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get input fields into vars</name>
+    <type>GetVariable</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>obId</name>
+        <variable>${obId}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>obName</name>
+        <variable>${obName}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>countryId</name>
+        <variable>${countryId}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>countryName</name>
+        <variable>${countryName}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>startPeriod</name>
+        <variable>${startPeriod}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>endPeriod</name>
+        <variable>${endPeriod}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>appProviderId</name>
+        <variable>${appProviderId}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>appProviderName</name>
+        <variable>${appProviderName}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+      <field>
+        <name>baseDir</name>
+        <variable>${baseDir}</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>25</xloc>
+      <yloc>25</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Mapper Transaction Status</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>TC_TRANSACTION_STATUS</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value>S</source_value>
+        <target_value>Started in Progress</target_value>
+      </field>
+      <field>
+        <source_value>P</source_value>
+        <target_value>Authorization in Progress</target_value>
+      </field>
+      <field>
+        <source_value>A</source_value>
+        <target_value>Accepted</target_value>
+      </field>
+      <field>
+        <source_value>C</source_value>
+        <target_value>Cancelled</target_value>
+      </field>
+      <field>
+        <source_value>T</source_value>
+        <target_value>Settled</target_value>
+      </field>
+      <field>
+        <source_value>E</source_value>
+        <target_value>Error Retry</target_value>
+      </field>
+      <field>
+        <source_value>U</source_value>
+        <target_value>Uncertain</target_value>
+      </field>
+      <field>
+        <source_value>d</source_value>
+        <target_value>Capture In Progress</target_value>
+      </field>
+      <field>
+        <source_value>m</source_value>
+        <target_value>Compensation In Progress</target_value>
+      </field>
+      <field>
+        <source_value>M</source_value>
+        <target_value>Compensated</target_value>
+      </field>
+      <field>
+        <source_value>p</source_value>
+        <target_value>Cancel In Progress</target_value>
+      </field>
+      <field>
+        <source_value>r</source_value>
+        <target_value>Refund In Progress</target_value>
+      </field>
+      <field>
+        <source_value>F</source_value>
+        <target_value>Failed</target_value>
+      </field>
+      <field>
+        <source_value>D</source_value>
+        <target_value>Captured</target_value>
+      </field>
+      <field>
+        <source_value>R</source_value>
+        <target_value>Refunded</target_value>
+      </field>
+      <field>
+        <source_value>I</source_value>
+        <target_value>Denied</target_value>
+      </field>
+      <field>
+        <source_value>O</source_value>
+        <target_value>Refused</target_value>
+      </field>
+      <field>
+        <source_value>N</source_value>
+        <target_value>None</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>825</xloc>
+      <yloc>50</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Mapper Transaction Type</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>TC_TRANSACTION_TYPE</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value>C</source_value>
+        <target_value>Charge</target_value>
+      </field>
+      <field>
+        <source_value>R</source_value>
+        <target_value>Refund</target_value>
+      </field>
+      <field>
+        <source_value>S</source_value>
+        <target_value>Preserv</target_value>
+      </field>
+      <field>
+        <source_value>P</source_value>
+        <target_value>Capture</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>575</xloc>
+      <yloc>125</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Set transformation constants</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>condAppProviderIdOld</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif> AND dt.tx_application_id IN (SELECT tx_application_id FROM dbe_appprovider_application WHERE tx_appprovider_id = &apos;#COND_VALUE_1#&apos;)</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>condAppProviderId</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif> AND dt.tx_app_provider = &apos;#COND_VALUE_1#&apos;</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>condPeriod</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif> AND DATE_FORMAT(dt.ts_request, &apos;%Y-%m&apos;) &gt;= &apos;#COND_VALUE_2#&apos;  AND DATE_FORMAT(dt.ts_request, &apos;%Y-%m&apos;) &lt;= &apos;#COND_VALUE_4#&apos;</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>condOb</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif> AND dt.nu_client_ob_id =#COND_VALUE_3# </nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>orderBy</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif> ORDER BY ts_request ASC</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>query</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>select dt.tx_end_user_id as tx_end_user_id, dt.tc_transaction_type as tc_transaction_type, dt.tx_transaction_id as tx_transaction_id, dt.tc_transaction_status as tc_transaction_status, dt.tx_reference_code as tx_reference_code, dt.tx_org_transaction_id as tx_org_transaction_id, dt.ts_request as ts_request, dt.ft_request_amount as amount_bef_taxes, dt.ft_request_tax_amount as ft_total_tax_amount, dt.ft_request_total_amount as ft_total_amount, bc.tx_iso4217_code as tx_iso4217_code, dt.tx_product_class as product_class, boc.tx_mnc_itu_t212 as tx_mnc_itu_t212, dt.tx_pb_correlation_id as pb_correlation_id, dt.tx_request_amount_desc as tx_request_amount_desc, dt.tx_application_id, dt.tx_refund_reason as tx_refund_reason from dbe_transaction dt, bm_ob_country boc, bm_currency bc where dt.nu_currency_id = bc.nu_currency_id and dt.nu_client_country_id = boc.nu_country_id and dt.nu_client_ob_id = boc.nu_ob_id</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>condCountry</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif> AND dt.nu_client_country_id =#COND_VALUE_5# </nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>200</xloc>
+      <yloc>25</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Switch &#47; Case status</name>
+    <type>SwitchCase</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<fieldname>TC_TRANSACTION_STATUS</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>String</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step>line filtered: check status</default_target_step>
+<cases><case><value>T</value>
+<target_step>Mapper Transaction Status</target_step>
+</case><case><value>M</value>
+<target_step>Mapper Transaction Status</target_step>
+</case><case><value>D</value>
+<target_step>Mapper Transaction Status</target_step>
+</case><case><value>R</value>
+<target_step>Mapper Transaction Status</target_step>
+</case><case><value>C</value>
+<target_step>Mapper Transaction Status</target_step>
+</case></cases>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>725</xloc>
+      <yloc>125</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>generate dinamic query</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <formula><field_name>finalQuery</field_name>
+<formula_string>REPLACE ([condPeriod];FIND(&quot;#COND_VALUE_2#&quot;;[condPeriod]);LEN(&quot;#COND_VALUE_2#&quot;);[startPeriod])</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>condPeriod</replace_field>
+</formula>
+       <formula><field_name>finalQuery</field_name>
+<formula_string>REPLACE ([condPeriod];FIND(&quot;#COND_VALUE_4#&quot;;[condPeriod]);LEN(&quot;#COND_VALUE_4#&quot;);[endPeriod])</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>condPeriod</replace_field>
+</formula>
+       <formula><field_name>finalQuery</field_name>
+<formula_string>REPLACE ([condAppProviderId];FIND(&quot;#COND_VALUE_1#&quot;;[condAppProviderId]);LEN(&quot;#COND_VALUE_1#&quot;);[appProviderId])</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>condAppProviderId</replace_field>
+</formula>
+       <formula><field_name>finalQuery</field_name>
+<formula_string>REPLACE ([condOb];FIND(&quot;#COND_VALUE_3#&quot;;[condOb]);LEN(&quot;#COND_VALUE_3#&quot;);[obId])</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>condOb</replace_field>
+</formula>
+       <formula><field_name>finalQuery</field_name>
+<formula_string>REPLACE ([condCountry];FIND(&quot;#COND_VALUE_5#&quot;;[condCountry]);LEN(&quot;#COND_VALUE_5#&quot;);[countryId])</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>condCountry</replace_field>
+</formula>
+       <formula><field_name>finalQuery</field_name>
+<formula_string>[query]&amp;[condPeriod]&amp;[condAppProviderId]&amp;[condOb]&amp;[orderBy]</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field/>
+</formula>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>350</xloc>
+      <yloc>50</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>generate generic report</name>
+    <type>TextFileOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <separator>#|#</separator>
+    <enclosure/>
+    <enclosure_forced>N</enclosure_forced>
+    <enclosure_fix_disabled>N</enclosure_fix_disabled>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <fileNameInField>Y</fileNameInField>
+    <fileNameField>fileName</fileNameField>
+    <create_parent_folder>Y</create_parent_folder>
+    <file>
+      <name>${baseDir}\${partnerName}\${ob_name}\generated\generic_report_${partnerName}_${ob_name}_${startPeriod}_${endPeriod}</name>
+      <is_command>N</is_command>
+      <servlet_output>N</servlet_output>
+      <do_not_open_new_file_init>Y</do_not_open_new_file_init>
+      <extention>csv</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format>yyyyMM</date_time_format>
+      <add_to_result_filenames>Y</add_to_result_filenames>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+    </file>
+    <fields>
+      <field>
+        <name>MSISDN</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>OPERATION</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>TRANSACTION_ID</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>TRANSACTION_STATUS</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>CORRELATION_ID</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>EXTERNALTRANSACTION_ID</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>RATING_TIMESTAMP</name>
+        <type>Date</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>AMOUNT_BEF_TAXES</name>
+        <type>Number</type>
+        <format>0.00</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>2</precision>
+      </field>
+      <field>
+        <name>TAXES_AMOUNT</name>
+        <type>Number</type>
+        <format>0.00</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>2</precision>
+      </field>
+      <field>
+        <name>TOTAL_AMOUNT</name>
+        <type>Number</type>
+        <format>0.00</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>2</precision>
+      </field>
+      <field>
+        <name>CURRENCY</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>OPERATOR_CODE</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>PRODUCT_CLASS</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>PB_CORRELATION_ID</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>DESCRIPTION_TEXT</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>APP_ID</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>REFUND_REASON</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>both</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>975</xloc>
+      <yloc>275</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>line filtered: check status</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>725</xloc>
+      <yloc>250</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>rename fields for generic report</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>TX_END_USER_ID</name>
+        <rename>MSISDN</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TC_TRANSACTION_TYPE</name>
+        <rename>OPERATION</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_TRANSACTION_ID</name>
+        <rename>TRANSACTION_ID</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TC_TRANSACTION_STATUS</name>
+        <rename>TRANSACTION_STATUS</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_REFERENCE_CODE</name>
+        <rename>CORRELATION_ID</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_ORG_TRANSACTION_ID</name>
+        <rename>EXTERNALTRANSACTION_ID</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TS_REQUEST</name>
+        <rename>RATING_TIMESTAMP</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>AMOUNT_BEF_TAXES</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>FT_TOTAL_TAX_AMOUNT</name>
+        <rename>TAXES_AMOUNT</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>FT_TOTAL_AMOUNT</name>
+        <rename>TOTAL_AMOUNT</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_ISO4217_CODE</name>
+        <rename>CURRENCY</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PRODUCT_CLASS</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_MNC_ITU_T212</name>
+        <rename>OPERATOR_CODE</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_REQUEST_AMOUNT_DESC</name>
+        <rename>DESCRIPTION_TEXT</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_APPLICATION_ID</name>
+        <rename>APP_ID</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TX_REFUND_REASON</name>
+        <rename>REFUND_REASON</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>obId</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>obName</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>countryId</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>countryName</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>startPeriod</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>endPeriod</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>appProviderId</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>appProviderName</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>baseDir</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>condAppProviderIdOld</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>condAppProviderId</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>condPeriod</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>condOb</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>orderBy</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>query</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>condCountry</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>finalQuery</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>fileName</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>PB_CORRELATION_ID</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>Y</select_unspecified>
+      <remove>        <name>obId</name>
+      </remove>      <remove>        <name>obName</name>
+      </remove>      <remove>        <name>countryId</name>
+      </remove>      <remove>        <name>countryName</name>
+      </remove>      <remove>        <name>startPeriod</name>
+      </remove>      <remove>        <name>endPeriod</name>
+      </remove>      <remove>        <name>appProviderId</name>
+      </remove>      <remove>        <name>appProviderName</name>
+      </remove>      <remove>        <name>baseDir</name>
+      </remove>      <remove>        <name>condAppProviderIdOld</name>
+      </remove>      <remove>        <name>condAppProviderId</name>
+      </remove>      <remove>        <name>condPeriod</name>
+      </remove>      <remove>        <name>condOb</name>
+      </remove>      <remove>        <name>orderBy</name>
+      </remove>      <remove>        <name>query</name>
+      </remove>      <remove>        <name>condCountry</name>
+      </remove>      <remove>        <name>finalQuery</name>
+      </remove>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>975</xloc>
+      <yloc>175</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>substring msisdn</name>
+    <type>Formula</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <formula><field_name>MSISDN_AUX</field_name>
+<formula_string>SUBSTITUTE([TX_END_USER_ID];&quot;tel:+&quot;;&quot;&quot;)</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>TX_END_USER_ID</replace_field>
+</formula>
+       <formula><field_name>MSISDN_AUX</field_name>
+<formula_string>SUBSTITUTE([TX_END_USER_ID];&quot;tel:&quot;;&quot;&quot;)</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>TX_END_USER_ID</replace_field>
+</formula>
+       <formula><field_name>pbCorrelationId</field_name>
+<formula_string>IF(ISERROR(FIND(&quot;-&quot;;[PB_CORRELATION_ID]));&quot;&quot;;RIGHT([PB_CORRELATION_ID];LEN([PB_CORRELATION_ID])-FIND(&quot;-&quot;;[PB_CORRELATION_ID])))</formula_string>
+<value_type>String</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<replace_field>PB_CORRELATION_ID</replace_field>
+</formula>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>500</xloc>
+      <yloc>50</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>
