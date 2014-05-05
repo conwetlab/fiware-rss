@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <dataset>
   <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
       nu_country_id ="1"
-      tx_el_type = "pertransaction"
+      tx_el_type = "perTransaction"
       ft_max_amount = "50"
       tx_notif_amounts = ""/>
  
   <dbe_expend_limit nu_service_id ="2" 
-      tx_end_user_id = "nouserid"
+      tx_end_user_id = "noUserId"
       tx_appprovider_id ="-1" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -21,7 +21,7 @@
       tx_notif_amounts = "[80, 90, 95]"/>
       
    <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "nouserid"
+      tx_end_user_id = "noUserId"
       tx_appprovider_id ="-1" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -32,7 +32,7 @@
 
       
   <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "nouserid"
+      tx_end_user_id = "noUserId"
       tx_appprovider_id ="-1" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -43,7 +43,7 @@
 
       
     <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "nouserid"
+      tx_end_user_id = "noUserId"
       tx_appprovider_id ="-1" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -53,7 +53,7 @@
       tx_notif_amounts = "[80, 90, 95]"/>
 
   <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -63,7 +63,7 @@
       tx_notif_amounts = "[70, 85, 90]"/>
 
   <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="app123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -73,7 +73,7 @@
       tx_notif_amounts = "[40, 45]"/>
 
   <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "nouserid"
+      tx_end_user_id = "noUserId"
       tx_appprovider_id ="app123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -83,7 +83,7 @@
       tx_notif_amounts = "[90, 95]"/>
 
   <dbe_expend_limit nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="-1" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -93,7 +93,7 @@
       tx_notif_amounts = "[75]"/>
 
     <dbe_expend_control nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="app123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -104,7 +104,7 @@
       tx_notifications = "[40]"/>
 
   <dbe_expend_control nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="app123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -115,7 +115,7 @@
       tx_notifications = ""/>
 
   <dbe_expend_control nu_service_id ="1" 
-      tx_end_user_id = "userid01"
+      tx_end_user_id = "userId01"
       tx_appprovider_id ="app123456" 
       nu_currency_id = "1"
       nu_ob_id ="1"
@@ -126,7 +126,7 @@
       tx_notifications = ""/>
       
    <dbe_expend_control nu_service_id ="1" 
-      tx_end_user_id = "useridupdate"
+      tx_end_user_id = "userIdUpdate"
       tx_appprovider_id ="app123456" 
       tx_el_type = "daily"
       nu_currency_id = "1"
@@ -137,7 +137,7 @@
       tx_notifications = "[20]"/>
       
    <dbe_expend_control nu_service_id ="1" 
-      tx_end_user_id = "useridupdate"
+      tx_end_user_id = "userIdUpdate"
       tx_appprovider_id ="app123456" 
       tx_el_type = "weekly"
       nu_currency_id = "1"
@@ -148,7 +148,7 @@
       tx_notifications = "[40]"/>
       
    <dbe_expend_control nu_service_id ="1" 
-      tx_end_user_id = "useridupdate"
+      tx_end_user_id = "userIdUpdate"
       tx_appprovider_id ="app123456" 
       tx_el_type = "monthly"
       nu_currency_id = "1"
