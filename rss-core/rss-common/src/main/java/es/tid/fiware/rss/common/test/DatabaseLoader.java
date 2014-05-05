@@ -126,7 +126,6 @@ public class DatabaseLoader {
             config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
             config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.TRUE);
             DatabaseLoader.logger.debug("DATASOURCE." + dataSource.toString());
-
             this.loader = new FlatXmlDataSetBuilder();
 
             dbConn.getConnection().createStatement().execute("DELETE FROM dbe_transaction");
