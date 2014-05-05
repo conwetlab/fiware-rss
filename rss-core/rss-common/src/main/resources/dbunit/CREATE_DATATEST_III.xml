@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <bm_paymentbroker bm_pb_id="1" tx_name="ebc"/>
-  <bm_paymentbroker bm_pb_id="2" tx_name="worldpay"/>
-  <bm_paymentbroker bm_pb_id="3" tx_name="telenor"/>
-  <bm_paymentbroker bm_pb_id="4" tx_name="cashlog"/>
-  <bm_pb_mop bm_pb_id="2" nu_mop_id="1" tx_paymentmethod_code="creditcard"/>
-  <bm_pb_mop bm_pb_id="1" nu_mop_id="2" tx_paymentmethod_code="code2"/>
-  <bm_pb_mop bm_pb_id="1" nu_mop_id="3" tx_paymentmethod_code="directtobill"/>
-  <bm_pb_mop bm_pb_id="3" nu_mop_id="3" tx_paymentmethod_code="directtobill"/>
-  <bm_pb_mop bm_pb_id="4" nu_mop_id="3" tx_paymentmethod_code="directtobill"/>
+  <bm_paymentbroker bm_pb_id="1" tx_name="eBC"/>
+  <bm_paymentbroker bm_pb_id="2" tx_name="Worldpay"/>
+  <bm_paymentbroker bm_pb_id="3" tx_name="Telenor"/>
+  <bm_paymentbroker bm_pb_id="4" tx_name="Cashlog"/>
+  <bm_pb_mop bm_pb_id="2" nu_mop_id="1" tx_paymentmethod_code="creditCard"/>
+  <bm_pb_mop bm_pb_id="1" nu_mop_id="2" tx_paymentmethod_code="Code2"/>
+  <bm_pb_mop bm_pb_id="1" nu_mop_id="3" tx_paymentmethod_code="directToBill"/>
+  <bm_pb_mop bm_pb_id="3" nu_mop_id="3" tx_paymentmethod_code="directToBill"/>
+  <bm_pb_mop bm_pb_id="4" nu_mop_id="3" tx_paymentmethod_code="directToBill"/>
   
     <bm_ob_mop nu_ob_id="0" nu_country_id="1" nu_mop_id="1"
         dt_start_date="2012-01-15 00:00:00.0" />
@@ -33,61 +33,61 @@
          
     <bm_servdeploy_mop nu_service_mop_id="1"
         nu_mop_id="1" nu_customer_type_id="1" nu_deployment_id="1"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="2"
         nu_mop_id="2" nu_customer_type_id="1" nu_deployment_id="1"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="4"
         nu_mop_id="1" nu_customer_type_id="2" nu_deployment_id="1"
-        tc_default_yn="y" />
+        tc_default_yn="Y" />
     <bm_servdeploy_mop nu_service_mop_id="5"
         nu_mop_id="2" nu_customer_type_id="2" nu_deployment_id="1"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="6"
         nu_mop_id="3" nu_customer_type_id="1" nu_deployment_id="1"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="7"
         nu_mop_id="3" nu_customer_type_id="1" nu_deployment_id="4"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="8"
         nu_mop_id="1" nu_customer_type_id="1" nu_deployment_id="4"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="9"
         nu_mop_id="3" nu_customer_type_id="3" nu_deployment_id="1"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="10"
         nu_mop_id="3" nu_customer_type_id="3" nu_deployment_id="5"
-        tc_default_yn="y" /> 
+        tc_default_yn="Y" /> 
     <bm_servdeploy_mop nu_service_mop_id="11"
         nu_mop_id="2" nu_customer_type_id="2" nu_deployment_id="4"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="12"
         nu_mop_id="3" nu_customer_type_id="2" nu_deployment_id="4"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="13"
         nu_mop_id="1" nu_customer_type_id="2" nu_deployment_id="4"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="14"
         nu_mop_id="3" nu_customer_type_id="3" nu_deployment_id="6"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
     <bm_servdeploy_mop nu_service_mop_id="15"
         nu_mop_id="3" nu_customer_type_id="1" nu_deployment_id="7"
-        tc_default_yn="n" />
+        tc_default_yn="N" />
         
     <bm_service_product_type
-        nu_service_product_type_id="1" tx_name="sptype1" tx_description="description"
-        nu_service_id="1" tc_is_default_yn="n" />
+        nu_service_product_type_id="1" tx_name="SPType1" tx_description="Description"
+        nu_service_id="1" tc_is_default_yn="N" />
     <bm_service_product_type
-        nu_service_product_type_id="2" tx_name="sptype2" tx_description="description2"
-        nu_service_id="2" tc_is_default_yn="y" />
-    <bm_product nu_product_id="1" tx_name="producttest1"
-        tx_product_description="description" nu_service_id="1"
-        tc_is_service_product_yn="n" nu_service_product_type_id="1" />
-    <bm_product nu_product_id="3" tx_name="producttest3"
-        tx_product_description="description" nu_service_id="1"
-        tc_is_service_product_yn="y" nu_service_product_type_id="1" />
-    <bm_product nu_product_id="2" tx_name="producttest2"
-        tx_product_description="description2" nu_service_id="2"
-        tc_is_service_product_yn="y" nu_service_product_type_id="2" />
+        nu_service_product_type_id="2" tx_name="SPType2" tx_description="Description2"
+        nu_service_id="2" tc_is_default_yn="Y" />
+    <bm_product nu_product_id="1" tx_name="ProductTest1"
+        tx_product_description="Description" nu_service_id="1"
+        tc_is_service_product_yn="N" nu_service_product_type_id="1" />
+    <bm_product nu_product_id="3" tx_name="ProductTest3"
+        tx_product_description="Description" nu_service_id="1"
+        tc_is_service_product_yn="Y" nu_service_product_type_id="1" />
+    <bm_product nu_product_id="2" tx_name="ProductTest2"
+        tx_product_description="Description2" nu_service_id="2"
+        tc_is_service_product_yn="Y" nu_service_product_type_id="2" />
         
 </dataset>

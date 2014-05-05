@@ -1,43 +1,43 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <bm_currency nu_currency_id="-1" tx_iso4217_code="xxx" tx_iso4217_code_num="000" nu_iso4217_decimals="2" tx_description="empty" tc_symbol="x"/>
-  <bm_currency nu_currency_id="1" tx_iso4217_code="eur" tx_iso4217_code_num="978" nu_iso4217_decimals="2" tx_description="euro" tc_symbol="€"/>
-  <bm_currency nu_currency_id="2" tx_iso4217_code="gbp" tx_iso4217_code_num="826" nu_iso4217_decimals="2" tx_description="esterlina" tc_symbol="£"/>
-  <bm_currency nu_currency_id="3" tx_iso4217_code="brl" tx_iso4217_code_num="986" nu_iso4217_decimals="2" tx_description="verdadero brasileño" tc_symbol="r$"/>
-  <bm_currency nu_currency_id="4" tx_iso4217_code="ars" tx_iso4217_code_num="032" nu_iso4217_decimals="2" tx_description="argentino de peso" tc_symbol="m$n"/>
-  <bm_currency nu_currency_id="5" tx_iso4217_code="mxn" tx_iso4217_code_num="484" nu_iso4217_decimals="2" tx_description="peso mexicano" tc_symbol="$"/>
-  <bm_currency nu_currency_id="6" tx_iso4217_code="myr" tx_iso4217_code_num="458" nu_iso4217_decimals="2" tx_description="malaysian ringgit" tc_symbol="rm"/>
-  <bm_currency nu_currency_id="7" tx_iso4217_code="huf" tx_iso4217_code_num="348" nu_iso4217_decimals="2" tx_description="hungarian forint" tc_symbol="ft"/>
+  <bm_currency nu_currency_id="-1" tx_iso4217_code="XXX" tx_iso4217_code_num="000" nu_iso4217_decimals="2" tx_description="empty" tx_symbol="x"/>
+  <bm_currency nu_currency_id="1" tx_iso4217_code="EUR" tx_iso4217_code_num="978" nu_iso4217_decimals="2" tx_description="Euro" tx_symbol="€"/>
+  <bm_currency nu_currency_id="2" tx_iso4217_code="GBP" tx_iso4217_code_num="826" nu_iso4217_decimals="2" tx_description="Esterlina" tx_symbol="£"/>
+  <bm_currency nu_currency_id="3" tx_iso4217_code="BRL" tx_iso4217_code_num="986" nu_iso4217_decimals="2" tx_description="Verdadero brasileño" tx_symbol="R$"/>
+  <bm_currency nu_currency_id="4" tx_iso4217_code="ARS" tx_iso4217_code_num="032" nu_iso4217_decimals="2" tx_description="Argentino de peso" tx_symbol="m$n"/>
+  <bm_currency nu_currency_id="5" tx_iso4217_code="MXN" tx_iso4217_code_num="484" nu_iso4217_decimals="2" tx_description="Peso mexicano" tx_symbol="$"/>
+  <bm_currency nu_currency_id="6" tx_iso4217_code="MYR" tx_iso4217_code_num="458" nu_iso4217_decimals="2" tx_description="Malaysian ringgit" tx_symbol="RM"/>
+  <bm_currency nu_currency_id="7" tx_iso4217_code="HUF" tx_iso4217_code_num="348" nu_iso4217_decimals="2" tx_description="Hungarian forint" tx_symbol="Ft"/>
   <bm_language nu_language_id="-1" tx_name="empty" tx_iso639_1_code="xxx" tx_iso639_code="xx"/>
-  <bm_language nu_language_id="1" tx_name="castellano" tx_iso639_1_code="spa" tx_iso639_code="es"/>
-  <bm_language nu_language_id="5" tx_name="english" tx_iso639_1_code="eng" tx_iso639_code="en"/>
-  <bm_language nu_language_id="6" tx_name="deutsch" tx_iso639_1_code="ger" tx_iso639_code="de"/>
-  <bm_country nu_country_id="-1" tx_itu_t212_code="000" tx_iso3166_code="xx" nu_currency_id="-1" nu_language_id="-1"/>
-  <bm_country nu_country_id="1" tx_itu_t212_code="214" tx_iso3166_code="es" nu_currency_id="1" nu_language_id="1"/>
-  <bm_country nu_country_id="2" tx_itu_t212_code="275" tx_iso3166_code="gb" nu_currency_id="2" nu_language_id="5"/>
-  <bm_country nu_country_id="3" tx_itu_t212_code="276" tx_iso3166_code="de" nu_currency_id="1" nu_language_id="6"/>
-  <bm_country nu_country_id="4" tx_itu_t212_code="277" tx_iso3166_code="mx" nu_currency_id="5" nu_language_id="1"/>
-  <bm_country nu_country_id="5" tx_itu_t212_code="502" tx_iso3166_code="my" nu_currency_id="6" nu_language_id="1"/>
-  <bm_country nu_country_id="6" tx_itu_t212_code="216" tx_iso3166_code="hu" nu_currency_id="7" nu_language_id="1"/>
-  <bm_ob nu_ob_id="-1" tx_name="empty" nu_country_id="-1" tx_brand="empty"/>
-  <bm_ob nu_ob_id="0" tx_name="t. gen. assasin gr." nu_country_id="1" tx_brand="tga"/>
-  <bm_ob nu_ob_id="1" tx_name="movistar españa" nu_country_id="1" tx_brand="movistar"/>
-  <bm_ob nu_ob_id="2" tx_name="o2 uk" nu_country_id="2" tx_brand="o2"/>
-  <bm_ob nu_ob_id="3" tx_name="o2 germany" nu_country_id="3" tx_brand="o2"/>
-  <bm_ob nu_ob_id="4" tx_name="movistar mexico" nu_country_id="4" tx_brand="movistar"/>
-  <bm_ob nu_ob_id="5" tx_name="telenor" nu_country_id="5" tx_brand="telenor mobil as"/>
-  <bm_ob nu_ob_id="6" tx_name="cashlog movistar es" nu_country_id="1" tx_brand="movistarcashlog"/>
-  <bm_ob_country nu_ob_id="-1" nu_country_id="-1" tc_pricepoints_yn="n" tx_mnc_itu_t212="000-00"/>
-  <bm_ob_country nu_ob_id="0" nu_country_id="1" tc_pricepoints_yn="y" tx_mnc_itu_t212="214-00"/>
-  <bm_ob_country nu_ob_id="1" nu_country_id="1" tc_pricepoints_yn="y" tx_mnc_itu_t212="214-07"/>
-  <bm_ob_country nu_ob_id="2" nu_country_id="2" tc_pricepoints_yn="y" tx_mnc_itu_t212="732-123"/>
-  <bm_ob_country nu_ob_id="3" nu_country_id="3" tc_pricepoints_yn="y" tx_mnc_itu_t212="125-06"/>
-  <bm_ob_country nu_ob_id="4" nu_country_id="4" tc_pricepoints_yn="y" tx_mnc_itu_t212="126-07"/>
-  <bm_ob_country nu_ob_id="1" nu_country_id="4" tc_pricepoints_yn="y" tx_mnc_itu_t212="127-05"/>
-  <bm_ob_country nu_ob_id="1" nu_country_id="3" tc_pricepoints_yn="n" tx_mnc_itu_t212="128-05"/>
-  <bm_ob_country nu_ob_id="5" nu_country_id="5" tc_pricepoints_yn="n" tx_mnc_itu_t212="502-16"/>
-  <bm_ob_country nu_ob_id="5" nu_country_id="6" tc_pricepoints_yn="n" tx_mnc_itu_t212="216-01"/>
-  <bm_ob_country nu_ob_id="6" nu_country_id="1" tc_pricepoints_yn="n" tx_mnc_itu_t212="214-06"/>
+  <bm_language nu_language_id="1" tx_name="Castellano" tx_iso639_1_code="spa" tx_iso639_code="es"/>
+  <bm_language nu_language_id="5" tx_name="English" tx_iso639_1_code="eng" tx_iso639_code="en"/>
+  <bm_language nu_language_id="6" tx_name="Deutsch" tx_iso639_1_code="ger" tx_iso639_code="de"/>
+  <bm_country nu_country_id="-1" tx_itu_t212_code="000" tx_iso3166_code="XX" nu_currency_id="-1" nu_language_id="-1"/>
+  <bm_country nu_country_id="1" tx_itu_t212_code="214" tx_iso3166_code="ES" nu_currency_id="1" nu_language_id="1"/>
+  <bm_country nu_country_id="2" tx_itu_t212_code="275" tx_iso3166_code="GB" nu_currency_id="2" nu_language_id="5"/>
+  <bm_country nu_country_id="3" tx_itu_t212_code="276" tx_iso3166_code="DE" nu_currency_id="1" nu_language_id="6"/>
+  <bm_country nu_country_id="4" tx_itu_t212_code="277" tx_iso3166_code="MX" nu_currency_id="5" nu_language_id="1"/>
+  <bm_country nu_country_id="5" tx_itu_t212_code="502" tx_iso3166_code="MY" nu_currency_id="6" nu_language_id="1"/>
+  <bm_country nu_country_id="6" tx_itu_t212_code="216" tx_iso3166_code="HU" nu_currency_id="7" nu_language_id="1"/>
+  <bm_ob nu_ob_id="-1" tx_name="empty" nu_country_id="-1" tx_brand="EMPTY"/>
+  <bm_ob nu_ob_id="0" tx_name="T. Gen. Assasin Gr." nu_country_id="1" tx_brand="TGA"/>
+  <bm_ob nu_ob_id="1" tx_name="Movistar España" nu_country_id="1" tx_brand="Movistar"/>
+  <bm_ob nu_ob_id="2" tx_name="O2 UK" nu_country_id="2" tx_brand="O2"/>
+  <bm_ob nu_ob_id="3" tx_name="O2 Germany" nu_country_id="3" tx_brand="O2"/>
+  <bm_ob nu_ob_id="4" tx_name="Movistar Mexico" nu_country_id="4" tx_brand="Movistar"/>
+  <bm_ob nu_ob_id="5" tx_name="Telenor" nu_country_id="5" tx_brand="Telenor Mobil AS"/>
+  <bm_ob nu_ob_id="6" tx_name="Cashlog Movistar ES" nu_country_id="1" tx_brand="MovistarCashlog"/>
+  <bm_ob_country nu_ob_id="-1" nu_country_id="-1" tc_pricepoints_yn="N" tx_mnc_itu_t212="000-00"/>
+  <bm_ob_country nu_ob_id="0" nu_country_id="1" tc_pricepoints_yn="Y" tx_mnc_itu_t212="214-00"/>
+  <bm_ob_country nu_ob_id="1" nu_country_id="1" tc_pricepoints_yn="Y" tx_mnc_itu_t212="214-07"/>
+  <bm_ob_country nu_ob_id="2" nu_country_id="2" tc_pricepoints_yn="Y" tx_mnc_itu_t212="732-123"/>
+  <bm_ob_country nu_ob_id="3" nu_country_id="3" tc_pricepoints_yn="Y" tx_mnc_itu_t212="125-06"/>
+  <bm_ob_country nu_ob_id="4" nu_country_id="4" tc_pricepoints_yn="Y" tx_mnc_itu_t212="126-07"/>
+  <bm_ob_country nu_ob_id="1" nu_country_id="4" tc_pricepoints_yn="Y" tx_mnc_itu_t212="127-05"/>
+  <bm_ob_country nu_ob_id="1" nu_country_id="3" tc_pricepoints_yn="N" tx_mnc_itu_t212="128-05"/>
+  <bm_ob_country nu_ob_id="5" nu_country_id="5" tc_pricepoints_yn="N" tx_mnc_itu_t212="502-16"/>
+  <bm_ob_country nu_ob_id="5" nu_country_id="6" tc_pricepoints_yn="N" tx_mnc_itu_t212="216-01"/>
+  <bm_ob_country nu_ob_id="6" nu_country_id="1" tc_pricepoints_yn="N" tx_mnc_itu_t212="214-06"/>
   <bm_price_point tx_price_point_id="23" nu_price="9.99" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="0" nu_country_id="1" nu_currency_id="1"/>
   <bm_price_point tx_price_point_id="11" nu_price="9.99" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="1" nu_currency_id="1"/>
   <bm_price_point tx_price_point_id="12" nu_price="19.99" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="1" nu_currency_id="1"/>
@@ -55,12 +55,12 @@
   <bm_price_point tx_price_point_id="13" nu_price="29.99" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="4" nu_currency_id="5"/>
   <bm_price_point tx_price_point_id="14" nu_price="39.99" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="4" nu_currency_id="5"/>
   <bm_price_point tx_price_point_id="16" nu_price="49.99" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="4" nu_currency_id="5"/>
-  <bm_price_point tx_price_point_id="codeforcharge" nu_price="0.01" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="1" nu_currency_id="1"/>
+  <bm_price_point tx_price_point_id="codeForCharge" nu_price="0.01" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="1" nu_country_id="1" nu_currency_id="1"/>
   <bm_price_point tx_price_point_id="20" nu_price="0.01" dt_edit_date="2012-01-01 00:00:00.0" nu_ob_id="0" nu_country_id="1" nu_currency_id="1"/>
   
-  <dbe_appprovider tx_appprovider_id="app123456" tx_name="provider 1"/>
-  <dbe_appprovider tx_appprovider_id="123456" tx_name="provider 2"/>
-  <dbe_appprovider tx_appprovider_id="-1" tx_name="default"/>
+  <dbe_appprovider tx_appprovider_id="app123456" tx_name="Provider 1"/>
+  <dbe_appprovider tx_appprovider_id="123456" tx_name="Provider 2"/>
+  <dbe_appprovider tx_appprovider_id="-1" tx_name="Default"/>
   
   <dbe_appprovider_application tx_appprovider_id="123456" tx_application_id="application123456"/>
   <dbe_appprovider_application tx_appprovider_id="123456" tx_application_id="1234"/>
