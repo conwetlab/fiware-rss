@@ -1,50 +1,50 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <dataset>
-    <bm_service nu_service_id="1" tx_name="ServiceTest1"
-        tx_description="Description" tc_thirdparties_yn="Y"
-        dt_start_date="2012-02-29 00:00:00.0" tc_status="A"
-        tc_api_taxes_yn="N" />
-    <bm_service nu_service_id="2" tx_name="ServiceTest2"
-        tx_description="Description2" tc_thirdparties_yn="N"
-        dt_start_date="2012-02-19 00:00:00.0" tc_status="A"
-        tc_api_taxes_yn="N" />
+    <bm_service nu_service_id="1" tx_name="servicetest1"
+        tx_description="description" tc_thirdparties_yn="y"
+        dt_start_date="2012-02-29 00:00:00.0" tc_status="a"
+        tc_api_taxes_yn="n" />
+    <bm_service nu_service_id="2" tx_name="servicetest2"
+        tx_description="description2" tc_thirdparties_yn="n"
+        dt_start_date="2012-02-19 00:00:00.0" tc_status="a"
+        tc_api_taxes_yn="n" />
     <bm_service_deployment nu_deployment_id="1"
         nu_service_id="1" nu_ob_id="1" nu_country_id="1"
-        dt_deployment_date="2012-03-01 00:00:00.0" tc_status="A" />
+        dt_deployment_date="2012-03-01 00:00:00.0" tc_status="a" />
     <bm_service_deployment nu_deployment_id="2"
         nu_service_id="1" nu_ob_id="1" nu_country_id="4"
-        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="I" />
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="i" />
     <bm_service_deployment nu_deployment_id="3"
         nu_service_id="1" nu_ob_id="2" nu_country_id="2"
-        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A" />
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="a" />
     <bm_service_deployment nu_deployment_id="4" 
         nu_service_id="1" nu_ob_id="0" nu_country_id="1" 
-        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="a"/>
     <bm_service_deployment nu_deployment_id="5" 
         nu_service_id="1" nu_ob_id="5" nu_country_id="5" 
-        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="a"/>
     <bm_service_deployment nu_deployment_id="6" 
         nu_service_id="1" nu_ob_id="5" nu_country_id="6" 
-        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>    
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="a"/>    
     <bm_service_deployment nu_deployment_id="7" 
         nu_service_id="1" nu_ob_id="6" nu_country_id="1" 
-        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>    
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="a"/>    
         
-    <bm_methods_of_payment nu_mop_id="1" tx_name="Visa"
-        tx_description="Pago con tarjeta" tx_code="creditCard" />
-    <bm_methods_of_payment nu_mop_id="2" tx_name="PayPal"
-        tx_description="Plataforma de pago por internet PayPal" tx_code="Code2" />
+    <bm_methods_of_payment nu_mop_id="1" tx_name="visa"
+        tx_description="pago con tarjeta" tx_code="creditcard" />
+    <bm_methods_of_payment nu_mop_id="2" tx_name="paypal"
+        tx_description="plataforma de pago por internet paypal" tx_code="code2" />
     <bm_methods_of_payment nu_mop_id="3"
-        tx_name="Factura Movistar" tx_description="Factura generada por la operadora"
-        tx_code="directToBill" />
+        tx_name="factura movistar" tx_description="factura generada por la operadora"
+        tx_code="directtobill" />
     <bm_customer_type nu_customer_type_id="1"
-        tx_name="Cliente Telefonica" tx_description="Cliente con factura de Movistar"
+        tx_name="cliente telefonica" tx_description="cliente con factura de movistar"
         nu_mop_id="3" />
     <bm_customer_type nu_customer_type_id="2"
-        tx_name="Cliente libre" tx_description="Cliente de cualquier operadora"
+        tx_name="cliente libre" tx_description="cliente de cualquier operadora"
         nu_mop_id="1" />
     <bm_customer_type nu_customer_type_id="3"
-        tx_name="Other client" tx_description="Other client for any operator"
+        tx_name="other client" tx_description="other client for any operator"
         nu_mop_id="3" />
 
 </dataset>
