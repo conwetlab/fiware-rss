@@ -29,6 +29,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
+import org.dbunit.ext.mysql.MySqlMetadataHandler;
 import org.dbunit.operation.DatabaseOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,11 +120,11 @@ public class DatabaseLoader {
         try {
             DatabaseLoader.logger.debug("starting init() in DatabaseLoader...");
 
-            this.dbConn = new DatabaseDataSourceConnection(dataSource);
+            this.dbConn = new DatabaseDataSourceConnection(dataSource, "FIWARE_SETTLEMENT");
             DatabaseConfig config = dbConn.getConfig();
-            // config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new Oracle10DataTypeFactory());
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
-            // config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.TRUE);
+            config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
+            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.TRUE);
             DatabaseLoader.logger.debug("DATASOURCE." + dataSource.toString());
 
             this.loader = new FlatXmlDataSetBuilder();
