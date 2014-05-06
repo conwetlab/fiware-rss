@@ -1,5 +1,7 @@
-Revenue Settlement and Sharing System
-===========
+
+# Revenue Settlement and Sharing System [![Build Status](https://travis-ci.org/telefonicaid/fiware-rss.svg)](https://travis-ci.org/telefonicaid/fiware-rss) 
+
+
 This is the code repository for the Revenue Settlement and Sharing System, a Java implementation developed as a part of the FI-WARE project.
 
 You find all the information on Revenue Settlement and Sharing System in its page in the FI-WARE Catalogue:
