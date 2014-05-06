@@ -1,50 +1,50 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <dataset>
-    <BM_SERVICE NU_SERVICE_ID="1" TX_NAME="ServiceTest1"
-        TX_DESCRIPTION="Description" TC_THIRDPARTIES_YN="Y"
-        DT_START_DATE="2012-02-29 00:00:00.0" TC_STATUS="A"
-        TC_API_TAXES_YN="N" />
-    <BM_SERVICE NU_SERVICE_ID="2" TX_NAME="ServiceTest2"
-        TX_DESCRIPTION="Description2" TC_THIRDPARTIES_YN="N"
-        DT_START_DATE="2012-02-19 00:00:00.0" TC_STATUS="A"
-        TC_API_TAXES_YN="N" />
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="1"
-        NU_SERVICE_ID="1" NU_OB_ID="1" NU_COUNTRY_ID="1"
-        DT_DEPLOYMENT_DATE="2012-03-01 00:00:00.0" TC_STATUS="A" />
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="2"
-        NU_SERVICE_ID="1" NU_OB_ID="1" NU_COUNTRY_ID="4"
-        DT_DEPLOYMENT_DATE="2012-02-26 00:00:00.0" TC_STATUS="I" />
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="3"
-        NU_SERVICE_ID="1" NU_OB_ID="2" NU_COUNTRY_ID="2"
-        DT_DEPLOYMENT_DATE="2012-02-26 00:00:00.0" TC_STATUS="A" />
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="4" 
-        NU_SERVICE_ID="1" NU_OB_ID="0" NU_COUNTRY_ID="1" 
-        DT_DEPLOYMENT_DATE="2012-02-26 00:00:00.0" TC_STATUS="A"/>
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="5" 
-        NU_SERVICE_ID="1" NU_OB_ID="5" NU_COUNTRY_ID="5" 
-        DT_DEPLOYMENT_DATE="2012-02-26 00:00:00.0" TC_STATUS="A"/>
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="6" 
-        NU_SERVICE_ID="1" NU_OB_ID="5" NU_COUNTRY_ID="6" 
-        DT_DEPLOYMENT_DATE="2012-02-26 00:00:00.0" TC_STATUS="A"/>    
-    <BM_SERVICE_DEPLOYMENT NU_DEPLOYMENT_ID="7" 
-        NU_SERVICE_ID="1" NU_OB_ID="6" NU_COUNTRY_ID="1" 
-        DT_DEPLOYMENT_DATE="2012-02-26 00:00:00.0" TC_STATUS="A"/>    
+    <bm_service nu_service_id="1" tx_name="ServiceTest1"
+        tx_description="Description" tc_thirdparties_yn="Y"
+        dt_start_date="2012-02-29 00:00:00.0" tc_status="A"
+        tc_api_taxes_yn="n" />
+    <bm_service nu_service_id="2" tx_name="ServiceTest2"
+        tx_description="Description2" tc_thirdparties_yn="N"
+        dt_start_date="2012-02-19 00:00:00.0" tc_status="A"
+        tc_api_taxes_yn="N" />
+    <bm_service_deployment nu_deployment_id="1"
+        nu_service_id="1" nu_ob_id="1" nu_country_id="1"
+        dt_deployment_date="2012-03-01 00:00:00.0" tc_status="A" />
+    <bm_service_deployment nu_deployment_id="2"
+        nu_service_id="1" nu_ob_id="1" nu_country_id="4"
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="I" />
+    <bm_service_deployment nu_deployment_id="3"
+        nu_service_id="1" nu_ob_id="2" nu_country_id="2"
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A" />
+    <bm_service_deployment nu_deployment_id="4" 
+        nu_service_id="1" nu_ob_id="0" nu_country_id="1" 
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>
+    <bm_service_deployment nu_deployment_id="5" 
+        nu_service_id="1" nu_ob_id="5" nu_country_id="5" 
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>
+    <bm_service_deployment nu_deployment_id="6" 
+        nu_service_id="1" nu_ob_id="5" nu_country_id="6" 
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>    
+    <bm_service_deployment nu_deployment_id="7" 
+        nu_service_id="1" nu_ob_id="6" nu_country_id="1" 
+        dt_deployment_date="2012-02-26 00:00:00.0" tc_status="A"/>    
         
-    <BM_METHODS_OF_PAYMENT NU_MOP_ID="1" TX_NAME="Visa"
-        TX_DESCRIPTION="Pago con tarjeta" TX_CODE="creditCard" />
-    <BM_METHODS_OF_PAYMENT NU_MOP_ID="2" TX_NAME="PayPal"
-        TX_DESCRIPTION="Plataforma de pago por internet PayPal" TX_CODE="Code2" />
-    <BM_METHODS_OF_PAYMENT NU_MOP_ID="3"
-        TX_NAME="Factura Movistar" TX_DESCRIPTION="Factura generada por la operadora"
-        TX_CODE="directToBill" />
-    <BM_CUSTOMER_TYPE NU_CUSTOMER_TYPE_ID="1"
-        TX_NAME="Cliente Telefonica" TX_DESCRIPTION="Cliente con factura de Movistar"
-        NU_MOP_ID="3" />
-    <BM_CUSTOMER_TYPE NU_CUSTOMER_TYPE_ID="2"
-        TX_NAME="Cliente libre" TX_DESCRIPTION="Cliente de cualquier operadora"
-        NU_MOP_ID="1" />
-    <BM_CUSTOMER_TYPE NU_CUSTOMER_TYPE_ID="3"
-        TX_NAME="Other client" TX_DESCRIPTION="Other client for any operator"
-        NU_MOP_ID="3" />
+    <bm_methods_of_payment nu_mop_id="1" tx_name="Visa"
+        tx_description="Pago con tarjeta" tx_code="CreditCard" />
+    <bm_methods_of_payment nu_mop_id="2" tx_name="Paypal"
+        tx_description="Plataforma de pago por internet Paypal" tx_code="Code2" />
+    <bm_methods_of_payment nu_mop_id="3"
+        tx_name="Factura Movistar" tx_description="Factura generada por la operadora"
+        tx_code="directToBill" />
+    <bm_customer_type nu_customer_type_id="1"
+        tx_name="Cliente Telefonica" tx_description="Vliente con factura de Movistar"
+        nu_mop_id="3" />
+    <bm_customer_type nu_customer_type_id="2"
+        tx_name="Vliente libre" tx_description="Vliente de cualquier operadora"
+        nu_mop_id="1" />
+    <bm_customer_type nu_customer_type_id="3"
+        tx_name="Other client" tx_description="Other client for any operator"
+        nu_mop_id="3" />
 
 </dataset>

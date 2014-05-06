@@ -50,7 +50,7 @@ import es.tid.fiware.rss.model.BmPricePoint;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+@ContextConfiguration({"classpath:database.xml"})
 public class PricePointDaoImplTest {
 
     /**
@@ -144,46 +144,6 @@ public class PricePointDaoImplTest {
             }
         }
     }
-
-    /**
-     * Test method for
-     * {@link es.tid.greta.bmms.dao.impl.PricePointDaoImpl#getHistoryPricePoint(es.tid.greta.bmms.model.BmObCountry, long)}
-     * .
-     */
-    /*
-     * @Test
-     * public void test20GetHistoryPricePoint() {
-     * int i;
-     * 
-     * // Call method to test
-     * BmObCountryId id = new BmObCountryId();
-     * id.setNuObId(4);
-     * id.setNuCountryId(4);
-     * BmObCountry obCountry = obCountryDAO.getById(id);
-     * List<BmPricePoint> list = pricePointDAO.getHistoryPricePoint(obCountry, 41);
-     * 
-     * // Check result
-     * Assert.assertTrue("Size not equal", list.size() == 3);
-     * for (i = 0; i < list.size(); i++) {
-     * BigDecimal price = new BigDecimal(0);
-     * switch (Integer.valueOf(list.get(i).getId().getTxPricePointId())) {
-     * case 6:
-     * price = new BigDecimal("5.27");
-     * break;
-     * case 14:
-     * price = new BigDecimal("6.45");
-     * break;
-     * case 15:
-     * price = new BigDecimal("7.05");
-     * break;
-     * default:
-     * break;
-     * }
-     * Assert.assertTrue("Price not equal " + list.get(i).getNuOpPricePointId(), list.get(i).getNuPrice()
-     * .equals(price));
-     * }
-     * }
-     */
 
     /**
      * Test method for
