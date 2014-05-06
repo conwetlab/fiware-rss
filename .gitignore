@@ -55,7 +55,5 @@ publish
 org
 com
 
-# META-INF folders
-META-INF
 
 git.properties
