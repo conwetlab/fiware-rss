@@ -497,28 +497,3 @@ CREATE TABLE `set_revenue_share_conf` (
   CONSTRAINT `fk_appprov_to_reveneu_share_c` FOREIGN KEY (`tx_appprovider_id`) REFERENCES `dbe_appprovider` (`tx_appprovider_id`),
   CONSTRAINT `fk_ob_coun_to_reveneu_share_c` FOREIGN KEY (`nu_ob_id`, `nu_country_id`) REFERENCES `bm_ob_country` (`nu_ob_id`, `nu_country_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
-
-#
-# Procedure "refunded_yn"
-#
-
-DROP PROCEDURE IF EXISTS `refunded_yn`;
-CREATE PROCEDURE `refunded_yn`()
-BEGIN
-	DECLARE v_finished INTEGER DEFAULT 0;
-	DECLARE id VARCHAR(40);
-	-- declare cursor for tx_transaction_id
-    DECLARE cur1 CURSOR FOR SELECT tx_org_transaction_id FROM dbe_transaction WHERE tc_transaction_type='R';
-	-- declare NOT FOUND handler
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1;
-	
-	OPEN cur1;
-	update_refunded: LOOP
-		FETCH cur1 INTO id;
-		IF v_finished = 1 THEN 
-			LEAVE update_refunded;
-		END IF;
-		UPDATE dbe_transaction SET tc_is_refunded_yn='Y' WHERE tc_transaction_type='C' AND tx_transaction_id = id;
-	END LOOP update_refunded;
-	CLOSE cur1;
-END;
