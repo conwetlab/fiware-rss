@@ -32,7 +32,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import es.tid.fiware.rss.model.RSSFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/META-INF/spring/application-context.xml", "/META-INF/spring/cxf-beans.xml"})
+@ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
+    "/META-INF/spring/cxf-beans.xml"})
 public class SettlementManagerTest {
 
     @Autowired
