@@ -27,7 +27,7 @@
         <jdk.version>1.6</jdk.version>
         <maven.version>3.0.3</maven.version>
         <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
-        <junit.version>4.8.2</junit.version>
+        <junit.version>4.11</junit.version>
         <org.springframework.version>3.2.3.RELEASE</org.springframework.version>
         <org.hibernate.version>3.6.10.Final</org.hibernate.version>
         <cxf.version>2.7.4</cxf.version>
