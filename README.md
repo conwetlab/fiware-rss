@@ -24,7 +24,7 @@ http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system
 This section includes indications on how to build Revenue Settlement and Sharing System from this code repository.
 The final result of this step will be 2 wars files: 
 * one for RSS (fiware-rss.war) located at ${base_code}/fiware-rss/fiware-rss/target
-* other for Expenditure limits(expenditureLimit.war) located at located at ${base_code}/fiware-rss/rss-expendLimit/el-server/target.
+* other for Expenditure Limits(expenditureLimit.war) located at ${base_code}/fiware-rss/rss-expendLimit/el-server/target.
 
 where ${base_code} is the folder where the code will be downloaded from the repository.
 
