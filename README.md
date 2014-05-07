@@ -2,13 +2,13 @@
 # Revenue Settlement and Sharing System [![Build Status](https://travis-ci.org/telefonicaid/fiware-rss.svg)](https://travis-ci.org/telefonicaid/fiware-rss) 
 
 
-This is the code repository for the Revenue Settlement and Sharing System, a Java implementation developed as a part of the FI-WARE project.
+This is the code repository for the Revenue Settlement and Sharing System, a Java implementation developed as a part of the FI-WARE project (http://www.fi-ware.org/).
 
 You find all the information on Revenue Settlement and Sharing System in its page in the FI-WARE Catalogue:
 
 http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system
 
-Note that you don't need this repository code if you install it using the packages at repository: https://forge.fi-ware.org/frs/?group_id=7  
+Note that you don't need this repository code if you install it using the packages at FI-WARE repository: https://forge.fi-ware.org/frs/?group_id=7  
 
 
 ## Installing and Using the Revenue Settlement and Sharing System
@@ -16,7 +16,7 @@ Note that you don't need this repository code if you install it using the packag
 The administration and programming manuals for Revenue Settlement and Sharing System are found in the FI-WARE Catalogue page,
 under the "Documentation" tab.
 
-http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system
+http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system/documentation
 
 
 ## Building Revenue Settlement and Sharing System
@@ -29,10 +29,7 @@ The final result of this step will be 2 wars files:
 where ${base_code} is the folder where the code will be downloaded from the repository.
 
 
-### Ubuntu 12.04.2 LTS 
-
-Revenue Settlement and Sharing System is a Java 6 project built using for its management the software project tool Apache Maven.
-This means that it is required to install them. To do it:
+Revenue Settlement and Sharing System is a Java 6 project built using for its management the software project tool Apache Maven.This means that it is required to install them. The following installation  has been done using as base O.S. Ubuntu 12.04.2 LTS. To do it:
 
 * Install Java 6
 
@@ -98,4 +95,4 @@ mvn test -fae
 
 ## License
 
-Revenue Settlement and Sharing System is licensed under Affero General Public License (GPL) version 3.
+Revenue Settlement and Sharing System is licensed under Affero General Public License (GPL) version 3 (http://www.gnu.org/licenses/agpl-3.0.html).
