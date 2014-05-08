@@ -154,6 +154,10 @@
                         <ignores>
                             <ignore>es.tid.fiware.rss.expenditureControl.api.*</ignore>
                             <ignore>es.tid.fiware.rss.expenditureLimit.api.*</ignore>
+                            <ignore>es.tid.fiware.rss.expenditureLimit.dao.*</ignore>
+                            <ignore>es.tid.fiware.rss.dao.*</ignore>
+                            <ignore>es.tid.fiware.rss.exception.*</ignore>
+                            <ignore>es.tid.fiware.rss.exception.beans*</ignore>
                         </ignores>
                         <excludes>
                             <exclude>**/*Test*.class</exclude>
