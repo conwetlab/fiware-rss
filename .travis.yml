@@ -10,3 +10,10 @@ before_script:
 
 install:
   - mvn clean install -DskipTests=true -B -V -q
+  
+
+test:
+- mvn test -B -q -fae
+
+after_success:
+- mvn cobertura:cobertura coveralls:cobertura
