@@ -34,14 +34,17 @@ import javax.sql.DataSource;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.DbeSystemPropertiesDao;
@@ -79,6 +82,9 @@ public class DbeExpendControlDaoTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
+
+    @Autowired
+    private HibernateTransactionManager transactionManager;
 
     /**
      * Method to insert data before test.
@@ -123,7 +129,6 @@ public class DbeExpendControlDaoTest {
     }
 
     @Test
-    @Ignore
     public void testUpdateExpendLimitDataForaUser() {
 
         BmService bmService = new BmService();
@@ -137,6 +142,9 @@ public class DbeExpendControlDaoTest {
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
         while (it.hasNext()) {
             DbeExpendControl el = it.next();
             if (el.getId().getTxElType().equalsIgnoreCase("daily")) {
@@ -150,6 +158,7 @@ public class DbeExpendControlDaoTest {
             }
             expLimitDao.saveDbeExpendControl(el);
         }
+        transactionManager.commit(status);
 
         l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
             "app123456", bmCurrency, bmObCountry);
@@ -168,7 +177,6 @@ public class DbeExpendControlDaoTest {
     }
 
     @Test
-    @Ignore
     public void testNewExpendLimitDataForaUser() {
 
         BmService bmService = new BmService();
@@ -182,6 +190,9 @@ public class DbeExpendControlDaoTest {
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
         while (it.hasNext()) {
             DbeExpendControl el = it.next();
             DbeExpendControl neoEc = new DbeExpendControl();
@@ -198,7 +209,7 @@ public class DbeExpendControlDaoTest {
             neoEc.setFtExpensedAmount(el.getFtExpensedAmount());
             expLimitDao.saveDbeExpendControl(neoEc);
         }
-
+        transactionManager.commit(status);
         l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId101", bmService,
             "123456", bmCurrency, bmObCountry);
 
