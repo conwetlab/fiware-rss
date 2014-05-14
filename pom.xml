@@ -152,8 +152,6 @@
                     <aggregate>true</aggregate>
                     <instrumentation>
                         <ignores>
-                            <ignore>es.tid.fiware.rss.expenditureControl.api.*</ignore>
-                            <ignore>es.tid.fiware.rss.expenditureLimit.api.*</ignore>
                             <ignore>es.tid.fiware.rss.exception.*</ignore>
                             <ignore>es.tid.fiware.rss.exception.beans*</ignore>
                         </ignores>
@@ -162,6 +160,9 @@
                             <exclude>**/model/**.class</exclude>
                             <exclude>**/dao/**.class</exclude>
                             <exclude>**/Constants.class</exclude>
+                            <exclude>**/api/**.class</exclude>
+                            <exclude>**/exception/**.class</exclude>
+                            <exclude>**/exception/beans/**.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
