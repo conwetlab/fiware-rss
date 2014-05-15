@@ -67,4 +67,9 @@
   <dbe_appprovider_application tx_appprovider_id="app123456" tx_application_id="1111"/>
   <dbe_appprovider_application tx_appprovider_id="-1" tx_application_id="-1"/>
   
+  <dbe_aggregator tx_email="mail@mail.com" tx_name="aggregator"/>  
+  <dbe_aggregator_appprovider tx_email="mail@mail.com" tx_appprovider_id="123456"/>
+  
+  <set_revenue_share_conf tx_appprovider_id="123456" nu_ob_id="1" nu_country_id="1" nu_perc_revenue_share="20" tx_product_class="productClass"/>
+  
 </dataset>
