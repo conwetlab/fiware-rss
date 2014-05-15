@@ -40,12 +40,6 @@ public final class FactoryExceptionType {
     private static Logger logger = LoggerFactory.getLogger(FactoryExceptionType.class);
 
     /***
-     * Constructor. Do nothing
-     */
-    private FactoryExceptionType() {
-    }
-
-    /***
      * Create and return an ExceptionType from the data passed.
      * 
      * @param exception

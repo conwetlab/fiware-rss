@@ -22,11 +22,7 @@
  */
 package es.tid.fiware.rss.exception.test;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
 
 import es.tid.fiware.rss.exception.RSSException;
@@ -39,24 +35,9 @@ import es.tid.fiware.rss.exception.UNICAExceptionType;
 public class RSSExceptionTest {
 
     /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
-
-    /**
      * Test method for {@link es.tid.fiware.rss.exception.RSSException#GRETAException(java.lang.String)}.
      */
     @Test
-    @Ignore
     public void testGRETAExceptionString() {
         String msg = "Mensaje de error";
         // Call method
@@ -74,9 +55,8 @@ public class RSSExceptionTest {
      * .
      */
     @Test
-    @Ignore
     public void testGRETAExceptionInterfaceExceptionTypeObjectArray() {
-        Object[] args = { "Mensaje de error" };
+        Object[] args = {"Mensaje de error"};
         // Call method
         RSSException exception = new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
 
@@ -92,9 +72,8 @@ public class RSSExceptionTest {
      * Test method for {@link es.tid.fiware.rss.exception.RSSException#getExceptionType()}.
      */
     @Test
-    @Ignore
     public void testGetExceptionType() {
-        Object[] args = { "Mensaje de error" };
+        Object[] args = {"Mensaje de error"};
         // Call method
         RSSException exception = new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
 
