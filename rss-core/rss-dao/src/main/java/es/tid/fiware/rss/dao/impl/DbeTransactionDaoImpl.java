@@ -411,32 +411,6 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
 
     }
 
-    /**
-     * update tx status with new ts_request.
-     * 
-     * @param tx
-     * @param newStatus
-     */
-    @Override
-    public void updateSafeTransactionStatus(DbeTransaction tx, String newStatus) {
-        DbeTransactionDaoImpl.LOGGER.debug("Updating status to " + newStatus);
-        tx.setTsStatusDate(new Date());
-        tx.setTcTransactionStatus(newStatus);
-        getHibernateTemplate().merge(tx);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see es.tid.rss.dbe.dao.DbeTransactionDao#updateSafeTransaction(es.tid.rss.dbe.model.DbeTransaction)
-     */
-    @Override
-    public void updateSafeTransaction(DbeTransaction transaction) {
-        DbeTransactionDaoImpl.LOGGER.debug("Safe transaction update.");
-        transaction.setTsStatusDate(new Date());
-        getHibernateTemplate().merge(transaction);
-    }
-
     @Override
     public void deleteTransactionsByProviderId(String providerId) {
         StringBuilder sbSql = new StringBuilder("delete from dbe_transaction where ");
@@ -480,32 +454,6 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
             DbeTransactionDaoImpl.LOGGER.debug("there is something to return");
         }
         return resultList;
-
-    }
-
-    /**
-     * Method executes HQL query and throws a exception.
-     * 
-     * @param hql
-     *            String with HQL query
-     * @return resultList
-     * @throws Exception
-     *             with ora error
-     */
-    private List<DbeTransaction> listDbeTransactionQueryExcep(final String hql) throws Exception {
-        try {
-
-            DbeTransactionDaoImpl.LOGGER.debug("listDbeTransactionQuery hql-->" + hql);
-            List list = getHibernateTemplate().find(hql);
-            List<DbeTransaction> resultList = Collections.checkedList(list, DbeTransaction.class);
-            if (resultList != null) {
-                DbeTransactionDaoImpl.LOGGER.debug("there is something to return");
-            }
-            return resultList;
-        } catch (Exception e) {
-            DbeTransactionDaoImpl.LOGGER.error("Exception in query:" + e.getMessage());
-            throw e;
-        }
 
     }
 

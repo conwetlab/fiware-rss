@@ -304,4 +304,24 @@ public class PricePointDaoImplTest {
         Assert.assertTrue("Price not equeal", pp.getNuPrice().compareTo(new BigDecimal("7.05")) == 0);
     }
 
+    /**
+     * Test method for
+     * {@link es.tid.fiware.rss.dao.impl.PricePointDaoImpl#getPricePoint(es.tid.fiware.rss.model.BmObCountry, float)}.
+     */
+    @Test
+    public void tesGetPricePoint() {
+        // Call method to test
+        BmObCountryId id = new BmObCountryId();
+        id.setNuCountryId(4);
+        id.setNuObId(4);
+        BmObCountry obCountry = obCountryDAO.getById(id);
+        BmPricePoint pp = pricePointDAO.getPricePoint(obCountry, 7.05f);
+
+        // Check result
+        Assert.assertTrue("Operator not equeal", pp.getBmObCountry().getId().getNuObId() == 4);
+        Assert.assertTrue("Country not equeal", pp.getBmObCountry().getId().getNuCountryId() == 4);
+        Assert.assertTrue("ID operator price point not equeal", pp.getId().getTxPricePointId().equals("41"));
+        Assert.assertTrue("Price not equeal", pp.getNuPrice().compareTo(new BigDecimal("7.05")) == 0);
+    }
+
 }
