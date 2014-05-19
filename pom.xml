@@ -163,7 +163,8 @@
                             <exclude>**/api/**.class</exclude>
                             <exclude>**/exception/**.class</exclude>
                             <exclude>**/exception/beans/**.class</exclude>
-                            <exclude>**/JsonResponse.class</exclude>                            
+                            <exclude>**/JsonResponse.class</exclude>  
+                            <exclude>**/DatabaseLoader.class</exclude>                       
                         </excludes>
                     </instrumentation>
                 </configuration>
