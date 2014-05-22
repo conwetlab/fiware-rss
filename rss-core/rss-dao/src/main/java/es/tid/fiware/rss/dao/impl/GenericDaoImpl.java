@@ -151,7 +151,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     @Override
     public int count() {
         List list = getHibernateTemplate().find("select count(*) from " + domainClass.getName() + " o");
-        Integer count = (Integer) list.get(0);
+        Long count = (Long) list.get(0);
         return count.intValue();
     }
 

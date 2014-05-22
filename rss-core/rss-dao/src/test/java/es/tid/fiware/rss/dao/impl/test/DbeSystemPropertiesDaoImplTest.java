@@ -27,13 +27,19 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.DbeSystemPropertiesDao;
@@ -44,6 +50,7 @@ import es.tid.fiware.rss.model.DbeSystemProperties;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DbeSystemPropertiesDaoImplTest {
 
     /**
@@ -82,7 +89,7 @@ public class DbeSystemPropertiesDaoImplTest {
      * {@link es.tid.fiware.rss.dao.impl.DbeSystemPropertiesDaoImpl#getAllByParamClass(java.lang.String)}.
      */
     @Test
-    public void testGetAllByParamClass() {
+    public void testaGetAllByParamClass() {
         // Call method to test
         List<DbeSystemProperties> c = dbeSystemPropertiesDao.getAllByParamClass("paramClass");
 
@@ -92,4 +99,69 @@ public class DbeSystemPropertiesDaoImplTest {
         Assert.assertTrue("PricePoint", c.get(0).getTxParamClass().equalsIgnoreCase("paramClass"));
 
     }
+
+    @Test
+    public void testbExit() {
+        Assert.assertTrue(dbeSystemPropertiesDao.exists("name"));
+        Assert.assertFalse(dbeSystemPropertiesDao.exists("noname"));
+    }
+
+    @Test
+    public void testcSize() {
+        Assert.assertEquals(2, dbeSystemPropertiesDao.count());
+    }
+
+    @Test
+    public void testdGetAll() {
+        Assert.assertTrue(dbeSystemPropertiesDao.getAll().size() == 2);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void testeUpdate() {
+        DbeSystemProperties c = dbeSystemPropertiesDao.getById("name");
+        c.setTxParamDescription("new description");
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
+        dbeSystemPropertiesDao.update(c);
+        transactionManager.commit(status);
+        c = dbeSystemPropertiesDao.getById("name");
+        Assert.assertTrue(dbeSystemPropertiesDao.getById("name").getTxParamDescription()
+            .equalsIgnoreCase("new description"));
+    }
+
+    @Test
+    public void testfDelete() {
+        DbeSystemProperties c = dbeSystemPropertiesDao.getById("name");
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
+        dbeSystemPropertiesDao.delete(c);
+        transactionManager.commit(status);
+        Assert.assertTrue(dbeSystemPropertiesDao.getById("name") == null);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void testgDeleteById() {
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
+        dbeSystemPropertiesDao.deleteById("name2");
+        transactionManager.commit(status);
+        Assert.assertTrue(dbeSystemPropertiesDao.getById("name2") == null);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void testhDeleteAll() {
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
+        dbeSystemPropertiesDao.deleteAll();
+        transactionManager.commit(status);
+        Assert.assertTrue(dbeSystemPropertiesDao.getAll().size() == 0);
+    }
+
 }
