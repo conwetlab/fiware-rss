@@ -21,21 +21,27 @@ package es.tid.fiware.rss.expenditureLimit.server.exceptionhandles.test;
 import java.net.URI;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.exception.GenericJDBCException;
 import org.hibernate.exception.JDBCConnectionException;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.expenditureLimit.server.exceptionhandles.ExpenditureLimitExceptionMapper;
 
@@ -46,8 +52,36 @@ import es.tid.fiware.rss.expenditureLimit.server.exceptionhandles.ExpenditureLim
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml", "classpath:cxf-beans.xml"})
 public class ExpenditureLimitExceptionMapperTest {
+    /**
+     * Logging system.
+     */
+    private static Logger logger = LoggerFactory.getLogger(ExpenditureLimitExceptionMapperTest.class);
+    /**
+     * For database access.
+     */
+    @Autowired
+    private DataSource dataSource;
+    /**
+     * 
+     */
+    @Autowired
+    private DatabaseLoader databaseLoader;
+
     @Autowired
     ExpenditureLimitExceptionMapper mapper;
+
+    @Before
+    public void setUp() throws Exception {
+        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
+    }
 
     @Test
     public void toResponse() throws Exception {

@@ -21,17 +21,21 @@ package es.tid.fiware.rss.expenditureLimit.server.manager.common.test;
 import java.net.URI;
 import java.util.Date;
 
+import javax.sql.DataSource;
 import javax.ws.rs.core.UriInfo;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.tid.fiware.rss.common.properties.AppProperties;
+import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.expenditureLimit.server.common.ExpenditureLimitCommon;
 
 /**
@@ -41,6 +45,23 @@ import es.tid.fiware.rss.expenditureLimit.server.common.ExpenditureLimitCommon;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 public class ExpenditureLimitCommonTest {
+    /**
+     * Logging system.
+     */
+    private static Logger logger = LoggerFactory.getLogger(ExpenditureLimitCommonTest.class);
+    /**
+     * For database access.
+     */
+    @Autowired
+    private DataSource dataSource;
+    /**
+     * 
+     */
+    @Autowired
+    private DatabaseLoader databaseLoader;
+    /**
+     * 
+     */
     @Autowired
     private AppProperties appProperties;
 
