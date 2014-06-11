@@ -22,23 +22,55 @@ package es.tid.fiware.rss.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.model.RSSFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
     "/META-INF/spring/cxf-beans.xml"})
 public class SettlementManagerTest {
-
+    /**
+     * 
+     */
     @Autowired
     private SettlementManager settlementManager;
+    /**
+     * 
+     */
+    @Autowired
+    private DatabaseLoader databaseLoader;
 
+    /**
+     * Method to insert data before test.
+     * 
+     * @throws Exception
+     *             from dbb
+     */
+    @Before
+    public void setUp() throws Exception {
+        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+    }
+
+    /**
+    * 
+    */
     @Test
     public void runSettlementTest() {
         try {
