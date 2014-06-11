@@ -23,7 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
@@ -108,6 +110,25 @@ public class SessionMultiactionControllerTest {
         userSession.setEmail("email");
         aggregator = new DbeAggregator();
         aggregator.setTxEmail("email");
+    }
+
+    /**
+     * Method to insert data before test.
+     * 
+     * @throws Exception
+     *             from db
+     */
+    @Before
+    public void setUp() throws Exception {
+        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
     }
 
     /**
