@@ -61,6 +61,7 @@ public class FactoryExceptionTypeTest {
         Object[] args = {"Mensaje de error"};
         RSSException exception = new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         // Call method
+        FactoryExceptionType factory = new FactoryExceptionType();
         ExceptionType bean = FactoryExceptionType.createExceptionBean(exception);
 
         Assert.assertTrue("ExceptionId not equal (" + bean.getExceptionId() + ")",
