@@ -116,7 +116,7 @@ public class SessionMultiactionControllerTest {
      * Method to insert data before test.
      * 
      * @throws Exception
-     *             from db
+     *             from dbb
      */
     @Before
     public void setUp() throws Exception {
