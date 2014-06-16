@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -57,19 +58,52 @@ public class SettlementManager {
      * Logging system.
      */
     private final Logger logger = LoggerFactory.getLogger(SettlementManager.class);
+    /**
+     * 
+     */
     @Autowired
     private DbeAggregatorAppProviderDao aggregatorAppProviderDao;
+    /**
+     * 
+     */
     @Autowired
+    /**
+     * 
+     */
     private DbeAppProviderDao appProviderDao;
+    /**
+     * 
+     */
     @Autowired
     private SetRevenueShareConfDao revenueShareConfDao;
+    /**
+     * 
+     */
     @Autowired
     private DbeTransactionDao transactionDao;
+    /**
+     * 
+     */
     @Autowired
     private DbeAggregatorDao aggregatorDao;
-
+    /**
+     * 
+     */
+    private Runtime runtime;
+    /**
+     * 
+     */
     @Resource(name = "rssProps")
     private Properties rssProps;
+
+    /**
+     * 
+     * @throws Exception
+     */
+    @PostConstruct
+    private void init() throws Exception {
+        runtime = Runtime.getRuntime();
+    }
 
     /**
      * Launch settlement process.
@@ -85,7 +119,6 @@ public class SettlementManager {
         logger.debug("runSettlement - Start: Init" + startPeriod + ",End:" + endPeriod);
         String settlementScript = (String) rssProps.get("settlementScript");
         File settlementSH = new File(settlementScript);
-        Runtime runtime = Runtime.getRuntime();
         logger.debug("Running script: " + "." + settlementSH.getPath() + " " + startPeriod + " " + endPeriod);
         if (null != providerId && providerId.length() > 0) {
             DbeAppProvider provider = appProviderDao.getById(providerId);
@@ -264,8 +297,13 @@ public class SettlementManager {
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
             if (null != provsAgg && provsAgg.size() > 0) {
                 for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    models.addAll(revenueShareConfDao.getRevenueModelsByProviderId(provAgg.getDbeAppProvider()
-                        .getTxAppProviderId()));
+                    List<SetRevenueShareConf> modelsBBDD = revenueShareConfDao.getRevenueModelsByProviderId(provAgg
+                        .getDbeAppProvider()
+                        .getTxAppProviderId());
+                    if (null != modelsBBDD) {
+                        models.addAll(modelsBBDD);
+                    }
+
                 }
             }
         } else {
