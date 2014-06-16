@@ -122,21 +122,6 @@ public class SettlementControllerTest {
     }
 
     /**
-     * 
-     * @return
-     * @throws Exception
-     */
-    /*
-     * private SettlementManager unwrapSettlementManager() throws Exception {
-     * if (AopUtils.isAopProxy(settlementManager) && settlementManager instanceof Advised) {
-     * Object target = ((Advised) settlementManager).getTargetSource().getTarget();
-     * return (SettlementManager) target;
-     * }
-     * return null;
-     * }
-     */
-
-    /**
      * @throws Exception
      */
     @After
