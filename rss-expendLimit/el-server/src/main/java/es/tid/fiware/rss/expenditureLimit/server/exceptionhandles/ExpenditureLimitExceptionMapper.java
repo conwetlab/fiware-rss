@@ -62,10 +62,10 @@ public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exceptio
                 ((RSSException) e), ui.getAbsolutePath().getPath());
             return FactoryResponse.createResponseError(((RSSException) e), exceptObj);
         } else if (e instanceof GenericJDBCException) {
-            return FactoryResponse.catchNewConnectionJson(dbeProperties, ui, (GenericJDBCException) e.getCause(),
+            return FactoryResponse.catchNewConnectionJson(dbeProperties, ui, (GenericJDBCException) e,
                 ui.getAbsolutePath().getPath(), null);
         } else if (e instanceof JDBCConnectionException) {
-            return FactoryResponse.catchConnectionJDBCJson(dbeProperties, ui, (JDBCConnectionException) e.getCause(),
+            return FactoryResponse.catchConnectionJDBCJson(dbeProperties, ui, (JDBCConnectionException) e,
                 ui.getAbsolutePath().getPath(), null);
         } else if (e instanceof NotFoundException) {
             return Response.status(404).build();

@@ -19,8 +19,7 @@
 
 package es.tid.fiware.rss.common.test.test;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ import es.tid.fiware.rss.common.properties.AppProperties;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+@ContextConfiguration({"classpath:database.xml"})
 public class AppPropertiesTest {
 
     /**
@@ -58,6 +57,13 @@ public class AppPropertiesTest {
         props.setProps(null);
         prop = props.getProperty("database.url");
         Assert.assertTrue(prop.startsWith("jdbc"));
+    }
+
+    @Test
+    public void getFilenaName() {
+        AppProperties props = new AppProperties("database.properties");
+        Assert.assertTrue(props.getFilename().equalsIgnoreCase("database.properties"));
+        Assert.assertNotNull("Props can not be null", props.getProps());
     }
 
 }

@@ -53,6 +53,7 @@
         <mysql.connector.version>5.1.26</mysql.connector.version>
         <httpclient.version>4.0.1</httpclient.version>	
         <cobertura-maven-plugin.version>2.6</cobertura-maven-plugin.version>
+        <mockito.version>1.9.5</mockito.version>
     </properties>
 
     <modules>
@@ -152,16 +153,19 @@
                     <aggregate>true</aggregate>
                     <instrumentation>
                         <ignores>
-                            <ignore>es.tid.fiware.rss.expenditureControl.api.*</ignore>
-                            <ignore>es.tid.fiware.rss.expenditureLimit.api.*</ignore>
-                            <ignore>es.tid.fiware.rss.expenditureLimit.dao.*</ignore>
-                            <ignore>es.tid.fiware.rss.dao.*</ignore>
                             <ignore>es.tid.fiware.rss.exception.*</ignore>
                             <ignore>es.tid.fiware.rss.exception.beans*</ignore>
                         </ignores>
                         <excludes>
                             <exclude>**/*Test*.class</exclude>
                             <exclude>**/model/**.class</exclude>
+                            <exclude>**/dao/**.class</exclude>
+                            <exclude>**/Constants.class</exclude>
+                            <exclude>**/api/**.class</exclude>
+                            <exclude>**/exception/**.class</exclude>
+                            <exclude>**/exception/beans/**.class</exclude>
+                            <exclude>**/JsonResponse.class</exclude>  
+                            <exclude>**/DatabaseLoader.class</exclude>                       
                         </excludes>
                     </instrumentation>
                 </configuration>

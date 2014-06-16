@@ -54,7 +54,7 @@ import es.tid.fiware.rss.model.BmService;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+@ContextConfiguration({"classpath:database.xml"})
 public class DbeExpendLimitDaoTest {
 
     /**
@@ -99,6 +99,30 @@ public class DbeExpendLimitDaoTest {
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrencyObCountry("userId01", bmService,
             "app123456", bmCurrency,
             bmObCountry);
+
+        Assert.assertTrue("Elements founds", l != null && l.size() == 6);
+        Iterator<DbeExpendLimit> it = l.iterator();
+        while (it.hasNext()) {
+            DbeExpendLimit el = it.next();
+            if (!el.getId().getTxAppProviderId().equalsIgnoreCase(DbeExpendLimitDao.NO_APP_PROVIDER_ID)
+                && !el.getId().getTxAppProviderId().equalsIgnoreCase("app123456")) {
+                Assert.fail("Application provider invalid: " + el.getId().getTxAppProviderId());
+            }
+            if (!el.getId().getTxEndUserId().equalsIgnoreCase(DbeExpendLimitDao.NO_USER_ID)
+                && !el.getId().getTxEndUserId().equalsIgnoreCase("userId01")) {
+                Assert.fail("User invalid: " + el.getId().getTxEndUserId());
+            }
+        }
+    }
+
+    @Test
+    public void testGetExpenditureLimitInfByUserNullCurrency() {
+        BmService bmService = new BmService();
+        bmService.setNuServiceId(1);
+        BmObCountry bmObCountry = new BmObCountry();
+        bmObCountry.setId(new BmObCountryId(1, 1));
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrencyObCountry("userId01", bmService,
+            "app123456", null, bmObCountry);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 6);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -177,6 +201,56 @@ public class DbeExpendLimitDaoTest {
                 Assert.fail("Application provider invalid: " + el.getId().getTxAppProviderId());
             }
             if (!el.getId().getTxEndUserId().equalsIgnoreCase(DbeExpendLimitDao.NO_USER_ID)) {
+                Assert.fail("User invalid: " + el.getId().getTxEndUserId());
+            }
+        }
+    }
+
+    @Test
+    public void getExpendLimitsByProviderUserService() {
+        BmService bmService = new BmService();
+        bmService.setNuServiceId(1);
+        BmCurrency bmCurrency = new BmCurrency();
+        bmCurrency.setNuCurrencyId(1);
+        BmObCountry bmObCountry = new BmObCountry();
+        bmObCountry.setId(new BmObCountryId(1, 1));
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(bmService,
+            "app123456", "userId01", bmObCountry, bmCurrency);
+
+        Assert.assertTrue("Elements founds", l != null && l.size() == 1);
+        Iterator<DbeExpendLimit> it = l.iterator();
+        while (it.hasNext()) {
+            DbeExpendLimit el = it.next();
+            if (!el.getId().getTxAppProviderId().equalsIgnoreCase(DbeExpendLimitDao.NO_APP_PROVIDER_ID)
+                && !el.getId().getTxAppProviderId().equalsIgnoreCase("app123456")) {
+                Assert.fail("Application provider invalid: " + el.getId().getTxAppProviderId());
+            }
+            if (!el.getId().getTxEndUserId().equalsIgnoreCase(DbeExpendLimitDao.NO_USER_ID)
+                && !el.getId().getTxEndUserId().equalsIgnoreCase("userId01")) {
+                Assert.fail("User invalid: " + el.getId().getTxEndUserId());
+            }
+        }
+    }
+
+    @Test
+    public void getExpendLimitsByProviderUserServiceNullCurrency() {
+        BmService bmService = new BmService();
+        bmService.setNuServiceId(1);
+        BmObCountry bmObCountry = new BmObCountry();
+        bmObCountry.setId(new BmObCountryId(1, 1));
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(bmService,
+            "app123456", "userId01", bmObCountry, null);
+
+        Assert.assertTrue("Elements founds", l != null && l.size() == 1);
+        Iterator<DbeExpendLimit> it = l.iterator();
+        while (it.hasNext()) {
+            DbeExpendLimit el = it.next();
+            if (!el.getId().getTxAppProviderId().equalsIgnoreCase(DbeExpendLimitDao.NO_APP_PROVIDER_ID)
+                && !el.getId().getTxAppProviderId().equalsIgnoreCase("app123456")) {
+                Assert.fail("Application provider invalid: " + el.getId().getTxAppProviderId());
+            }
+            if (!el.getId().getTxEndUserId().equalsIgnoreCase(DbeExpendLimitDao.NO_USER_ID)
+                && !el.getId().getTxEndUserId().equalsIgnoreCase("userId01")) {
                 Assert.fail("User invalid: " + el.getId().getTxEndUserId());
             }
         }

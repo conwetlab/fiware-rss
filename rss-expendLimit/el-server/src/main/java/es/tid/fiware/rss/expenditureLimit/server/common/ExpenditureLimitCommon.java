@@ -64,13 +64,6 @@ public final class ExpenditureLimitCommon {
     public final static String DEF_PROV_ID = "DefaulProviderId";
 
     /**
-     * Constructor.
-     */
-    private ExpenditureLimitCommon() {
-
-    }
-
-    /**
      * 
      * @param strDate
      * @return date;
@@ -85,7 +78,7 @@ public final class ExpenditureLimitCommon {
             return date;
         } catch (ParseException ex) {
             ExpenditureLimitCommon.logger.error("Error parsing string to date " + ex.getMessage());
-            String[] args = { "'fromTime/untilTime' hasn't correct format (Example: 2012-05-29 12:32)" };
+            String[] args = {"'fromTime/untilTime' hasn't correct format (Example: 2012-05-29 12:32)"};
             throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
         }
     }
@@ -97,9 +90,9 @@ public final class ExpenditureLimitCommon {
      * @param resource
      * @return
      */
-    public static String getResourceUrl(AppProperties dbeProperties, UriInfo ui, String profileId, String resource) {
+    public static String getResourceUrl(AppProperties appProperties, UriInfo ui, String profileId, String resource) {
         String resourceUrl, urlEnd;
-        String serviceUrl = ExpenditureLimitCommon.getServiceUrl(dbeProperties);
+        String serviceUrl = ExpenditureLimitCommon.getServiceUrl(appProperties);
 
         // Init urlEnd
         if (profileId == null || profileId.equals("")) {
@@ -133,10 +126,10 @@ public final class ExpenditureLimitCommon {
      * 
      * @return the serviceUrl
      */
-    public static String getServiceUrl(AppProperties dbeProperties) {
+    public static String getServiceUrl(AppProperties appProperties) {
         ExpenditureLimitCommon.logger.debug("Into getServiceUrl method.");
         if (ExpenditureLimitCommon.serviceUrl == null) {
-            ExpenditureLimitCommon.serviceUrl = dbeProperties.getProperty("service.url");
+            ExpenditureLimitCommon.serviceUrl = appProperties.getProperty("service.url");
             if (ExpenditureLimitCommon.serviceUrl == null) {
                 ExpenditureLimitCommon.logger.error("Property 'service.url' not defined");
             }

@@ -22,11 +22,9 @@
  */
 package es.tid.fiware.rss.exception.factories.test;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import es.tid.fiware.rss.exception.RSSException;
@@ -59,11 +57,11 @@ public class FactoryExceptionTypeTest {
      * .
      */
     @Test
-    @Ignore
     public void testCreateExceptionBean() {
-        Object[] args = { "Mensaje de error" };
+        Object[] args = {"Mensaje de error"};
         RSSException exception = new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         // Call method
+        FactoryExceptionType factory = new FactoryExceptionType();
         ExceptionType bean = FactoryExceptionType.createExceptionBean(exception);
 
         Assert.assertTrue("ExceptionId not equal (" + bean.getExceptionId() + ")",
