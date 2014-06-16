@@ -30,7 +30,6 @@ import javax.sql.DataSource;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -42,6 +41,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import es.tid.fiware.rss.common.Constants;
@@ -112,7 +113,7 @@ public class ProcessingLimitServiceTest {
     public static DbeTransaction generateTransaction() {
         DbeTransaction tx = new DbeTransaction();
         tx.setTxTransactionId("transactionsId");
-        tx.setTcTransactionType(Constants.CAPTURE_TYPE);
+        tx.setTcTransactionType(Constants.CHARGE_TYPE);
         tx.setTcTransactionStatus(Constants.CAPTURE_STATUS);
         BmService service = new BmService();
         tx.setBmService(service);
@@ -237,7 +238,7 @@ public class ProcessingLimitServiceTest {
      * Check that not existing control are created.
      */
     @Test
-    @Ignore
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void creationControls() {
         try {
             DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
@@ -248,7 +249,11 @@ public class ProcessingLimitServiceTest {
                 tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
             Assert.assertTrue(controls.size() == 0);
             // Update limits.
+            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+            def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+            TransactionStatus status = transactionManager.getTransaction(def);
             limitService.proccesLimit(tx);
+            transactionManager.commit(status);
             controls = controlService.getExpendDataForUserAppProvCurrencyObCountry(tx.getTxEndUserId(),
                 tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
             Assert.assertNotNull(controls);
@@ -268,7 +273,7 @@ public class ProcessingLimitServiceTest {
      * Update periods and check amounts.
      */
     @Test
-    @Ignore
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkControls() {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
         tx.setTxEndUserId("userIdUpdate");

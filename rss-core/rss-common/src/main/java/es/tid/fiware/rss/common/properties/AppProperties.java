@@ -39,7 +39,7 @@ public class AppProperties {
     /**
      * Filename of properties.
      */
-    private String filename;
+    private final String filename;
 
     /**
      * Filename of properties.
@@ -61,14 +61,6 @@ public class AppProperties {
      */
     public String getFilename() {
         return filename;
-    }
-
-    /**
-     * @param filename
-     *            the filename to set
-     */
-    public void setFilename(final String filename) {
-        this.filename = filename;
     }
 
     /**

@@ -77,7 +77,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.AbstractHibernateDAO#save(DomainObject)
+     * @see es.tid.fiware.rss.dao.AbstractHibernateDAO#save(DomainObject)
      */
     @Override
     public void create(final DomainObject object) {
@@ -87,7 +87,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.AbstractHibernateDAO#create(DomainObject)
+     * @see es.tid.fiware.rss.dao.AbstractHibernateDAO#create(DomainObject)
      */
     @Override
     public void createOrUpdate(final DomainObject object) {
@@ -98,7 +98,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.AbstractHibernateDAO#delete(DomainObject)
+     * @see es.tid.fiware.rss.dao.AbstractHibernateDAO#delete(DomainObject)
      */
     @Override
     public void delete(final DomainObject object) {
@@ -108,7 +108,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.AbstractHibernateDAO#deleteById(KeyType)
+     * @see es.tid.fiware.rss.dao.AbstractHibernateDAO#deleteById(KeyType)
      */
     @Override
     public void deleteById(final PK id) {
@@ -119,7 +119,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.AbstractHibernateDAO#getAll()
+     * @see es.tid.fiware.rss.dao.AbstractHibernateDAO#getAll()
      */
     @Override
     public List<DomainObject> getAll() {
@@ -129,7 +129,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.AbstractHibernateDAO#deleteAll()
+     * @see es.tid.fiware.rss.dao.AbstractHibernateDAO#deleteAll()
      */
     @Override
     public void deleteAll() {
@@ -146,12 +146,12 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     /*
      * (non-Javadoc)
      * 
-     * @see org.slasoi.businessManager.common.dao.GenericDAO#count()
+     * @see es.tid.fiware.rss.dao.GenericDAO#count()
      */
     @Override
     public int count() {
         List list = getHibernateTemplate().find("select count(*) from " + domainClass.getName() + " o");
-        Integer count = (Integer) list.get(0);
+        Long count = (Long) list.get(0);
         return count.intValue();
     }
 

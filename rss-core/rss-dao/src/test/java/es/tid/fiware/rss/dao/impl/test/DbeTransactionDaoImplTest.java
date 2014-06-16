@@ -37,6 +37,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.impl.DbeTransactionDaoImpl;
@@ -49,7 +53,7 @@ import es.tid.fiware.rss.model.BmService;
 import es.tid.fiware.rss.model.DbeTransaction;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+@ContextConfiguration({"classpath:database.xml"})
 public class DbeTransactionDaoImplTest {
 
     /**
@@ -421,6 +425,19 @@ public class DbeTransactionDaoImplTest {
 
         // I don't know de tx id at first time
         Assert.assertTrue("End user id not equal", "91334000000".equals(dbetr.getTxEndUserId())); // to see: Asser
+        dbetr.setTxEndUserId("UserTest");
+        dbeTransactionDAO.createOrUpdate(dbetr);
+        DbeTransactionDaoImplTest.LOGGER.debug("**************Value of end user id:" + dbetr.getTxEndUserId());
+        DbeTransactionDaoImplTest.LOGGER.debug("**************Value of tx id:" + dbetr.getTxTransactionId());
+        DbeTransactionDaoImplTest.LOGGER.debug("************** Value of partition:" + dbetr.getTxPartition());
+
+        // I don't know de tx id at first time
+        Assert.assertTrue("End user id not equal", "UserTest".equals(dbetr.getTxEndUserId())); // to see: Asser
+
+        // I don't know de tx id at first time
+        dbetr.setTxTransactionId("1");
+        dbeTransactionDAO.createOrUpdate(dbetr);
+        Assert.assertTrue("Equals TxId", !dbetr.getTxTransactionId().equalsIgnoreCase("1")); // to see: Asser
 
     }
 
@@ -534,6 +551,133 @@ public class DbeTransactionDaoImplTest {
             Assert.assertTrue("nothing obtained ", false);
         }
 
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void testGetTransactionByTxIdWithoutLazy() {
+
+        String txId = new String("1234");
+        try {
+            DbeTransaction dbetr = dbeTransactionDAO.getTransactionByTxIdWithoutLazy(txId);
+            if (dbetr == null) {
+                DbeTransactionDaoImplTest.LOGGER.debug("Obtained nothing");
+                Assert.assertTrue("Transaction Id not found", false);
+            } else {
+                DbeTransactionDaoImplTest.LOGGER.debug("Obtained value of transaction");
+                Assert.assertTrue("Transaction Id found", true);
+            }
+        } catch (Exception e) { // this is not possible
+            String msg = "test65GetTransactionBySvrRfCde:Error in database there are several Transactions for " + txId;
+            DbeTransactionDaoImplTest.LOGGER.error(msg);
+            Assert.assertTrue("ERROR in Test ", false);
+        }
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void testGetTransactionByRfCdeSvc() {
+
+        String txReferenceCode = new String("100");
+        String applicationId = new String("1");
+        long nuServiceId = 1;
+        try {
+            DbeTransaction dbetr = dbeTransactionDAO.getTransactionByRfCdeSvc(nuServiceId, txReferenceCode,
+                applicationId);
+            if (dbetr == null) {
+                DbeTransactionDaoImplTest.LOGGER.debug("value of transaction not Obtained");
+                Assert.assertTrue("Transaction Id not found", false);
+            } else {
+                DbeTransactionDaoImplTest.LOGGER.debug("Obtained nothing");
+                Assert.assertTrue("Transaction Id not found", dbetr.getTxTransactionId().equalsIgnoreCase("1234"));
+            }
+        } catch (Exception e) { // this is not possible
+            String msg = "testGetTransactionByRfCdeSvc: Error in database";
+            DbeTransactionDaoImplTest.LOGGER.error(msg);
+            Assert.assertTrue("ERROR in Test ", false);
+        }
+    }
+
+    // obtained the value of the datatest
+    @Test
+    public void testGetTransactionByTxPbCorrelationId() {
+
+        String txTransactionId = new String("1234");
+        String pbcorrelationid = new String("null");
+
+        List<DbeTransaction> listDbeTr = dbeTransactionDAO.getTransactionByTxPbCorrelationId(pbcorrelationid);
+
+        if (listDbeTr.size() >= 0) {
+            DbeTransactionDaoImplTest.LOGGER.debug("looking result list data....");
+            if (listDbeTr.size() == 0) {
+                DbeTransactionDaoImplTest.LOGGER.error("Obtained 0 data is not possible with datatest values");
+                Assert.assertTrue("0 data obtained ", false);
+            } else {
+                DbeTransactionDaoImplTest.LOGGER.debug("Obtained:" + listDbeTr.get(0).getTxTransactionId());
+                Assert.assertTrue("0 data obtained ", (listDbeTr.get(0).getTxTransactionId()).equals(txTransactionId));
+            }
+        } else {
+            DbeTransactionDaoImplTest.LOGGER.error("Obtained nothing is not possible with datatest values");
+            Assert.assertTrue("nothing obtained ", false);
+        }
+    }
+
+    @Test
+    public void testGetTransactionsByProviderId() {
+        String txTransactionId = new String("1234");
+        String providerId = new String("provider");
+
+        List<DbeTransaction> listDbeTr = dbeTransactionDAO.getTransactionsByProviderId(providerId);
+
+        if (listDbeTr.size() >= 0) {
+            DbeTransactionDaoImplTest.LOGGER.debug("looking result list data....");
+            if (listDbeTr.size() == 0) {
+                DbeTransactionDaoImplTest.LOGGER.error("Obtained 0 data is not possible with datatest values");
+                Assert.assertTrue("0 data obtained ", false);
+            } else {
+                DbeTransactionDaoImplTest.LOGGER.debug("Obtained:" + listDbeTr.get(0).getTxTransactionId());
+                Assert.assertTrue("0 data obtained ", (listDbeTr.get(0).getTxTransactionId()).equals(txTransactionId));
+            }
+        } else {
+            DbeTransactionDaoImplTest.LOGGER.error("Obtained nothing is not possible with datatest values");
+            Assert.assertTrue("nothing obtained ", false);
+        }
+
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void testDeleteTransactionsByProviderId() {
+        String txTransactionId = new String("1234");
+        String providerId = new String("provider");
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
+        TransactionStatus status = transactionManager.getTransaction(def);
+        dbeTransactionDAO.deleteTransactionsByProviderId(providerId);
+        transactionManager.commit(status);
+        List<DbeTransaction> listDbeTr = dbeTransactionDAO.getTransactionsByProviderId(providerId);
+
+        if (listDbeTr != null && listDbeTr.size() > 0) {
+            DbeTransactionDaoImplTest.LOGGER.debug("looking result list data....");
+            DbeTransactionDaoImplTest.LOGGER.error("Obtained:" + listDbeTr.get(0).getTxTransactionId());
+            Assert.assertTrue("0 data obtained ", (listDbeTr.get(0).getTxTransactionId()).equals(txTransactionId));
+        } else {
+            DbeTransactionDaoImplTest.LOGGER.debug("Obtained 0 data is not possible with datatest values");
+            Assert.assertTrue("0 data obtained ", true);
+        }
+
+    }
+
+    @Test
+    public void testGetNumTxBySvcRefcPrdtUserDate() {
+        String txTransactionId = new String("1234");
+        Long number = dbeTransactionDAO.getNumTxBySvcRefcPrdtUserDate(txTransactionId, null, null, null, null, null,
+            null, null, null, null, null, null, null, null);
+        Assert.assertTrue("0 data obtained ", number == 1);
     }
 
 }

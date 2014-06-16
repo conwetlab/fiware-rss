@@ -44,7 +44,7 @@ import es.tid.fiware.rss.model.BmServdeployMop;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+@ContextConfiguration({"classpath:database.xml"})
 public class ServDeployMopDaoImplTest {
 
     @Autowired
@@ -121,6 +121,13 @@ public class ServDeployMopDaoImplTest {
             Assert.assertTrue("MOP ID not equal", servdeployMop.getBmMethodsOfPayment().getNuMopId() == idMop);
             Assert.assertTrue("defaultYn not equal", servdeployMop.getTcDefaultYn().compareTo(defaultYn) == 0);
         }
+
+        // call null parameter
+        list = servDeployMopDao.getServDeployMopFilter(new Long(1), null);
+        Assert.assertNotNull("Size not equal", list);
+        Assert.assertTrue("Size not equal", list.size() == 6);
+        Assert.assertTrue("Size not equal", list.get(0).getBmServiceDeployment().getNuDeploymentId() == 1);
+
     }
 
     /**
@@ -139,6 +146,38 @@ public class ServDeployMopDaoImplTest {
         Assert.assertTrue("Deployment ID not equal", servdeployMop.getBmServiceDeployment().getNuDeploymentId() == 1);
         Assert.assertTrue("MOP ID not equal", servdeployMop.getBmMethodsOfPayment().getNuMopId() == 1);
         Assert.assertTrue("defaultYn not equal", servdeployMop.getTcDefaultYn().compareTo("Y") == 0);
+    }
+
+    /**
+     * Test method for
+     * {@link es.tid.fiware.rss.dao.impl.ServDeployMopDaoImpl#getDefaultMop(java.lang.Long, java.lang.Long)}.
+     */
+    @Test
+    public void testGetServiceDeployMop() {
+        // Call method to test
+        BmServdeployMop list = servDeployMopDao.getServiceDeployMop(new Long(1), new Long(1));
+
+        // Check result
+        BmServdeployMop servdeployMop = list;
+        Assert.assertTrue("Customer type ID not equal", servdeployMop.getBmCustomerType().getNuCustomerTypeId() == 1);
+        Assert.assertTrue("Deployment ID not equal", servdeployMop.getBmServiceDeployment().getNuDeploymentId() == 1);
+        Assert.assertTrue("MOP ID not equal", servdeployMop.getBmMethodsOfPayment().getNuMopId() == 1);
+        Assert.assertTrue("defaultYn not equal", servdeployMop.getTcDefaultYn().compareTo("N") == 0);
+    }
+
+    /**
+     * Test method for
+     * {@link es.tid.fiware.rss.dao.impl.ServDeployMopDaoImpl#listServDeployMopsbyDeploymentId(java.lang.Long)}.
+     */
+    @Test
+    public void testListServDeployMopsbyDeploymentId() {
+        // Call method to test
+        List<BmServdeployMop> list = servDeployMopDao.listServDeployMopsbyDeploymentId(new Long(1));
+
+        // Check result
+        Assert.assertNotNull("No result", list);
+        Assert.assertTrue("Size not equal", list.size() > 0);
+        Assert.assertTrue("Size not equal", list.get(0).getBmServiceDeployment().getNuDeploymentId() == 1);
     }
 
 }

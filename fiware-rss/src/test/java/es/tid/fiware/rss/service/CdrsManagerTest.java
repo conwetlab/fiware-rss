@@ -19,24 +19,62 @@
 
 package es.tid.fiware.rss.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import es.tid.fiware.rss.common.test.DatabaseLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
     "/META-INF/spring/cxf-beans.xml"})
 public class CdrsManagerTest {
-
+    /**
+     * 
+     */
     @Autowired
     private CdrsManager cdrsManager;
+    /**
+     * 
+     */
+    @Autowired
+    private DatabaseLoader databaseLoader;
 
+    /**
+     * Method to insert data before test.
+     * 
+     * @throws Exception
+     *             from dbb
+     */
+    @Before
+    public void setUp() throws Exception {
+        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+    }
+
+    /**
+     * 
+     */
     @Test
     public void getCdrFileTest() {
         File cdrFile;
@@ -49,5 +87,27 @@ public class CdrsManagerTest {
             Assert.fail(e.getMessage());
         }
 
+    }
+
+    /**
+     * Test runCdrToDB method.
+     */
+    @Test
+    public void runCdrToDB() throws IOException, InterruptedException {
+        Process p = Mockito.mock(Process.class);
+        Runtime runtime = Mockito.mock(Runtime.class);
+        Mockito.when(runtime.exec(Matchers.any(String.class))).thenReturn(p);
+        ReflectionTestUtils.setField(cdrsManager, "runtime", runtime);
+        InputStream inputStream = new ByteArrayInputStream("OK".getBytes());
+        Mockito.when(p.getInputStream()).thenReturn(inputStream);
+        Mockito.when(p.waitFor()).thenReturn(0);
+        String result = cdrsManager.runCdrToDB();
+        Assert.assertNull(result);
+        // Error
+        inputStream = new ByteArrayInputStream("ERROR".getBytes());
+        Mockito.when(p.getInputStream()).thenReturn(inputStream);
+        Mockito.when(p.waitFor()).thenReturn(-1);
+        result = cdrsManager.runCdrToDB();
+        Assert.assertEquals("ERROR", result);
     }
 }

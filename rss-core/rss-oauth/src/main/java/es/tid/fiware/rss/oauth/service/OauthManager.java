@@ -65,6 +65,10 @@ public class OauthManager {
     @Autowired
     @Qualifier(value = "oauthProperties")
     private AppProperties oauthProperties;
+    /**
+     * 
+     */
+    private final DefaultHttpClient httpclient = new DefaultHttpClient();
 
     /**
      * Read needed properties from file.
@@ -169,7 +173,6 @@ public class OauthManager {
         OauthManager.log.debug("getToken method");
         // grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA
         // &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcallback_url
-        DefaultHttpClient httpclient = new DefaultHttpClient();
         try {
             OauthManager.log.debug("Code:" + code);
             HttpPost httppost = new HttpPost(getTokenUrl(code));
@@ -178,7 +181,8 @@ public class OauthManager {
 
             OauthManager.log.debug("executing request" + httppost.getRequestLine());
             // send request
-            HttpResponse response = httpclient.execute(httppost);
+            ResponseHandler handler = new ResponseHandler();
+            HttpResponse response = httpclient.execute(httppost, handler);
             HttpEntity received = response.getEntity();
             int status = response.getStatusLine().getStatusCode();
             OauthManager.log.debug("----------------------------------------");
@@ -236,7 +240,6 @@ public class OauthManager {
                     session.setRole(role.getName());
                     break;
                 }
-                session.setRole(role.getName());
             }
         } else {
             // no roles --> not allowed to enter
@@ -255,12 +258,12 @@ public class OauthManager {
      */
     public ValidatedToken getUserInfo(String token) throws Exception {
         OauthManager.log.debug("getUserInfo method. Token: {}", token);
-        DefaultHttpClient httpclient = new DefaultHttpClient();
         try {
             HttpGet httpget = new HttpGet(getInfoUserUrl(token));
             OauthManager.log.debug("executing request" + httpget.getRequestLine());
             // send request
-            HttpResponse response = httpclient.execute(httpget);
+            ResponseHandler handler = new ResponseHandler();
+            HttpResponse response = httpclient.execute(httpget, handler);
             HttpEntity received = response.getEntity();
             int status = response.getStatusLine().getStatusCode();
             OauthManager.log.debug("----------------------------------------");
@@ -303,12 +306,12 @@ public class OauthManager {
      */
     public ApplicationInfo[] getClientIdApplications(String userToken, String actorId) throws Exception {
         OauthManager.log.debug("getClientIdApplications method. Token: {}", userToken);
-        DefaultHttpClient httpclient = new DefaultHttpClient();
         try {
             HttpGet httpget = new HttpGet(getAplicationsUrl(actorId, userToken));
             OauthManager.log.debug("executing request" + httpget.getRequestLine());
             // send request
-            HttpResponse response = httpclient.execute(httpget);
+            ResponseHandler handler = new ResponseHandler();
+            HttpResponse response = httpclient.execute(httpget, handler);
             HttpEntity received = response.getEntity();
             int status = response.getStatusLine().getStatusCode();
             OauthManager.log.debug("----------------------------------------");
