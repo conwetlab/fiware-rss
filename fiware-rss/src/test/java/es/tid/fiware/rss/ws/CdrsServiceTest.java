@@ -27,7 +27,9 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -38,6 +40,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
 import es.tid.fiware.rss.oauth.service.OauthManager;
 import es.tid.fiware.rss.service.CdrsManager;
@@ -48,6 +51,12 @@ import es.tid.fiware.rss.service.CdrsManager;
 public class CdrsServiceTest {
     private final Logger logger = LoggerFactory.getLogger(CdrsServiceTest.class);
     /**
+     * 
+     */
+    @Autowired
+    private DatabaseLoader databaseLoader;
+    /**
+     * /**
      * 
      */
     @Autowired
@@ -76,6 +85,25 @@ public class CdrsServiceTest {
         ReflectionTestUtils.setField(cdrsService, "ui", mockUriInfo);
         cdrsManager = Mockito.mock(CdrsManager.class);
         ReflectionTestUtils.setField(cdrsService, "cdrsManager", cdrsManager);
+    }
+
+    /**
+     * Method to insert data before test.
+     * 
+     * @throws Exception
+     *             from dbb
+     */
+    @Before
+    public void setUp() throws Exception {
+        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
     }
 
     /**
