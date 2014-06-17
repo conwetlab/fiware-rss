@@ -1,5 +1,5 @@
 
-# Revenue Settlement and Sharing System [![Build Status](https://travis-ci.org/telefonicaid/fiware-rss.svg?branch=develop)](https://travis-ci.org/telefonicaid/fiware-rss?branch=develop) [![Coverage Status](https://img.shields.io/coveralls/telefonicaid/fiware-rss.svg)](https://coveralls.io/r/telefonicaid/fiware-rss?branch=develop)
+# Revenue Settlement and Sharing System [![Build Status](https://travis-ci.org/telefonicaid/fiware-rss.svg?branch=develop)](https://travis-ci.org/telefonicaid/fiware-rss?branch=develop)[![Coverage Status](https://coveralls.io/repos/telefonicaid/fiware-rss/badge.png?branch=develop)](https://coveralls.io/r/telefonicaid/fiware-rss?branch=develop)
 
 This is the code repository for the Revenue Settlement and Sharing System, a Java implementation developed as a part of the FI-WARE project (http://www.fi-ware.org/).
 
