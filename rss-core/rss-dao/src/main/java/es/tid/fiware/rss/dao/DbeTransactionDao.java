@@ -98,16 +98,6 @@ public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
     void createOrUpdate(DbeTransaction object);
 
     /**
-     * Safe transaction status update.
-     */
-    void updateSafeTransactionStatus(DbeTransaction tx, String newStatus);
-
-    /**
-     * Safe transaction update.
-     */
-    void updateSafeTransaction(DbeTransaction transaction);
-
-    /**
      * Delete transactionByProviderId.
      * 
      * @param providerId

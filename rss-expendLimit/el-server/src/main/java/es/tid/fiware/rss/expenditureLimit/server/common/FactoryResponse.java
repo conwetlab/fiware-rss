@@ -44,12 +44,6 @@ public final class FactoryResponse {
     private static Logger logger = LoggerFactory.getLogger(FactoryResponse.class);
 
     /**
-     * Private constructor.
-     */
-    private FactoryResponse() {
-    }
-
-    /**
      * Response error for a GRETA exception.
      * 
      * @param exception
@@ -110,7 +104,7 @@ public final class FactoryResponse {
      */
     public static Response createResponseErrorJson(AppProperties dbeProperties, UriInfo ui, final String message,
         final String resource) {
-        String[] args = { message };
+        String[] args = {message};
         RSSException exception = new RSSException(RSSExceptionType.GENERIC_EXCEPTION, args);
         ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
             exception, resource);
@@ -132,7 +126,7 @@ public final class FactoryResponse {
         FactoryResponse.logger.error(Constants.LOG_ALARM + " Cannot open connection with the database");
 
         // Write response
-        String[] args = { "Cannot open connection with the database" };
+        String[] args = {"Cannot open connection with the database"};
         RSSException newException = new RSSException(UNICAExceptionType.GENERIC_SERVER_FAULT, args, e, txId, null);
         FactoryResponse.logger.error("Return GRETAException: [" + newException.getExceptionType().getExceptionId()
             + "] "
@@ -157,7 +151,7 @@ public final class FactoryResponse {
         FactoryResponse.logger.error(Constants.LOG_ALARM + " Problems connecting to the database: {}", resource);
 
         // Write response
-        String[] args = { "Problems connecting to the database: " + resource };
+        String[] args = {"Problems connecting to the database: " + resource};
         RSSException newException = new RSSException(UNICAExceptionType.GENERIC_SERVER_FAULT, args, e, txId, null);
         FactoryResponse.logger.error("Return GRETAException: [" + newException.getExceptionType().getExceptionId()
             + "] "

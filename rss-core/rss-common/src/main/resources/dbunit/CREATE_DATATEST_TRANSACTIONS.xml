@@ -22,7 +22,7 @@
         nu_currency_id="1" tx_pb_correlation_id="null"
         tx_op_attributes="[]" tx_taxes_applied="[]"
         ft_request_tax_amount="0" tx_application_id="1" 
-        tx_merchant_id="PDI" ts_status_date="2012-12-12 12:12:12.0"/>
+        tx_merchant_id="PDI" ts_status_date="2012-12-12 12:12:12.0" tx_app_provider="provider"/>
     <dbe_transaction tx_transaction_id="1235" ts_client_date="2015-05-07 01:12:03.0" 
         ts_request="2012-01-01 00:00:00.0" ts_response="2012-07-01 00:00:00.0" tx_end_user_id="tel:+34913329702"
         tc_transaction_type="C" tx_global_user_id="25"
