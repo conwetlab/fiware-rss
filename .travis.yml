@@ -16,7 +16,7 @@ env:
   global:
   - COVERALLS_SERVICE_NAME=travis-ci
   # COVERALLS_REPO_TOKEN (encrypted)
-  - secure: DCRGAPfP9bSol9UNPNMIpik/0shBDuupDY00OVix2yjjSbxlGp2N8EIp4rPXadReU/8kzTe9vLVOSxNKqdjZZWoQ8TZXElBOvkozPP49WO+Vo9Y72+5pe+aBTSCkEDQkAfp/Ikw93nzwXATx/jw2AcCOwysCniGlE0QDpSoi2bY=
+  - secure: t56Q+wOTRzBDTdJI+nW8xjmyOhCKQdHrQ0KKw9aLEscDC613TJ5kMYziM8VcPpNqGm+H9rxjthJE09T5yZcKqbEk8/9MEghYoH+a4N4xtqaGbDU4min2SVl/xIa44NInT77s16XigKpJ/VnDGzcu1dgpOJFGVw7IwNa3eSDa9l0=
   
 after_success:
 - mvn cobertura:cobertura coveralls:cobertura
