@@ -19,15 +19,22 @@
 
 package es.tid.fiware.rss.oauth.service;
 
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,12 +76,16 @@ public class OauthManager {
      * 
      */
     private final DefaultHttpClient httpclient = new DefaultHttpClient();
+    /**
+     * handler that manages responses
+     */
+    private ResponseHandler handler = new ResponseHandler();
 
     /**
      * Read needed properties from file.
      */
     @PostConstruct
-    private void readProperties() {
+    private void readProperties() throws Exception {
         externalLogin = oauthProperties.getProperty("config.externalLogin");
         baseSite = oauthProperties.getProperty("config.baseUrl");
         clientId = oauthProperties.getProperty("config.client_id");
@@ -86,6 +97,34 @@ public class OauthManager {
         grantedRole = oauthProperties.getProperty("config.grantedRole");
         getApplicationsUrl = oauthProperties.getProperty("config.getApplications");
         useOauth = oauthProperties.getProperty("config.useOauth");
+        // avoid certificate checking for problems regarding with them.
+        SSLContext ctx = SSLContext.getInstance("TLS");
+        X509TrustManager tm = new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+        ctx.init(null, new TrustManager[]{tm}, null);
+        SSLSocketFactory ssf = new SSLSocketFactory(ctx);
+        ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        httpclient.getConnectionManager().getSchemeRegistry().register(new Scheme("https", ssf, 443));
+    }
+
+    /**
+     * Destroy connection.
+     */
+    @PreDestroy
+    private void destroyConnection() {
+        httpclient.getConnectionManager().shutdown();
     }
 
     /**
@@ -181,21 +220,16 @@ public class OauthManager {
 
             OauthManager.log.debug("executing request" + httppost.getRequestLine());
             // send request
-            ResponseHandler handler = new ResponseHandler();
             HttpResponse response = httpclient.execute(httppost, handler);
-            HttpEntity received = response.getEntity();
-            int status = response.getStatusLine().getStatusCode();
             OauthManager.log.debug("----------------------------------------");
             OauthManager.log.debug(response.getStatusLine().toString());
-            String responseContent = "";
-            if (received != null) {
+            if (handler.hasContent()) {
                 OauthManager.log.debug("----------------------------------------");
                 OauthManager.log.debug("Response content:");
-                responseContent = EntityUtils.toString(received);
-                OauthManager.log.debug(responseContent);
-                if (status != 200) {
-                    OauthManager.log.error("Error Status different to 200 received " + responseContent);
-                    throw new RSSException(responseContent);
+                OauthManager.log.debug(handler.getResponseContent());
+                if (handler.getStatus() != 200) {
+                    OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
+                    throw new RSSException(handler.getResponseContent());
                 }
                 ObjectMapper mapper = new ObjectMapper();
                 /*
@@ -206,11 +240,12 @@ public class OauthManager {
                  * "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
                  * }
                  */
-                OauthLoginWebSessionData session = mapper.readValue(responseContent, OauthLoginWebSessionData.class);
+                OauthLoginWebSessionData session = mapper.readValue(handler.getResponseContent(),
+                    OauthLoginWebSessionData.class);
                 return session;
-            } else if (status != 200) {
-                OauthManager.log.error("Error Status different to 200 received " + responseContent);
-                throw new RSSException(responseContent);
+            } else if (handler.getStatus() != 200) {
+                OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
+                throw new RSSException(handler.getResponseContent());
             }
             return null;
         } catch (RSSException ex) {
@@ -219,7 +254,7 @@ public class OauthManager {
             OauthManager.log.error("Error obtaining token:" + e.toString(), e);
             throw new Exception("Error obtaining token: " + e.toString());
         } finally {
-            httpclient.getConnectionManager().shutdown();
+            httpclient.getConnectionManager().closeExpiredConnections();
         }
 
     }
@@ -262,28 +297,23 @@ public class OauthManager {
             HttpGet httpget = new HttpGet(getInfoUserUrl(token));
             OauthManager.log.debug("executing request" + httpget.getRequestLine());
             // send request
-            ResponseHandler handler = new ResponseHandler();
             HttpResponse response = httpclient.execute(httpget, handler);
-            HttpEntity received = response.getEntity();
-            int status = response.getStatusLine().getStatusCode();
             OauthManager.log.debug("----------------------------------------");
             OauthManager.log.debug(response.getStatusLine().toString());
-            String responseContent = "";
-            if (received != null) {
+            if (handler.hasContent()) {
                 OauthManager.log.debug("----------------------------------------");
                 OauthManager.log.debug("Response content:");
-                responseContent = EntityUtils.toString(received);
-                OauthManager.log.debug(responseContent);
-                if (status != 200) {
-                    OauthManager.log.error("Error Status different to 200 received " + responseContent);
-                    throw new RSSException(responseContent);
+                OauthManager.log.debug(handler.getResponseContent());
+                if (handler.getStatus() != 200) {
+                    OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
+                    throw new RSSException(handler.getResponseContent());
                 }
                 ObjectMapper mapper = new ObjectMapper();
-                ValidatedToken session = mapper.readValue(responseContent, ValidatedToken.class);
+                ValidatedToken session = mapper.readValue(handler.getResponseContent(), ValidatedToken.class);
                 return session;
-            } else if (status != 200) {
-                OauthManager.log.error("Error Status different to 200 received " + responseContent);
-                throw new RSSException(responseContent);
+            } else if (handler.getStatus() != 200) {
+                OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
+                throw new RSSException(handler.getResponseContent());
             }
             return null;
         } catch (RSSException ex) {
@@ -292,7 +322,7 @@ public class OauthManager {
             OauthManager.log.error("Error obtaining token:" + e.toString(), e);
             throw new Exception("Error obtaining token: " + e.toString());
         } finally {
-            httpclient.getConnectionManager().shutdown();
+            httpclient.getConnectionManager().closeExpiredConnections();
         }
     }
 
@@ -310,29 +340,24 @@ public class OauthManager {
             HttpGet httpget = new HttpGet(getAplicationsUrl(actorId, userToken));
             OauthManager.log.debug("executing request" + httpget.getRequestLine());
             // send request
-            ResponseHandler handler = new ResponseHandler();
             HttpResponse response = httpclient.execute(httpget, handler);
-            HttpEntity received = response.getEntity();
-            int status = response.getStatusLine().getStatusCode();
             OauthManager.log.debug("----------------------------------------");
             OauthManager.log.debug(response.getStatusLine().toString());
-            String responseContent = "";
-            if (received != null) {
+            if (handler.hasContent()) {
                 OauthManager.log.debug("----------------------------------------");
                 OauthManager.log.debug("Response content:");
-                responseContent = EntityUtils.toString(received);
-                if (status != 200) {
-                    OauthManager.log.error("Error Status different to 200 received " + responseContent);
-                    throw new RSSException(responseContent);
+                if (handler.getStatus() != 200) {
+                    OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
+                    throw new RSSException(handler.getResponseContent());
                 }
-                OauthManager.log.debug(responseContent);
+                OauthManager.log.debug(handler.getResponseContent());
                 ObjectMapper mapper = new ObjectMapper();
-                ApplicationInfo[] applications = mapper.readValue(responseContent, ApplicationInfo[].class);
-                OauthManager.log.debug(responseContent);
+                ApplicationInfo[] applications = mapper
+                    .readValue(handler.getResponseContent(), ApplicationInfo[].class);
                 return applications;
-            } else if (status != 200) {
-                OauthManager.log.error("Error Status different to 200 received " + responseContent);
-                throw new Exception(responseContent);
+            } else if (handler.getStatus() != 200) {
+                OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
+                throw new Exception(handler.getResponseContent());
             }
             return null;
         } catch (RSSException ex) {
@@ -341,7 +366,7 @@ public class OauthManager {
             OauthManager.log.error("Error obtaining information:" + e.toString(), e);
             throw new Exception("Error obtaining information: " + e.toString());
         } finally {
-            httpclient.getConnectionManager().shutdown();
+            httpclient.getConnectionManager().closeExpiredConnections();
         }
 
     }
