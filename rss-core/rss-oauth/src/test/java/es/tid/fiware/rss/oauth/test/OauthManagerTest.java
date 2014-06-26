@@ -18,10 +18,8 @@
  */
 package es.tid.fiware.rss.oauth.test;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +131,7 @@ public class OauthManagerTest {
             .assertTrue(oauthManager
                 .getAuthorizationUrl()
                 .equalsIgnoreCase(
-                    "https://account.lab.fi-ware.org/oauth2/authorize?response_type=code&client_id=318&state=xyz&redirect_uri=http://rss.testbed.fi-ware.eu:8080/fiware-rss/settlement/settlement.html"));
+                    "https://account.lab.fi-ware.org/oauth2/authorize?response_type=code&client_id=318&state=xyz&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
     }
 
     /**
@@ -146,7 +144,7 @@ public class OauthManagerTest {
             .assertTrue(oauthManager
                 .getTokenUrl("code")
                 .equalsIgnoreCase(
-                    "https://account.lab.fi-ware.org/token?grant_type=authorization_code&code=code&redirect_uri=http://rss.testbed.fi-ware.eu:8080/fiware-rss/settlement/settlement.html"));
+                    "https://account.lab.fi-ware.org/token?grant_type=authorization_code&code=code&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
     }
 
     /**
@@ -203,11 +201,13 @@ public class OauthManagerTest {
         session.setExpiresIn(2000);
         session.setRefreshToken("refreshToken");
         // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", parseRequest2JSON(session));
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
         Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        InputStream jsonResponse = new ByteArrayInputStream(parseRequest2JSON(session).getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
-        Mockito.when(mHttpResponseMock.getEntity()).thenReturn(mHttpEntityMock);
         Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
         Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
         Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
@@ -224,14 +224,43 @@ public class OauthManagerTest {
         Assert.assertEquals(session.getExpiresIn(), sessionObtained.getExpiresIn());
         Assert.assertEquals(session.getAccessToken(), sessionObtained.getAccessToken());
         // Error in request
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_FORBIDDEN);
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_FORBIDDEN);
         thrown.expect(RSSException.class);
         oauthManager.getToken("Token");
         // other error
-        jsonResponse = new ByteArrayInputStream(parseRequest2JSON(session).getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
+        ReflectionTestUtils.setField(handler, "responseContent", parseRequest2JSON(session));
         oauthManager.getToken("Token");
 
+    }
+
+    /**
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void getTokenTestErrorNoContent() throws Exception {
+        OauthManagerTest.log.debug("Into getTokenTestErrorNoContent");
+        // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_FORBIDDEN);
+        ReflectionTestUtils.setField(handler, "content", false);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
+        Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
+        Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
+        Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
+        Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
+            Matchers.any(ResponseHandler.class))).thenAnswer(
+            new Answer<HttpResponse>() {
+                @Override
+                public HttpResponse answer(InvocationOnMock invocation) throws IOException {
+                    return mHttpResponseMock;
+                }
+            });
+        // set client.
+        ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
+        thrown.expect(RSSException.class);
+        oauthManager.getToken("Token");
     }
 
     @Test
@@ -243,11 +272,13 @@ public class OauthManagerTest {
         session.setExpiresIn(2000);
         session.setRefreshToken("refreshToken");
         // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", "error");
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
         Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        InputStream jsonResponse = new ByteArrayInputStream("error".getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
-        Mockito.when(mHttpResponseMock.getEntity()).thenReturn(mHttpEntityMock);
         Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
         Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
         Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
@@ -262,7 +293,6 @@ public class OauthManagerTest {
         ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
         // Error in request
         thrown.expect(Exception.class);
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
         oauthManager.getToken("Token");
     }
 
@@ -284,11 +314,14 @@ public class OauthManagerTest {
         role.setName(oauthManager.getGrantedRole());
         roles.add(role);
         // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", parseRequest2JSON(userPermission));
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
         Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
         Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        InputStream jsonResponse = new ByteArrayInputStream(parseRequest2JSON(userPermission).getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
-        Mockito.when(mHttpResponseMock.getEntity()).thenReturn(mHttpEntityMock);
         Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
         Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
         Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
@@ -304,8 +337,10 @@ public class OauthManagerTest {
         // nothing happends
         oauthManager.checkUserPermisions(session);
         // Expected exception
-        roles.get(0).setId("other");
-        roles.get(0).setName("other");
+        // roles.get(0).setId("other");
+        // roles.get(0).setName("other");
+        userPermission.setRoles(new ArrayList<Role>());
+        ReflectionTestUtils.setField(handler, "responseContent", parseRequest2JSON(userPermission));
         thrown.expect(Exception.class);
         oauthManager.checkUserPermisions(session);
     }
@@ -329,11 +364,13 @@ public class OauthManagerTest {
         role.setName(oauthManager.getGrantedRole());
         roles.add(role);
         // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", parseRequest2JSON(userPermission));
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // httpResponse mock
         Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        InputStream jsonResponse = new ByteArrayInputStream(parseRequest2JSON(userPermission).getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
-        Mockito.when(mHttpResponseMock.getEntity()).thenReturn(mHttpEntityMock);
         Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
         Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
         Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
@@ -346,6 +383,7 @@ public class OauthManagerTest {
             });
         // set client.
         ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
+        // call
         ValidatedToken validatedToken = oauthManager.checkAuthenticationToken("userToken");
         Assert.assertEquals("email", validatedToken.getEmail());
         // Expected exception
@@ -380,11 +418,13 @@ public class OauthManagerTest {
         application.setDescription("description");
         application.setId("id");
         // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", parseRequest2JSON(applicationsResponse));
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
         Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        InputStream jsonResponse = new ByteArrayInputStream(parseRequest2JSON(applicationsResponse).getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
-        Mockito.when(mHttpResponseMock.getEntity()).thenReturn(mHttpEntityMock);
         Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
         Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
         Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
@@ -400,26 +440,25 @@ public class OauthManagerTest {
         ApplicationInfo[] aplications = oauthManager.getClientIdApplications("userToken", "actorId");
         Assert.assertEquals(applicationsResponse[0].getId(), aplications[0].getId());
         // Expected exception
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_FORBIDDEN);
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_FORBIDDEN);
         thrown.expect(RSSException.class);
         oauthManager.getClientIdApplications("userToken", "actorId");
     }
 
     /**
      * 
-     * @param userToken
-     * @param actorId
      * @throws Exception
      */
     @Test
-    public void getClientIdApplicationsTestError() throws Exception {
-        OauthManagerTest.log.debug("Into getClientIdApplicationsTest");
+    public void getClientIdApplicationsTestNoContent() throws Exception {
+        OauthManagerTest.log.debug("Into getClientIdApplicationsTestNoContent");
         // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_FORBIDDEN);
+        ReflectionTestUtils.setField(handler, "content", false);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
         Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
-        Mockito.when(mStatusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        InputStream jsonResponse = new ByteArrayInputStream("error".getBytes());
-        Mockito.when(mHttpEntityMock.getContent()).thenReturn(jsonResponse);
-        Mockito.when(mHttpResponseMock.getEntity()).thenReturn(mHttpEntityMock);
         Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
         Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
         Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
@@ -435,6 +474,140 @@ public class OauthManagerTest {
         // Expected exception
         thrown.expect(Exception.class);
         oauthManager.getClientIdApplications("userToken", "actorId");
+    }
+
+    /**
+     * 
+     * @param userToken
+     * @param actorId
+     * @throws Exception
+     */
+    @Test
+    public void getClientIdApplicationsTestError() throws Exception {
+        OauthManagerTest.log.debug("Into getClientIdApplicationsTest");
+        // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", "error");
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // mock response
+        Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
+        Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
+        Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
+        Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
+            Matchers.any(ResponseHandler.class))).thenAnswer(
+            new Answer<HttpResponse>() {
+                @Override
+                public HttpResponse answer(InvocationOnMock invocation) throws IOException {
+                    return mHttpResponseMock;
+                }
+            });
+        // set client.
+        ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
+        // Expected exception
+        thrown.expect(Exception.class);
+        oauthManager.getClientIdApplications("userToken", "actorId");
+    }
+
+    /**
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void getUserInfoTest() throws Exception {
+        OauthManagerTest.log.debug("Into getUserInfoTest");
+        // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", "Error");
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_OK);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // httpResponse mock
+        Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
+        Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
+        Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
+        Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
+            Matchers.any(ResponseHandler.class))).thenAnswer(
+            new Answer<HttpResponse>() {
+                @Override
+                public HttpResponse answer(InvocationOnMock invocation) throws IOException {
+                    return mHttpResponseMock;
+                }
+            });
+        // set client.
+        ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
+        // Expected exception
+        thrown.expect(Exception.class);
+        // call
+        oauthManager.getUserInfo("userToken");
+
+    }
+
+    /**
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void getUserInfoTestNocontent() throws Exception {
+        OauthManagerTest.log.debug("Into getUserInfoTest");
+        // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", "Error");
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_FORBIDDEN);
+        ReflectionTestUtils.setField(handler, "content", false);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // httpResponse mock
+        Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
+        Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
+        Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
+        Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
+            Matchers.any(ResponseHandler.class))).thenAnswer(
+            new Answer<HttpResponse>() {
+                @Override
+                public HttpResponse answer(InvocationOnMock invocation) throws IOException {
+                    return mHttpResponseMock;
+                }
+            });
+        // set client.
+        ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
+        // Expected exception
+        thrown.expect(Exception.class);
+        // call
+        oauthManager.getUserInfo("userToken");
+    }
+
+    /**
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void getUserInfoTestErrorContent() throws Exception {
+        OauthManagerTest.log.debug("Into getUserInfoTest");
+        // mocks
+        ResponseHandler handler = new ResponseHandler();
+        ReflectionTestUtils.setField(handler, "responseContent", "Error");
+        ReflectionTestUtils.setField(handler, "status", HttpStatus.SC_FORBIDDEN);
+        ReflectionTestUtils.setField(handler, "content", true);
+        ReflectionTestUtils.setField(oauthManager, "handler", handler);
+        // httpResponse mock
+        Mockito.when(mHttpResponseMock.getStatusLine()).thenReturn(mStatusLineMock);
+        Mockito.when(mockHttpPost.getURI()).thenReturn(new URI("http://test.com"));
+        Mockito.when(httpClient.getConnectionManager()).thenReturn(conectionManager);
+        Mockito.when(httpClient.execute(Matchers.any(HttpRequestBase.class),
+            Matchers.any(ResponseHandler.class))).thenAnswer(
+            new Answer<HttpResponse>() {
+                @Override
+                public HttpResponse answer(InvocationOnMock invocation) throws IOException {
+                    return mHttpResponseMock;
+                }
+            });
+        // set client.
+        ReflectionTestUtils.setField(oauthManager, "httpclient", httpClient);
+        // Expected exception
+        thrown.expect(Exception.class);
+        // call
+        oauthManager.getUserInfo("userToken");
     }
 
     /**

@@ -20,13 +20,30 @@ package es.tid.fiware.rss.oauth.service;
 
 import java.io.IOException;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
  *
  */
 public class ResponseHandler implements org.apache.http.client.ResponseHandler<HttpResponse> {
+    private static final Logger log = LoggerFactory.getLogger(ResponseHandler.class);
+    /**
+     * 
+     */
+    private String responseContent;
+    /**
+     * 
+     */
+    private int status;
+    /**
+     * 
+     */
+    private boolean content;
 
     /**
      * handle response.
@@ -35,7 +52,40 @@ public class ResponseHandler implements org.apache.http.client.ResponseHandler<H
      */
     @Override
     public HttpResponse handleResponse(final HttpResponse response) throws IOException {
+        ResponseHandler.log.debug("into handleResponse method");
+        status = response.getStatusLine().getStatusCode();
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            content = true;
+            ResponseHandler.log.debug("----------------------------------------");
+            ResponseHandler.log.debug("Response content:");
+            responseContent = EntityUtils.toString(entity);
+            ResponseHandler.log.debug(responseContent);
+        } else {
+            content = false;
+        }
         return response;
+    }
+
+    /**
+     * @return the responseContent
+     */
+    public String getResponseContent() {
+        return responseContent;
+    }
+
+    /**
+     * @return the status
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * @return the content
+     */
+    public boolean hasContent() {
+        return content;
     }
 
 }
