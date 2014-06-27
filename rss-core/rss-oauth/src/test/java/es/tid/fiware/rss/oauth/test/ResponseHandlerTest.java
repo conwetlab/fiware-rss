@@ -18,10 +18,14 @@
  */
 package es.tid.fiware.rss.oauth.test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 import org.junit.Assert;
@@ -44,7 +48,16 @@ public class ResponseHandlerTest {
         HttpResponse responseSent = factory.newHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, HttpStatus.SC_OK,
             "reason"), null);
         HttpResponse response = handler.handleResponse(responseSent);
-        Assert.assertEquals(responseSent.getStatusLine().getReasonPhrase(), response.getStatusLine().getReasonPhrase());
+        Assert.assertEquals(handler.getStatus(), HttpStatus.SC_OK);
+        Assert.assertFalse(handler.hasContent());
+        // response with content.
+        BasicHttpEntity entity = new BasicHttpEntity();
+        InputStream inputStream = new ByteArrayInputStream("new content".getBytes());
+        entity.setContent(inputStream);
+        entity.setContentLength("new content".length()); // sets the length
+        response.setEntity(entity);
+        response = handler.handleResponse(responseSent);
+        Assert.assertEquals("new content", handler.getResponseContent());
     }
 
 }
