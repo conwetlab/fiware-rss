@@ -1,5 +1,6 @@
 /**
- * Revenue Settlement and Sharing System GE
+ * Revenue Settlement and Shar
+ * ing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
@@ -18,11 +19,20 @@
  */
 package es.tid.fiware.rss.exceptionhandles;
 
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Properties;
+
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import es.tid.fiware.rss.exception.RSSException;
 
@@ -31,12 +41,21 @@ import es.tid.fiware.rss.exception.RSSException;
  *
  */
 public class RssExceptionMapperTest {
+
     /**
      * 
      */
     @Test
-    public void toResponse() {
+    public void toResponse() throws Exception {
         RssExceptionMapper mapper = new RssExceptionMapper();
+        UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
+        Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
+        ReflectionTestUtils.setField(mapper, "uriInfo", mockUriInfo);
+
+        HttpHeaders headers = Mockito.mock(HttpHeaders.class);
+        Mockito.when(headers.getAcceptableMediaTypes()).thenReturn(null);
+        ReflectionTestUtils.setField(mapper, "headers", headers);
+
         RSSException e = new RSSException("RssException");
         Response response = mapper.toResponse(e);
         // other type
@@ -46,5 +65,27 @@ public class RssExceptionMapperTest {
         Exception ex1 = new Exception("Exception");
         response = mapper.toResponse(ex1);
         Assert.assertTrue(true);
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void toResponseJson() throws Exception {
+        RssExceptionMapper mapper = new RssExceptionMapper();
+        UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
+        Mockito.when(mockUriInfo.getAbsolutePath()).thenReturn(new URI("http://www.test.com/go"));
+        ReflectionTestUtils.setField(mapper, "uriInfo", mockUriInfo);
+
+        Properties rssProps = Mockito.mock(Properties.class);
+        Mockito.when(rssProps.get("service.url")).thenReturn("");
+        ReflectionTestUtils.setField(mapper, "rssProps", rssProps);
+
+        HttpHeaders headers = Mockito.mock(HttpHeaders.class);
+        Mockito.when(headers.getAcceptableMediaTypes()).thenReturn(Arrays.asList(MediaType.APPLICATION_JSON_TYPE));
+        ReflectionTestUtils.setField(mapper, "headers", headers);
+
+        RSSException e = new RSSException("RssException");
+        Response response = mapper.toResponse(e);
     }
 }

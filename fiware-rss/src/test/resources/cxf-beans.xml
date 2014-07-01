@@ -18,12 +18,46 @@
             <bean class="es.tid.fiware.rss.ws.CdrsService" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
+            <ref bean="jsonProvider" />
+            <ref bean="jsonErrorParser" />
+        </jaxrs:providers>        
+    </jaxrs:server>
+    
+    <jaxrs:server id="rssModelMgm" address="/rssModelMgmt">
+        <jaxrs:serviceBeans>
+            <bean class="es.tid.fiware.rss.ws.RSSModelService" />
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider" />
             <ref bean="jsonErrorParser" />
         </jaxrs:providers>        
     </jaxrs:server>
     
     <bean id="cdrService" class="es.tid.fiware.rss.ws.CdrsService" />
     
+    <bean id="rssModelService" class="es.tid.fiware.rss.ws.RSSModelService" />               
+    
     <bean id="jsonErrorParser" class="es.tid.fiware.rss.exceptionhandles.RssExceptionMapper" />
+    
+        <!-- JSON CONFIG -->
+    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+        <property name="mapper" ref="jmapper" />
+    </bean>
+    <bean id="jmapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+        <property name="dateFormat">
+            <bean class="java.text.SimpleDateFormat">
+                <constructor-arg value="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
+            </bean>
+        </property>
+        <property name="timeZone">
+            <bean id="timeZone" class="java.util.TimeZone" factory-method="getTimeZone">
+                <constructor-arg>
+                    <value>GMT</value>
+                </constructor-arg>
+            </bean>
+        </property>
+        <property name="serializationInclusion" value="NON_NULL" />
+
+    </bean>
 
 </beans>

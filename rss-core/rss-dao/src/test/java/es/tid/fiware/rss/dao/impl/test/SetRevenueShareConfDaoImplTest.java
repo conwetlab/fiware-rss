@@ -91,6 +91,55 @@ public class SetRevenueShareConfDaoImplTest {
         Assert.assertTrue("ID not equal", c.get(0).getId().getTxAppProviderId().equalsIgnoreCase("123456"));
         Assert.assertTrue("ID not equal", c.get(0).getId().getCountryId() == 1);
         Assert.assertTrue("ID not equal", c.get(0).getId().getNuObId() == 1);
+        // non existing provider
+        c = setRevenueShareConfDao.getRevenueModelsByProviderId("nonExisting");
+        Assert.assertNull("List<SetRevenueShareConf> is not null", c);
+    }
+
+    /**
+     * Test method for
+     * {@link es.tid.fiware.rss.dao.impl.SetRevenueShareConfDaoImpl#getRevenueModelsByParameters(java.lang.String, java.lang.String, java.lang.String)}
+     * .
+     */
+    @Test
+    public void testGetRevenueModelsByParameters() {
+        // tx_email="mail@mail.com"
+        // tx_appprovider_id="123456"
+        // tx_product_class="productClass"
+        // Call method to test
+        // check only aggregator
+        List<SetRevenueShareConf> result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "",
+            null);
+        checkResult(result);
+        // check aggregator and provider
+        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "123456", null);
+        checkResult(result);
+        // check aggregator and provider and class
+        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "123456", null);
+        checkResult(result);
+        // check aggregator and provider
+        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "", "productClass");
+        checkResult(result);
+        // empty product class
+        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "", "");
+        checkResult(result);
+        // non existing product class
+        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "", "nonExisting");
+        Assert.assertNull("List<SetRevenueShareConf> is not null", result);
+    }
+
+    /**
+     * Check the result.
+     * 
+     * @param result
+     */
+    private void checkResult(List<SetRevenueShareConf> result) {
+        // Check result
+        Assert.assertNotNull("List<SetRevenueShareConf> is null", result);
+        Assert.assertTrue("It has no results", result.size() > 0);
+        Assert.assertTrue("ID not equal", result.get(0).getId().getTxAppProviderId().equalsIgnoreCase("123456"));
+        Assert.assertTrue("ID not equal", result.get(0).getId().getCountryId() == 1);
+        Assert.assertTrue("ID not equal", result.get(0).getId().getNuObId() == 1);
     }
 
 }

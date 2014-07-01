@@ -19,8 +19,15 @@
 
 package es.tid.fiware.rss.exceptionhandles;
 
+import java.util.Properties;
+
+import javax.annotation.Resource;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -35,13 +42,47 @@ import es.tid.fiware.rss.exception.RSSException;
  */
 @Provider
 public class RssExceptionMapper implements ExceptionMapper<Exception> {
-
+    /**
+     * 
+     */
     private final Logger logger = LoggerFactory.getLogger(RssExceptionMapper.class);
+    /**
+     * 
+     */
+    @Context
+    protected HttpHeaders headers;
+    /**
+     * 
+     */
+    @Context
+    protected UriInfo uriInfo;
+    /**
+     * 
+     */
+    @Resource(name = "rssProps")
+    private Properties rssProps;
+
+    /**
+     * 
+     * @return
+     */
+    protected boolean isJSONAccept() {
+        return headers.getAcceptableMediaTypes() != null
+            && headers.getAcceptableMediaTypes().size() > 0
+            && headers.getAcceptableMediaTypes().get(0).getType().equals(MediaType.APPLICATION_JSON_TYPE.getType())
+            && headers.getAcceptableMediaTypes().get(0).getSubtype()
+                .equals(MediaType.APPLICATION_JSON_TYPE.getSubtype());
+    }
 
     @Override
     public Response toResponse(Exception e) {
-
-        if (e instanceof RSSException) {
+        if (isJSONAccept()) {
+            // JSON
+            JsonExceptionMapper mapperJSON = new JsonExceptionMapper();
+            mapperJSON.setRssProps(rssProps);
+            mapperJSON.setUriInfo(uriInfo);
+            return mapperJSON.toResponse(e);
+        } else if (e instanceof RSSException) {
             logger.error("Return RssException: [" + ((RSSException) e).getExceptionType().getStatus().value()
                 + "] " + e.getMessage(), e);
             return Response.status(((RSSException) e).getExceptionType().getStatus().value())
@@ -55,4 +96,5 @@ public class RssExceptionMapper implements ExceptionMapper<Exception> {
             return Response.serverError().entity(e.getMessage()).build();
         }
     }
+
 }
