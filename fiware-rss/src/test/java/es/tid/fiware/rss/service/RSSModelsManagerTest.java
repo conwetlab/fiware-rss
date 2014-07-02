@@ -31,8 +31,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -87,25 +85,10 @@ public class RSSModelsManagerTest {
     @Before
     public void setUp() throws Exception {
         databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
-        // prepare mockito
-        // ReflectionTestUtils.setField(unwrapSettlementManager(), "runtime", runtime);
         rssModel = new RSSModel();
         rssModel.setAppProviderId(appProviderId);
-        rssModel.setProductClass("newProductClass");
+        rssModel.setProductClass("productClassTest");
         rssModel.setPercRevenueShare(BigDecimal.valueOf(40));
-    }
-
-    /**
-     * 
-     * @return
-     * @throws Exception
-     */
-    private RSSModelsManager unwrapSettlementManager() throws Exception {
-        if (AopUtils.isAopProxy(rssModelsManager) && rssModelsManager instanceof Advised) {
-            Object target = ((Advised) rssModelsManager).getTargetSource().getTarget();
-            return (RSSModelsManager) target;
-        }
-        return null;
     }
 
     /**
@@ -214,8 +197,13 @@ public class RSSModelsManagerTest {
     @Test
     public void createRssModelTest() throws Exception {
         logger.debug("createRssModelTest");
-        RSSModel model = rssModelsManager.createRssModel(aggregatorId, rssModel);
-        Assert.assertEquals(rssModel.getProductClass(), model.getProductClass());
+        try {
+            RSSModel model = rssModelsManager.createRssModel(aggregatorId, rssModel);
+            Assert.assertTrue(rssModel.getProductClass().equalsIgnoreCase(model.getProductClass()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
     }
 
     /**
@@ -223,7 +211,7 @@ public class RSSModelsManagerTest {
      */
     @Test
     public void updateRssModelTest() throws Exception {
-        logger.debug("createRssModelTest");
+        logger.debug("updateRssModelTest");
         RSSModel model = rssModelsManager.updateRssModel(aggregatorId, rssModel);
         Assert.assertEquals(rssModel.getProductClass(), model.getProductClass());
         thrown.expect(RSSException.class);
@@ -239,9 +227,14 @@ public class RSSModelsManagerTest {
     public void deleteRssModelTest() throws Exception {
         logger.debug("deleteRssModelTest");
         // non expected error
-        rssModel.setProductClass("prodcutClassTest");
-        RSSModel model = rssModelsManager.createRssModel(aggregatorId, rssModel);
-        rssModelsManager.deleteRssModel(aggregatorId, appProviderId, "prodcutClassTest");
+        rssModel.setProductClass("newProductClassTest");
+        try {
+            RSSModel model = rssModelsManager.createRssModel(aggregatorId, rssModel);
+            rssModelsManager.deleteRssModel(aggregatorId, appProviderId, "newProductClassTest");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
         thrown.expect(RSSException.class);
         thrown.expectMessage("Required parameters not found: appProviderId.");
         rssModelsManager.deleteRssModel(aggregatorId, null, null);
