@@ -23,7 +23,7 @@
         </jaxrs:providers>        
     </jaxrs:server>
     
-    <jaxrs:server id="rssModelMgm" address="/rssModelMgmt">
+    <jaxrs:server id="rsModelsMgmt" address="/rsModelsMgmt">
         <jaxrs:serviceBeans>
             <bean class="es.tid.fiware.rss.ws.RSSModelService" />
         </jaxrs:serviceBeans>
