@@ -1,4 +1,4 @@
-﻿# Date: 2014-03-28 11:17:53
+# Date: 2014-03-28 11:17:53
 
 
 /*!40101 SET NAMES utf8 */;
@@ -404,7 +404,7 @@ CREATE TABLE `dbe_aggregator` (
 # Data for table "dbe_aggregator"
 #
 
-INSERT INTO `dbe_aggregator` VALUES ('e.payment_enabler@tid.es','TID Store'),('fdelavega@conwet.com','UPM STORE');
+INSERT INTO `dbe_aggregator` VALUES ('e.payment_enabler.tid@telefonica.com','TID Store'),('fdelavega@conwet.com','UPM STORE');
 
 #
 # Structure for table "dbe_appprovider"
@@ -441,7 +441,7 @@ CREATE TABLE `dbe_aggregator_appprovider` (
 # Data for table "dbe_aggregator_appprovider"
 #
 
-INSERT INTO `dbe_aggregator_appprovider` VALUES ('e.payment_enabler@tid.es','movistar'),('fdelavega@conwet.com','conwet'),('fdelavega@conwet.com','wstore-test');
+INSERT INTO `dbe_aggregator_appprovider` VALUES ('e.payment_enabler.tid@telefonica.com','movistar'),('fdelavega@conwet.com','conwet'),('fdelavega@conwet.com','wstore-test');
 
 #
 # Structure for table "dbe_appprovider_application"
@@ -658,7 +658,7 @@ INSERT INTO `set_revenue_share_conf` VALUES ('-1',1,1,60,'music'),('CoNWeT',1,1,
 #
 # Procedure "refunded_yn"
 #
-
+DELIMITER $$
 DROP PROCEDURE IF EXISTS `refunded_yn`;
 CREATE PROCEDURE `refunded_yn`()
 BEGIN
@@ -678,4 +678,5 @@ BEGIN
 		UPDATE dbe_transaction SET tc_is_refunded_yn='Y' WHERE tc_transaction_type='C' AND tx_transaction_id = id;
 	END LOOP update_refunded;
 	CLOSE cur1;
-END;
+END$$
+DELIMITER ;

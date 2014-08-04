@@ -32,4 +32,15 @@ public interface SetRevenueShareConfDao extends GenericDao<SetRevenueShareConf, 
      */
     List<SetRevenueShareConf> getRevenueModelsByProviderId(String providerId);
 
+    /**
+     * Get getRevenueModels By Parameters
+     * 
+     * @param aggregatorId
+     * @param appProviderId
+     * @param productClass
+     * @return
+     */
+    List<SetRevenueShareConf> getRevenueModelsByParameters(String aggregatorId, String appProviderId,
+        String productClass);
+
 }
