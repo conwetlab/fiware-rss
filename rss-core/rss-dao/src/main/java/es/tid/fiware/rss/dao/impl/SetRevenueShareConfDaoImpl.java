@@ -85,4 +85,32 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see es.tid.fiware.rss.dao.SetRevenueShareConfDao#getRevenueModelsByParameters()
+     */
+    @Override
+    public List<SetRevenueShareConf> getRevenueModelsByParameters(String aggregatorId, String appProviderId,
+        String productClass) {
+        SetRevenueShareConfDaoImpl.LOGGER.debug("getRevenueModelsByProviderId");
+        String hql = "select * from set_revenue_share_conf l where tx_appprovider_id ='" + appProviderId + "'";
+        // if appProvider not specified
+        if (null == appProviderId || "".equalsIgnoreCase(appProviderId)) {
+            hql = "select * from set_revenue_share_conf l where tx_appprovider_id in " +
+                "(select tx_appprovider_id from dbe_aggregator_appprovider where tx_email='" + aggregatorId + "')";
+        }
+        // if product class specified
+        if (null != productClass) {
+            hql += " and  tx_product_class='" + productClass + "'";
+        }
+        List list = super.getSession().createSQLQuery(hql).addEntity(SetRevenueShareConf.class).list();
+        List<SetRevenueShareConf> resultList = Collections.checkedList(list, SetRevenueShareConf.class);
+        if (null != resultList && resultList.size() > 0) {
+            return resultList;
+        } else { // <=0
+            return null;
+        }
+    }
+
 }

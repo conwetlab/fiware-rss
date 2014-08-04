@@ -108,7 +108,7 @@ public class OauthManagerTest {
             .assertTrue(oauthManager
                 .buildHeader()
                 .equalsIgnoreCase(
-                    "Basic MzE4OjM5NzkxOTc3OWMzMjM5ZTQ4OWFkZTQyNGQyY2M3ZjE3MmVkMDc0YjczNGJjOTY1ZmMwZTQ4ODI5N2JhMDRiNjNjMmZmM2IzNmM3MDY4NjM1MzNjMzc1MmI0ZDUyYjdlYmRiMzEzZDk2NjQxOTE4MzFlYzUwN2U4YWUyYWVkMDhj"));
+                    "Basic MTM6YmZjZmMwZGMwODNmNWZiMmQ4OWM1NzI5NjQ2NjY0OGQxYWYyOWI3YzgzYmI3MThjNzhmNjk1YjYyY2FkZTRiMTcxODAxMjA1ZmZiODIxOTRkYmNiMTBiZWQ5NWUxNDM2MGYwMmY3OTdiZGYxMDAzNmUyODA0NDJhNmE0NDVmODI="));
     }
 
     /**
@@ -131,7 +131,7 @@ public class OauthManagerTest {
             .assertTrue(oauthManager
                 .getAuthorizationUrl()
                 .equalsIgnoreCase(
-                    "https://account.lab.fi-ware.org/oauth2/authorize?response_type=code&client_id=318&state=xyz&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
+                    "https://account.testbed.fi-ware.org/oauth2/authorize?response_type=code&client_id=13&state=xyz&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
     }
 
     /**
@@ -144,7 +144,7 @@ public class OauthManagerTest {
             .assertTrue(oauthManager
                 .getTokenUrl("code")
                 .equalsIgnoreCase(
-                    "https://account.lab.fi-ware.org/token?grant_type=authorization_code&code=code&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
+                    "https://account.testbed.fi-ware.org/token?grant_type=authorization_code&code=code&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
     }
 
     /**
@@ -154,7 +154,7 @@ public class OauthManagerTest {
     public void getInfoUserUrlTest() {
         OauthManagerTest.log.debug("getInfoUserUrlTest");
         Assert.assertTrue(oauthManager.getInfoUserUrl("token").equalsIgnoreCase(
-            "https://account.lab.fi-ware.org/user?access_token=token"));
+            "https://account.testbed.fi-ware.org/user?access_token=token"));
     }
 
     /**
@@ -164,7 +164,7 @@ public class OauthManagerTest {
     public void getAplicationsUrlTest() {
         OauthManagerTest.log.debug("getAplicationsUrlTest");
         Assert.assertTrue(oauthManager.getAplicationsUrl("actorId", "token").equalsIgnoreCase(
-            "https://account.lab.fi-ware.org/applications.json?actor_id=actorId&access_token=token"));
+            "https://account.testbed.fi-ware.org/applications.json?actor_id=actorId&access_token=token"));
     }
 
     /**
@@ -174,7 +174,7 @@ public class OauthManagerTest {
     public void checkApplictionIdsTest() throws Exception {
         OauthManagerTest.log.debug("checkApplictionIdsTest");
         ApplicationInfo application = new ApplicationInfo();
-        application.setId("318");
+        application.setId("13");
         ApplicationInfo[] applications = {application};
         // no exception produced
         oauthManager.checkApplictionIds(applications);

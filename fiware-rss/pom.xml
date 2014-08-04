@@ -179,6 +179,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.3.1.Final</version>
 		</dependency>
+		<dependency>
+           <groupId>com.fasterxml.jackson.jaxrs</groupId>
+           <artifactId>jackson-jaxrs-json-provider</artifactId>
+           <version>${jackson.version}</version>
+        </dependency>
 		<!-- RUNTIME SCOPE -->
 		<dependency>
 			<groupId>mysql</groupId>
