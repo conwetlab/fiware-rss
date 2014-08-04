@@ -71,6 +71,7 @@
   <dbe_aggregator_appprovider tx_email="mail@mail.com" tx_appprovider_id="123456"/>
   
   <set_revenue_share_conf tx_appprovider_id="123456" nu_ob_id="1" nu_country_id="1" nu_perc_revenue_share="20" tx_product_class="productClass"/>
+  <set_revenue_share_conf tx_appprovider_id="123456" nu_ob_id="1" nu_country_id="1" nu_perc_revenue_share="50" tx_product_class=""/>
   
   <dbe_system_properties tx_param_name="name" tx_param_data_type="string" tx_param_description="description" tx_param_value="value" tx_param_class="paramClass"/>
   <dbe_system_properties tx_param_name="name2" tx_param_data_type="string" tx_param_description="description2" tx_param_value="value2" tx_param_class="paramClass"/>
