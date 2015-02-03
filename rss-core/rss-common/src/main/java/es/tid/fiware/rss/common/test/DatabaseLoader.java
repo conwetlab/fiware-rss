@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -34,6 +36,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * The Class DatabaseLoader.
@@ -44,6 +47,9 @@ public class DatabaseLoader {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(DatabaseLoader.class);
+
+    // Get database schema from properties
+    private @Value("${database.schema}") String schema;
 
     /**
      * For database access.
@@ -120,7 +126,7 @@ public class DatabaseLoader {
         try {
             DatabaseLoader.logger.debug("starting init() in DatabaseLoader...");
 
-            this.dbConn = new DatabaseDataSourceConnection(dataSource, "FIWARE_SETTLEMENT");
+            this.dbConn = new DatabaseDataSourceConnection(dataSource, this.schema);
             DatabaseConfig config = dbConn.getConfig();
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
             config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());

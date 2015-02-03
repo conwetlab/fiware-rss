@@ -24,7 +24,7 @@
         <core.version>1.0.0</core.version>
         <expenditureLimit.version>1.0.0</expenditureLimit.version>        
         
-        <jdk.version>1.6</jdk.version>
+        <jdk.version>1.7</jdk.version>
         <maven.version>3.0.3</maven.version>
         <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
         <junit.version>4.11</junit.version>
