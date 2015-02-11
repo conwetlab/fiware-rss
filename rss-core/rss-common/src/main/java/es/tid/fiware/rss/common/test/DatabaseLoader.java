@@ -135,14 +135,13 @@ public class DatabaseLoader {
             this.loader = new FlatXmlDataSetBuilder();
 
             dbConn.getConnection().createStatement().execute("DELETE FROM dbe_transaction");
-            deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_III.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_II.xml", false);
-            deleteAll("dbunit/CREATE_DATATEST_I.xml", true);
+            deleteAll("dbunit/CREATE_DATATEST_I.xml", false);
 
             cleanInsert("dbunit/CREATE_DATATEST_I.xml", false);
             cleanInsert("dbunit/CREATE_DATATEST_II.xml", false);
-            cleanInsert("dbunit/CREATE_DATATEST_III.xml", false);
+            cleanInsert("dbunit/CREATE_DATATEST_III.xml", true);
 
             DatabaseLoader.logger.debug("ending init() in DatabaseLoader...");
 
@@ -163,7 +162,6 @@ public class DatabaseLoader {
     public void cleanup() throws Exception {
         try {
             DatabaseLoader.logger.debug("starting cleanup of DatabaseLoader...");
-            deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_III.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_II.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_I.xml", true);
