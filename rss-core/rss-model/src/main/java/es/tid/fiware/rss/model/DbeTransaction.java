@@ -751,7 +751,7 @@ public class DbeTransaction implements Serializable, Cloneable {
         this.txMaskedAccountNum = txMaskedAccountNum;
     }
 
-    @Column(name = "TC_IS_REFUNDED_YN", length = 1, nullable = false)
+    @Column(name = "TC_IS_REFUNDED_YN", length = 1, nullable = false, columnDefinition = "char(1) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'N'")
     public String getTcIsRefundedYn() {
         return tcIsRefundedYn;
     }
@@ -760,7 +760,7 @@ public class DbeTransaction implements Serializable, Cloneable {
         this.tcIsRefundedYn = tcIsRefundedYn;
     }
 
-    @Column(name = "TC_IS_CAPTURED_YN", length = 1, nullable = false)
+    @Column(name = "TC_IS_CAPTURED_YN", length = 1, nullable = false, columnDefinition = "char(1) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL DEFAULT 'N'")
     public String getTcIsCapturedYn() {
         return tcIsCapturedYn;
     }
