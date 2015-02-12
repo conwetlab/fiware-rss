@@ -1,7 +1,6 @@
 <link rel="icon" href="<%=request.getContextPath()%>/resources/assets/ico/favicon.ico" type="image/x-icon"/>
 
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/dhtmlcalendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" media="screen"/>
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/style.css" media="screen"/>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/dhtmlcalendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js"></script>
 
