@@ -27,7 +27,7 @@
 	
 	
 	<div><p style="margin-left:40px;">It is necessary being logged to access to the page. Please  login in accounting page.
-	      <a href="${contextPath}/settlement/settlement.html">Login</a></p></div>
+	      <a href="${contextPath}/settlement/settlement">Login</a></p></div>
 
 </body>
 </html>

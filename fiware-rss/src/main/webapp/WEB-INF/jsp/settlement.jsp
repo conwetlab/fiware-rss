@@ -169,13 +169,13 @@
 			  <td><input type="submit" value="Launch" onclick="javascript:launchSettlement('${aggregatorId}');"/> </td>	
     </div>
  
- 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewFiles.html?aggregatorId=${aggregatorId}">View files</a></div>
+ 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewFiles?aggregatorId=${aggregatorId}">View files</a></div>
  
-	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewTransactions.html?aggregatorId=${aggregatorId}">View transactions in database</a></div>
+	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewTransactions?aggregatorId=${aggregatorId}">View transactions in database</a></div>
  
- 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewRS.html?aggregatorId=${aggregatorId}">View RS models in database</a></div>
+ 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewRS?aggregatorId=${aggregatorId}">View RS models in database</a></div>
  	
- 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewProviders.html?aggregatorId=${aggregatorId}">View Providers in database</a></div>
+ 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewProviders?aggregatorId=${aggregatorId}">View Providers in database</a></div>
  	
  	<div style="margin-left:40px;">
            <td><b>Create RS model:</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -259,7 +259,7 @@
  	 
  	<div style="margin-left:40px;"><a href="${pentahoReportsUrl}" target="_blank">View Reports</a></div>
  	 
- 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/logout.html">logout</a></div>
+ 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/logout">logout</a></div>
  	 
 </body>
 </html>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Settlement</title>
+<title>FIWARE RSS - Settlement</title>
 </head>
 <body>
 
@@ -14,7 +14,7 @@
 	
 	<div style="margin-left:40px;"><p>${operation} done.</p></div>
 	
-    <div style="margin-left:40px;"><a href="${contextPath}/settlement/settlement.html">Back</a></div>
+    <div style="margin-left:40px;"><a href="${contextPath}/settlement/settlement">Back</a></div>
 
 </body>
 </html>
