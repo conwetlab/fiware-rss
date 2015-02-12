@@ -17,7 +17,7 @@
 
 
 <%@  include file="/jspf/header.jsp"%> 
-<%@  include file="/jspf/pie.jspf"%> <br/> <br/> <br/><br/><br/>
+<%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
 
 <div style="margin-left:40px;">
 <table width="90%" align="center" cellpadding="2" cellspacing="0" border="0">

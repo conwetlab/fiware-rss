@@ -139,7 +139,7 @@
 <body>
 
 	<%@  include file="/jspf/header.jsp"%>
-    <%@  include file="/jspf/pie.jspf"%> <br/> <br/> <br/><br/><br/>
+    <%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
 	
  	<div style="margin-left:40px;"><a href="${contextPath}/rss/">RSS API</a></div> 
  

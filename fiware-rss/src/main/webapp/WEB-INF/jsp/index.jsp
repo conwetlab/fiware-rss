@@ -22,7 +22,7 @@
 <body onload="javascript:init();" >
 
 <%@  include file="/jspf/header.jsp"%>
-<%@  include file="/jspf/pie.jspf"%> <br/> <br/> <br/><br/><br/>
+<%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
 
 	
 	
