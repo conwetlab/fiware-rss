@@ -1,7 +1,21 @@
+<link rel="icon" href="<%=request.getContextPath()%>/resources/assets/ico/favicon.ico" type="image/x-icon"/>
+
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/dhtmlcalendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/style.css" media="screen"/>
-<link type="text/css" href="<%=request.getContextPath()%>/resources/css/cupertino/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+
 <script type="text/javascript" src="<%=request.getContextPath()%>/dhtmlcalendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/assets/bootstrap/css/bootstrap.min.css" />
+<link href="<%=request.getContextPath()%>/resources/assets/bootstrap/css/sticky-footer-navbar.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/resources/assets/bootstrap/css/docs.min.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/resources/assets/bootstrap-rewrite/bootstrap-rewrite.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/resources/assets/FI-WARE/css/fonts.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/resources/assets/FI-WARE/css/FI-style.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/resources/assets/bootstrap/css/sticky-footer-navbar.css" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/assets/addons/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/core.css" />
+
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/core.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/json-serialization.js"></script>

@@ -7,7 +7,7 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Settlement</title>
+<title>FIWARE RSS - Settlement</title>
 <script type="text/javascript">
    function init() {
 	   if (null != "${error}" && "${error}" != '') {
@@ -21,7 +21,7 @@
 </head>
 <body onload="javascript:init();" >
 
-<%@  include file="/jspf/cabecera.jsp"%> 
+<%@  include file="/jspf/header.jsp"%>
 <%@  include file="/jspf/pie.jspf"%> <br/> <br/> <br/><br/><br/>
 
 	
