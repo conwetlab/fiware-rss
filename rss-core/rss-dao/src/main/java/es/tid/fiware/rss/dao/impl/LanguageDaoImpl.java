@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -26,6 +28,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.LanguageDao;
@@ -37,22 +40,13 @@ import es.tid.fiware.rss.model.BmLanguage;
  * 
  */
 @Repository
+@Transactional
 public class LanguageDaoImpl extends GenericDaoImpl<BmLanguage, Long> implements LanguageDao {
 
     /**
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(LanguageDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public LanguageDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
@@ -94,7 +88,7 @@ public class LanguageDaoImpl extends GenericDaoImpl<BmLanguage, Long> implements
     private List<BmLanguage> listLanguageQuery(final String hql) {
         LanguageDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // entityManager.createQuery(hql).getResultList();
         // @SuppressWarnings("unchecked")
         List<BmLanguage> resultList = Collections.checkedList(list, BmLanguage.class);

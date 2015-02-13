@@ -68,7 +68,7 @@
         <!-- 3rd party dependencies -->
         <dependency>
             <groupId>org.codehaus.castor</groupId>
-            <artifactId>castor</artifactId>
+            <artifactId>castor-xml</artifactId>
             <version>${castor.version}</version>
         </dependency>
         <dependency>

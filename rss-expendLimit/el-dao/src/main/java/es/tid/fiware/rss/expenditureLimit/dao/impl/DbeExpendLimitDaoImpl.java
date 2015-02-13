@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -47,16 +49,6 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
 
     private static Logger logger = LoggerFactory.getLogger(DbeExpendLimitDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public DbeExpendLimitDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -78,23 +70,34 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
         BmService bmService, String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry) {
         DbeExpendLimitDaoImpl.logger.debug("Entering getExpendLimitsForUserCurrencyObCountry...");
 
-        String hql = " from DbeExpendLimit el where (el.id.txEndUserId = ? or el.id.txEndUserId = ? )" +
-            " and el.id.nuServiceId = ? and el.id.nuCountryId = ? and el.id.nuObId = ?" +
-            " and (el.id.txAppProviderId = ? or el.id.txAppProviderId = ?)";
+        String hql = " from DbeExpendLimit el where (el.id.txEndUserId = :txUsrId1 or el.id.txEndUserId = :txUsrId2 )" +
+            " and el.id.nuServiceId = :nuServID and el.id.nuCountryId = :nuCountrID and el.id.nuObId = :nuObID" +
+            " and (el.id.txAppProviderId = :txAppPID1 or el.id.txAppProviderId = :txAppPID2)";
 
         @SuppressWarnings("unchecked")
         List<DbeExpendLimit> list;
         if (bmCurrency != null) {
-            hql += " and el.id.nuCurrencyId = ?";
-            list = getHibernateTemplate().find(hql, DbeExpendLimitDao.NO_USER_ID, urlEndUserId,
-                bmService.getNuServiceId(), bmObCountry.getId().getNuCountryId(),
-                bmObCountry.getId().getNuObId(), appProviderId, DbeExpendLimitDao.NO_APP_PROVIDER_ID,
-                bmCurrency.getNuCurrencyId());
-
+            hql += " and el.id.nuCurrencyId = :bmCurrID";
+            list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
+            		setParameter("txUsrId1", DbeExpendLimitDao.NO_USER_ID).
+            		setParameter("txUsrId2", urlEndUserId).
+            		setParameter("nuServID", bmService.getNuServiceId()).
+            		setParameter("nuCountrID", bmObCountry.getId().getNuCountryId()).
+            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
+            		setParameter("txAppPID1", appProviderId).
+            		setParameter("txAppPID2", DbeExpendLimitDao.NO_APP_PROVIDER_ID).
+            		setParameter("bmSetCurrID", bmCurrency.getNuCurrencyId()).
+            		list();
         } else {
-            list = getHibernateTemplate().find(hql, DbeExpendLimitDao.NO_USER_ID, urlEndUserId,
-                bmService.getNuServiceId(), bmObCountry.getId().getNuCountryId(),
-                bmObCountry.getId().getNuObId(), appProviderId, DbeExpendLimitDao.NO_APP_PROVIDER_ID);
+        	list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
+            		setParameter("txUsrId1", DbeExpendLimitDao.NO_USER_ID).
+            		setParameter("txUsrId2", urlEndUserId).
+            		setParameter("nuServID", bmService.getNuServiceId()).
+            		setParameter("nuCountrID", bmObCountry.getId().getNuCountryId()).
+            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
+            		setParameter("txAppPID1", appProviderId).
+            		setParameter("txAppPID2", DbeExpendLimitDao.NO_APP_PROVIDER_ID).
+            		list();
         }
 
         return list;
@@ -166,19 +169,28 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
         String userId, BmObCountry bmObCountry, BmCurrency bmCurrency) {
         DbeExpendLimitDaoImpl.logger.debug("Entering getExpendLimitsByProviderUserService...");
 
-        String hql = " from DbeExpendLimit el where el.id.txEndUserId = ? and el.id.txAppProviderId = ? " +
-            " and el.id.nuServiceId = ? and el.id.nuCountryId = ? and el.id.nuObId = ?";
+        String hql = " from DbeExpendLimit el where el.id.txEndUserId = :txUsrID and el.id.txAppProviderId = :txAppPID " +
+            " and el.id.nuServiceId = :nuServID and el.id.nuCountryId = :nuCountID and el.id.nuObId = :nuObID";
         @SuppressWarnings("unchecked")
         List<DbeExpendLimit> list = null;
         if (bmCurrency != null) {
-            hql += "and el.id.nuCurrencyId = ?";
-            list = getHibernateTemplate().find(hql, userId, provider,
-                bmService.getNuServiceId(), bmObCountry.getId().getNuCountryId(),
-                bmObCountry.getId().getNuObId(), bmCurrency.getNuCurrencyId());
+            hql += "and el.id.nuCurrencyId = :nuCurrID";
+            list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
+            		setParameter("txUsrID", userId).
+            		setParameter("txAppPID", provider).
+            		setParameter("nuServID", bmService.getNuServiceId()).
+            		setParameter("nuCountID", bmObCountry.getId().getNuCountryId()).
+            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
+            		setParameter("nuCurrID", bmCurrency.getNuCurrencyId()).
+            		list();
         } else {
-            list = getHibernateTemplate().find(hql, userId, provider,
-                bmService.getNuServiceId(), bmObCountry.getId().getNuCountryId(),
-                bmObCountry.getId().getNuObId());
+        	list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
+            		setParameter("txUsrID", userId).
+            		setParameter("txAppPID", provider).
+            		setParameter("nuServID", bmService.getNuServiceId()).
+            		setParameter("nuCountID", bmObCountry.getId().getNuCountryId()).
+            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
+            		list();
         }
 
         return list;

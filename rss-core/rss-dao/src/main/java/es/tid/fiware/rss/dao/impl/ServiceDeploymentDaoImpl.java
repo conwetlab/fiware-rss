@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -29,6 +31,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.ServiceDeploymentDao;
@@ -38,6 +41,7 @@ import es.tid.fiware.rss.model.BmServiceDeployment;
  * 
  */
 @Repository
+@Transactional
 public class ServiceDeploymentDaoImpl extends GenericDaoImpl<BmServiceDeployment, Long> implements
     ServiceDeploymentDao {
 
@@ -45,16 +49,6 @@ public class ServiceDeploymentDaoImpl extends GenericDaoImpl<BmServiceDeployment
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDeploymentDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public ServiceDeploymentDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
@@ -109,7 +103,7 @@ public class ServiceDeploymentDaoImpl extends GenericDaoImpl<BmServiceDeployment
     private List<BmServiceDeployment> listServiceDeploymentQuery(final String hql) {
         ServiceDeploymentDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // entityManager.createQuery(hql).getResultList();
         // @SuppressWarnings("unchecked")
         List<BmServiceDeployment> resultList = Collections.checkedList(list, BmServiceDeployment.class);

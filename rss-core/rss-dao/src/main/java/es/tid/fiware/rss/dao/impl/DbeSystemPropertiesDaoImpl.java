@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -28,6 +30,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeSystemPropertiesDao;
@@ -38,6 +41,7 @@ import es.tid.fiware.rss.model.DbeSystemProperties;
  * 
  */
 @Repository
+@Transactional
 public class DbeSystemPropertiesDaoImpl extends GenericDaoImpl<DbeSystemProperties, String> implements
     DbeSystemPropertiesDao {
 
@@ -48,16 +52,6 @@ public class DbeSystemPropertiesDaoImpl extends GenericDaoImpl<DbeSystemProperti
         criteria.add(Restrictions.eq("txParamClass", paramClass));
         List<DbeSystemProperties> result = criteria.list();
         return result;
-    }
-
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public DbeSystemPropertiesDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
     }
 
     @Override

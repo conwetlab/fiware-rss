@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -48,16 +50,6 @@ public class DbeExpendControlDaoImpl extends GenericDaoImpl<DbeExpendControl, Db
 
     private static Logger logger = LoggerFactory.getLogger(DbeExpendControlDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public DbeExpendControlDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -81,14 +73,20 @@ public class DbeExpendControlDaoImpl extends GenericDaoImpl<DbeExpendControl, Db
         BmService bmService, String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry) {
         DbeExpendControlDaoImpl.logger.debug("Entering getExpendDataForUserAppProvCurrencyObCountry...");
 
-        String hql = " from DbeExpendControl el where el.id.txEndUserId = ? and el.id.nuServiceId = ?"
-            + " and el.id.nuCurrencyId = ? and el.id.nuCountryId = ? and el.id.nuObId = ? "
-            + " and el.id.txAppProviderId = ?";
+        String hql = " from DbeExpendControl el where el.id.txEndUserId = :usrID and el.id.nuServiceId = :nuServID"
+            + " and el.id.nuCurrencyId = :nuCurrID and el.id.nuCountryId = :nuCounID and el.id.nuObId = :nuObID "
+            + " and el.id.txAppProviderId = :txAppPID";
 
         @SuppressWarnings("unchecked")
-        List<DbeExpendControl> list = getHibernateTemplate().find(hql, urlEndUserId,
-            bmService.getNuServiceId(), bmCurrency.getNuCurrencyId(), bmObCountry.getId().getNuCountryId(),
-            bmObCountry.getId().getNuObId(), appProviderId);
+        List<DbeExpendControl> list = (List<DbeExpendControl>) this.getSession().
+        		createQuery(hql).
+        		setParameter("usrID", urlEndUserId).
+        		setParameter("nuServID", bmService.getNuServiceId()).
+        		setParameter("nuCurrID", bmCurrency.getNuCurrencyId()).
+        		setParameter("nuCounID", bmObCountry.getId().getNuCountryId()).
+        		setParameter("nuObID", bmObCountry.getId().getNuObId()).
+        		setParameter("txAppPID", appProviderId).
+        		list();
 
         return list;
     }
@@ -109,7 +107,7 @@ public class DbeExpendControlDaoImpl extends GenericDaoImpl<DbeExpendControl, Db
             && (expendData.getId().getTxAppProviderId() != null)
             && (expendData.getId().getTxAppProviderId().length() > 0)
             && (expendData.getId().getTxElType() != null) && (expendData.getId().getTxElType().length() > 0)) {
-            getHibernateTemplate().saveOrUpdate(expendData);
+            this.getSession().saveOrUpdate(expendData);
         }
 
     }

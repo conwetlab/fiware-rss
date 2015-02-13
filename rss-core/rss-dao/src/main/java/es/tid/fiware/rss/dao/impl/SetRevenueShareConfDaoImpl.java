@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -25,6 +27,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
@@ -40,6 +43,7 @@ import es.tid.fiware.rss.model.SetRevenueShareConfId;
  * 
  */
 @Repository
+@Transactional
 public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareConf, SetRevenueShareConfId> implements
     SetRevenueShareConfDao {
     /**
@@ -47,15 +51,6 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SetRevenueShareConfDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public SetRevenueShareConfDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
@@ -76,7 +71,7 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
     public List<SetRevenueShareConf> getRevenueModelsByProviderId(String providerId) {
         SetRevenueShareConfDaoImpl.LOGGER.debug("getRevenueModelsByProviderId");
         String hql = " from SetRevenueShareConf l where l.id.txAppProviderId ='" + providerId + "'";
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         List<SetRevenueShareConf> resultList = Collections.checkedList(list, SetRevenueShareConf.class);
         if (null != resultList && resultList.size() > 0) {
             return resultList;
@@ -104,7 +99,7 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
         if (null != productClass) {
             hql += " and  tx_product_class='" + productClass + "'";
         }
-        List list = super.getSession().createSQLQuery(hql).addEntity(SetRevenueShareConf.class).list();
+        List list = getSession().createSQLQuery(hql).addEntity(SetRevenueShareConf.class).list();
         List<SetRevenueShareConf> resultList = Collections.checkedList(list, SetRevenueShareConf.class);
         if (null != resultList && resultList.size() > 0) {
             return resultList;

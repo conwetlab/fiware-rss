@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -29,6 +31,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.PricePointDAO;
@@ -41,22 +44,13 @@ import es.tid.fiware.rss.model.BmPricePointId;
  * 
  */
 @Repository
+@Transactional
 public class PricePointDaoImpl extends GenericDaoImpl<BmPricePoint, BmPricePointId> implements PricePointDAO {
 
     /**
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(PricePointDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public PricePointDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
@@ -145,7 +139,7 @@ public class PricePointDaoImpl extends GenericDaoImpl<BmPricePoint, BmPricePoint
     private List<BmPricePoint> listPricePointQuery(final String hql) {
         PricePointDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // @SuppressWarnings("unchecked")
         List<BmPricePoint> resultList = Collections.checkedList(list, BmPricePoint.class);
         return resultList;

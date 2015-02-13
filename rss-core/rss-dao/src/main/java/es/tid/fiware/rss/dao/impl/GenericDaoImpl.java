@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,14 +21,17 @@
 
 package es.tid.fiware.rss.dao.impl;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import es.tid.fiware.rss.dao.GenericDao;
 
@@ -35,8 +40,11 @@ import es.tid.fiware.rss.dao.GenericDao;
  * @param <DomainObject>
  * @param <PK>
  */
-public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> extends HibernateDaoSupport implements
+public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> implements
     GenericDao<DomainObject, PK> {
+
+	@Autowired
+	private SessionFactory sessionFactory;
 
     /**
      * Variable to print the trace.
@@ -54,6 +62,14 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     protected abstract Class<DomainObject> getDomainClass();
 
+    /**
+     * 
+     */
+    protected Session getSession() {
+    	// Get session factory
+    	return this.sessionFactory.getCurrentSession();
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -61,7 +77,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public DomainObject getById(final PK id) {
-        return getHibernateTemplate().get(getDomainClass(), id);
+        return (DomainObject) this.getSession().get(this.domainClass, id);
     }
 
     /*
@@ -71,7 +87,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public void update(final DomainObject object) {
-        getHibernateTemplate().update(object);
+        this.getSession().merge(object);
     }
 
     /*
@@ -81,7 +97,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public void create(final DomainObject object) {
-        getHibernateTemplate().save(object);
+        this.getSession().persist(object);
     }
 
     /*
@@ -92,7 +108,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
     @Override
     public void createOrUpdate(final DomainObject object) {
         // System.out.println("a");
-        getHibernateTemplate().saveOrUpdate(object);
+        this.getSession().saveOrUpdate(object);
     }
 
     /*
@@ -102,7 +118,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public void delete(final DomainObject object) {
-        getHibernateTemplate().delete(object);
+        this.getSession().delete(object);
     }
 
     /*
@@ -112,8 +128,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public void deleteById(final PK id) {
-        Object obj = getById(id);
-        getHibernateTemplate().delete(obj);
+        this.delete(this.getById(id));
     }
 
     /*
@@ -123,7 +138,8 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public List<DomainObject> getAll() {
-        return (getHibernateTemplate().find("from " + domainClass.getName() + " o"));
+        return (List<DomainObject>) this.getSession().
+        		createQuery("from " + this.domainClass.getName()).list();
     }
 
     /*
@@ -133,14 +149,8 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public void deleteAll() {
-        getHibernateTemplate().execute(new HibernateCallback() {
-            @Override
-            public Object doInHibernate(final Session session) {
-                String hqlDelete = "delete " + domainClass.getName();
-                int deletedEntities = session.createQuery(hqlDelete).executeUpdate();
-                return null;
-            }
-        });
+        String hqlDelete = "delete " + this.domainClass.getName();
+        this.getSession().createQuery(hqlDelete).executeUpdate();
     }
 
     /*
@@ -150,7 +160,10 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> exte
      */
     @Override
     public int count() {
-        List list = getHibernateTemplate().find("select count(*) from " + domainClass.getName() + " o");
+        List list = this.getSession().
+        		createQuery("select count(*) from " + this.domainClass.getName() + " o").
+        		list();
+
         Long count = (Long) list.get(0);
         return count.intValue();
     }

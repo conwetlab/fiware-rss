@@ -401,7 +401,7 @@ public class ExpenditureLimitManager {
     private void insertNewLimits(List<DbeExpendLimit> newLimits) {
         ExpenditureLimitManager.logger.debug("Into insertNewLimits method. Limits size: " + newLimits.size());
         for (DbeExpendLimit limit : newLimits) {
-            expLimitDao.getHibernateTemplate().merge(limit);
+            expLimitDao.update(limit);
         }
     }
 

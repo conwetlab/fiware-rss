@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,6 +36,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeTransactionDao;
@@ -46,6 +49,7 @@ import es.tid.fiware.rss.model.DbeTransaction;
  * 
  */
 @Repository
+@Transactional
 public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String> implements DbeTransactionDao {
 
     /**
@@ -57,16 +61,6 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DbeTransactionDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public DbeTransactionDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /**
      * 
@@ -173,11 +167,11 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     @Override
     public DbeTransaction getTransactionByTxIdWithoutLazy(String txid) {
         String hql = "from DbeTransaction as trans left join trans.bmObMop.bmObCountry left join trans.bmProduct "
-            + "where trans.txTransactionId=?";
+            + "where trans.txTransactionId=:transaction";
         DbeTransaction dbetrBD = null;
         Object[] obj = null;
         try {
-            obj = (Object[]) getHibernateTemplate().find(hql, txid).get(0);
+            obj = (Object[]) this.getSession().createQuery(hql).setParameter("transaction", txid).list().get(0);
             dbetrBD = (DbeTransaction) obj[0];
         } catch (Exception e) {
             DbeTransactionDaoImpl.LOGGER.error("Error db", e);
@@ -193,10 +187,10 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
      */
     @Override
     public List<DbeTransaction> getTransactionByTxPbCorrelationId(String pbCorrelationId) {
-        String hql = "from DbeTransaction as trans where trans.txPbCorrelationId=?";
+        String hql = "from DbeTransaction as trans where trans.txPbCorrelationId=:correlation";
         List<DbeTransaction> resultList = null;
         try {
-            List list = getHibernateTemplate().find(hql, pbCorrelationId);
+            List list = this.getSession().createQuery(hql).setParameter("correlation", pbCorrelationId).list();
             resultList = Collections.checkedList(list, DbeTransaction.class);
         } catch (Exception e) {
             DbeTransactionDaoImpl.LOGGER.error("Error db", e);
@@ -236,10 +230,14 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     public DbeTransaction getTransactionByTxId(final String transactionId) throws RSSException {
 
         DbeTransactionDaoImpl.LOGGER.debug("Entering getTransactionByTxId...");
-        String hql = "from DbeTransaction l where l.txTransactionId=?";
+        String hql = "from DbeTransaction l where l.txTransactionId=:txID";
 
         try {
-            List<Object> txs = getHibernateTemplate().find(hql, transactionId);
+            List<Object> txs = (List<Object>) this.getSession().
+            		createQuery(hql).
+            		setParameter("txID", transactionId).
+            		list();
+
             if (txs.size() == 0) {
                 DbeTransactionDaoImpl.LOGGER.debug("There is no data");
                 return null;
@@ -448,7 +446,7 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
      */
     private List<DbeTransaction> listDbeTransactionQuery(final String hql) {
         DbeTransactionDaoImpl.LOGGER.debug("listDbeTransactionQuery hql-->" + hql);
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         List<DbeTransaction> resultList = Collections.checkedList(list, DbeTransaction.class);
         if (resultList != null) {
             DbeTransactionDaoImpl.LOGGER.debug("there is something to return");

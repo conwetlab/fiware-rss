@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -25,6 +27,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.ServiceProductTypeDao;
@@ -36,6 +39,7 @@ import es.tid.fiware.rss.model.BmServiceProductTypeId;
  * 
  */
 @Repository
+@Transactional
 public class ServiceProductTypeDaoImpl
     extends GenericDaoImpl<BmServiceProductType, BmServiceProductTypeId> implements ServiceProductTypeDao {
 
@@ -43,16 +47,6 @@ public class ServiceProductTypeDaoImpl
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceProductTypeDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public ServiceProductTypeDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
