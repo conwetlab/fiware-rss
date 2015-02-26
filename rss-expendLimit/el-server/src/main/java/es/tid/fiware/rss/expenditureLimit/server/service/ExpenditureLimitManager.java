@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.tid.fiware.rss.exception.RSSException;
@@ -51,6 +50,7 @@ import es.tid.fiware.rss.model.BmService;
  * 
  */
 @Service
+@Transactional
 public class ExpenditureLimitManager {
 
     /**
@@ -130,7 +130,6 @@ public class ExpenditureLimitManager {
      * @param provider
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED)
     public LimitGroupBean storeGeneralProviderExpLimit(String provider, LimitGroupBean expLimits)
         throws RSSException {
         ExpenditureLimitManager.logger.debug("Into storeGeneralUserExpLimit method");
@@ -279,7 +278,6 @@ public class ExpenditureLimitManager {
      * @param expLimits
      * @throws RSSException
      */
-    @Transactional(propagation = Propagation.REQUIRED)
     private void createUserExpLimit(String provider, String userId,
         LimitGroupBean expLimits) throws RSSException {
         ExpenditureLimitManager.logger.debug("Into createUserExpLimit method");
@@ -348,7 +346,6 @@ public class ExpenditureLimitManager {
      * @param currency
      * @param type
      */
-    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUserLmits(String providerId, String userId, String service, String currency, String type)
         throws RSSException {
         ExpenditureLimitManager.logger.debug("Into deleteUserLmits method:" + providerId + " userId:" + userId);

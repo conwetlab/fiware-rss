@@ -52,6 +52,7 @@ import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 
 @Service
+@Transactional
 public class SettlementManager {
 
     /***
@@ -319,7 +320,6 @@ public class SettlementManager {
      * @param providerName
      * @throws IOException
      */
-    @Transactional
     public void runCreateProvider(String providerId, String providerName, String aggregatorId) throws Exception {
         logger.debug("Creating provider: {}", providerId);
         DbeAppProvider provider = new DbeAppProvider();
@@ -343,7 +343,6 @@ public class SettlementManager {
      * @param providerName
      * @throws IOException
      */
-    @Transactional
     public void runCreateAggretator(String aggregatorId, String aggregatorName) throws Exception {
         logger.debug("Creating aggregator: {}", aggregatorId);
         DbeAggregator aggregator = new DbeAggregator();
@@ -380,7 +379,6 @@ public class SettlementManager {
      * @param appProvider
      * @throws IOException
      */
-    @Transactional
     public void runClean(String appProvider) throws IOException {
         logger.debug("Deleting  transactions. Provider: {}", appProvider);
         transactionDao.deleteTransactionsByProviderId(appProvider);

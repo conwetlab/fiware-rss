@@ -2,7 +2,7 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Error</title>
+<title>FIWARE RSS - Error</title>
 </head>
 <body>
    <%@  include file="/jspf/header.jsp"%> 

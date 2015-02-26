@@ -42,11 +42,13 @@ import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
 import es.tid.fiware.rss.oauth.service.OauthManager;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  */
 @Service
+@Transactional
 public class ExpenditureLimitDataChecker {
 
     /**

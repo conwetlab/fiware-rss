@@ -5,7 +5,7 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Settlement</title>
+<title>FIWARE RSS - Settlement</title>
 </head>
 <body>
 

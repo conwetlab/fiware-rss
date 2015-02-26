@@ -50,8 +50,10 @@ import es.tid.fiware.rss.oauth.model.ApplicationInfo;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.oauth.model.Role;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class OauthManager {
     private static final Logger log = LoggerFactory.getLogger(OauthManager.class);
     /**

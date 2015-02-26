@@ -46,6 +46,7 @@ import es.tid.fiware.rss.model.DbeTransaction;
  * 
  */
 @Service("processLimitService")
+@Transactional
 public class ProcessingLimitService {
     /**
      * Variable to print the trace.
