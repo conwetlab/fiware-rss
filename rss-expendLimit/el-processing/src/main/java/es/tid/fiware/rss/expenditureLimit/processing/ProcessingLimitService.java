@@ -56,8 +56,10 @@ public class ProcessingLimitService {
     public static String WEEK_TYPE = "weekly";
     public static String TRANSACTION_TYPE = "perTransaction";
     public static String EXCCED_PARAMETER_NAME = "%levelExcceded%";
+
     @Autowired
     private DbeExpendLimitDao expendLimitDao;
+
     @Autowired
     private DbeExpendControlDao expendControlDao;
     /**
@@ -75,25 +77,33 @@ public class ProcessingLimitService {
      * @throws RSSException
      */
     public void proccesLimit(DbeTransaction tx) throws RSSException {
-        ProcessingLimitService.logger.debug("Process limit for tx:" + tx.getTxTransactionId());
+        ProcessingLimitService.logger.debug("=========== Process limit for tx:" + tx.getTxTransactionId());
+
         // transaction to take into account: charge, capture, refund
         String operationType = tx.getTcTransactionType();
+
         if (operationType.equalsIgnoreCase(Constants.CAPTURE_TYPE)
             || operationType.equalsIgnoreCase(Constants.CHARGE_TYPE)
             || operationType.equalsIgnoreCase(Constants.REFUND_TYPE)) {
+
+        	ProcessingLimitService.logger.debug("===== IF");
             // Obtain accumulated
             List<DbeExpendControl> controls = getControls(tx);
             DbeExpendControl control;
             BigDecimal levelExceded = new BigDecimal(0);
+
             List<DbeExpendLimit> limits = getLimits(tx);
             if (null != limits && limits.size() > 0) {
+            	ProcessingLimitService.logger.debug("===== IF LIMITS");
                 boolean notification = false;
                 for (DbeExpendLimit limit : limits) {
                     if (ProcessingLimitService.TRANSACTION_TYPE.equalsIgnoreCase(limit.getId().getTxElType())) {
+                    	ProcessingLimitService.logger.debug("===== IF FOR");
                         ProcessingLimitUtil utils = new ProcessingLimitUtil();
                         BigDecimal total = utils.getValueToAddFromTx(tx);
                         checkMaxAmountExceed(total, limit, tx);
                     } else {
+                    	ProcessingLimitService.logger.debug("===== ELSE FOR");
                         // Get control to check against the limit
                         control = getExpendControlToCheck(controls, limit, tx);
                         // check end period do not exceeded
@@ -157,6 +167,7 @@ public class ProcessingLimitService {
     @Transactional
     public void updateLimit(DbeTransaction tx) throws RSSException {
         ProcessingLimitService.logger.debug("Update limit for tx: " + tx.getTxTransactionId());
+
         // transaction to take into account: charge, capture, refund
         String operationType = tx.getTcTransactionType();
         if ((operationType.equalsIgnoreCase(Constants.CAPTURE_TYPE)

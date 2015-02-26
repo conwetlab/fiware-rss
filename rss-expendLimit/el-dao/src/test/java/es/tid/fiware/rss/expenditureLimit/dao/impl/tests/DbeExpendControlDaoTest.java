@@ -47,6 +47,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.DbeSystemPropertiesDao;
@@ -63,6 +65,7 @@ import es.tid.fiware.rss.model.BmService;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public class DbeExpendControlDaoTest {
 
     /**
@@ -105,6 +108,7 @@ public class DbeExpendControlDaoTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void testGetExpendLimitDataForaUser() {
 
         BmService bmService = new BmService();
@@ -131,6 +135,7 @@ public class DbeExpendControlDaoTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void testUpdateExpendLimitDataForaUser() {
 
         BmService bmService = new BmService();
@@ -144,9 +149,11 @@ public class DbeExpendControlDaoTest {
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
+        
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
         TransactionStatus status = transactionManager.getTransaction(def);
+        
         while (it.hasNext()) {
             DbeExpendControl el = it.next();
             if (el.getId().getTxElType().equalsIgnoreCase("daily")) {
@@ -160,6 +167,7 @@ public class DbeExpendControlDaoTest {
             }
             expLimitDao.saveDbeExpendControl(el);
         }
+
         transactionManager.commit(status);
 
         l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
@@ -179,6 +187,7 @@ public class DbeExpendControlDaoTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void testNewExpendLimitDataForaUser() {
 
         BmService bmService = new BmService();
@@ -187,14 +196,17 @@ public class DbeExpendControlDaoTest {
         bmCurrency.setNuCurrencyId(1);
         BmObCountry bmObCountry = new BmObCountry();
         bmObCountry.setId(new BmObCountryId(1, 1));
+
         List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
             "app123456", bmCurrency, bmObCountry);
 
-        Assert.assertTrue("Elements founds", l != null && l.size() == 3);
+        Assert.assertTrue("Elements found before " + l.toString(), l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
+ 
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
         TransactionStatus status = transactionManager.getTransaction(def);
+        
         while (it.hasNext()) {
             DbeExpendControl el = it.next();
             DbeExpendControl neoEc = new DbeExpendControl();
@@ -211,12 +223,14 @@ public class DbeExpendControlDaoTest {
             neoEc.setFtExpensedAmount(el.getFtExpensedAmount());
             expLimitDao.saveDbeExpendControl(neoEc);
         }
+
         transactionManager.commit(status);
-        l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId101", bmService,
+        
+        List<DbeExpendControl> l1 = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId101", bmService,
             "123456", bmCurrency, bmObCountry);
 
-        Assert.assertTrue("Elements founds", l != null && l.size() == 3);
-        it = l.iterator();
+        Assert.assertTrue("Elements found after " +  l.toString() + " " + l1.toString(), l != null && l.size() == 3);
+        it = l1.iterator();
         while (it.hasNext()) {
             DbeExpendControl el = it.next();
             if (!el.getId().getTxAppProviderId().equalsIgnoreCase("123456")) {

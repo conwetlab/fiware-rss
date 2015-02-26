@@ -77,6 +77,7 @@ public class DbeTransactionDaoImplTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
+    
     @Autowired
     @Qualifier("transactionManager")
     private HibernateTransactionManager transactionManager;
@@ -101,6 +102,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void test20GetTransactionBySvcPrdtUserDate() {
         String txTransactionId = new String("1234");
 
@@ -142,6 +144,7 @@ public class DbeTransactionDaoImplTest {
      * tests the getLimitedTxBySvcPrdtUserDateOrderByDate
      */
     @Test
+    @Transactional
     public void test25getLimitedTxBySvcRefcPrdtUserDateOrderByDate() {
         String txTransactionId = new String("1234");
 
@@ -183,6 +186,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void test30Create() {
         // to see what data we have in database
         // try{
@@ -246,6 +250,7 @@ public class DbeTransactionDaoImplTest {
      */
 
     @Test
+    @Transactional
     public void test35Create() {
         // to see what data we have in database
         // try{
@@ -310,6 +315,7 @@ public class DbeTransactionDaoImplTest {
      * test35Create creates the transaction in the database. we set transactionId not with uuid class
      */
     @Test
+    @Transactional
     public void test37Create() {
         // to see what data we have in database
         // try{
@@ -371,6 +377,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void test40CreateOrUpdate() {
         // to see what data we have in database
         // try{
@@ -458,6 +465,7 @@ public class DbeTransactionDaoImplTest {
      */
 
     @Test
+    @Transactional
     public void test60GetTransactionByTxId() {
 
         String txId = new String("987");
@@ -484,6 +492,7 @@ public class DbeTransactionDaoImplTest {
      */
 
     @Test
+    @Transactional
     public void test65GetTransactionByTxId() {
 
         String txId = new String("111");
@@ -505,6 +514,7 @@ public class DbeTransactionDaoImplTest {
 
     // obtained nothing with datatest values
     @Test
+    @Transactional
     public void test70GetTransactionByOrgSvrRfCde() {
 
         String orgSrvRefCode = new String("987");
@@ -532,6 +542,7 @@ public class DbeTransactionDaoImplTest {
 
     // obtained the value of the datatest
     @Test
+    @Transactional
     public void test75GetTransactionByOrgSvrRfCde() {
 
         String txTransactionId = new String("1234");
@@ -559,6 +570,7 @@ public class DbeTransactionDaoImplTest {
      * 
      */
     @Test
+    @Transactional
     public void testGetTransactionByTxIdWithoutLazy() {
 
         String txId = new String("1234");
@@ -582,6 +594,7 @@ public class DbeTransactionDaoImplTest {
      * 
      */
     @Test
+    @Transactional
     public void testGetTransactionByRfCdeSvc() {
 
         String txReferenceCode = new String("100");
@@ -606,6 +619,7 @@ public class DbeTransactionDaoImplTest {
 
     // obtained the value of the datatest
     @Test
+    @Transactional
     public void testGetTransactionByTxPbCorrelationId() {
 
         String txTransactionId = new String("1234");
@@ -629,6 +643,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void testGetTransactionsByProviderId() {
         String txTransactionId = new String("1234");
         String providerId = new String("provider");
@@ -675,6 +690,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void testGetNumTxBySvcRefcPrdtUserDate() {
         String txTransactionId = new String("1234");
         Long number = dbeTransactionDAO.getNumTxBySvcRefcPrdtUserDate(txTransactionId, null, null, null, null, null,

@@ -44,7 +44,9 @@ import es.tid.fiware.rss.model.BmLanguage;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+@ContextConfiguration({"classpath:database.xml"})
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class LanguageDaoImplTest {
 
     /**
@@ -55,9 +57,10 @@ public class LanguageDaoImplTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
-    @Autowired
+    
+    /*@Autowired
     @Qualifier("transactionManager")
-    private HibernateTransactionManager transactionManager;
+    private HibernateTransactionManager transactionManager;*/
 
     /**
      * Method to insert data before test.

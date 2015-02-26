@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politénica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -40,6 +42,8 @@ import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml"})
@@ -103,6 +107,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void convertIntoApiModelTest() {
         logger.debug("convertIntoApiModelTest");
         SetRevenueShareConf model = new SetRevenueShareConf();
@@ -121,6 +126,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkValidAppProviderTest() throws Exception {
         logger.debug("checkValidAppProviderTest");
         // nothing happens
@@ -134,6 +140,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkNonValidAppProviderTest() throws Exception {
         logger.debug("checkNonValidAppProviderTest");
         thrown.expect(RSSException.class);
@@ -145,6 +152,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkValidRSSModelTest() throws Exception {
         logger.debug("checkValidRSSModelTest");
         // nothing happens
@@ -156,6 +164,7 @@ public class RSSModelsManagerTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkValidRSSModelNonRevenueTest() throws Exception {
         logger.debug("checkValidRSSModelTest");
         // nothing happens
@@ -167,6 +176,7 @@ public class RSSModelsManagerTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkValidRSSModelRevenuelessThan0Test() throws Exception {
         logger.debug("checkValidRSSModelTest");
         // nothing happens
@@ -181,6 +191,7 @@ public class RSSModelsManagerTest {
     * 
     */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getRssModelsTest() throws Exception {
         logger.debug("getRssModelsTest");
         // with provider
@@ -195,6 +206,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void createRssModelTest() throws Exception {
         logger.debug("createRssModelTest");
         try {
@@ -210,6 +222,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void updateRssModelTest() throws Exception {
         logger.debug("updateRssModelTest");
         RSSModel model = rssModelsManager.updateRssModel(aggregatorId, rssModel);
@@ -224,6 +237,7 @@ public class RSSModelsManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteRssModelTest() throws Exception {
         logger.debug("deleteRssModelTest");
         // non expected error

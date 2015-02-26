@@ -37,6 +37,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.impl.ObCountryDaoImpl;
@@ -53,6 +55,8 @@ import es.tid.fiware.rss.model.BmPricePoint;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class PricePointDaoImplTest {
 
     /**
@@ -75,9 +79,10 @@ public class PricePointDaoImplTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
-    @Autowired
+    
+    /*@Autowired
     @Qualifier("transactionManager")
-    private HibernateTransactionManager transactionManager;
+    private HibernateTransactionManager transactionManager;*/
 
     /**
      * Method to insert data before test.

@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -46,6 +48,8 @@ import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChe
 import es.tid.fiware.rss.expenditureLimit.test.ExpenditureLimitBeanConstructor;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
 import es.tid.fiware.rss.oauth.service.OauthManager;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -135,6 +139,7 @@ public class ExpenditureLimitServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserExpLimits() throws Exception {
         Response response = server.getUserExpLimits("authToken", appProvider, userId,
             service, currency, type);
@@ -146,6 +151,7 @@ public class ExpenditureLimitServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getProviderExpLimits() throws Exception {
         Response response = server.getProviderExpLimits("authToken", appProvider, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
@@ -155,6 +161,7 @@ public class ExpenditureLimitServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
@@ -165,7 +172,8 @@ public class ExpenditureLimitServerTest {
     /**
      * @throws Exception
      */
-    @Test
+    //@Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralUserExpLimits method");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
@@ -178,6 +186,7 @@ public class ExpenditureLimitServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteProviderExpLimits method");
         Response response = server.deleteProviderExpLimits("authToken", appProvider, service, currency, type);
@@ -189,6 +198,7 @@ public class ExpenditureLimitServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteUserAccumulated method");
         Response response = server.deleteUserExpCtrl("authToken", appProvider, userId, service, currency, type);

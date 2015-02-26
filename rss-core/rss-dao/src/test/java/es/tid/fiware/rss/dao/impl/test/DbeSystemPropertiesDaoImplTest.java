@@ -42,6 +42,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.DbeSystemPropertiesDao;
@@ -63,6 +64,7 @@ public class DbeSystemPropertiesDaoImplTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
+    
     @Autowired
     @Qualifier("transactionManager")
     private HibernateTransactionManager transactionManager;
@@ -91,6 +93,7 @@ public class DbeSystemPropertiesDaoImplTest {
      * {@link es.tid.fiware.rss.dao.impl.DbeSystemPropertiesDaoImpl#getAllByParamClass(java.lang.String)}.
      */
     @Test
+    @Transactional
     public void testaGetAllByParamClass() {
         // Call method to test
         List<DbeSystemProperties> c = dbeSystemPropertiesDao.getAllByParamClass("paramClass");
@@ -103,17 +106,20 @@ public class DbeSystemPropertiesDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void testbExit() {
         Assert.assertTrue(dbeSystemPropertiesDao.exists("name"));
         Assert.assertFalse(dbeSystemPropertiesDao.exists("noname"));
     }
 
     @Test
+    @Transactional
     public void testcSize() {
         Assert.assertEquals(2, dbeSystemPropertiesDao.count());
     }
 
     @Test
+    @Transactional
     public void testdGetAll() {
         Assert.assertTrue(dbeSystemPropertiesDao.getAll().size() == 2);
     }
@@ -134,13 +140,10 @@ public class DbeSystemPropertiesDaoImplTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void testfDelete() {
         DbeSystemProperties c = dbeSystemPropertiesDao.getById("name");
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
-        TransactionStatus status = transactionManager.getTransaction(def);
         dbeSystemPropertiesDao.delete(c);
-        transactionManager.commit(status);
         Assert.assertTrue(dbeSystemPropertiesDao.getById("name") == null);
     }
 
