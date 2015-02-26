@@ -56,6 +56,20 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
         return BmObCountry.class;
     }
 
+    /**
+     * 
+     * @param hql
+     * @return
+     */
+    private List<BmObCountry> listObCountryQuery(final String hql) {
+        ObCountryDaoImpl.LOGGER.debug(hql);
+
+        List<BmObCountry> list = this.getSession().createQuery(hql).list();
+        List<BmObCountry> resultList = Collections.checkedList(list, BmObCountry.class);
+
+        return resultList;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -67,25 +81,6 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
         return this.listObCountryQuery(hql);
     }
 
-    /* Private Methods */
-
-    /**
-     * Method executes HQL query.
-     * 
-     * @param hql
-     *            String with HQL query
-     * @return resultList
-     */
-    private List<BmObCountry> listObCountryQuery(final String hql) {
-        ObCountryDaoImpl.LOGGER.debug(hql);
-        // @SuppressWarnings("rawtypes")
-        List list = this.getSession().createQuery(hql).list();
-        // entityManager.createQuery(hql).getResultList();
-        // @SuppressWarnings("unchecked")
-        List<BmObCountry> resultList = Collections.checkedList(list, BmObCountry.class);
-        return resultList;
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -94,8 +89,8 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
     @Override
     public final BmObCountry getBmObByITUData(final String txMncItuT212) {
         String hql = "from BmObCountry c where c.txMncItuT212 = '" + txMncItuT212 + "'";
-        List<BmObCountry> list = (List<BmObCountry>) this.getSession().createQuery(hql).list();
-        List<BmObCountry> resultList = Collections.checkedList(list, BmObCountry.class);
+        List<BmObCountry> resultList = this.listObCountryQuery(hql);
+
         if (resultList.size() == 1) {
             return resultList.get(0);
         }
