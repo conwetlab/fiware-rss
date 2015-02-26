@@ -26,7 +26,7 @@ import java.net.URL;
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 /**
  * The Class DatabaseLoader.
@@ -126,7 +127,8 @@ public class DatabaseLoader {
         try {
             DatabaseLoader.logger.debug("starting init() in DatabaseLoader...");
 
-            this.dbConn = new DatabaseDataSourceConnection(dataSource, this.schema);
+            this.dbConn = new DatabaseConnection(DataSourceUtils.getConnection(dataSource), this.schema);
+
             DatabaseConfig config = dbConn.getConfig();
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
             config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
