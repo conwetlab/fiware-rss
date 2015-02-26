@@ -24,7 +24,6 @@ package es.tid.fiware.rss.dao.impl;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.PbMopDao;
@@ -36,7 +35,6 @@ import es.tid.fiware.rss.model.BmPbMopId;
  * 
  */
 @Repository
-@Transactional
 public class PbMopDaoImpl extends GenericDaoImpl<BmPbMop, BmPbMopId> implements PbMopDao {
 
     /*

@@ -29,7 +29,6 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.CurrencyDao;
@@ -41,7 +40,6 @@ import es.tid.fiware.rss.model.BmCurrency;
  * 
  */
 @Repository
-@Transactional
 public class CurrencyDaoImpl extends GenericDaoImpl<BmCurrency, Long> implements CurrencyDao {
 
     /**

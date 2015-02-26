@@ -28,7 +28,6 @@ package es.tid.fiware.rss.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeAppProviderApplicationDao;
@@ -39,7 +38,6 @@ import es.tid.fiware.rss.model.DbeAppProviderApplication;
  * 
  */
 @Repository
-@Transactional
 public class DbeAppProviderApplicationDaoImpl extends GenericDaoImpl<DbeAppProviderApplication, String> implements
     DbeAppProviderApplicationDao {
 

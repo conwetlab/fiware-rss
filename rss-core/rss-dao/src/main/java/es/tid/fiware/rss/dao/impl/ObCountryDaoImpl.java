@@ -29,7 +29,6 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.ObCountryDao;
@@ -40,7 +39,6 @@ import es.tid.fiware.rss.model.BmObCountryId;
  * 
  */
 @Repository
-@Transactional
 public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId> implements ObCountryDao {
 
     /**

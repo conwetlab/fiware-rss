@@ -24,7 +24,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
@@ -35,7 +34,6 @@ import es.tid.fiware.rss.model.DbeAggregator;
  * 
  */
 @Repository
-@Transactional
 public class DbeAggregatorDaoImpl extends GenericDaoImpl<DbeAggregator, String> implements DbeAggregatorDao {
     /**
      * Variable to print the trace.

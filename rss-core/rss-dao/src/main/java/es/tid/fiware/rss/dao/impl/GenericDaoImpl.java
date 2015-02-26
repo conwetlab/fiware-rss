@@ -43,8 +43,8 @@ import es.tid.fiware.rss.dao.GenericDao;
 public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> implements
     GenericDao<DomainObject, PK> {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
     /**
      * Variable to print the trace.
@@ -87,7 +87,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> impl
      */
     @Override
     public void update(final DomainObject object) {
-        this.getSession().merge(object);
+        this.getSession().update(object);
     }
 
     /*
@@ -97,7 +97,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> impl
      */
     @Override
     public void create(final DomainObject object) {
-        this.getSession().persist(object);
+        this.getSession().save(object);
     }
 
     /*
@@ -107,8 +107,7 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> impl
      */
     @Override
     public void createOrUpdate(final DomainObject object) {
-        // System.out.println("a");
-        this.getSession().saveOrUpdate(object);
+        this.getSession().merge(object);
     }
 
     /*

@@ -25,7 +25,6 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.PaymentBrokerDao;
@@ -36,7 +35,6 @@ import es.tid.fiware.rss.model.BmPaymentbroker;
  * 
  */
 @Repository
-@Transactional
 public class PaymentBrokerDaoImpl extends GenericDaoImpl<BmPaymentbroker, Long> implements PaymentBrokerDao {
 
     /*

@@ -27,7 +27,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.ServiceProductTypeDao;
@@ -39,7 +38,6 @@ import es.tid.fiware.rss.model.BmServiceProductTypeId;
  * 
  */
 @Repository
-@Transactional
 public class ServiceProductTypeDaoImpl
     extends GenericDaoImpl<BmServiceProductType, BmServiceProductTypeId> implements ServiceProductTypeDao {
 

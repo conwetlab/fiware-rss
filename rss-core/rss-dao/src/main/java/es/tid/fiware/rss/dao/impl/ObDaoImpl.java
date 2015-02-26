@@ -23,7 +23,6 @@ package es.tid.fiware.rss.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.ObDao;
@@ -35,7 +34,6 @@ import es.tid.fiware.rss.model.BmOb;
  * 
  */
 @Repository
-@Transactional
 public class ObDaoImpl extends GenericDaoImpl<BmOb, Long> implements ObDao {
 
     /*

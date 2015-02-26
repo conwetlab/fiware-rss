@@ -48,7 +48,6 @@
             <props>
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.connection.autocommit">false</prop>
-                <prop key="current_session_context_class">thread</prop>
           		<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
                 <!-- Tunning config x integration environment -->
                 <prop key="hibernate.jdbc.batch_size">16</prop>

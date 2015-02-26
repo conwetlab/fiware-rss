@@ -30,7 +30,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
@@ -41,7 +40,6 @@ import es.tid.fiware.rss.model.DbeAppProvider;
  * 
  */
 @Repository
-@Transactional
 public class DbeAppProviderDaoImpl extends GenericDaoImpl<DbeAppProvider, String> implements DbeAppProviderDao {
     /**
      * Variable to print the trace.
