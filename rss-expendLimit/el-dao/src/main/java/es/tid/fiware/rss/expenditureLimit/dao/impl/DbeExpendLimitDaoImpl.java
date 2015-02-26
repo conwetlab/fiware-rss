@@ -86,7 +86,7 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
             		setParameter("nuObID", bmObCountry.getId().getNuObId()).
             		setParameter("txAppPID1", appProviderId).
             		setParameter("txAppPID2", DbeExpendLimitDao.NO_APP_PROVIDER_ID).
-            		setParameter("bmSetCurrID", bmCurrency.getNuCurrencyId()).
+            		setParameter("bmCurrID", bmCurrency.getNuCurrencyId()).
             		list();
         } else {
         	list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
@@ -169,12 +169,13 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
         String userId, BmObCountry bmObCountry, BmCurrency bmCurrency) {
         DbeExpendLimitDaoImpl.logger.debug("Entering getExpendLimitsByProviderUserService...");
 
-        String hql = " from DbeExpendLimit el where el.id.txEndUserId = :txUsrID and el.id.txAppProviderId = :txAppPID " +
+        String hql = "from DbeExpendLimit el where el.id.txEndUserId = :txUsrID and el.id.txAppProviderId = :txAppPID " +
             " and el.id.nuServiceId = :nuServID and el.id.nuCountryId = :nuCountID and el.id.nuObId = :nuObID";
+
         @SuppressWarnings("unchecked")
         List<DbeExpendLimit> list = null;
         if (bmCurrency != null) {
-            hql += "and el.id.nuCurrencyId = :nuCurrID";
+            hql += " and el.id.nuCurrencyId = :nuCurrID";
             list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
             		setParameter("txUsrID", userId).
             		setParameter("txAppPID", provider).

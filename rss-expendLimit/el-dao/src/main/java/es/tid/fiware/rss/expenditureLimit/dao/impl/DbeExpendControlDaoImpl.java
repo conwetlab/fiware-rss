@@ -107,7 +107,7 @@ public class DbeExpendControlDaoImpl extends GenericDaoImpl<DbeExpendControl, Db
             && (expendData.getId().getTxAppProviderId() != null)
             && (expendData.getId().getTxAppProviderId().length() > 0)
             && (expendData.getId().getTxElType() != null) && (expendData.getId().getTxElType().length() > 0)) {
-            this.getSession().saveOrUpdate(expendData);
+            this.createOrUpdate(expendData);
         }
 
     }
