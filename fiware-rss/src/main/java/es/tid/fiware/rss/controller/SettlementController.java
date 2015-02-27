@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -105,6 +107,33 @@ public class SettlementController {
             logger.error(e.getMessage(), e);
             return "error";
         }
+    }
+
+    /**
+     * Returns Web view for the creating of Revenue Sharing models
+     * @param request
+     * @param model
+     * @return The page to be rendered
+     */
+    @RequestMapping("/RSModels")
+    public String rsModelsView(HttpServletRequest request, ModelMap model) {
+        String result = null;
+        try {
+            OauthLoginWebSessionData session = (OauthLoginWebSessionData)
+                request.getSession().getAttribute(USER_SESSION);
+
+            String aggregatorId = null;
+            if (session != null) {
+                aggregatorId = session.getAggregatorId();
+            }
+            model.addAttribute("providers", settlementManager.getProviders(aggregatorId));
+            return "RSModels";
+        } catch (Exception e) {
+            model.addAttribute("message", "RS Models:"  + e.getMessage());
+            logger.error(e.getMessage(), e);
+            result = "error";
+        }
+        return result;
     }
 
     /**

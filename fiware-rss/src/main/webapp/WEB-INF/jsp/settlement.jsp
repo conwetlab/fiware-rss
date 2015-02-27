@@ -7,7 +7,7 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Settlement</title>
+<title>FIWARE RSS - Settlement</title>
 <script type="text/javascript">
     function launchSettlement(aggregatorId){
     	dateFrom = document.getElementById("dateFrom").value;
@@ -102,26 +102,6 @@
   		});     	
     }
     
-    function createModel() {    	
-    	providerId = $( "#providerId option:selected" ).val();
-    	productClass = document.getElementById("productClass").value;
-    	revenue = document.getElementById("revenue");
-    	if(revenue.value == null || revenue.value == "" || ! isNumber(revenue)){
-    		dialogMessage("Revenue number must be introduced");
-    		return;
-    	}    	
-    	url = "${contextPath}/settlement/createRSModel.json?providerId=" + providerId 
-		 +"&productClass=" + productClass + "&revenue=" + revenue.value;
-    	
-   	    $.getJSON(url, function(json){
-   		if(json.success){
-   			dialogMessage(json.message, "info");
-	    	  }else {
-	    		  dialogMessage(json.message);
-	    	  }
- 		  });    	
-    }     
-    
     function deletingProvider() {    	
     	providerId = $( "#name option:selected" ).val();
     	providerId = document.getElementById("name").value;    	
@@ -174,29 +154,10 @@
 	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewTransactions?aggregatorId=${aggregatorId}">View transactions in database</a></div>
  
  	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewRS?aggregatorId=${aggregatorId}">View RS models in database</a></div>
+
+        <div style="margin-left:40px;"><a href="${contextPath}/settlement/RSModels">Create RS Model</a></div>
  	
  	<div style="margin-left:40px;"><a href="${contextPath}/settlement/viewProviders?aggregatorId=${aggregatorId}">View Providers in database</a></div>
- 	
- 	<div style="margin-left:40px;">
-           <td><b>Create RS model:</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		   <td>Provider</td>
-		   <td> 
-			 <select id="providerId" name="providerId" style="width:150px">
-				<c:forEach var="provider" items="${providers}">			
-	               <option value="${provider.txAppProviderId}">${provider.txName}</option>
-	      	    </c:forEach>					
-			 </select>
-		   </td> 		      
-		   <td>Revenue %</td>
-		   <td>
-			  <input type="text" id="revenue" name="revenue" value='' size="2" maxlength="2"/>			  
-		   </td>  
-		   <td>Product Class:</td>
-		   <td>
-			  <input type="text" id="productClass" name="productClass" value='' size="40"/>	  		   
-           </td> 
-           <td><input type="submit" value="Create" onclick="javascript:createModel();"/> </td>	
-    </div> 	
     
  	<c:if  test="${userSession.role != 'Provider'}"> 
  	<div style="margin-left:40px;">
