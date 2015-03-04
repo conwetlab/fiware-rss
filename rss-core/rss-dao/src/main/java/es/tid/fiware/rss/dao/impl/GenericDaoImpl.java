@@ -21,7 +21,6 @@
 
 package es.tid.fiware.rss.dao.impl;
 
-import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,8 +29,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.HibernateCallback;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import es.tid.fiware.rss.dao.GenericDao;
 
