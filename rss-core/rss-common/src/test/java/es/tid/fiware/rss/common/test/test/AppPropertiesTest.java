@@ -22,8 +22,6 @@ package es.tid.fiware.rss.common.test.test;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -36,26 +34,19 @@ import es.tid.fiware.rss.common.properties.AppProperties;
 @ContextConfiguration({"classpath:database.xml"})
 public class AppPropertiesTest {
 
-    /**
-     * Properties for database connection.
-     */
-    @Autowired
-    @Qualifier("databaseProperties")
-    private AppProperties databaseProp;
-
     @Test
     public void getProperty() {
-        String prop = AppProperties.getProperty("database.properties", "database.url");
+        String prop = AppProperties.getProperty("database.properties", "database.test.url");
         Assert.assertTrue(prop.startsWith("jdbc"));
     }
 
     @Test
     public void nullProperties() {
         AppProperties props = new AppProperties("database.properties");
-        String prop = props.getProperty("database.url");
+        String prop = props.getProperty("database.test.url");
         Assert.assertTrue(prop.startsWith("jdbc"));
         props.setProps(null);
-        prop = props.getProperty("database.url");
+        prop = props.getProperty("database.test.url");
         Assert.assertTrue(prop.startsWith("jdbc"));
     }
 
