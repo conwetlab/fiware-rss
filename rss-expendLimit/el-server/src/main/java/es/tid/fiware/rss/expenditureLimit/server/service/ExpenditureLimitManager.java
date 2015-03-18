@@ -68,44 +68,52 @@ public class ExpenditureLimitManager {
     private DbeExpendLimitDao expLimitDao;
 
     /**
-     * Get provider limits
+     * Get the general expenditure limits defined for a service provider in a 
+     * given service
      * 
-     * @param appProvider
-     * @param service
-     * @param currency
-     * @param type
-     * @return
+     * @param appProvider, id of the service provider
+     * @param service, concrete service where expenditure limits are applied
+     * @param currency, concrete currency of the expenditure limits
+     * @param type, type of the limits (transaction, daily, monthly,)
+     * @return The filtered limits for the service provider
      * @throws RSSException
      */
     public LimitGroupBean getGeneralProviderExpLimitsBean(String appProvider, String service, String currency,
         String type) throws RSSException {
         ExpenditureLimitManager.logger.debug("Into getGeneralProviderExpLimitsBean method");
+
         // check mandatory information
         checker.checkRequiredSearchParameters(DbeExpendLimitDao.NO_USER_ID, service, appProvider);
+
         // check service Existence
         BmService bmService = checker.checkService(service);
+
         // Check valid currency
         BmCurrency bmCurrency = null;
         if (currency != null && currency.trim().length() > 0) {
             bmCurrency = checker.checkCurrency(currency);
         }
+
         // check valid appPorviderId
         checker.checkDbeAppProvider(appProvider);
+
         // check valid elType
         checker.checkElType(type);
+
         // unique ob
         BmObCountry obCountry = new BmObCountry();
         BmObCountryId id = new BmObCountryId();
         id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
         id.setNuObId(ExpenditureLimitDataChecker.obId);
         obCountry.setId(id);
+
         // Get All limits associated to a provider
         HashMap<String, List<DbeExpendLimit>> limitsHash = expLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(
             DbeExpendLimitDao.NO_USER_ID, bmService, appProvider, bmCurrency, obCountry);
 
         List<DbeExpendLimit> result;
         if (null != type && type.length() > 0) {
-            result = new ArrayList<DbeExpendLimit>();
+            result = new ArrayList<>();
             if (null != limitsHash.get(DbeExpendLimitDao.APP_PROV_KEY)
                 && limitsHash.get(DbeExpendLimitDao.APP_PROV_KEY).size() > 0) {
                 for (DbeExpendLimit limit : limitsHash.get(DbeExpendLimitDao.APP_PROV_KEY)) {
@@ -124,19 +132,22 @@ public class ExpenditureLimitManager {
     }
 
     /**
-     * Store the Expenditure control information given.
+     * Save Expenditure control information for a given provider.
      * 
-     * @param expCtrlBean
-     * @param provider
-     * @return
+     * @param provider, Provider that owns the new expenditure limits
+     * @param expLimits, New limits for the service provider
+     * @return, Returns the applied expenditure limits
+     * @throws RSSException
      */
     public LimitGroupBean storeGeneralProviderExpLimit(String provider, LimitGroupBean expLimits)
         throws RSSException {
         ExpenditureLimitManager.logger.debug("Into storeGeneralUserExpLimit method");
+
         if (expLimits == null || expLimits.getLimits() == null || expLimits.getLimits().size() <= 0) {
             String[] args = { "LimitGroupBean" };
             throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
+
         // check service Existence
         BmService bmService = null;
         if ((expLimits.getService() != null) && (expLimits.getService().trim().length() > 0)) {
@@ -145,6 +156,7 @@ public class ExpenditureLimitManager {
             String[] args = { "Service Identifier" };
             throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
+
         // check valid appPorviderId
         if ((provider != null) && (provider.trim().length() > 0)) {
             checker.checkDbeAppProvider(provider);
@@ -153,11 +165,12 @@ public class ExpenditureLimitManager {
             throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
 
-        List<DbeExpendLimit> newLimits = new ArrayList<DbeExpendLimit>();
+        List<DbeExpendLimit> newLimits = new ArrayList<>();
 
         Iterator<LimitBean> it = expLimits.getLimits().iterator();
-        LimitBean limitBean = null;
-        BmCurrency bmCurrency = null;
+        LimitBean limitBean;
+        BmCurrency bmCurrency;
+
         // Get and check limits from request
         while (it.hasNext()) {
             limitBean = it.next();
@@ -191,10 +204,12 @@ public class ExpenditureLimitManager {
     /**
      * Delete Provider Limits.
      * 
-     * @param urlEndUserId
-     * @param providerId
-     * @param fields
-     * @return
+     * @param providerId, Id of the service provider whose limits are going to be deleted
+     * @param service, Service where limits are applied
+     * @param currency, Currency used to filter the limits
+     * @param type, Type of the limits to be deleted (perTransaction, monthly,
+     * dayly, weekly)
+     * @throws RSSException
      */
     public void deleteProviderLimits(String providerId, String service, String currency, String type)
         throws RSSException {
@@ -204,18 +219,21 @@ public class ExpenditureLimitManager {
     }
 
     /**
-     * Get limits for given user.
+     * Get limits for given user for a concrete provider.
      * 
-     * @param endUserId
-     * @param appProvider
-     * @param service
-     * @param currency
-     * @return
+     * @param endUserId, ID of the user
+     * @param appProvider, ID of the service provider
+     * @param service, Service where expenditure limits are applied
+     * @param currency, Currency used to filter the limits
+     * @param type, Type of the expenditure limits to be returned (perTransaction,
+     * monthly, dayly, weekly)
+     * @return, Returns the limits of the user
      * @throws RSSException
      */
     public UserExpenditureLimitInfoBean getGeneralUserExpLimitsBean(String endUserId, String appProvider,
         String service, String currency, String type) throws RSSException {
         ExpenditureLimitManager.logger.debug("Into getGeneralUserExpLimitsBean method. User:" + endUserId);
+
         // check mandatory information
         checker.checkRequiredSearchParameters(endUserId, service, appProvider);
         // check service Existence
@@ -238,19 +256,24 @@ public class ExpenditureLimitManager {
         // Get All limits associated to a user
         HashMap<String, List<DbeExpendLimit>> limitsHash = expLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(
             endUserId, bmService, appProvider, bmCurrency, obCountry);
+
         // Fill in limits
         UserExpenditureLimitInfoBean userLimits = new UserExpenditureLimitInfoBean();
         userLimits.setService(service);
         userLimits.setAppProvider(appProvider);
+
         // service limits
         List<DbeExpendLimit> result = getLimitsFiltered(type, limitsHash.get(DbeExpendLimitDao.ALL_GENERIC_KEY));
         userLimits.setServiceLimits(getListBeans(result));
+
         // provider limits
         result = getLimitsFiltered(type, limitsHash.get(DbeExpendLimitDao.APP_PROV_KEY));
         userLimits.setAppProvidersLimits(getListBeans(result));
+
         // User limits
         result = getLimitsFiltered(type, limitsHash.get(DbeExpendLimitDao.USER_APP_PROV_KEY));
         userLimits.setGeneralUserLimits(getListBeans(result));
+
         // return result
         return userLimits;
     }
@@ -258,8 +281,10 @@ public class ExpenditureLimitManager {
     /**
      * Store the Expenditure control information given.
      * 
-     * @param expCtrlBean
-     * @param urlEndUserId
+     * @param provider
+     * @param userId
+     * @param expLimits 
+     * @throws RSSException
      * @return
      */
 
@@ -268,6 +293,7 @@ public class ExpenditureLimitManager {
         ExpenditureLimitManager.logger.debug("Into storeGeneralUserExpLimit method");
         createUserExpLimit(provider, userId, expLimits);
         return getGeneralUserExpLimitsBean(userId, provider, expLimits.getService(), null, null);
+        //return new UserExpenditureLimitInfoBean();
     }
 
     /**
@@ -301,11 +327,12 @@ public class ExpenditureLimitManager {
             throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
 
-        List<DbeExpendLimit> newLimits = new ArrayList<DbeExpendLimit>();
+        List<DbeExpendLimit> newLimits = new ArrayList<>();
 
         Iterator<LimitBean> it = expLimits.getLimits().iterator();
-        LimitBean limitBean = null;
-        BmCurrency bmCurrency = null;
+        LimitBean limitBean;
+        BmCurrency bmCurrency;
+
         // Get and check limits from request
         while (it.hasNext()) {
             limitBean = it.next();
@@ -345,6 +372,7 @@ public class ExpenditureLimitManager {
      * @param service
      * @param currency
      * @param type
+     * @throws RSSException
      */
     public void deleteUserLmits(String providerId, String userId, String service, String currency, String type)
         throws RSSException {
@@ -426,7 +454,7 @@ public class ExpenditureLimitManager {
     private List<DbeExpendLimit> getLimitsFiltered(String type, List<DbeExpendLimit> limits) {
         List<DbeExpendLimit> result;
         if (null != type && type.length() > 0) {
-            result = new ArrayList<DbeExpendLimit>();
+            result = new ArrayList<>();
             if (null != limits && limits.size() > 0) {
                 for (DbeExpendLimit limit : limits) {
                     if (type.equalsIgnoreCase(limit.getId().getTxElType())) {
@@ -461,7 +489,7 @@ public class ExpenditureLimitManager {
      * @return
      */
     private List<LimitBean> getListBeans(List<DbeExpendLimit> dbeLimits) {
-        List<LimitBean> limits = new ArrayList<LimitBean>();
+        List<LimitBean> limits = new ArrayList<>();
         if ((dbeLimits != null) && (dbeLimits.size() > 0)) {
             Iterator<DbeExpendLimit> it = dbeLimits.iterator();
             LimitBean limitBean;

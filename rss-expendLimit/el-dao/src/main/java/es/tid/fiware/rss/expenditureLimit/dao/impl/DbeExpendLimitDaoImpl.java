@@ -26,10 +26,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.impl.GenericDaoImpl;
@@ -115,16 +113,16 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
     public HashMap<String, List<DbeExpendLimit>> getOrdExpLimitsForUserAppProvCurrencyObCountry(String urlEndUserId,
         BmService bmService, String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry) {
 
-        HashMap<String, List<DbeExpendLimit>> hLimits = new HashMap<String, List<DbeExpendLimit>>();
+        HashMap<String, List<DbeExpendLimit>> hLimits = new HashMap<>();
         List<DbeExpendLimit> allLimits = getExpendLimitsForUserAppProvCurrencyObCountry(urlEndUserId, bmService,
             appProviderId,
             bmCurrency, bmObCountry);
 
         // Split the limits
-        List<DbeExpendLimit> userAppLimits = new ArrayList<DbeExpendLimit>();
-        List<DbeExpendLimit> userLimits = new ArrayList<DbeExpendLimit>();
-        List<DbeExpendLimit> appLimits = new ArrayList<DbeExpendLimit>();
-        List<DbeExpendLimit> genericLimits = new ArrayList<DbeExpendLimit>();
+        List<DbeExpendLimit> userAppLimits = new ArrayList<>();
+        List<DbeExpendLimit> userLimits = new ArrayList<>();
+        List<DbeExpendLimit> appLimits = new ArrayList<>();
+        List<DbeExpendLimit> genericLimits = new ArrayList<>();
 
         Iterator<DbeExpendLimit> it = allLimits.iterator();
         while (it.hasNext()) {
@@ -172,8 +170,7 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
         String hql = "from DbeExpendLimit el where el.id.txEndUserId = :txUsrID and el.id.txAppProviderId = :txAppPID " +
             " and el.id.nuServiceId = :nuServID and el.id.nuCountryId = :nuCountID and el.id.nuObId = :nuObID";
 
-        @SuppressWarnings("unchecked")
-        List<DbeExpendLimit> list = null;
+        List<DbeExpendLimit> list;
         if (bmCurrency != null) {
             hql += " and el.id.nuCurrencyId = :nuCurrID";
             list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
