@@ -50,7 +50,7 @@ public class DatabaseLoader {
     private static Logger logger = LoggerFactory.getLogger(DatabaseLoader.class);
 
     // Get database schema from properties
-    private @Value("${database.schema}") String schema;
+    private @Value("${database.test.schema}") String schema;
 
     /**
      * For database access.
