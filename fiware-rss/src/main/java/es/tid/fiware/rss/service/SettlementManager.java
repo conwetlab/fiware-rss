@@ -242,7 +242,7 @@ public class SettlementManager {
      * @throws Exception
      */
     public List<DbeTransaction> runSelectTransactions(String aggregatorId) throws Exception {
-        List<DbeTransaction> transactions = new ArrayList<DbeTransaction>();
+        List<DbeTransaction> transactions = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
@@ -269,7 +269,7 @@ public class SettlementManager {
      * @throws Exception
      */
     public List<DbeAppProvider> getProviders(String aggregatorId) throws Exception {
-        List<DbeAppProvider> providers = new ArrayList<DbeAppProvider>();
+        List<DbeAppProvider> providers = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
@@ -292,7 +292,7 @@ public class SettlementManager {
      * @throws Exception
      */
     public List<SetRevenueShareConf> getRSModels(String aggregatorId) throws Exception {
-        List<SetRevenueShareConf> models = new ArrayList<SetRevenueShareConf>();
+        List<SetRevenueShareConf> models = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
