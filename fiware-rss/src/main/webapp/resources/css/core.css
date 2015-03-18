@@ -21,3 +21,15 @@ h2 {
   top: -25px;
   left: 95px;
 }
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.table th {
+    background-color: #EBEBEB !important;
+}
