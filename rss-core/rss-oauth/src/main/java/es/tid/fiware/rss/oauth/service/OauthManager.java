@@ -46,10 +46,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.tid.fiware.rss.common.properties.AppProperties;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.oauth.exceptions.AuthException;
 import es.tid.fiware.rss.oauth.model.ApplicationInfo;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.oauth.model.Role;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
+import java.io.IOException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -66,22 +68,28 @@ public class OauthManager {
     private String accessTokenUrl;
     private String callbackURL;
     private String externalLogin;
-    private String useOauth = "";
+    private boolean useOauth = false;
     private String userInfoUrl;
     private String getApplicationsUrl;
     private String grantedRole;
     private final String authMethod = "Basic ";
+
+    /*
+     OAuth2 Properties handler
+    */
     @Autowired
     @Qualifier(value = "oauthProperties")
     private AppProperties oauthProperties;
+
     /**
      * 
      */
     private final DefaultHttpClient httpclient = new DefaultHttpClient();
+
     /**
      * handler that manages responses
      */
-    private ResponseHandler handler = new ResponseHandler();
+    private final ResponseHandler handler = new ResponseHandler();
 
     /**
      * Read needed properties from file.
@@ -98,7 +106,7 @@ public class OauthManager {
         userInfoUrl = oauthProperties.getProperty("config.userInfoUrl");
         grantedRole = oauthProperties.getProperty("config.grantedRole");
         getApplicationsUrl = oauthProperties.getProperty("config.getApplications");
-        useOauth = oauthProperties.getProperty("config.useOauth");
+        useOauth = oauthProperties.getProperty("config.useOauth").equalsIgnoreCase("Y");
         // avoid certificate checking for problems regarding with them.
         SSLContext ctx = SSLContext.getInstance("TLS");
         X509TrustManager tm = new X509TrustManager() {
@@ -287,45 +295,45 @@ public class OauthManager {
     }
 
     /**
-     * Get user Info.
+     * Retrieves the user info from  the configured identity manager.
      * 
-     * @param token
-     * @return
-     * @throws Exception
+     * @param token, Access token of the user given by the identity manager
+     * @return ValidatedToken instance with the user info in the idm
+     * @throws RSSException
+     * @throws AuthException
      */
-    public ValidatedToken getUserInfo(String token) throws Exception {
+    public ValidatedToken getUserInfo(String token) 
+            throws RSSException, AuthException{
+
+        ValidatedToken validatedToken = null;
         OauthManager.log.debug("getUserInfo method. Token: {}", token);
+
+        if (null == token || token.isEmpty()) {
+            throw new RSSException("User token cannot be null");
+        }
+
         try {
+            // Get user info from the idm
             HttpGet httpget = new HttpGet(getInfoUserUrl(token));
-            OauthManager.log.debug("executing request" + httpget.getRequestLine());
-            // send request
-            HttpResponse response = httpclient.execute(httpget, handler);
-            OauthManager.log.debug("----------------------------------------");
-            OauthManager.log.debug(response.getStatusLine().toString());
-            if (handler.hasContent()) {
-                OauthManager.log.debug("----------------------------------------");
-                OauthManager.log.debug("Response content:");
-                OauthManager.log.debug(handler.getResponseContent());
-                if (handler.getStatus() != 200) {
-                    OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
-                    throw new RSSException(handler.getResponseContent());
-                }
-                ObjectMapper mapper = new ObjectMapper();
-                ValidatedToken session = mapper.readValue(handler.getResponseContent(), ValidatedToken.class);
-                return session;
-            } else if (handler.getStatus() != 200) {
+            httpclient.execute(httpget, handler);
+
+            // Check idm response
+            if (handler.getStatus() != 200) {
                 OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
-                throw new RSSException(handler.getResponseContent());
+                throw new AuthException(handler.getResponseContent());
             }
-            return null;
-        } catch (RSSException ex) {
-            throw ex;
-        } catch (Exception e) {
-            OauthManager.log.error("Error obtaining token:" + e.toString(), e);
-            throw new Exception("Error obtaining token: " + e.toString());
+
+            if (handler.hasContent()) {
+                // If the response has content, build the ValidatedToken object
+                ObjectMapper mapper = new ObjectMapper();
+                 validatedToken = mapper.readValue(handler.getResponseContent(), ValidatedToken.class);
+            }
+        } catch (IOException ex) {
+            throw new AuthException("The connection with the idm has failed");
         } finally {
             httpclient.getConnectionManager().closeExpiredConnections();
         }
+        return validatedToken;
     }
 
     /**
@@ -377,27 +385,25 @@ public class OauthManager {
      * Check if the user has sent a valid token.
      * 
      * @param userToken
-     * @throws Exception
+     * @return ValidatedToken instance with the user info
+     * @throws RSSException
+     * @throws AuthException
      */
-    public ValidatedToken checkAuthenticationToken(String userToken) throws Exception {
+    public ValidatedToken checkAuthenticationToken(String userToken)
+            throws RSSException, AuthException {
+
+        ValidatedToken validatedToken = null;
         OauthManager.log.debug("Into checkAuthenticationToken. Token:" + userToken);
-        if ("Y".equalsIgnoreCase(useOauth)) {
-            if (null != userToken && userToken.length() > 0) {
-                // Get user Info
-                return getUserInfo(userToken);
-                /*
-                 * ValidatedToken userInfo = getUserInfo(userToken);
-                 * // check user token
-                 * ApplicationInfo[] applications = getClientIdApplications(userToken, userInfo.getActorId());
-                 * // Finally check if the user has access to the application.
-                 * checkApplictionIds(applications);
-                 */
-            } else {
+
+        if (this.useOauth) {
+            // Check that a token has been provided
+            if (null == userToken || userToken.isEmpty()) {
                 String[] args = {"X-Auth-Token header is required"};
                 throw new RSSException(UNICAExceptionType.INVALID_OAUTH_TOKEN, args);
             }
+            validatedToken = getUserInfo(userToken);
         }
-        return null;
+        return validatedToken;
     }
 
     /**

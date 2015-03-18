@@ -398,10 +398,10 @@ public class OauthManagerTest {
      */
     @Test
     public void checkNoAuthenticationTokenTest() throws Exception {
-        ReflectionTestUtils.setField(oauthManager, "useOauth", "N");
+        ReflectionTestUtils.setField(oauthManager, "useOauth", false);
         ValidatedToken validatedToken = oauthManager.checkAuthenticationToken("userToken");
         Assert.assertNull(validatedToken);
-        ReflectionTestUtils.setField(oauthManager, "useOauth", "Y");
+        ReflectionTestUtils.setField(oauthManager, "useOauth", true);
     }
 
     /**
