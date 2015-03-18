@@ -84,7 +84,7 @@ public class ProcessingLimitServiceTest {
      */
     private static Logger logger = LoggerFactory.getLogger(ProcessingLimitServiceTest.class);
 
-    private @Value("${database.schema}") String schema;
+    private @Value("${database.test.schema}") String schema;
 
     @Autowired
     private DataSource dataSource;
@@ -387,15 +387,16 @@ public class ProcessingLimitServiceTest {
             List<DbeExpendControl> controlsAfter = controlService.getExpendDataForUserAppProvCurrencyObCountry(
                 tx.getTxEndUserId(),
                 tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
-            boolean finded = false;
+
+            boolean found = false;
             for (DbeExpendControl checkControl : controlsAfter) {
                 if (checkControl.getFtExpensedAmount().compareTo(new BigDecimal(0)) == 0) {
-                    finded = true;
+                    found = true;
                     break;
                 }
             }
             // reset control found
-            Assert.assertTrue(finded);
+            Assert.assertTrue(found);
         } catch (RSSException e) {
             ProcessingLimitServiceTest.logger.debug("Exception received: " + e.getMessage());
             Assert.fail("Exception expected");
