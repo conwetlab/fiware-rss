@@ -314,19 +314,27 @@ public class SettlementManager {
     }
 
     /**
-     * Create provider.
+     * Create provider a new provider for a given aggregator.
      * 
      * @param providerId
      * @param providerName
-     * @throws IOException
+     * @param aggregatorId
      */
-    public void runCreateProvider(String providerId, String providerName, String aggregatorId) throws Exception {
+    public void runCreateProvider(String providerId, String providerName,
+            String aggregatorId) {
+
         logger.debug("Creating provider: {}", providerId);
+
+        // Build new Provider entity
         DbeAppProvider provider = new DbeAppProvider();
         provider.setTxAppProviderId(providerId);
         provider.setTxName(providerName);
+
+        // Create provider
         appProviderDao.create(provider);
-        if (null != aggregatorId && aggregatorId.length() > 0) {
+
+        // If an aggregator id has been specified create the aggregator provider
+        if (null != aggregatorId && !aggregatorId.isEmpty()) {
             DbeAggregatorAppProvider object = new DbeAggregatorAppProvider();
             DbeAggregatorAppProviderId id = new DbeAggregatorAppProviderId();
             object.setId(id);
