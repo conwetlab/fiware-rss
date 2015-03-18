@@ -30,10 +30,10 @@
     <!-- Database config -->
 	<!-- Pool -->
 	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="${database.driverClassName}" />
-		<property name="url" value="${database.url}" />
-		<property name="username" value="${database.username}" />
-		<property name="password" value="${database.password}" />
+		<property name="driverClassName" value="${database.test.driverClassName}" />
+		<property name="url" value="${database.test.url}" />
+		<property name="username" value="${database.test.username}" />
+		<property name="password" value="${database.test.password}" />
 		<!-- Pool settings -->
 		<property name="poolPreparedStatements" value="true" />
 	    <property name="initialSize" value="5" />
