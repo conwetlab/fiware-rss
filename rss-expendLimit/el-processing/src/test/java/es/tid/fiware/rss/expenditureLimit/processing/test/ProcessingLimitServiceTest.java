@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -24,6 +26,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.sql.DataSource;
 
@@ -32,11 +36,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionDefinition;
@@ -47,7 +54,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import es.tid.fiware.rss.common.Constants;
 import es.tid.fiware.rss.common.test.DatabaseLoader;
-import es.tid.fiware.rss.dao.DbeTransactionDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendControlDao;
@@ -60,6 +66,11 @@ import es.tid.fiware.rss.model.BmObMop;
 import es.tid.fiware.rss.model.BmObMopId;
 import es.tid.fiware.rss.model.BmService;
 import es.tid.fiware.rss.model.DbeTransaction;
+import java.net.URL;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 
@@ -72,16 +83,21 @@ public class ProcessingLimitServiceTest {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(ProcessingLimitServiceTest.class);
+
+    private @Value("${database.test.schema}") String schema;
+
     @Autowired
     private DataSource dataSource;
+
     @Autowired
     private ProcessingLimitService limitService;
+
     @Autowired
     private DbeExpendControlDao controlService;
-    @Autowired
-    private DbeTransactionDao transactionDao;
+
     @Autowired
     private DatabaseLoader databaseLoader;
+
     @Autowired
     @Qualifier("transactionManager")
     private HibernateTransactionManager transactionManager;
@@ -102,7 +118,12 @@ public class ProcessingLimitServiceTest {
      */
     @After
     public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
+        FlatXmlDataSetBuilder loader = new FlatXmlDataSetBuilder();
+        IDatabaseConnection dbConn = new DatabaseConnection(DataSourceUtils.getConnection(dataSource), this.schema);
+        URL url = this.getClass().getClassLoader().getResource("dbunit/CREATE_DATATEST_EXPLIMIT.xml");
+        IDataSet ds = loader.build(url);
+        DatabaseOperation.DELETE_ALL.execute(dbConn, ds);
+        dbConn.getConnection().commit();
     }
 
     /**
@@ -138,35 +159,53 @@ public class ProcessingLimitServiceTest {
         tx.setTxEndUserId("txEndUserId");
         tx.setTxAppProvider("app123456");
         tx.setFtInternalTotalAmount(new BigDecimal(20));
-        // Valores comodin txUserId, appproviderId
+
         return tx;
+    }
+
+    /**
+     * 
+     * @param tx
+     * @return
+     */
+    private List<DbeExpendControl> getExpenditureControls(DbeTransaction tx) {
+    	return controlService.getExpendDataForUserAppProvCurrencyObCountry(
+                tx.getTxEndUserId(),
+                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
     }
 
     /**
      * Check that the limits are updated.
      */
     @Test
+    @Transactional
     public void updateControls() {
-        try {
+    	try {
+        	ProcessingLimitServiceTest.logger.debug("==== Update Controls ====");
+
             DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
             // Set user for testing
             tx.setTxEndUserId("userIdUpdate");
             tx.setFtChargedTotalAmount(new BigDecimal(2));
-            List<DbeExpendControl> controls = controlService.getExpendDataForUserAppProvCurrencyObCountry(
-                tx.getTxEndUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
-            // Reset dates to current date--> if not test fail
+
+            List<DbeExpendControl> controls = this.getExpenditureControls(tx);
+
+            // Save expexted expenditure limits
+            Map<String, BigDecimal> expectedLimits = new HashMap<>();
+
+            for (DbeExpendControl control: controls) {
+                expectedLimits.put(control.getId().getTxElType(), control.getFtExpensedAmount().add(tx.getFtChargedTotalAmount()));
+            }
+
+            // Reset dates to current date--> in other case the test fails
             updateDate(controls);
             limitService.updateLimit(tx);
-            List<DbeExpendControl> controls2 = controlService.getExpendDataForUserAppProvCurrencyObCountry(
-                tx.getTxEndUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
-            for (DbeExpendControl control : controls) {
-                if (controls2.get(0).getId().getTxElType().
-                    equalsIgnoreCase(control.getId().getTxElType())) {
-                    BigDecimal total = control.getFtExpensedAmount().add(tx.getFtChargedTotalAmount());
-                    Assert.assertTrue(total.compareTo(controls2.get(0).getFtExpensedAmount()) == 0);
-                }
+
+            List<DbeExpendControl> controls2 = this.getExpenditureControls(tx);
+
+            for (DbeExpendControl control : controls2) {
+                BigDecimal amount = control.getFtExpensedAmount();
+                Assert.assertTrue(expectedLimits.get(control.getId().getTxElType()).compareTo(amount) == 0);
             }
         } catch (RSSException e) {
             Assert.fail("Exception not expected" + e.getMessage());
@@ -197,34 +236,38 @@ public class ProcessingLimitServiceTest {
      * Check that the acummulated is set to 0 and added a negative value (refund)
      */
     @Test
+    @Transactional
     public void updateResetControls() {
-        try {
+    	try {
             DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
             // Set user for testing
             tx.setTxEndUserId("userIdUpdate");
             tx.setTcTransactionType(Constants.REFUND_TYPE);
             tx.setFtChargedTotalAmount(new BigDecimal(2));
-            List<DbeExpendControl> controls = controlService.getExpendDataForUserAppProvCurrencyObCountry(
-                tx.getTxEndUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
+
+            List<DbeExpendControl> controls = this.getExpenditureControls(tx);
+
             DbeExpendControl control = controls.get(0);
             // Reset period
             Date date = new Date();
             date.setTime((new Date()).getTime() - 100000000);
             control.setDtNextPeriodStart(date);
+
             DefaultTransactionDefinition def = new DefaultTransactionDefinition();
             def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
             TransactionStatus status = transactionManager.getTransaction(def);
+
             controlService.createOrUpdate(control);
+
             transactionManager.commit(status);
+
             limitService.updateLimit(tx);
-            List<DbeExpendControl> controls2 = controlService.getExpendDataForUserAppProvCurrencyObCountry(
-                tx.getTxEndUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
+            List<DbeExpendControl> controls2 = this.getExpenditureControls(tx);
+
             for (DbeExpendControl controlAux : controls2) {
                 if (control.getId().getTxElType().
                     equalsIgnoreCase(controlAux.getId().getTxElType())) {
-                    Assert.assertTrue(controlAux.getFtExpensedAmount().compareTo(new BigDecimal(-2)) == 0);
+                    Assert.assertTrue("Expensed amount: " + controlAux.getFtExpensedAmount(), controlAux.getFtExpensedAmount().compareTo(new BigDecimal(-2)) == 0);
                 }
             }
 
@@ -286,14 +329,12 @@ public class ProcessingLimitServiceTest {
             GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
             cal.setTime(new Date());
             cal.add(Calendar.DAY_OF_MONTH, 1);
-            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-            def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-            TransactionStatus status = transactionManager.getTransaction(def);
+
             for (DbeExpendControl control : controlsBefore) {
                 control.setDtNextPeriodStart(cal.getTime());
                 controlService.createOrUpdate(control);
             }
-            transactionManager.commit(status);
+
             limitService.proccesLimit(tx);
             List<DbeExpendControl> controlsAfter = controlService.getExpendDataForUserAppProvCurrencyObCountry(
                 tx.getTxEndUserId(),
@@ -346,15 +387,16 @@ public class ProcessingLimitServiceTest {
             List<DbeExpendControl> controlsAfter = controlService.getExpendDataForUserAppProvCurrencyObCountry(
                 tx.getTxEndUserId(),
                 tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(), tx.getBmObMop().getBmObCountry());
-            boolean finded = false;
+
+            boolean found = false;
             for (DbeExpendControl checkControl : controlsAfter) {
                 if (checkControl.getFtExpensedAmount().compareTo(new BigDecimal(0)) == 0) {
-                    finded = true;
+                    found = true;
                     break;
                 }
             }
             // reset control found
-            Assert.assertTrue(finded);
+            Assert.assertTrue(found);
         } catch (RSSException e) {
             ProcessingLimitServiceTest.logger.debug("Exception received: " + e.getMessage());
             Assert.fail("Exception expected");
@@ -365,6 +407,7 @@ public class ProcessingLimitServiceTest {
      * Verifies that the limit perTransaction is applied correctly
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void perTransactionLimit() {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
         tx.setTxEndUserId("userId01");
@@ -388,7 +431,7 @@ public class ProcessingLimitServiceTest {
             limitService.proccesLimit(tx);
             Assert.assertTrue("Limit passed", true);
         } catch (Exception e) {
-            Assert.fail("Exception expected");
+            Assert.fail("Exception not expected " + e.getMessage());
         }
     }
 }

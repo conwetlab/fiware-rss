@@ -121,6 +121,7 @@ public class ExpenditureLimitServer {
     public Response createModifProviderExpLimit(@HeaderParam("X-Auth-Token") final String authToken,
         @PathParam("appProvider") final String appProvider,
         LimitGroupBean expLimits) throws Exception {
+
         ExpenditureLimitServer.logger.debug("Into createModifProviderExpLimit method");
         // check security
         checker.checkAuthenticationToken(authToken);
@@ -218,6 +219,7 @@ public class ExpenditureLimitServer {
         // Store directly the given
         UserExpenditureLimitInfoBean expInfoBean = expLimitManager.storeGeneralUserExpLimit(appProvider, urlEndUserId,
             expLimits);
+
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, ExpenditureLimitServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
 

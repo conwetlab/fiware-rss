@@ -44,6 +44,12 @@
            <groupId>es.tid.fiware.rss.core</groupId>
            <artifactId>rss-common</artifactId>
            <version>${core.version}</version>
+           <exclusions>
+               <exclusion>
+                   <groupId>commons-logging</groupId>
+                   <artifactId>commons-logging</artifactId>
+               </exclusion>
+           </exclusions>
        </dependency>   
        <dependency>
            <groupId>es.tid.fiware.rss.core</groupId>
@@ -68,8 +74,18 @@
         <!-- 3rd party dependencies -->
         <dependency>
             <groupId>org.codehaus.castor</groupId>
-            <artifactId>castor</artifactId>
+            <artifactId>castor-xml</artifactId>
             <version>${castor.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -80,6 +96,12 @@
 	       <groupId>org.apache.httpcomponents</groupId>
 	       <artifactId>httpclient</artifactId>
            <version>${httpclient.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Resolve conflict version -->
         <dependency>

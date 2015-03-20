@@ -46,6 +46,7 @@ import es.tid.fiware.rss.model.DbeTransaction;
  * 
  */
 @Service
+@Transactional
 public class BalanceAccumulateManager {
     /**
      * Variable to print the trace.
@@ -162,7 +163,6 @@ public class BalanceAccumulateManager {
      * @param expendControl
      * @return
      */
-    @Transactional
     public void deleteUserAccumulated(String urlEndUserId, ExpendControl expendControl)
         throws RSSException {
         BalanceAccumulateManager.logger.debug("Into deleteUserAccumulated for user:{}", urlEndUserId);

@@ -2,7 +2,7 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -59,8 +59,10 @@ public class ProcessingLimitUtilTest {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(ProcessingLimitUtilTest.class);
+
     @Autowired
     private DataSource dataSource;
+
     @Autowired
     private DatabaseLoader databaseLoader;
 

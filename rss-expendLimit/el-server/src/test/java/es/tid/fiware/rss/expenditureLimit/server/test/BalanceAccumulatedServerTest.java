@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -46,6 +48,8 @@ import es.tid.fiware.rss.expenditureLimit.server.BalanceAccumulatedServer;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChecker;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
 import es.tid.fiware.rss.oauth.service.OauthManager;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -126,6 +130,7 @@ public class BalanceAccumulatedServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserAccumulated() throws Exception {
 
         Response response = server.getUserAccumulated("authToken", endUserId,
@@ -138,6 +143,7 @@ public class BalanceAccumulatedServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkUserBalance() throws Exception {
 
         ExpendControl expendControl = generateExpendControl();
@@ -150,6 +156,7 @@ public class BalanceAccumulatedServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void updateUserAccumulated() throws Exception {
 
         ExpendControl expendControl = generateExpendControl();
@@ -162,6 +169,7 @@ public class BalanceAccumulatedServerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteUserAccumulated() throws Exception {
         BalanceAccumulatedServerTest.logger.debug("Into deleteUserAccumulated method");
         ExpendControl expendControl = generateExpendControl();

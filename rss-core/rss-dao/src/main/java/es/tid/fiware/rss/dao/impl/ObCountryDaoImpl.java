@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +46,6 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ObCountryDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public ObCountryDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -61,6 +54,20 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
     @Override
     protected final Class<BmObCountry> getDomainClass() {
         return BmObCountry.class;
+    }
+
+    /**
+     * 
+     * @param hql
+     * @return
+     */
+    private List<BmObCountry> listObCountryQuery(final String hql) {
+        ObCountryDaoImpl.LOGGER.debug(hql);
+
+        List<BmObCountry> list = this.getSession().createQuery(hql).list();
+        List<BmObCountry> resultList = Collections.checkedList(list, BmObCountry.class);
+
+        return resultList;
     }
 
     /*
@@ -74,25 +81,6 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
         return this.listObCountryQuery(hql);
     }
 
-    /* Private Methods */
-
-    /**
-     * Method executes HQL query.
-     * 
-     * @param hql
-     *            String with HQL query
-     * @return resultList
-     */
-    private List<BmObCountry> listObCountryQuery(final String hql) {
-        ObCountryDaoImpl.LOGGER.debug(hql);
-        // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
-        // entityManager.createQuery(hql).getResultList();
-        // @SuppressWarnings("unchecked")
-        List<BmObCountry> resultList = Collections.checkedList(list, BmObCountry.class);
-        return resultList;
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -101,8 +89,8 @@ public class ObCountryDaoImpl extends GenericDaoImpl<BmObCountry, BmObCountryId>
     @Override
     public final BmObCountry getBmObByITUData(final String txMncItuT212) {
         String hql = "from BmObCountry c where c.txMncItuT212 = '" + txMncItuT212 + "'";
-        List<BmObCountry> list = getHibernateTemplate().find(hql);
-        List<BmObCountry> resultList = Collections.checkedList(list, BmObCountry.class);
+        List<BmObCountry> resultList = this.listObCountryQuery(hql);
+
         if (resultList.size() == 1) {
             return resultList.get(0);
         }

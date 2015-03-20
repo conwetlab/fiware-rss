@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politénica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
@@ -75,6 +77,7 @@ public class DbeTransactionDaoImplTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
+    
     @Autowired
     @Qualifier("transactionManager")
     private HibernateTransactionManager transactionManager;
@@ -99,6 +102,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void test20GetTransactionBySvcPrdtUserDate() {
         String txTransactionId = new String("1234");
 
@@ -140,6 +144,7 @@ public class DbeTransactionDaoImplTest {
      * tests the getLimitedTxBySvcPrdtUserDateOrderByDate
      */
     @Test
+    @Transactional
     public void test25getLimitedTxBySvcRefcPrdtUserDateOrderByDate() {
         String txTransactionId = new String("1234");
 
@@ -181,6 +186,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void test30Create() {
         // to see what data we have in database
         // try{
@@ -244,6 +250,7 @@ public class DbeTransactionDaoImplTest {
      */
 
     @Test
+    @Transactional
     public void test35Create() {
         // to see what data we have in database
         // try{
@@ -308,6 +315,7 @@ public class DbeTransactionDaoImplTest {
      * test35Create creates the transaction in the database. we set transactionId not with uuid class
      */
     @Test
+    @Transactional
     public void test37Create() {
         // to see what data we have in database
         // try{
@@ -369,6 +377,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void test40CreateOrUpdate() {
         // to see what data we have in database
         // try{
@@ -456,6 +465,7 @@ public class DbeTransactionDaoImplTest {
      */
 
     @Test
+    @Transactional
     public void test60GetTransactionByTxId() {
 
         String txId = new String("987");
@@ -482,6 +492,7 @@ public class DbeTransactionDaoImplTest {
      */
 
     @Test
+    @Transactional
     public void test65GetTransactionByTxId() {
 
         String txId = new String("111");
@@ -503,6 +514,7 @@ public class DbeTransactionDaoImplTest {
 
     // obtained nothing with datatest values
     @Test
+    @Transactional
     public void test70GetTransactionByOrgSvrRfCde() {
 
         String orgSrvRefCode = new String("987");
@@ -530,6 +542,7 @@ public class DbeTransactionDaoImplTest {
 
     // obtained the value of the datatest
     @Test
+    @Transactional
     public void test75GetTransactionByOrgSvrRfCde() {
 
         String txTransactionId = new String("1234");
@@ -557,6 +570,7 @@ public class DbeTransactionDaoImplTest {
      * 
      */
     @Test
+    @Transactional
     public void testGetTransactionByTxIdWithoutLazy() {
 
         String txId = new String("1234");
@@ -580,6 +594,7 @@ public class DbeTransactionDaoImplTest {
      * 
      */
     @Test
+    @Transactional
     public void testGetTransactionByRfCdeSvc() {
 
         String txReferenceCode = new String("100");
@@ -604,6 +619,7 @@ public class DbeTransactionDaoImplTest {
 
     // obtained the value of the datatest
     @Test
+    @Transactional
     public void testGetTransactionByTxPbCorrelationId() {
 
         String txTransactionId = new String("1234");
@@ -627,6 +643,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void testGetTransactionsByProviderId() {
         String txTransactionId = new String("1234");
         String providerId = new String("provider");
@@ -673,6 +690,7 @@ public class DbeTransactionDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void testGetNumTxBySvcRefcPrdtUserDate() {
         String txTransactionId = new String("1234");
         Long number = dbeTransactionDAO.getNumTxBySvcRefcPrdtUserDate(txTransactionId, null, null, null, null, null,

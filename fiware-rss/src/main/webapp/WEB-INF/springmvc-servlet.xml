@@ -13,7 +13,40 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+	<annotation-driven/> 
+        
+        
+       <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    
+     <beans:bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
+        <beans:property name="dataSource" ref="dataSource" />  
+        <beans:property name="hibernateProperties">
+            <beans:props>
+                <beans:prop key="hibernate.show_sql">false</beans:prop>
+                <beans:prop key="hibernate.connection.autocommit">false</beans:prop>
+                <beans:prop key="hibernate.bytecode.use_reflection_optimizer">false</beans:prop>
+                <beans:prop key="hibernate.jdbc.batch_size">16</beans:prop>
+                <beans:prop key="hibernate.default_batch_fetch_size">8</beans:prop>
+                <beans:prop key="hibernate.connection.release_mode">after_transaction</beans:prop>
+                <beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</beans:prop>
+                <beans:prop key="hibernate.connection.autoReconnect">true</beans:prop> 
+                <beans:prop key="hibernate.cache.use_second_level_cache">false</beans:prop>
+                <beans:prop key="hibernate.cache.use_query_cache">false</beans:prop>
+                <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>
+            </beans:props> 
+        </beans:property>
+        <beans:property name="packagesToScan">
+            <beans:list>
+               <beans:value>es.tid.fiware.rss.model</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>  
+  
+    <beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
+      <beans:property name="sessionFactory" ref="sessionFactory" />
+   </beans:bean>
+
+
 	<context:component-scan base-package="es.tid.fiware.rss" />
 	
 	<interceptors>

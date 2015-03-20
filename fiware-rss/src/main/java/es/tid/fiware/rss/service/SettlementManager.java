@@ -52,6 +52,7 @@ import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 
 @Service
+@Transactional
 public class SettlementManager {
 
     /***
@@ -241,7 +242,7 @@ public class SettlementManager {
      * @throws Exception
      */
     public List<DbeTransaction> runSelectTransactions(String aggregatorId) throws Exception {
-        List<DbeTransaction> transactions = new ArrayList<DbeTransaction>();
+        List<DbeTransaction> transactions = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
@@ -268,7 +269,7 @@ public class SettlementManager {
      * @throws Exception
      */
     public List<DbeAppProvider> getProviders(String aggregatorId) throws Exception {
-        List<DbeAppProvider> providers = new ArrayList<DbeAppProvider>();
+        List<DbeAppProvider> providers = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
@@ -291,7 +292,7 @@ public class SettlementManager {
      * @throws Exception
      */
     public List<SetRevenueShareConf> getRSModels(String aggregatorId) throws Exception {
-        List<SetRevenueShareConf> models = new ArrayList<SetRevenueShareConf>();
+        List<SetRevenueShareConf> models = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
@@ -313,20 +314,27 @@ public class SettlementManager {
     }
 
     /**
-     * Create provider.
+     * Create provider a new provider for a given aggregator.
      * 
      * @param providerId
      * @param providerName
-     * @throws IOException
+     * @param aggregatorId
      */
-    @Transactional
-    public void runCreateProvider(String providerId, String providerName, String aggregatorId) throws Exception {
+    public void runCreateProvider(String providerId, String providerName,
+            String aggregatorId) {
+
         logger.debug("Creating provider: {}", providerId);
+
+        // Build new Provider entity
         DbeAppProvider provider = new DbeAppProvider();
         provider.setTxAppProviderId(providerId);
         provider.setTxName(providerName);
+
+        // Create provider
         appProviderDao.create(provider);
-        if (null != aggregatorId && aggregatorId.length() > 0) {
+
+        // If an aggregator id has been specified create the aggregator provider
+        if (null != aggregatorId && !aggregatorId.isEmpty()) {
             DbeAggregatorAppProvider object = new DbeAggregatorAppProvider();
             DbeAggregatorAppProviderId id = new DbeAggregatorAppProviderId();
             object.setId(id);
@@ -343,7 +351,6 @@ public class SettlementManager {
      * @param providerName
      * @throws IOException
      */
-    @Transactional
     public void runCreateAggretator(String aggregatorId, String aggregatorName) throws Exception {
         logger.debug("Creating aggregator: {}", aggregatorId);
         DbeAggregator aggregator = new DbeAggregator();
@@ -380,7 +387,6 @@ public class SettlementManager {
      * @param appProvider
      * @throws IOException
      */
-    @Transactional
     public void runClean(String appProvider) throws IOException {
         logger.debug("Deleting  transactions. Provider: {}", appProvider);
         transactionDao.deleteTransactionsByProviderId(appProvider);

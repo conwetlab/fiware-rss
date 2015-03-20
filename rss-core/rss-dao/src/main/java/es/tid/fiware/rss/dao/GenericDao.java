@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -22,8 +24,9 @@ package es.tid.fiware.rss.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 
 /**
  * Abstract interface to be implemented by every DAO.
@@ -32,17 +35,6 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
  * @param <PK>
  */
 public abstract interface GenericDao<DomainObject, PK extends Serializable> {
-    /**
-     * 
-     * @return SessionFactory
-     */
-    SessionFactory getSessionFactory();
-
-    /**
-     * 
-     * @return HibernateTemplate
-     */
-    HibernateTemplate getHibernateTemplate();
 
     /**
      * @return List<T> Object list.

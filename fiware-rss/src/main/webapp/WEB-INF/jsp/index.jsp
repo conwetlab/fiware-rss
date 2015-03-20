@@ -7,7 +7,7 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Settlement</title>
+<title>FIWARE RSS - Settlement</title>
 <script type="text/javascript">
    function init() {
 	   if (null != "${error}" && "${error}" != '') {
@@ -21,13 +21,13 @@
 </head>
 <body onload="javascript:init();" >
 
-<%@  include file="/jspf/cabecera.jsp"%> 
-<%@  include file="/jspf/pie.jspf"%> <br/> <br/> <br/><br/><br/>
+<%@  include file="/jspf/header.jsp"%>
+<%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
 
 	
 	
 	<div><p style="margin-left:40px;">It is necessary being logged to access to the page. Please  login in accounting page.
-	      <a href="${contextPath}/settlement/settlement.html">Login</a></p></div>
+	      <a href="${contextPath}/settlement/settlement">Login</a></p></div>
 
 </body>
 </html>

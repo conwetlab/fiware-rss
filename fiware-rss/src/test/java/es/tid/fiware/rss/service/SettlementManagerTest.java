@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politénica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -37,6 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.model.DbeAppProvider;
@@ -116,6 +120,7 @@ public class SettlementManagerTest {
     * 
     */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getSettlementFilesTest() {
         List<RSSFile> fileList = settlementManager.getSettlementFiles(null);
         if (fileList.isEmpty()) {
@@ -140,6 +145,7 @@ public class SettlementManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void runSettlementTest() {
         logger.debug("Into runSettlementTest");
         try {
@@ -159,6 +165,7 @@ public class SettlementManagerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void runSelectTransactionsTest() throws Exception {
         logger.debug("run all providers");
         List<DbeTransaction> transactions = settlementManager.runSelectTransactions(null);
@@ -173,6 +180,7 @@ public class SettlementManagerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getProvidersTest() throws Exception {
         logger.debug("run all providers");
         List<DbeAppProvider> providers = settlementManager.getProviders(null);
@@ -190,6 +198,7 @@ public class SettlementManagerTest {
      * @throws Exception
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getRSModelsTest() throws Exception {
         logger.debug("run all models");
         List<SetRevenueShareConf> models = settlementManager.getRSModels(null);
@@ -206,6 +215,7 @@ public class SettlementManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void runCleanTest() throws IOException {
         logger.debug("runClean");
         try {
@@ -220,6 +230,7 @@ public class SettlementManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void createAggregatorTest() {
         logger.debug("runClean");
         try {
@@ -234,6 +245,7 @@ public class SettlementManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void createRssModelTest() {
         logger.debug("createRssModelTest");
         try {
@@ -248,6 +260,7 @@ public class SettlementManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void CreateProviderTest() {
         logger.debug("CreateProviderTest");
         try {

@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendLimitDao;
@@ -55,6 +57,8 @@ import es.tid.fiware.rss.model.BmService;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 public class DbeExpendLimitDaoTest {
 
     /**

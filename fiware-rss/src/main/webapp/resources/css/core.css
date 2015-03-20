@@ -1,0 +1,39 @@
+h2 {
+    color: rgb(0, 43, 103);
+}
+
+#navbar-dec {
+  width: 305px;
+  background-color: rgb(244, 244, 244);
+  border-radius: 0px 0px 10px 0px;
+  position: fixed;
+  height: 26px;
+  z-index: 1031;
+  top: 39px;
+  border-color: rgb(229, 229, 229);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+#navbar-dec h2 {
+  font-size: 25px;
+  position: absolute;
+  top: -25px;
+  left: 95px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.table th {
+    background-color: #EBEBEB !important;
+}
+
+.table tr {
+    background-color: rgb(255, 255, 255) !important;
+}

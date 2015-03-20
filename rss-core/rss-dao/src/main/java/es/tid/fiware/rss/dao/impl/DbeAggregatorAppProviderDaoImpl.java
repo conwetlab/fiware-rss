@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -43,22 +45,11 @@ public class DbeAggregatorAppProviderDaoImpl extends
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DbeAggregatorAppProviderDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public DbeAggregatorAppProviderDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
-
     /*
      * (non-Javadoc)
      * 
      * @see es.tid.fiware.rss.dao.impl.GenericDaoImpl#getDomainClass()
      */
-
     @Override
     protected Class<DbeAggregatorAppProvider> getDomainClass() {
         return DbeAggregatorAppProvider.class;
@@ -68,7 +59,7 @@ public class DbeAggregatorAppProviderDaoImpl extends
     public List<DbeAggregatorAppProvider> getDbeAggregatorAppProviderByAggregatorId(String aggregatorId) {
         DbeAggregatorAppProviderDaoImpl.LOGGER.debug("getDbeAggregatorAppProviderByAggregatorId");
         String hql = " from DbeAggregatorAppProvider l where l.id.txEmail ='" + aggregatorId + "'";
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         List<DbeAggregatorAppProvider> resultList = Collections.checkedList(list, DbeAggregatorAppProvider.class);
         if (null != resultList && resultList.size() > 0) {
             return resultList;

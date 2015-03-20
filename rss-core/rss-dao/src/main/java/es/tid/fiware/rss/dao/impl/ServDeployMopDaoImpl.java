@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -44,16 +46,6 @@ public class ServDeployMopDaoImpl extends GenericDaoImpl<BmServdeployMop, Long> 
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            SessionFactory
-     */
-    @Autowired
-    public ServDeployMopDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     @Override
     protected Class<BmServdeployMop> getDomainClass() {
@@ -117,7 +109,7 @@ public class ServDeployMopDaoImpl extends GenericDaoImpl<BmServdeployMop, Long> 
     private List<BmServdeployMop> listServDeployMopQuery(final String hql) {
         ServDeployMopDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // @SuppressWarnings("unchecked")
         List<BmServdeployMop> resultList = Collections.checkedList(list, BmServdeployMop.class);
         return resultList;

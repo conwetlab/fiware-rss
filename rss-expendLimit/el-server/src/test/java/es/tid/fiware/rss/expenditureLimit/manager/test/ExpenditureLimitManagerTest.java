@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -41,12 +43,16 @@ import es.tid.fiware.rss.expenditureLimit.api.UserExpenditureLimitInfoBean;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChecker;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitManager;
 import es.tid.fiware.rss.expenditureLimit.test.ExpenditureLimitBeanConstructor;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * .
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @ContextConfiguration({ "classpath:database.xml" })
 public class ExpenditureLimitManagerTest {
 
@@ -73,6 +79,7 @@ public class ExpenditureLimitManagerTest {
      */
     @Autowired
     ExpenditureLimitManager elManager;
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -110,6 +117,7 @@ public class ExpenditureLimitManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into getGeneralProviderExpLimits method");
         LimitGroupBean limits = elManager.getGeneralProviderExpLimitsBean(appProvider, service, currency, type);
@@ -124,6 +132,7 @@ public class ExpenditureLimitManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         thrown.expect(RSSException.class);
@@ -144,6 +153,7 @@ public class ExpenditureLimitManagerTest {
      * @throws RSSException
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimitsNoService() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         thrown.expect(RSSException.class);
@@ -159,6 +169,7 @@ public class ExpenditureLimitManagerTest {
      * @throws RSSException
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimitsNoAppProvider() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         thrown.expect(RSSException.class);
@@ -172,6 +183,7 @@ public class ExpenditureLimitManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into deleteGeneralProviderExpLimits method");
         elManager.deleteProviderLimits(appProvider, service, currency, type);
@@ -182,6 +194,7 @@ public class ExpenditureLimitManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into getGeneralUserExpLimits method");
         UserExpenditureLimitInfoBean limits = elManager.getGeneralUserExpLimitsBean(userId, appProvider, service,
@@ -197,7 +210,8 @@ public class ExpenditureLimitManagerTest {
     /**
      * 
      */
-    @Test
+    //@Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralUserExpLimits method");
         thrown.expect(RSSException.class);
@@ -217,6 +231,7 @@ public class ExpenditureLimitManagerTest {
      * @throws RSSException
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralUserExpLimitsNoService() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         thrown.expect(RSSException.class);
@@ -232,6 +247,7 @@ public class ExpenditureLimitManagerTest {
      * @throws RSSException
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralUserExpLimitsNoAppProvider() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         thrown.expect(RSSException.class);
@@ -245,6 +261,7 @@ public class ExpenditureLimitManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into deleteGeneralUserExpLimits method");
         elManager.deleteUserLmits(appProvider, userId, service, currency, type);

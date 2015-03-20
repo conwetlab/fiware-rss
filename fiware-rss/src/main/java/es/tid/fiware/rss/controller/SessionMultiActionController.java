@@ -34,19 +34,23 @@ import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.oauth.service.OauthManager;
+import org.springframework.transaction.annotation.Transactional;
 
 public class SessionMultiActionController implements HandlerInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(SessionMultiActionController.class);
 
     private OauthLoginWebSessionData session;
+
     @Autowired
     private OauthManager oauth;
+
     @Autowired
     private DbeAggregatorDao dbeAggregatorDao;
     public static final String USER_SESSION = "userSession";
 
     @Override
+    @Transactional
     public boolean preHandle(HttpServletRequest request,
         HttpServletResponse response, Object handler) throws Exception {
         // Use login from idm?

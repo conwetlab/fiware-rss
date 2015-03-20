@@ -10,8 +10,8 @@
     <description></description>
 
     <organization>
-        <name>Telefonica Investigación y Desarrollo</name>
-        <url>http://www.tid.es</url>
+        <name>Universidad Politécnica de Madrid</name>
+        <url>http://conwet.fi.upm.es</url>
     </organization>
 
     <properties>
@@ -24,20 +24,20 @@
         <core.version>1.0.0</core.version>
         <expenditureLimit.version>1.0.0</expenditureLimit.version>        
         
-        <jdk.version>1.6</jdk.version>
-        <maven.version>3.0.3</maven.version>
-        <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
-        <junit.version>4.11</junit.version>
-        <org.springframework.version>3.2.3.RELEASE</org.springframework.version>
-        <org.hibernate.version>3.6.10.Final</org.hibernate.version>
-        <cxf.version>2.7.4</cxf.version>
-        <jackson.version>2.1.4</jackson.version>
+        <jdk.version>1.7</jdk.version>
+        <maven.version>3.2.5</maven.version>
+        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+        <junit.version>4.12</junit.version>
+        <org.springframework.version>4.1.4.RELEASE</org.springframework.version>
+        <org.hibernate.version>4.3.8.Final</org.hibernate.version>
+        <cxf.version>3.0.3</cxf.version>
+        <jackson.version>2.5.0</jackson.version>
         <logback.version>1.0.12</logback.version>	
         <janino.version>2.5.16</janino.version>
         <org.dbunit.version>2.4.9</org.dbunit.version>
         <cloning.version>1.9.0</cloning.version>
-        <mockito.version>1.9.5</mockito.version>
-        <castor.version>1.2</castor.version>
+        <mockito.version>1.10.19</mockito.version>
+        <castor.version>1.3.3</castor.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-codec.version>1.7</commons-codec.version>
         <commons-vfs.version>1.0</commons-vfs.version>
@@ -49,11 +49,9 @@
         <jstl.version>1.2</jstl.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
-        <org.dbunit.version>2.4.9</org.dbunit.version>
-        <mysql.connector.version>5.1.26</mysql.connector.version>
+        <mysql.connector.version>5.1.34</mysql.connector.version>
         <httpclient.version>4.0.1</httpclient.version>	
         <cobertura-maven-plugin.version>2.6</cobertura-maven-plugin.version>
-        <mockito.version>1.9.5</mockito.version>
     </properties>
 
     <modules>
@@ -121,7 +119,7 @@
                 <inherited>true</inherited>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.2</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>

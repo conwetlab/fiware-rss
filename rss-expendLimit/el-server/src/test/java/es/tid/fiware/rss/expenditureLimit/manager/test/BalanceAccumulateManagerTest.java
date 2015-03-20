@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -43,6 +45,8 @@ import es.tid.fiware.rss.expenditureControl.api.AccumsExpend;
 import es.tid.fiware.rss.expenditureControl.api.ExpendControl;
 import es.tid.fiware.rss.expenditureLimit.server.service.BalanceAccumulateManager;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChecker;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -109,6 +113,7 @@ public class BalanceAccumulateManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into getUserAccumulated method.");
         AccumsExpend result = balanceAccumulateManager.getUserAccumulated(endUserId,
@@ -122,6 +127,7 @@ public class BalanceAccumulateManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkUserBalance() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into checkUserBalance method.");
         thrown.expect(RSSException.class);
@@ -140,6 +146,7 @@ public class BalanceAccumulateManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void updateUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into updateUserAccumulated method.");
         ExpendControl control = generateExpendControl();
@@ -151,6 +158,7 @@ public class BalanceAccumulateManagerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into getUserAccumulated method.");
         ExpendControl control = generateExpendControl();

@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -36,15 +38,6 @@ import es.tid.fiware.rss.model.BmCustomerType;
  */
 @Repository
 public class CustomerTypeDaoImpl extends GenericDaoImpl<BmCustomerType, Long> implements CustomerTypeDao {
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public CustomerTypeDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)

@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politénica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -33,13 +35,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.dao.DbeSystemPropertiesDao;
@@ -61,6 +64,7 @@ public class DbeSystemPropertiesDaoImplTest {
 
     @Autowired
     private DatabaseLoader databaseLoader;
+    
     @Autowired
     @Qualifier("transactionManager")
     private HibernateTransactionManager transactionManager;
@@ -89,6 +93,7 @@ public class DbeSystemPropertiesDaoImplTest {
      * {@link es.tid.fiware.rss.dao.impl.DbeSystemPropertiesDaoImpl#getAllByParamClass(java.lang.String)}.
      */
     @Test
+    @Transactional
     public void testaGetAllByParamClass() {
         // Call method to test
         List<DbeSystemProperties> c = dbeSystemPropertiesDao.getAllByParamClass("paramClass");
@@ -101,17 +106,20 @@ public class DbeSystemPropertiesDaoImplTest {
     }
 
     @Test
+    @Transactional
     public void testbExit() {
         Assert.assertTrue(dbeSystemPropertiesDao.exists("name"));
         Assert.assertFalse(dbeSystemPropertiesDao.exists("noname"));
     }
 
     @Test
+    @Transactional
     public void testcSize() {
         Assert.assertEquals(2, dbeSystemPropertiesDao.count());
     }
 
     @Test
+    @Transactional
     public void testdGetAll() {
         Assert.assertTrue(dbeSystemPropertiesDao.getAll().size() == 2);
     }
@@ -132,13 +140,10 @@ public class DbeSystemPropertiesDaoImplTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void testfDelete() {
         DbeSystemProperties c = dbeSystemPropertiesDao.getById("name");
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
-        TransactionStatus status = transactionManager.getTransaction(def);
         dbeSystemPropertiesDao.delete(c);
-        transactionManager.commit(status);
         Assert.assertTrue(dbeSystemPropertiesDao.getById("name") == null);
     }
 

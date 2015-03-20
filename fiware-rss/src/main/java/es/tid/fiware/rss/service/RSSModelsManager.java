@@ -41,6 +41,7 @@ import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 
 @Service
+@Transactional
 public class RSSModelsManager {
 
     /***
@@ -102,7 +103,6 @@ public class RSSModelsManager {
      * @return
      * @throws Exception
      */
-    @Transactional
     public RSSModel createRssModel(String aggregatorId, RSSModel rssModel) throws Exception {
         logger.debug("Into createRssModel() method");
         // check valid rssModel
@@ -132,7 +132,6 @@ public class RSSModelsManager {
      * @return
      * @throws Exception
      */
-    @Transactional
     public RSSModel updateRssModel(String aggregatorId, RSSModel rssModel) throws Exception {
         logger.debug("Into updateRssModel() method");
         // check valid rssModel
@@ -165,7 +164,6 @@ public class RSSModelsManager {
      * @param productClass
      * @throws Exception
      */
-    @Transactional
     public void deleteRssModel(String aggregatorId, String appProviderId, String productClass) throws Exception {
         logger.debug("Into deleteRssModel() method");
         // check valid appProvider

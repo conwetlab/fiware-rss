@@ -48,6 +48,8 @@ import es.tid.fiware.rss.model.AppProviderParameter;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.SettlementManager;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
@@ -133,6 +135,7 @@ public class SettlementControllerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void testSettlement() {
         logger.debug("into testLogout method");
         String response = controller.settlement(null, model);
@@ -140,6 +143,7 @@ public class SettlementControllerTest {
         logger.debug("Correct logout");
         response = controller.settlement(request, model);
         Assert.assertEquals("settlement", response);
+
         logger.debug("Correct logout with session data");
         Mockito.when(session.getAttribute(USER_SESSION)).thenReturn(sessionData);
         response = controller.settlement(request, model);

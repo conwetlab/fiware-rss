@@ -40,16 +40,14 @@
     
     
     <!-- Transaction manager definition -->     
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     
-     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">  
-        <property name="dataSource" ref="dataSource" />  
-        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>  
+     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.connection.autocommit">false</prop>
-                <prop key="current_session_context_class">thread</prop>
           		<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
                 <!-- Tunning config x integration environment -->
                 <prop key="hibernate.jdbc.batch_size">16</prop>
@@ -59,6 +57,7 @@
                 <prop key="hibernate.connection.autoReconnect">true</prop> 
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
                 <prop key="hibernate.cache.use_query_cache">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <!-- prop key="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</prop-->
             </props> 
         </property>
@@ -70,7 +69,7 @@
         </property>
     </bean>  
   
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">  
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
       <property name="sessionFactory" ref="sessionFactory" />
    </bean> 
     

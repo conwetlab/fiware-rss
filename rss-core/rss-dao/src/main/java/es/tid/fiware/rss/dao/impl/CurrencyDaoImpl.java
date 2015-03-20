@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,15 +47,6 @@ public class CurrencyDaoImpl extends GenericDaoImpl<BmCurrency, Long> implements
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public CurrencyDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
@@ -123,7 +117,7 @@ public class CurrencyDaoImpl extends GenericDaoImpl<BmCurrency, Long> implements
     private List<BmCurrency> listCurrencyQuery(final String hql) {
         CurrencyDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // entityManager.createQuery(hql).getResultList();
         // @SuppressWarnings("unchecked")
         List<BmCurrency> resultList = Collections.checkedList(list, BmCurrency.class);

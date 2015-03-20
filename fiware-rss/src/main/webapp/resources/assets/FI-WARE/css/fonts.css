@@ -1,0 +1,32 @@
+/************* typography*******/
+
+@font-face {
+  font-family: "NeoTechstd-Regular";
+  font-style: normal;
+  src: url('../neotechstd-regular.eot');
+    src: url('../fonts/neotechstd-regular.eot') format('embedded-opentype'),
+         url('../fonts/neotechstd-regular.woff') format('woff'),
+         url('../fonts/neotechstd-regular.ttf') format('truetype'),
+         url('../fonts/neotechstd-regular.svg#NeoTechStdMedium') format('svg');
+}
+
+
+@font-face {
+  font-family: "NeoTechstd-Medium";
+  font-style: normal;
+  src: url('../fonts/neotechstd-medium.eot');
+    src: url('../fonts/neotechstd-medium.eot') format('embedded-opentype'),
+         url('../fonts/neotechstd-medium.woff') format('woff'),
+         url('../fonts/neotechstd-medium.ttf') format('truetype'),
+         url('../fonts/neotechstd-medium.svg#NeoTechStdMedium') format('svg');
+}
+
+
+@font-face {
+    font-family: 'DesyrelRegular';
+    src: url('../fonts/desyrel.eot');
+    src: url('../fonts/desyrel.eot') format('embedded-opentype'),
+         url('../fonts/desyrel.woff') format('woff'),
+         url('../fonts/desyrel.ttf') format('truetype'),
+         url('../fonts/desyrel.svg#DesyrelRegular') format('svg');
+}

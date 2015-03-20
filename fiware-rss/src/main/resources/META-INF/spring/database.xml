@@ -23,11 +23,11 @@
         
     <bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${database.driverClassName}" />
-		<property name="url" value="${database.url}" />
-		<property name="username" value="${database.username}" />
-		<property name="password" value="${database.password}" />
-		<!-- Pool settings -->
-	    <property name="initialSize" value="25"/>
+        <property name="url" value="${database.url}" />
+        <property name="username" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+        <!-- Pool settings -->
+        <property name="initialSize" value="25"/>
         <property name="maxActive" value="50"/>
         <property name="maxIdle" value="25"/>
         <property name="maxWait" value="5000"/>
@@ -36,21 +36,19 @@
         <property name="removeAbandonedTimeout" value="300"/>
         <property name="testOnBorrow" value="true" />
        	<property name="validationQuery" value="SELECT 1 FROM DUAL"/>
-	</bean>
+    </bean>
     
     
     <!-- Transaction manager definition -->     
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     
-     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">  
+     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
         <property name="dataSource" ref="dataSource" />  
-        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>  
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.connection.autocommit">false</prop>
-                <prop key="current_session_context_class">thread</prop>
-          		<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+                <prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
                 <!-- Tunning config x integration environment -->
                 <prop key="hibernate.jdbc.batch_size">16</prop>
                 <prop key="hibernate.default_batch_fetch_size">8</prop>
@@ -59,6 +57,7 @@
                 <prop key="hibernate.connection.autoReconnect">true</prop> 
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
                 <prop key="hibernate.cache.use_query_cache">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <!-- prop key="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</prop-->
             </props> 
         </property>
@@ -69,7 +68,7 @@
         </property>
     </bean>  
   
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">  
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
       <property name="sessionFactory" ref="sessionFactory" />
    </bean> 
     

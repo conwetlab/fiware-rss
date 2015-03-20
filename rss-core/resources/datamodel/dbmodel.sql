@@ -503,6 +503,7 @@ CREATE TABLE `set_revenue_share_conf` (
 # Procedure "refunded_yn"
 #
 
+DELIMITER $$
 DROP PROCEDURE IF EXISTS `refunded_yn`;
 CREATE PROCEDURE `refunded_yn`()
 BEGIN
@@ -522,4 +523,5 @@ BEGIN
 		UPDATE dbe_transaction SET tc_is_refunded_yn='Y' WHERE tc_transaction_type='C' AND tx_transaction_id = id;
 	END LOOP update_refunded;
 	CLOSE cur1;
-END;
+END$$
+DELIMITER ;

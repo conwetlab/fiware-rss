@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -28,6 +30,8 @@ public class ValidatedToken {
     private String displayName;
     private String name;
     private String email;
+    private String app_id;
+    private String app_slug;
     private List<Role> roles;
     private List<Organization> organizations;
 
@@ -94,5 +98,21 @@ public class ValidatedToken {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getApp_id() {
+		return app_id;
+	}
+
+	public void setApp_id(String app_id) {
+		this.app_id = app_id;
+	}
+
+	public String getApp_slug() {
+		return app_slug;
+	}
+
+	public void setApp_slug(String app_slug) {
+		this.app_slug = app_slug;
+	}
 
 }

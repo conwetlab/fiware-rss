@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -43,16 +45,6 @@ public class ProductDaoImpl extends GenericDaoImpl<BmProduct, Long> implements P
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hiberante session factory
-     */
-    @Autowired
-    public ProductDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)

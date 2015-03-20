@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -40,6 +42,8 @@ import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.expenditureLimit.api.LimitBean;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChecker;
 import es.tid.fiware.rss.expenditureLimit.test.ExpenditureLimitBeanConstructor;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -84,6 +88,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkChargeRequiredParametersTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkChargeRequiredParametersTest mehtod");
         thrown.expect(RSSException.class);
@@ -101,6 +106,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkRequiredParametersTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkChargeRequiredParametersTest mehtod");
         thrown.expect(RSSException.class);
@@ -116,6 +122,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkRequiredSearchParametersTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkRequiredSearchParametersTest mehtod");
         thrown.expect(RSSException.class);
@@ -131,6 +138,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkCurrencyTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkCurrencyTest mehtod");
         thrown.expect(RSSException.class);
@@ -145,6 +153,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkServiceTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkServiceTest mehtod");
         thrown.expect(RSSException.class);
@@ -158,6 +167,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkDbeAppProviderTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkDbeAppProviderTest mehtod");
         thrown.expect(RSSException.class);
@@ -171,6 +181,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkElTypeTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkElTypeTest mehtod");
         thrown.expect(RSSException.class);
@@ -184,6 +195,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkChargeTypeTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkChargeTypeTest mehtod");
         thrown.expect(RSSException.class);
@@ -197,6 +209,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkMandatoryDatumExistenceTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkMandatoryDatumExistenceTest mehtod");
         thrown.expect(RSSException.class);
@@ -210,6 +223,7 @@ public class ExpenditureLimitDataCheckerTest {
      * 
      */
     @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void checkExpLimitDataTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkExpLimitDataTest mehtod");
         thrown.expect(RSSException.class);

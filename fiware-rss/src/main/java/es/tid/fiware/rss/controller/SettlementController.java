@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -49,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
-import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.model.AppProviderParameter;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
@@ -57,6 +58,7 @@ import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.SettlementManager;
+import org.springframework.transaction.annotation.Transactional;
 
 @Controller
 public class SettlementController {
@@ -69,12 +71,13 @@ public class SettlementController {
      * User session attribute.
      */
     private final String USER_SESSION = "userSession";
+
     @Autowired
     private SettlementManager settlementManager;
+
     @Autowired
     private DbeAggregatorDao aggregatorDao;
-    @Autowired
-    private DbeAppProviderDao providerDao;
+
     @Resource(name = "rssProps")
     private Properties rssProps;
 
@@ -86,6 +89,7 @@ public class SettlementController {
      * @return
      */
     @RequestMapping("/settlement")
+    @Transactional
     public String settlement(HttpServletRequest request, ModelMap model) {
         try {
             OauthLoginWebSessionData session = (OauthLoginWebSessionData)
@@ -99,10 +103,37 @@ public class SettlementController {
             model.addAttribute("pentahoReportsUrl", rssProps.get("pentahoReportsUrl"));
             return "settlement";
         } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message", "Settlement:"  + e.getMessage());
             logger.error(e.getMessage(), e);
             return "error";
         }
+    }
+
+    /**
+     * Returns Web view for the creating of Revenue Sharing models
+     * @param request
+     * @param model
+     * @return The page to be rendered
+     */
+    @RequestMapping("/RSModels")
+    public String rsModelsView(HttpServletRequest request, ModelMap model) {
+        String result = null;
+        try {
+            OauthLoginWebSessionData session = (OauthLoginWebSessionData)
+                request.getSession().getAttribute(USER_SESSION);
+
+            String aggregatorId = null;
+            if (session != null) {
+                aggregatorId = session.getAggregatorId();
+            }
+            model.addAttribute("providers", settlementManager.getProviders(aggregatorId));
+            return "RSModels";
+        } catch (Exception e) {
+            model.addAttribute("message", "RS Models:"  + e.getMessage());
+            logger.error(e.getMessage(), e);
+            result = "error";
+        }
+        return result;
     }
 
     /**
@@ -174,7 +205,7 @@ public class SettlementController {
             return "viewReportsList";
 
         } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message", "View files:"  + e.getMessage());
             logger.error(e.getMessage(), e);
             return "error";
         }
@@ -230,7 +261,7 @@ public class SettlementController {
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message","View Transactions:"  + e.getMessage());
             return "error";
         }
     }
@@ -254,7 +285,7 @@ public class SettlementController {
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message", "View RS Models:"  + e.getMessage());
             return "error";
         }
     }
@@ -314,7 +345,7 @@ public class SettlementController {
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message", "View Providers:"  + e.getMessage());
             return "error";
         }
     }

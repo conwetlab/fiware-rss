@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -43,16 +45,6 @@ public class CountryDaoImpl extends GenericDaoImpl<BmCountry, Long> implements C
      * Variable to print the trace.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CountryDaoImpl.class);
-
-    /**
-     * 
-     * @param factory
-     *            hiberante session factory
-     */
-    @Autowired
-    public CountryDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
 
     /*
      * (non-Javadoc)
@@ -112,7 +104,7 @@ public class CountryDaoImpl extends GenericDaoImpl<BmCountry, Long> implements C
     private List<BmCountry> listCountryQuery(final String hql) {
         CountryDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // @SuppressWarnings("unchecked")
         List<BmCountry> resultList = Collections.checkedList(list, BmCountry.class);
         return resultList;

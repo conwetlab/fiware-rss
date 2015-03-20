@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -24,7 +26,7 @@ import java.net.URL;
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -34,6 +36,8 @@ import org.dbunit.operation.DatabaseOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 /**
  * The Class DatabaseLoader.
@@ -44,6 +48,9 @@ public class DatabaseLoader {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(DatabaseLoader.class);
+
+    // Get database schema from properties
+    private @Value("${database.test.schema}") String schema;
 
     /**
      * For database access.
@@ -120,7 +127,8 @@ public class DatabaseLoader {
         try {
             DatabaseLoader.logger.debug("starting init() in DatabaseLoader...");
 
-            this.dbConn = new DatabaseDataSourceConnection(dataSource, "FIWARE_SETTLEMENT");
+            this.dbConn = new DatabaseConnection(DataSourceUtils.getConnection(dataSource), this.schema);
+
             DatabaseConfig config = dbConn.getConfig();
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
             config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
@@ -129,14 +137,13 @@ public class DatabaseLoader {
             this.loader = new FlatXmlDataSetBuilder();
 
             dbConn.getConnection().createStatement().execute("DELETE FROM dbe_transaction");
-            deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_III.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_II.xml", false);
-            deleteAll("dbunit/CREATE_DATATEST_I.xml", true);
+            deleteAll("dbunit/CREATE_DATATEST_I.xml", false);
 
             cleanInsert("dbunit/CREATE_DATATEST_I.xml", false);
             cleanInsert("dbunit/CREATE_DATATEST_II.xml", false);
-            cleanInsert("dbunit/CREATE_DATATEST_III.xml", false);
+            cleanInsert("dbunit/CREATE_DATATEST_III.xml", true);
 
             DatabaseLoader.logger.debug("ending init() in DatabaseLoader...");
 
@@ -157,7 +164,6 @@ public class DatabaseLoader {
     public void cleanup() throws Exception {
         try {
             DatabaseLoader.logger.debug("starting cleanup of DatabaseLoader...");
-            deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_III.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_II.xml", false);
             deleteAll("dbunit/CREATE_DATATEST_I.xml", true);

@@ -2,6 +2,8 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -44,16 +46,6 @@ public class LanguageDaoImpl extends GenericDaoImpl<BmLanguage, Long> implements
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(LanguageDaoImpl.class);
 
-    /**
-     * 
-     * @param factory
-     *            hibernate session factory
-     */
-    @Autowired
-    public LanguageDaoImpl(final SessionFactory factory) {
-        setSessionFactory(factory);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -94,7 +86,7 @@ public class LanguageDaoImpl extends GenericDaoImpl<BmLanguage, Long> implements
     private List<BmLanguage> listLanguageQuery(final String hql) {
         LanguageDaoImpl.LOGGER.debug(hql);
         // @SuppressWarnings("rawtypes")
-        List list = getHibernateTemplate().find(hql);
+        List list = this.getSession().createQuery(hql).list();
         // entityManager.createQuery(hql).getResultList();
         // @SuppressWarnings("unchecked")
         List<BmLanguage> resultList = Collections.checkedList(list, BmLanguage.class);
