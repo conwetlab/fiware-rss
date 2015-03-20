@@ -33,3 +33,7 @@ a:hover {
 .table th {
     background-color: #EBEBEB !important;
 }
+
+.table tr {
+    background-color: rgb(255, 255, 255) !important;
+}

@@ -22,7 +22,7 @@
  
         <div class="container-fluid">
             <div class="col-md-8">
-                <table class="table table-bordered table-striped table-responsive
+                <table class="table table-bordered table-responsive
                        table-condensed">
                     <th>
                         Settlement
@@ -79,7 +79,7 @@
         </div>
         <div class="container-fluid">
             <div class="col-md-8">
-                <table class="table table-bordered table-striped table-responsive
+                <table class="table table-bordered table-responsive
                        table-condensed">
                     <th>
                         Revenue Sharing models
@@ -99,7 +99,7 @@
         </div>
         <div class="container-fluid">
             <div class="col-md-8">
-                <table class="table table-bordered table-striped table-responsive
+                <table class="table table-bordered table-responsive
                        table-condensed">
                     <th>
                         Providers Management
@@ -127,7 +127,7 @@
                                         <option value="${aggregator.txEmail}">${aggregator.txName}</option>
                                     </c:forEach>
                                 </select>
-                                <input type="submit" value="Create" onclick="createAdminProvider();"/>
+                                <input type="submit" class="btn btn-default" value="Create" onclick="createAdminProvider();"/>
                             </c:if>
                         </td>
                     </tr>
