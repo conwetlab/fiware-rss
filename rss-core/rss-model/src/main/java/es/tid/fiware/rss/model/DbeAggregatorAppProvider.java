@@ -37,6 +37,7 @@ import javax.persistence.Table;
 public class DbeAggregatorAppProvider implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
+
     private DbeAggregatorAppProviderId id;
     private DbeAggregator dbeAggregator;
     private DbeAppProvider dbeAppProvider;
@@ -78,7 +79,7 @@ public class DbeAggregatorAppProvider implements java.io.Serializable {
     }
 
     /**
-     * @param dbeAggredator
+     * @param dbeAggregator
      *            the dbeAggredator to set
      */
     public void setDbeAggregator(DbeAggregator dbeAggregator) {
