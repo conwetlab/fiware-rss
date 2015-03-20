@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,25 +21,41 @@
 
 package es.tid.fiware.rss.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "set_revenue_share_conf")
-public class SetRevenueShareConf {
+public class SetRevenueShareConf implements Serializable{
 
+    // Composite id of the revenue sharing model
     private SetRevenueShareConfId id;
-    private BigDecimal nuPercRevenueShare;
-    private DbeAppProvider appProvider;
+
+    // Type of algorithm that is going to be used
+    private String algorithmType;
+
+    // Store (Aggregator) that is part of the revenue model
+    private RevenueShareAggregator shareAggregator;
+
+    // Application provider which is the owner of the revenue sharing model
+    private DbeAppProvider modelOwner;
+
+    // List of stakeholders (AppProviders) involved in the revenue sharing model
+    // including its sharing value
+    private Set<ModelProvider> stakeholders;
 
     /**
      * Constructor.
@@ -49,21 +67,27 @@ public class SetRevenueShareConf {
      * Constructor.
      * 
      * @param id
-     * @param bmProduct
-     * @param bmServiceDeployment
+     * @param algorithmType
+     * @param shareAggregator
+     * @param modelOwner
+     * @param stakeholders
+     * @param aggregatorPerc
      */
-    public SetRevenueShareConf(SetRevenueShareConfId id, DbeAppProvider appProvider, BigDecimal nuPercRevenueShare) {
+    public SetRevenueShareConf(SetRevenueShareConfId id, String algorithmType,
+            RevenueShareAggregator shareAggregator, DbeAppProvider modelOwner,
+            Set<ModelProvider> stakeholders,BigDecimal aggregatorPerc) {
+
         this.id = id;
-        this.appProvider = appProvider;
-        this.nuPercRevenueShare = nuPercRevenueShare;
+        this.algorithmType = algorithmType;
+        this.shareAggregator = shareAggregator;
+        this.modelOwner = modelOwner;
+        this.stakeholders = stakeholders;
     }
 
     @EmbeddedId
     @AttributeOverrides({
         @AttributeOverride(name = "txAppProviderId", column = @Column(name = "TX_APPPROVIDER_ID", nullable = false,
             length = 50)),
-        @AttributeOverride(name = "nuObId", column = @Column(name = "NU_OB_ID", nullable = false,
-            precision = 10, scale = 0)),
         @AttributeOverride(name = "nuCountryId", column = @Column(name = "NU_COUNTRY_OB_ID", nullable = false,
             precision = 10, scale = 0)),
         @AttributeOverride(name = "txProductClass", column = @Column(name = "TX_PRODUCT_CLASS", nullable = true,
@@ -77,23 +101,42 @@ public class SetRevenueShareConf {
         this.id = id;
     }
 
-    @Column(name = "NU_PERC_REVENUE_SHARE", nullable = false, precision = 5, scale = 0)
-    public BigDecimal getNuPercRevenueShare() {
-        return nuPercRevenueShare;
+    @Column(name = "ALGORITHM_TYPE", length = 255)
+    public String getAlgorithmType() {
+        return this.algorithmType;
     }
 
-    public void setNuPercRevenueShare(BigDecimal nuPercRevenueShare) {
-        this.nuPercRevenueShare = nuPercRevenueShare;
+    public void setAlgorithmType(String algorithmType) {
+        this.algorithmType = algorithmType;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class)
+    public Set<ModelProvider> getStakeholders() {
+        return this.stakeholders;
+    }
+
+    public void setStakeholders(Set<ModelProvider> stakeholders) {
+        this.stakeholders = stakeholders;
+    }
+
+    @Embedded
+    public RevenueShareAggregator getShareAggregator() {
+        return this.shareAggregator;
+    }
+
+    public void setShareAggregator(RevenueShareAggregator shareAggregator) {
+        this.shareAggregator = shareAggregator;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TX_APPPROVIDER_ID", nullable = false, insertable = false, updatable = false)
-    public DbeAppProvider getAppProvider() {
-        return appProvider;
+    @JoinColumn(name = "MODEL_OWNER_PROVIDER", nullable = false, insertable = false, updatable = false)
+    public DbeAppProvider getModelOwner() {
+        return modelOwner;
     }
 
-    public void setAppProvider(DbeAppProvider appProvider) {
-        this.appProvider = appProvider;
+    public void setModelOwner(DbeAppProvider modelOwner) {
+        this.modelOwner = modelOwner;
     }
 
+    
 }

@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -24,10 +26,13 @@
  */
 package es.tid.fiware.rss.model;
 
+import java.util.Set;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -44,8 +49,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class DbeAppProvider implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
+
     private String txAppProviderId;
     private String txName;
+    private Set<ModelProvider> models;
 
     /**
      * 
@@ -56,10 +63,13 @@ public class DbeAppProvider implements java.io.Serializable {
     /**
      * @param txAppProviderId
      * @param txName
+     * @param models
      */
-    public DbeAppProvider(String txAppProviderId, String txName) {
+    public DbeAppProvider(String txAppProviderId, String txName, 
+            Set<ModelProvider> models) {
         this.txAppProviderId = txAppProviderId;
         this.txName = txName;
+        this.models = models;
     }
 
     /**
@@ -95,4 +105,12 @@ public class DbeAppProvider implements java.io.Serializable {
         return txName;
     }
 
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class)
+    public Set<ModelProvider> getModels() {
+        return models;
+    }
+
+    public void setModels(Set<ModelProvider> models) {
+        this.models = models;
+    }
 }

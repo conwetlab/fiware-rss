@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -20,64 +22,62 @@
 package es.tid.fiware.rss.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class RSSModel {
-    /**
-     * 
-     */
-    private String appProviderId;
-    /**
-     * 
-     */
+
+    private String ownerProviderId;
     private String productClass;
-    /**
-     * 
-     */
-    private BigDecimal percRevenueShare;
+    private String algorithmType;
+    private String aggregatorId;
+    private BigDecimal aggregatorShare;
+    private List<StakeholderModel> stakeholders;
 
-    /**
-     * @return the appProviderId
-     */
-    public String getAppProviderId() {
-        return appProviderId;
+    public String getOwnerProviderId() {
+        return ownerProviderId;
     }
 
-    /**
-     * @param appProviderId
-     *            the appProviderId to set
-     */
-    public void setAppProviderId(String appProviderId) {
-        this.appProviderId = appProviderId;
+    public void setOwnerProviderId(String ownerProviderId) {
+        this.ownerProviderId = ownerProviderId;
     }
 
-    /**
-     * @return the productClass
-     */
     public String getProductClass() {
         return productClass;
     }
 
-    /**
-     * @param productClass
-     *            the productClass to set
-     */
     public void setProductClass(String productClass) {
         this.productClass = productClass;
     }
 
-    /**
-     * @return the percRevenueShare
-     */
-    public BigDecimal getPercRevenueShare() {
-        return percRevenueShare;
+    public String getAlgorithmType() {
+        return algorithmType;
     }
 
-    /**
-     * @param percRevenueShare
-     *            the percRevenueShare to set
-     */
-    public void setPercRevenueShare(BigDecimal percRevenueShare) {
-        this.percRevenueShare = percRevenueShare;
+    public void setAlgorithmType(String algorithmType) {
+        this.algorithmType = algorithmType;
     }
 
+    public String getAggregatorId() {
+        return aggregatorId;
+    }
+
+    public void setAggregatorId(String aggregatorId) {
+        this.aggregatorId = aggregatorId;
+    }
+
+    public BigDecimal getAggregatorShare() {
+        return aggregatorShare;
+    }
+
+    public void setAggregatorShare(BigDecimal aggregatorShare) {
+        this.aggregatorShare = aggregatorShare;
+    }
+
+    public List<StakeholderModel> getStakeholders() {
+        return stakeholders;
+    }
+
+    public void setStakeholders(List<StakeholderModel> stakeholders) {
+        this.stakeholders = stakeholders;
+    }
 }

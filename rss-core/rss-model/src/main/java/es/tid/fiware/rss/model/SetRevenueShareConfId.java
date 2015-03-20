@@ -9,7 +9,6 @@ import javax.persistence.Embeddable;
 public class SetRevenueShareConfId implements Serializable {
     private static final long serialVersionUID = 1L;
     private String txAppProviderId;
-    private Long nuObId;
     private Long countryId;
     private String productClass;
 
@@ -27,22 +26,6 @@ public class SetRevenueShareConfId implements Serializable {
      */
     public void setTxAppProviderId(String txAppProviderId) {
         this.txAppProviderId = txAppProviderId;
-    }
-
-    /**
-     * @return the nuObId
-     */
-    @Column(name = "NU_OB_ID", nullable = false, precision = 10, scale = 0)
-    public Long getNuObId() {
-        return nuObId;
-    }
-
-    /**
-     * @param nuObId
-     *            the nuObId to set
-     */
-    public void setNuObId(Long nuObId) {
-        this.nuObId = nuObId;
     }
 
     /**
@@ -87,7 +70,6 @@ public class SetRevenueShareConfId implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
-        result = prime * result + ((nuObId == null) ? 0 : nuObId.hashCode());
         result = prime * result + ((productClass == null) ? 0 : productClass.hashCode());
         result = prime * result + ((txAppProviderId == null) ? 0 : txAppProviderId.hashCode());
         return result;
@@ -115,13 +97,6 @@ public class SetRevenueShareConfId implements Serializable {
                 return false;
             }
         } else if (!countryId.equals(other.countryId)) {
-            return false;
-        }
-        if (nuObId == null) {
-            if (other.nuObId != null) {
-                return false;
-            }
-        } else if (!nuObId.equals(other.nuObId)) {
             return false;
         }
         if (productClass == null) {

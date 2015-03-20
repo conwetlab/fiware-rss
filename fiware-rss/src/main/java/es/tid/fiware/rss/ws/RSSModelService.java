@@ -75,7 +75,7 @@ public class RSSModelService {
      * Get Rss Models.
      * 
      * @param authToken
-     * @param appProviderId
+     * @param appProvider
      * @param productClass
      * @return
      * @throws Exception
