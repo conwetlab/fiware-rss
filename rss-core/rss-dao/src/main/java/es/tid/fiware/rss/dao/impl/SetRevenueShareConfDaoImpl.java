@@ -23,24 +23,15 @@ package es.tid.fiware.rss.dao.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 
-/**
- * @author usuario
- * 
- */
-/**
- * @author usuario
- * 
- */
+
 @Repository
 public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareConf, SetRevenueShareConfId> implements
     SetRevenueShareConfDao {
@@ -60,50 +51,64 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
         return SetRevenueShareConf.class;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see es.tid.fiware.rss.dao.SetRevenueShareConfDao#getRevenueModelsByProviderId()
+    /**
+     * Returns a list of revenue sharing models based on the id of the owner 
+     * provider
+     *
+     * @param providerId, ID of the owner provider
+     * @return A list of SetRevenueShareConf objects containing the revenue 
+     * sharing models of the given provider
      */
     @Override
     public List<SetRevenueShareConf> getRevenueModelsByProviderId(String providerId) {
         SetRevenueShareConfDaoImpl.LOGGER.debug("getRevenueModelsByProviderId");
+
+        // Build the query
         String hql = " from SetRevenueShareConf l where l.id.txAppProviderId ='" + providerId + "'";
         List list = this.getSession().createQuery(hql).list();
         List<SetRevenueShareConf> resultList = Collections.checkedList(list, SetRevenueShareConf.class);
-        if (null != resultList && resultList.size() > 0) {
-            return resultList;
-        } else { // <=0
-            return null;
+
+        if (null == resultList || resultList.isEmpty()) {
+            resultList = null;
         }
+        return resultList;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns a list of revenue sharing models filtered by some params
      * 
-     * @see es.tid.fiware.rss.dao.SetRevenueShareConfDao#getRevenueModelsByParameters()
+     * @param aggregatorId
+     * @param appProviderId
+     * @param productClass
+     * @return
      */
     @Override
     public List<SetRevenueShareConf> getRevenueModelsByParameters(String aggregatorId, String appProviderId,
         String productClass) {
         SetRevenueShareConfDaoImpl.LOGGER.debug("getRevenueModelsByProviderId");
+ 
+        // Build queries
         String hql = "select * from set_revenue_share_conf l where tx_appprovider_id ='" + appProviderId + "'";
+
         // if appProvider not specified
-        if (null == appProviderId || "".equalsIgnoreCase(appProviderId)) {
+        if (null == appProviderId || appProviderId.isEmpty()) {
             hql = "select * from set_revenue_share_conf l where tx_appprovider_id in " +
                 "(select tx_appprovider_id from dbe_aggregator_appprovider where tx_email='" + aggregatorId + "')";
         }
+
         // if product class specified
         if (null != productClass) {
             hql += " and  tx_product_class='" + productClass + "'";
         }
+
         List list = getSession().createSQLQuery(hql).addEntity(SetRevenueShareConf.class).list();
         List<SetRevenueShareConf> resultList = Collections.checkedList(list, SetRevenueShareConf.class);
-        if (null != resultList && resultList.size() > 0) {
-            return resultList;
-        } else { // <=0
-            return null;
+
+        if (null == resultList || resultList.isEmpty()) {
+            resultList = null;
         }
+
+        return resultList;
     }
 
 }
