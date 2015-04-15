@@ -27,10 +27,11 @@ import java.util.List;
 public class RSSModel {
 
     private String ownerProviderId;
+    private BigDecimal ownerValue;
     private String productClass;
     private String algorithmType;
     private String aggregatorId;
-    private BigDecimal aggregatorShare;
+    private BigDecimal aggregatorValue;
     private List<StakeholderModel> stakeholders;
 
     public String getOwnerProviderId() {
@@ -43,6 +44,14 @@ public class RSSModel {
 
     public String getProductClass() {
         return productClass;
+    }
+
+    public BigDecimal getOwnerValue() {
+        return ownerValue;
+    }
+
+    public void setOwnerValue(BigDecimal ownerValue) {
+        this.ownerValue = ownerValue;
     }
 
     public void setProductClass(String productClass) {
@@ -65,12 +74,12 @@ public class RSSModel {
         this.aggregatorId = aggregatorId;
     }
 
-    public BigDecimal getAggregatorShare() {
-        return aggregatorShare;
+    public BigDecimal getAggregatorValue() {
+        return aggregatorValue;
     }
 
-    public void setAggregatorShare(BigDecimal aggregatorShare) {
-        this.aggregatorShare = aggregatorShare;
+    public void setAggregatorShare(BigDecimal aggregatorValue) {
+        this.aggregatorValue = aggregatorValue;
     }
 
     public List<StakeholderModel> getStakeholders() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,42 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.tid.fiware.rss.model;
+package es.tid.fiware.rss.dao.impl;
 
-import java.io.Serializable;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+import es.tid.fiware.rss.dao.ModelProviderDao;
+import es.tid.fiware.rss.model.ModelProvider;
+import es.tid.fiware.rss.model.ModelProviderId;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author fdelavega
  */
-@Embeddable
-public class ModelProviderId implements Serializable {
+@Repository
+public class ModelProviderDaoImpl extends GenericDaoImpl<ModelProvider, ModelProviderId> 
+   implements ModelProviderDao{
 
-    private SetRevenueShareConf model;
-    private DbeAppProvider stakeholder;
-
-    public ModelProviderId() {        
+    @Override
+    protected Class<ModelProvider> getDomainClass() {
+        return ModelProvider.class;
     }
-
-    @ManyToOne
-    public SetRevenueShareConf getModel() {
-        return model;
-    }
-
-    public void setModel(SetRevenueShareConf model) {
-        this.model = model;
-    }
-
-    @ManyToOne
-    public DbeAppProvider getStakeholder() {
-        return stakeholder;
-    }
-
-    public void setStakeholder(DbeAppProvider stakeholder) {
-        this.stakeholder = stakeholder;
-    }
-
     
 }

@@ -32,8 +32,6 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -50,8 +48,8 @@ public class SetRevenueShareConf implements Serializable{
     // Store (Aggregator) that is part of the revenue model
     private RevenueShareAggregator shareAggregator;
 
-    // Application provider which is the owner of the revenue sharing model
-    private DbeAppProvider modelOwner;
+    // Provider that owns the RS Model
+    private RevenueShareOwnerProvider ownerProvider;
 
     // List of stakeholders (AppProviders) involved in the revenue sharing model
     // including its sharing value
@@ -69,18 +67,18 @@ public class SetRevenueShareConf implements Serializable{
      * @param id
      * @param algorithmType
      * @param shareAggregator
-     * @param modelOwner
+     * @param ownerProvider
      * @param stakeholders
      * @param aggregatorPerc
      */
     public SetRevenueShareConf(SetRevenueShareConfId id, String algorithmType,
-            RevenueShareAggregator shareAggregator, DbeAppProvider modelOwner,
+            RevenueShareAggregator shareAggregator, RevenueShareOwnerProvider ownerProvider,
             Set<ModelProvider> stakeholders,BigDecimal aggregatorPerc) {
 
         this.id = id;
         this.algorithmType = algorithmType;
         this.shareAggregator = shareAggregator;
-        this.modelOwner = modelOwner;
+        this.ownerProvider = ownerProvider;
         this.stakeholders = stakeholders;
     }
 
@@ -128,15 +126,15 @@ public class SetRevenueShareConf implements Serializable{
         this.shareAggregator = shareAggregator;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MODEL_OWNER_PROVIDER", nullable = false, insertable = false, updatable = false)
-    public DbeAppProvider getModelOwner() {
-        return modelOwner;
+    @Embedded
+    public RevenueShareOwnerProvider getOwnerProvider() {
+        return ownerProvider;
     }
 
-    public void setModelOwner(DbeAppProvider modelOwner) {
-        this.modelOwner = modelOwner;
+    public void setOwnerProvider(RevenueShareOwnerProvider ownerProvider) {
+        this.ownerProvider = ownerProvider;
     }
 
+    
     
 }

@@ -12,6 +12,9 @@ public class SetRevenueShareConfId implements Serializable {
     private Long countryId;
     private String productClass;
 
+    public SetRevenueShareConfId() {
+    }
+
     /**
      * @return the txAppProviderId
      */

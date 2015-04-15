@@ -24,10 +24,6 @@ package es.tid.fiware.rss.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate4.HibernateTemplate;
-
 /**
  * Abstract interface to be implemented by every DAO.
  * 

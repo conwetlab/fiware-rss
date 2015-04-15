@@ -312,7 +312,7 @@ public class SettlementController {
             if (productClass == null) {
                 productClass = "";
             }
-            settlementManager.runCreateRSModel(providerId, productClass, revenue);
+            //settlementManager.runCreateRSModel(providerId, productClass, revenue);
             logger.debug("RS Model Created.");
             JsonResponse response = new JsonResponse();
             response.setMessage("RS Model Created.");

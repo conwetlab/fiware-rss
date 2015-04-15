@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,42 +15,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.tid.fiware.rss.model;
+package es.tid.fiware.rss.algorithm;
 
-import java.io.Serializable;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.model.RSSModel;
 
 /**
  *
  * @author fdelavega
  */
-@Embeddable
-public class ModelProviderId implements Serializable {
+public interface AlgorithmProcessor {
 
-    private SetRevenueShareConf model;
-    private DbeAppProvider stakeholder;
+    public void validateModel(RSSModel model) throws RSSException;
 
-    public ModelProviderId() {        
-    }
-
-    @ManyToOne
-    public SetRevenueShareConf getModel() {
-        return model;
-    }
-
-    public void setModel(SetRevenueShareConf model) {
-        this.model = model;
-    }
-
-    @ManyToOne
-    public DbeAppProvider getStakeholder() {
-        return stakeholder;
-    }
-
-    public void setStakeholder(DbeAppProvider stakeholder) {
-        this.stakeholder = stakeholder;
-    }
-
-    
+    public void launchSettlement() throws RSSException;
 }

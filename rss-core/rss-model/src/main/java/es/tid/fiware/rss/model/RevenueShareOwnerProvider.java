@@ -30,30 +30,33 @@ import javax.persistence.ManyToOne;
  * @author fdelavega
  */
 @Embeddable
-public class RevenueShareAggregator implements Serializable{
+public class RevenueShareOwnerProvider implements Serializable{
 
-    private DbeAggregator aggregator;
-    private BigDecimal aggregatorValue;
+    // Application provider which is the owner of the revenue sharing model
+    private DbeAppProvider modelOwner;
+    // Value applied for the owner in the RS models
+    private BigDecimal ownerValue;
 
-    public RevenueShareAggregator () {
+    public RevenueShareOwnerProvider() {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TX_AGGREGATOR_ID", nullable = false, insertable = false, updatable = false)
-    public DbeAggregator getAggregator() {
-        return this.aggregator;
+    @JoinColumn(name = "MODEL_OWNER_PROVIDER", nullable = false, insertable = false, updatable = false)
+    public DbeAppProvider getModelOwner() {
+        return modelOwner;
     }
 
-    public void setAggregator(DbeAggregator aggregator) {
-        this.aggregator = aggregator;
+    public void setModelOwner(DbeAppProvider modelOwner) {
+        this.modelOwner = modelOwner;
     }
 
-    @Column(name = "AGGREGATOR_VALUE", nullable = false, precision = 5, scale = 0)
-    public BigDecimal getAggregatorValue() {
-        return this.aggregatorValue;
+    @Column(name = "OWNER_VALUE", nullable = false, precision = 5, scale = 0)
+    public BigDecimal getOwnerValue() {
+        return this.ownerValue;
     }
 
-    public void setAggregatorValue (BigDecimal aggregatorValue) {
-        this.aggregatorValue = aggregatorValue;
+    public void setOwnerValue(BigDecimal ownerValue) {
+        this.ownerValue = ownerValue;
     }
+
 }

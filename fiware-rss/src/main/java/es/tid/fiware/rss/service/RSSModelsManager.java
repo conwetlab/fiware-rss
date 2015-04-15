@@ -21,6 +21,8 @@
 
 package es.tid.fiware.rss.service;
 
+import es.tid.fiware.rss.algorithm.AlgorithmFactory;
+import es.tid.fiware.rss.algorithm.AlgorithmProcessor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
+import es.tid.fiware.rss.dao.ModelProviderDao;
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
@@ -42,11 +45,15 @@ import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.ModelProvider;
+import es.tid.fiware.rss.model.ModelProviderId;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.RevenueShareAggregator;
+import es.tid.fiware.rss.model.RevenueShareOwnerProvider;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 import es.tid.fiware.rss.model.StakeholderModel;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -78,6 +85,8 @@ public class RSSModelsManager {
     @Autowired
     private DbeAggregatorDao aggregatorDao;
 
+    @Autowired
+    private ModelProviderDao modelProviderDao;
     /**
      * private properties
      */
@@ -124,14 +133,9 @@ public class RSSModelsManager {
         return id;
     }
 
-    private SetRevenueShareConf buildRSModel(String aggregatorId, 
-            RSSModel rssModel) {
+    private SetRevenueShareConf fillRSModelInfo(String aggregatorId,
+            RSSModel rssModel, SetRevenueShareConf model) {
 
-        SetRevenueShareConfId id = this.buildRSModelId(rssModel);
-
-        // Create new model
-        SetRevenueShareConf model = new SetRevenueShareConf();
-        model.setId(id);
         model.setAlgorithmType(rssModel.getAlgorithmType());
 
         // Create aggregator sharing object
@@ -140,19 +144,58 @@ public class RSSModelsManager {
         DbeAggregator aggregator = this.aggregatorDao.getById(aggregatorId);
 
         aggregatorSharing.setAggregator(aggregator);
-        aggregatorSharing.setAggregatorPerc(rssModel.getAggregatorShare());
+        aggregatorSharing.setAggregatorValue(rssModel.getAggregatorValue());
         model.setShareAggregator(aggregatorSharing);
 
         // Set provider owner
-        DbeAppProvider provider = this.appProviderDao.getById(rssModel.getOwnerProviderId());
-        model.setModelOwner(provider);
+        RevenueShareOwnerProvider ownerProvider= new RevenueShareOwnerProvider();
 
-        // TODO: Set stakeholders
+        DbeAppProvider provider = this.appProviderDao.getById(rssModel.getOwnerProviderId());
+        ownerProvider.setModelOwner(provider);
+        ownerProvider.setOwnerValue(rssModel.getOwnerValue());
+
+        model.setOwnerProvider(ownerProvider);
+
+        // Set stakeholders
+        if (rssModel.getStakeholders() != null) {
+            Set<ModelProvider> stakeholders = new HashSet<>();
+
+            for (StakeholderModel stakeholderModel: rssModel.getStakeholders()) {
+                DbeAppProvider stakeholder = this.appProviderDao.getById(stakeholderModel.getStakeholderId());
+
+                // Build stakeholder id
+                ModelProviderId stModelId = new ModelProviderId();
+                stModelId.setStakeholder(stakeholder);
+                stModelId.setModel(model);
+
+                // Build stakeholder
+                ModelProvider stModel = new ModelProvider();
+                stModel.setId(stModelId);
+                stModel.setModelValue(stakeholderModel.getModelValue());
+
+                // Add stakeholder to the set
+                stakeholders.add(stModel);
+            }
+
+            model.setStakeholders(stakeholders);
+        }
         return model;
     }
 
+    private SetRevenueShareConf buildRSModel(String aggregatorId, 
+            RSSModel rssModel) {
+
+        SetRevenueShareConfId id = this.buildRSModelId(rssModel);
+
+        // Create new model
+        SetRevenueShareConf model = new SetRevenueShareConf();
+        model.setId(id);
+
+        return this.fillRSModelInfo(aggregatorId, rssModel, model);
+    }
+
     /**
-     * Create RSS Model.
+     * Creates a new RS Model.
      * 
      * @param aggregatorId
      * @param rssModel
@@ -165,12 +208,14 @@ public class RSSModelsManager {
         // check valid rssModel
         checkValidRSSModel(rssModel);
 
+        // Build database model for RS Model
         SetRevenueShareConf model = this.buildRSModel(aggregatorId, rssModel);
 
         // Save model into database
         revenueShareConfDao.create(model);
+
         // return model
-        return convertIntoApiModel(model);
+        return rssModel;
     }
 
     /**
@@ -196,11 +241,11 @@ public class RSSModelsManager {
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
 
-        model.setNuPercRevenueShare(rssModel.getPercRevenueShare());
         // Save model into database
-        revenueShareConfDao.update(model);
+        revenueShareConfDao.update(this.fillRSModelInfo(aggregatorId, rssModel, model));
+
         // return model
-        return convertIntoApiModel(model);
+        return rssModel;
     }
 
     /**
@@ -213,6 +258,7 @@ public class RSSModelsManager {
      */
     public void deleteRssModel(String aggregatorId, String appProviderId, String productClass) throws Exception {
         logger.debug("Into deleteRssModel() method");
+
         // check valid appProvider
         if (null == appProviderId || appProviderId.equalsIgnoreCase("")) {
             String[] args = {"Required parameters not found: appProviderId."};
@@ -220,12 +266,20 @@ public class RSSModelsManager {
         } else {
             checkValidAppProvider(aggregatorId, appProviderId);
         }
-        // Get models and delete them
+
+        // Get models
         List<SetRevenueShareConf> result = revenueShareConfDao.getRevenueModelsByParameters(aggregatorId,
             appProviderId, productClass);
-        // convert result to api model.
-        if (null != result && result.size() > 0) {
+
+        // Remeve models
+        if (null != result && !result.isEmpty()) {
             for (SetRevenueShareConf model : result) {
+                // Remove Stakeholders
+                if (null != model.getStakeholders()) {
+                    for (ModelProvider st: model.getStakeholders()) {
+                        modelProviderDao.delete(st);
+                    }
+                }
                 revenueShareConfDao.delete(model);
             }
         }
@@ -281,16 +335,10 @@ public class RSSModelsManager {
         }
     }
 
-    private void checkNumberField(BigDecimal number) throws RSSException{
+    private void checkNumberField(BigDecimal number, String name) throws RSSException{
         if (null == number) {
-            String[] args = {"Required parameters not found: percRevenueShare"};
+            String[] args = {"Required parameters not found: " + name};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
-        } else if (number.compareTo(BigDecimal.ZERO) <= 0) {
-            String[] args = {"percentage must be greater than 0"};
-            throw new RSSException(UNICAExceptionType.INVALID_INPUT_VALUE, args);
-        } else if (number.compareTo(BigDecimal.valueOf(100)) > 0) {
-            String[] args = {"percentage must be equal or lower than 100"};
-            throw new RSSException(UNICAExceptionType.INVALID_INPUT_VALUE, args);
         }
     }
 
@@ -306,21 +354,20 @@ public class RSSModelsManager {
         // Validate basic fields
         this.checkField(rssModel.getAggregatorId(), "aggregatorId");
         this.checkField(rssModel.getOwnerProviderId(), "ownerProviderId");
-        // FIXME: Validate the concrete type
+
+        this.checkNumberField(rssModel.getOwnerValue(), "ownerValue");
 
         this.checkField(rssModel.getAlgorithmType(), "algorithmType");
-        this.checkNumberField(rssModel.getAggregatorShare());
-        BigDecimal accumulatedValue = rssModel.getAggregatorShare();
+        this.checkNumberField(rssModel.getAggregatorValue(), "aggregatorValue");
 
         // Check valid provider owner
         this.checkValidAppProvider(rssModel.getAggregatorId(), rssModel.getOwnerProviderId());
 
-        // Check stakeholders fileds if existing
+        // Check stakeholders fields if existing
         if (rssModel.getStakeholders() != null) {
             for (StakeholderModel stModel: rssModel.getStakeholders()) {
                 this.checkField(stModel.getStakeholderId(), "stakeholderId");
-                this.checkNumberField(stModel.getModelValue());
-                accumulatedValue.add(stModel.getModelValue());
+                this.checkNumberField(stModel.getModelValue(), "modelValue");
 
                 this.checkValidAppProvider(rssModel.getAggregatorId(), stModel.getStakeholderId());
 
@@ -332,11 +379,10 @@ public class RSSModelsManager {
             }
         }
 
-        // Check that the total percentage is not greater than 100
-        if (accumulatedValue.compareTo(BigDecimal.valueOf(100)) > 0) {
-            String[] args = {"The RS model owner cannot be included as stakeholder"};
-            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
-        }
+        // Check algorithm specific restrictions
+        AlgorithmFactory algorithmFactory = new AlgorithmFactory();
+        AlgorithmProcessor processor = algorithmFactory.getAlgorithmProcessor(rssModel.getAlgorithmType());
+        processor.validateModel(rssModel);
     }
 
     /**
@@ -348,9 +394,14 @@ public class RSSModelsManager {
     public RSSModel convertIntoApiModel(SetRevenueShareConf model) {
         RSSModel rssModel = new RSSModel();
         // Fill basic revenue sharing model info
-        rssModel.setOwnerProviderId(model.getModelOwner().getTxAppProviderId());
+        rssModel.setOwnerProviderId(
+                model.getOwnerProvider().
+                        getModelOwner().
+                        getTxAppProviderId()
+        );
+        rssModel.setOwnerValue(model.getOwnerProvider().getOwnerValue());
         rssModel.setAggregatorId(model.getShareAggregator().getAggregator().getTxEmail());
-        rssModel.setAggregatorShare(model.getShareAggregator().getAggregatorPerc());
+        rssModel.setAggregatorShare(model.getShareAggregator().getAggregatorValue());
         rssModel.setAlgorithmType(model.getAlgorithmType());
         rssModel.setProductClass(model.getId().getProductClass());
 

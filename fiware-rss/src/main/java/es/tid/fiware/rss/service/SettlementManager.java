@@ -360,28 +360,6 @@ public class SettlementManager {
     }
 
     /**
-     * Create RS Model.
-     * 
-     * @param providerId
-     * @param productClass
-     * @param revenue
-     * @throws IOException
-     */
-    public void runCreateRSModel(String providerId, String productClass, Long revenue) throws IOException {
-        logger.debug("Creating RsModel. Provider: {} productClass {}  revenue:",
-            providerId, productClass, revenue.toString());
-        SetRevenueShareConf rsModel = new SetRevenueShareConf();
-        SetRevenueShareConfId id = new SetRevenueShareConfId();
-        rsModel.setId(id);
-        rsModel.setNuPercRevenueShare(BigDecimal.valueOf(revenue.longValue()));
-        id.setTxAppProviderId(providerId);
-        id.setProductClass(productClass);
-        id.setNuObId(Long.valueOf(1));
-        id.setCountryId(Long.valueOf(1));
-        revenueShareConfDao.create(rsModel);
-    }
-
-    /**
      * Delete data from provider.
      * 
      * @param appProvider

@@ -35,6 +35,9 @@ public class ModelProvider implements Serializable{
     private ModelProviderId id;
     private BigDecimal modelValue;
 
+    public ModelProvider() {
+    }
+
     @EmbeddedId
     public ModelProviderId getId() {
         return id;
@@ -49,7 +52,7 @@ public class ModelProvider implements Serializable{
         return this.modelValue;
     }
 
-    public void setValue(BigDecimal modelValue) {
+    public void setModelValue(BigDecimal modelValue) {
         this.modelValue = modelValue;
     }
 
