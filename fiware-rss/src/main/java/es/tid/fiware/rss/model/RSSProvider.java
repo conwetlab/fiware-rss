@@ -22,8 +22,17 @@ package es.tid.fiware.rss.model;
  * @author fdelavega
  */
 public class RSSProvider {
+    private String aggregatorId;
     private String providerId;
     private String providerName;
+
+    public String getAggregatorId() {
+        return aggregatorId;
+    }
+
+    public void setAggregatorId(String aggregatorId) {
+        this.aggregatorId = aggregatorId;
+    }
 
     public String getProviderId() {
         return providerId;

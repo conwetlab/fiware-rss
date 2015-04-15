@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -42,12 +44,14 @@ import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
+import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAggregatorAppProviderId;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
+import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 
@@ -263,12 +267,31 @@ public class SettlementManager {
     }
 
     /**
+     * Get providers from the DB in a format ready to be serialized
+     * @param aggregatorId
+     * @return
+     * @throws RSSException 
+     */
+    public List<RSSProvider> getAPIProviders(String aggregatorId) throws RSSException {
+        List<RSSProvider> apiProviders = new ArrayList<>();
+        List<DbeAppProvider> providers = this.getProviders(aggregatorId);
+
+        for(DbeAppProvider p: providers) {
+            RSSProvider apiProvider = new RSSProvider();
+            apiProvider.setAggregatorId(aggregatorId);
+            apiProvider.setProviderId(p.getTxAppProviderId());
+            apiProvider.setProviderName(p.getTxName());
+            apiProviders.add(apiProvider);
+        }
+        return apiProviders;
+    }
+    /**
      * Get providers from bbdd.
      * 
      * @return
-     * @throws Exception
+     * @throws RSSException
      */
-    public List<DbeAppProvider> getProviders(String aggregatorId) throws Exception {
+    public List<DbeAppProvider> getProviders(String aggregatorId) throws RSSException {
         List<DbeAppProvider> providers = new ArrayList<>();
         if (null != aggregatorId && aggregatorId.length() > 0) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao

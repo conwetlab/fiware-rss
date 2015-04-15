@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -426,6 +428,25 @@ public class OauthManager {
             throw new RSSException(UNICAExceptionType.INVALID_OAUTH_TOKEN, args);
         }
 
+    }
+
+    /**
+     * Check if a given validated token corresponds with an admin of the RSS
+     * @param token, The validated token of the user
+     * @return 
+     */
+    public boolean isAdmin(ValidatedToken token) {
+        boolean found = false;
+        int i = 0;
+
+        while (!found && i < token.getRoles().size()) {
+            Role role = token.getRoles().get(i);
+            if (role.getName().equals("Provider")) {
+                found = true;
+            }
+            i++;
+        }
+        return found;
     }
 
 }
