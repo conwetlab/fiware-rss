@@ -56,16 +56,19 @@ public class RSSModelsManager {
      * Logging system.
      */
     private final Logger logger = LoggerFactory.getLogger(RSSModelsManager.class);
+
     /**
      * 
      */
     @Autowired
     private DbeAggregatorAppProviderDao aggregatorAppProviderDao;
+
     /**
      * 
      */
     @Autowired
     private DbeAppProviderDao appProviderDao;
+
     /**
      * 
      */
@@ -81,15 +84,17 @@ public class RSSModelsManager {
     private final Long countryId = Long.valueOf(1);
 
     /**
-     * Get models.
+     * Retrives a list of revenue sharing models filtered by aggregator, provider
+     * and product class
      * 
-     * @param aggregatorId
-     * @param appProviderId
-     * @param productClass
+     * @param aggregatorId, Id of the aggregator
+     * @param appProviderId, Id if the provider owener of the revenue sharing models
+     * @param productClass, Product class where the models are applied
      * @return
-     * @throws Exception
+     * @throws RSSException
      */
-    public List<RSSModel> getRssModels(String aggregatorId, String appProviderId, String productClass) throws Exception {
+    public List<RSSModel> getRssModels(String aggregatorId, String appProviderId,
+            String productClass) throws RSSException {
         logger.debug("Into getRssModels() method");
 
         // Validate owner provider
@@ -110,25 +115,19 @@ public class RSSModelsManager {
         return models;
     }
 
-    /**
-     * Create RSS Model.
-     * 
-     * @param aggregatorId
-     * @param rssModel
-     * @return
-     * @throws Exception
-     */
-    public RSSModel createRssModel(String aggregatorId, RSSModel rssModel) throws Exception {
-        logger.debug("Into createRssModel() method");
-
-        // check valid rssModel
-        checkValidRSSModel(rssModel);
-
+    private SetRevenueShareConfId buildRSModelId(RSSModel rssModel) {
         // Create new model id
         SetRevenueShareConfId id = new SetRevenueShareConfId();
         id.setTxAppProviderId(rssModel.getOwnerProviderId());
         id.setCountryId(countryId);
         id.setProductClass(rssModel.getProductClass());
+        return id;
+    }
+
+    private SetRevenueShareConf buildRSModel(String aggregatorId, 
+            RSSModel rssModel) {
+
+        SetRevenueShareConfId id = this.buildRSModelId(rssModel);
 
         // Create new model
         SetRevenueShareConf model = new SetRevenueShareConf();
@@ -149,6 +148,24 @@ public class RSSModelsManager {
         model.setModelOwner(provider);
 
         // TODO: Set stakeholders
+        return model;
+    }
+
+    /**
+     * Create RSS Model.
+     * 
+     * @param aggregatorId
+     * @param rssModel
+     * @return
+     * @throws Exception
+     */
+    public RSSModel createRssModel(String aggregatorId, RSSModel rssModel) throws Exception {
+        logger.debug("Into createRssModel() method");
+
+        // check valid rssModel
+        checkValidRSSModel(rssModel);
+
+        SetRevenueShareConf model = this.buildRSModel(aggregatorId, rssModel);
 
         // Save model into database
         revenueShareConfDao.create(model);
@@ -168,19 +185,17 @@ public class RSSModelsManager {
         logger.debug("Into updateRssModel() method");
         // check valid rssModel
         checkValidRSSModel(rssModel);
-        // check valid appProvider
-        checkValidAppProvider(aggregatorId, rssModel.getAppProviderId());
-        // Insert data into model
-        SetRevenueShareConfId id = new SetRevenueShareConfId();
-        id.setTxAppProviderId(rssModel.getAppProviderId());
-        id.setProductClass(rssModel.getProductClass());
-        id.setNuObId(obId);
-        id.setCountryId(countryId);
+
+        // Get exisintg RS model
+        SetRevenueShareConfId id = this.buildRSModelId(rssModel);
         SetRevenueShareConf model = revenueShareConfDao.getById(id);
+
+        // Check if the model does not exists
         if (null == model) {
             String[] args = {"Non existing Rss Model."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
+
         model.setNuPercRevenueShare(rssModel.getPercRevenueShare());
         // Save model into database
         revenueShareConfDao.update(model);
@@ -221,9 +236,10 @@ public class RSSModelsManager {
      * 
      * @param aggregatorId
      * @param appProviderId
-     * @throws Exception
+     * @throws RSSException
      */
-    public void checkValidAppProvider(String aggregatorId, String appProviderId) throws Exception {
+    public void checkValidAppProvider(String aggregatorId, String appProviderId)
+            throws RSSException {
         logger.debug("Into checkValidAppProvider mehtod : aggregator:{} provider:{}", aggregatorId, appProviderId);
 
         DbeAppProvider provider = appProviderDao.getById(appProviderId);
@@ -282,9 +298,9 @@ public class RSSModelsManager {
      * Check that a RssModels contains all required Information.
      * 
      * @param rssModel
-     * @throws Exception
+     * @throws RSSException
      */
-    public void checkValidRSSModel(RSSModel rssModel) throws Exception {
+    public void checkValidRSSModel(RSSModel rssModel) throws RSSException {
         logger.debug("Into checkValidRSSModel mehtod");
 
         // Validate basic fields
