@@ -441,7 +441,7 @@ public class OauthManager {
 
         while (!found && i < token.getRoles().size()) {
             Role role = token.getRoles().get(i);
-            if (role.getName().equals("Provider")) {
+            if (role.getName().equals(grantedRole)) {
                 found = true;
             }
             i++;

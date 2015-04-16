@@ -26,12 +26,12 @@ import es.tid.fiware.rss.exception.UNICAExceptionType;
  */
 public class AlgorithmFactory {
 
-    public AlgorithmProcessor getAlgorithmProcessor(String algorithmType) 
+    public AlgorithmProcessor getAlgorithmProcessor(Algorithms algorithmType) 
         throws RSSException{
 
         AlgorithmProcessor processor = null;
 
-        if (algorithmType.equals("FIXED_PERCENTAGE")) {
+        if (algorithmType.equals(Algorithms.FIXED_PERCENTAGE)) {
             processor = new FixedPercentageProcessor();
         } else {
             // There is no implementation for the given algorithm

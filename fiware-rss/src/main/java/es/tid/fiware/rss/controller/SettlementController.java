@@ -21,6 +21,8 @@
 
 package es.tid.fiware.rss.controller;
 
+import es.tid.fiware.rss.model.Aggregator;
+import es.tid.fiware.rss.model.Algorithm;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,14 +52,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.model.AppProviderParameter;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
+import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
+import es.tid.fiware.rss.service.RSSModelsManager;
 import es.tid.fiware.rss.service.SettlementManager;
+import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 @Controller
@@ -76,7 +80,7 @@ public class SettlementController {
     private SettlementManager settlementManager;
 
     @Autowired
-    private DbeAggregatorDao aggregatorDao;
+    private RSSModelsManager modelsManager;
 
     @Resource(name = "rssProps")
     private Properties rssProps;
@@ -99,7 +103,7 @@ public class SettlementController {
                 aggregatorId = session.getAggregatorId();
             }
             model.addAttribute("providers", settlementManager.getProviders(aggregatorId));
-            model.addAttribute("aggregators", aggregatorDao.getAll());
+            model.addAttribute("aggregators", settlementManager.getAggregators());
             model.addAttribute("pentahoReportsUrl", rssProps.get("pentahoReportsUrl"));
             return "settlement";
         } catch (Exception e) {
@@ -110,7 +114,7 @@ public class SettlementController {
     }
 
     /**
-     * Returns Web view for the creating of Revenue Sharing models
+     * Returns Web view for the creation of Revenue Sharing models
      * @param request
      * @param model
      * @return The page to be rendered
@@ -122,11 +126,6 @@ public class SettlementController {
             OauthLoginWebSessionData session = (OauthLoginWebSessionData)
                 request.getSession().getAttribute(USER_SESSION);
 
-            String aggregatorId = null;
-            if (session != null) {
-                aggregatorId = session.getAggregatorId();
-            }
-            model.addAttribute("providers", settlementManager.getProviders(aggregatorId));
             return "RSModels";
         } catch (Exception e) {
             model.addAttribute("message", "RS Models:"  + e.getMessage());
@@ -135,7 +134,7 @@ public class SettlementController {
         }
         return result;
     }
-
+    
     /**
      * Do settlement.
      * 
@@ -479,5 +478,39 @@ public class SettlementController {
             response.setSuccess(false);
             return response;
         }
+    }
+
+    @RequestMapping(value="/aggregators", headers = "Accept=*/*", produces = "application/json")
+    @ResponseBody
+    public List<Aggregator> getAggregators(ModelMap model) {
+        List<Aggregator> result = new ArrayList<>();
+        try {
+            result = settlementManager.getAPIAggregators();
+        } catch (Exception e) {
+        }
+        return result;
+    }
+
+    @RequestMapping(value="/providers", headers = "Accept=*/*", produces = "application/json")
+    @ResponseBody
+    public List<RSSProvider> getProviders(@QueryParam("aggregatorId") String aggregatorId,
+            ModelMap model) {
+        List<RSSProvider> result = new ArrayList<>();
+        try {
+            result = settlementManager.getAPIProviders(aggregatorId);
+        } catch (Exception e) {
+        }
+        return result;
+    }
+
+    @RequestMapping(value="/algorithms", headers = "Accept=*/*", produces = "application/json")
+    @ResponseBody
+    public List<Algorithm> getAlgorithms(ModelMap model) {
+        List<Algorithm> algorithms = new ArrayList<>();
+        try {
+            algorithms = modelsManager.getRSAlgorithms();
+        } catch (Exception e) {
+        }
+        return algorithms;
     }
 }

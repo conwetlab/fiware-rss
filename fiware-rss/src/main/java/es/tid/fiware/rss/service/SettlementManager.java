@@ -180,7 +180,7 @@ public class SettlementManager {
             // Add all reports
             rssFilesList = getSettlementFilesOfPath(reportsPath);
         }
-        if (rssFilesList.size() == 0) {
+        if (rssFilesList.isEmpty()) {
             RSSFile rssf = new RSSFile();
             rssf.setTxName("There are no RSS Files generated for you at this moment");
             logger.warn("ELSE: There are no RSS Files generated for you at this moment");
@@ -199,7 +199,7 @@ public class SettlementManager {
     public List<RSSFile> getSettlementFilesOfPath(String path) {
         // Opening/creating the folder
         File folder = new File(path);
-        List<RSSFile> rssFilesList = new ArrayList<RSSFile>();
+        List<RSSFile> rssFilesList = new ArrayList<>();
         RSSFile rssf = new RSSFile();
 
         if (folder.exists() && folder.isDirectory()) {
@@ -271,15 +271,21 @@ public class SettlementManager {
      * @throws RSSException
      */
     public List<Aggregator> getAPIAggregators() throws RSSException {
+            
         List<Aggregator> apiAggregators = new ArrayList<>();
-        List<DbeAggregator> aggregators = aggregatorDao.getAll();
+        List<DbeAggregator> aggregators = this.getAggregators();
 
         for (DbeAggregator aggregator: aggregators) {
             Aggregator apiAggregator = new Aggregator();
             apiAggregator.setAggregatorId(aggregator.getTxEmail());
             apiAggregator.setAggregatorName(aggregator.getTxName());
+            apiAggregators.add(apiAggregator);
         }
         return apiAggregators;
+    }
+
+    public List<DbeAggregator> getAggregators() throws RSSException {
+        return aggregatorDao.getAll();
     }
 
     /**

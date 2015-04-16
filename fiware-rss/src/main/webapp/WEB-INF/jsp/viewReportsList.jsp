@@ -17,9 +17,10 @@
 
 
 <%@  include file="/jspf/header.jsp"%> 
-<%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
+<%@  include file="/jspf/footer.jspf"%>
 
-<div style="margin-left:40px;">
+<a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">Back</a>
+<div>
 <table width="90%" align="center" cellpadding="2" cellspacing="0" border="0">
 	<tr>
 		<th align="left">&nbsp;</th>
@@ -43,8 +44,6 @@
 	
 </table>
 </div>
-
-<div style="margin-left:40px;"><a href="${contextPath}/settlement/settlement.html">Back</a></div>
 
 </body>
 </html>

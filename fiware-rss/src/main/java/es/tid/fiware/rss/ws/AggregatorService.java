@@ -50,8 +50,8 @@ public class AggregatorService {
     @WebMethod
     @Produces("application/json")
     @GET
-    public Response getAggregators(@HeaderParam("X-Auth-Token") final String authToken) 
-            throws Exception{
+    public Response getAggregators(@HeaderParam("X-Auth-Token") final String authToken
+            ) throws Exception{
 
         ValidatedToken validToken = oauthManager.checkAuthenticationToken(authToken);
 

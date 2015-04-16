@@ -10,8 +10,9 @@
 <body>
 
     <%@  include file="/jspf/header.jsp"%>
-    <%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
-    
+    <%@  include file="/jspf/footer.jspf"%>
+
+    <a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">Back</a>
     <div style="margin-left:40px;">
         <table border="1">
         <tr>
@@ -26,7 +27,5 @@
 		</c:forEach>
 		</table>
 	</div>
-    <div style="margin-left:40px;"><a href="${contextPath}/settlement/settlement.html">Back</a></div>
-
 </body>
 </html>

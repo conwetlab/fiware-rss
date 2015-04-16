@@ -37,3 +37,12 @@ a:hover {
 .table tr {
     background-color: rgb(255, 255, 255) !important;
 }
+
+.embedded-input {
+    margin-top: 10px;
+}
+
+.back {
+    margin-top: 30px;
+    margin-left: 10px;
+}

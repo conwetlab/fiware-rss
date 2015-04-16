@@ -31,10 +31,9 @@
                         <td>
                             Launch Settlement: 
                             <select id="providerSettlement" name="providerSettlement">
-                                <option></option>
-                                    <c:forEach var="provider" items="${providers}">
-                                        <option value="${provider.txAppProviderId}">${provider.txName}</option>
-                                    </c:forEach>
+                                <c:forEach var="provider" items="${providers}">
+                                    <option value="${provider.txAppProviderId}">${provider.txName}</option>
+                                </c:forEach>
                             </select>
                             From
                             <input type="text" id="dateFrom" name="dateFrom" value='' size="10" onchange="validMonthDate(this)"
@@ -122,7 +121,6 @@
                                 <input type="text" id="providerAdminName" name="providerAdminName" value='' size="40"/>
                                 Store
                                 <select id="aggregator" name="aggregator">
-                                    <option value=""></option>
                                     <c:forEach var="aggregator" items="${aggregators}">
                                         <option value="${aggregator.txEmail}">${aggregator.txName}</option>
                                     </c:forEach>

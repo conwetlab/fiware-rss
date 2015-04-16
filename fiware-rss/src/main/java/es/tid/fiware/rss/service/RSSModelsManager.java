@@ -23,6 +23,7 @@ package es.tid.fiware.rss.service;
 
 import es.tid.fiware.rss.algorithm.AlgorithmFactory;
 import es.tid.fiware.rss.algorithm.AlgorithmProcessor;
+import es.tid.fiware.rss.algorithm.Algorithms;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ import es.tid.fiware.rss.dao.ModelProviderDao;
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.Algorithm;
 import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAppProvider;
@@ -381,7 +383,9 @@ public class RSSModelsManager {
 
         // Check algorithm specific restrictions
         AlgorithmFactory algorithmFactory = new AlgorithmFactory();
-        AlgorithmProcessor processor = algorithmFactory.getAlgorithmProcessor(rssModel.getAlgorithmType());
+        AlgorithmProcessor processor = algorithmFactory.
+                getAlgorithmProcessor(Algorithms.valueOf(rssModel.getAlgorithmType()));
+
         processor.validateModel(rssModel);
     }
 
@@ -417,4 +421,14 @@ public class RSSModelsManager {
         return rssModel;
     }
 
+    public List<Algorithm> getRSAlgorithms() {
+        List<Algorithm> algorithms = new ArrayList<>();
+
+        for (Algorithms alg: Algorithms.values()) {
+            Algorithm algorithm = new Algorithm();
+            algorithm.setAlgorithmId(alg.name());
+            algorithms.add(algorithm);
+        }
+        return algorithms;
+    }
 }
