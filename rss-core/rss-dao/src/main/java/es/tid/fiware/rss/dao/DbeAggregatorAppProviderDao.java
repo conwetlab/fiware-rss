@@ -19,6 +19,7 @@
 
 package es.tid.fiware.rss.dao;
 
+import es.tid.fiware.rss.model.DbeAggregator;
 import java.util.List;
 
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
@@ -38,4 +39,5 @@ public interface DbeAggregatorAppProviderDao extends GenericDao<DbeAggregatorApp
      */
     List<DbeAggregatorAppProvider> getDbeAggregatorAppProviderByAggregatorId(String aggregatorId);
 
+    public DbeAggregatorAppProvider getDbeAggregatorAppProviderByProviderId(String appProviderId);
 }

@@ -23,10 +23,8 @@ package es.tid.fiware.rss.dao.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
@@ -61,7 +59,7 @@ public class DbeAggregatorAppProviderDaoImpl extends
         String hql = " from DbeAggregatorAppProvider l where l.id.txEmail ='" + aggregatorId + "'";
         List list = this.getSession().createQuery(hql).list();
         List<DbeAggregatorAppProvider> resultList = Collections.checkedList(list, DbeAggregatorAppProvider.class);
-        if (null != resultList && resultList.size() > 0) {
+        if (null != resultList && !resultList.isEmpty()) {
             return resultList;
         } else { // <=0
             return null;
@@ -69,4 +67,14 @@ public class DbeAggregatorAppProviderDaoImpl extends
 
     }
 
+    @Override
+    public DbeAggregatorAppProvider getDbeAggregatorAppProviderByProviderId(String appProviderId) {
+        DbeAggregatorAppProviderDaoImpl.LOGGER.debug("getDbeAggregatorAppProviderByProviderId");
+
+        String hql = "from DbeAggregatorAppProvider l where l.id.txAppProviderId='" + appProviderId + "'";
+        DbeAggregatorAppProvider aggAppProvider =
+                (DbeAggregatorAppProvider) this.getSession().createQuery(hql).uniqueResult();
+
+        return aggAppProvider;
+    }
 }

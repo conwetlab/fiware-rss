@@ -294,7 +294,12 @@ public class SettlementManager {
 
         for(DbeAppProvider p: providers) {
             RSSProvider apiProvider = new RSSProvider();
-            apiProvider.setAggregatorId(aggregatorId);
+            // Get aggregator of the provider
+            apiProvider.setAggregatorId(
+                    aggregatorAppProviderDao.
+                            getDbeAggregatorAppProviderByProviderId(p.getTxAppProviderId()).
+                            getId().getTxEmail());
+
             apiProvider.setProviderId(p.getTxAppProviderId());
             apiProvider.setProviderName(p.getTxName());
             apiProviders.add(apiProvider);
@@ -311,7 +316,8 @@ public class SettlementManager {
      */
     public List<DbeAppProvider> getProviders(String aggregatorId) throws RSSException {
         List<DbeAppProvider> providers = new ArrayList<>();
-        if (null != aggregatorId && aggregatorId.length() > 0) {
+
+        if (null != aggregatorId && !aggregatorId.isEmpty()) {
             List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
                 .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
             if (null != provsAgg && provsAgg.size() > 0) {

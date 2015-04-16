@@ -26,5 +26,4 @@ import es.tid.fiware.rss.model.DbeAggregator;
  *
  */
 public interface DbeAggregatorDao extends GenericDao<DbeAggregator, String> {
-
 }

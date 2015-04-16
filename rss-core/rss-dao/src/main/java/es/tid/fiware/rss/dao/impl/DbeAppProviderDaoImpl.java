@@ -26,13 +26,12 @@
  */
 package es.tid.fiware.rss.dao.impl;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
+import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
 
 /**

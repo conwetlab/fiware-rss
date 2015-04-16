@@ -18,7 +18,6 @@ package es.tid.fiware.rss.ws;
 
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
-import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
 import es.tid.fiware.rss.oauth.service.OauthManager;
