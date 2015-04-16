@@ -23,7 +23,6 @@ package es.tid.fiware.rss.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +44,7 @@ import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
 import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.model.Aggregator;
 import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAggregatorAppProviderId;
@@ -53,7 +53,6 @@ import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
-import es.tid.fiware.rss.model.SetRevenueShareConfId;
 
 @Service
 @Transactional
@@ -267,6 +266,23 @@ public class SettlementManager {
     }
 
     /**
+     * Get existing aggregators from the DB in a format ready to be serialized
+     * @return
+     * @throws RSSException
+     */
+    public List<Aggregator> getAPIAggregators() throws RSSException {
+        List<Aggregator> apiAggregators = new ArrayList<>();
+        List<DbeAggregator> aggregators = aggregatorDao.getAll();
+
+        for (DbeAggregator aggregator: aggregators) {
+            Aggregator apiAggregator = new Aggregator();
+            apiAggregator.setAggregatorId(aggregator.getTxEmail());
+            apiAggregator.setAggregatorName(aggregator.getTxName());
+        }
+        return apiAggregators;
+    }
+
+    /**
      * Get providers from the DB in a format ready to be serialized
      * @param aggregatorId
      * @return
@@ -285,9 +301,11 @@ public class SettlementManager {
         }
         return apiProviders;
     }
+
     /**
      * Get providers from bbdd.
      * 
+     * @param aggregatorId
      * @return
      * @throws RSSException
      */
