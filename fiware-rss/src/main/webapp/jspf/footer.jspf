@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="core"%>
 
-<div id="menuSP" align="center" style="border:0px solid #000000;position:fixed;top:89.5%;width:100%;margin-left:0px;z-index:100;">
+<div id="menuSP" class="footer" align="center">
   <div>
        2015 &#169;
        <a href="http://fiware.org/">FIWARE</a>
