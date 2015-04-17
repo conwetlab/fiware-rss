@@ -65,10 +65,16 @@
                     <div class="form-group">
                         <label for="add-stakeholder" class="col-sm-2 control-label">Stakeholders</label>
                         <div class="col-sm-10">
-                            <a class="btn btn-default" id="add-stakeholder" >Add Stakeholder</a>
+                            <select class="form-control" id="select-stakeholder">
+                            </select>
+                            <input type="text" class="form-control embedded-input" id="sel-stakeholder-val" placeholder="Stakeholder value" />
+                            <a class="btn btn-default embedded-input" id="add-stakeholder" >
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Add the Stakeholder
+                            </a>
+                            <div class="form-divider"></div>
+                            <div id="stakeholder-container"></div>
                         </div>
-                    </div>
-                    <div id="stakeholder-container">
                     </div>
                 </form>
             </div>

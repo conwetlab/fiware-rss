@@ -57,3 +57,39 @@ a:hover {
     padding-bottom: 10px;
     padding-top: 5px;
 }
+
+.form-divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: rgb(229, 229, 229);
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.selected-stakeholder {
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    height: 34px;
+    border: solid 1px rgb(229, 229, 229);
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+}
+
+.selected-stakeholder span {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.st-value {
+    float: right;
+}
+
+.remove-st {
+    float: right;
+    margin-top: -34px;
+}
+

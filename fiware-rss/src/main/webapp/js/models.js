@@ -18,6 +18,7 @@
 (function(){
 
     var endpointManager = new EndpointManager();
+    var currentProviders = [];
 
     var makeRequest = function makeRequest(url, callback) {
         // Get aggregators
@@ -27,10 +28,17 @@
         }).done(callback);
     };
 
-    var paintProviders = function paintProviders(providers) {
-        var i = 0;
+    var removeProvider = function removeProvider(provider) {
+        var newList = [];
+        for (var i = 0; i < currentProviders.length; i++) {
+            if (currentProviders[i].providerId !== provider) {
+                newList.push(currentProviders[i]);
+            }
+        }
+        currentProviders = newList;
+    };
 
-        $('#owner-provider').empty();
+    var fillProviders = function fillProviders(providers, container) {
         // Create select form
         for (i = 0; i < providers.length; i++) {
             var provider = providers[i];
@@ -38,8 +46,30 @@
             $('<option></option>')
                     .val(provider.providerId)
                     .text(provider.providerName)
-                    .appendTo('#owner-provider');
+                    .appendTo(container);
         }
+    };
+
+    var fillStakeholderList = function fillStakeholderList() {
+        $('#select-stakeholder').empty();
+        removeProvider($('#owner-provider').val());
+        fillProviders(currentProviders, '#select-stakeholder');
+    }
+    var paintProviders = function paintProviders(providers) {
+        var i = 0;
+        $('#stakeholder-container').empty();
+        currentProviders = providers.slice();
+
+        $('#owner-provider').empty();
+
+        fillProviders(providers, '#owner-provider');
+
+        $('#owner-provider').off();
+        $('#owner-provider').change(function () {
+            currentProviders = providers.slice();
+            fillStakeholderList();
+        });
+        fillStakeholderList();
     };
 
     var getProviders = function getProviders(aggregatorId) {
@@ -68,7 +98,6 @@
 
         // Get providers for the default aggregator
         getProviders($('#rs-aggregator').val());
-        
     };
 
     var getAggregators = function getAggregators() {
@@ -100,6 +129,39 @@
     };
 
     var buildForm = function buildForm() {
+        // Set add stakeholder listener
+        $('#add-stakeholder').click(function () {
+            if (currentProviders.length > 0) {
+                var name = $('#select-stakeholder').val();
+                var displayName = $('#select-stakeholder option:selected').text();
+                var value = $.trim($('#sel-stakeholder-val').val());
+
+                if (name && value && $.isNumeric(value)) {
+                    var stHtml = '<div class="selected-stakeholder embedded-input">';
+                    stHtml += '<span class="glyphicon glyphicon-user"></span>';
+                    stHtml += '<span>' + displayName + '</span>';
+                    stHtml += '<span class="st-value"><b>' + value + '</b></span></div>';
+
+                    var stDiv = $(stHtml);
+                    stDiv.appendTo('#stakeholder-container');
+                    $('<a class="btn btn-default remove-st"><span class="glyphicon glyphicon-remove"></span></a>')
+                            .appendTo('#stakeholder-container')
+                            .click((function (id, dispName){
+                                return function () {
+                                    currentProviders.push({
+                                        providerId: id,
+                                        providerName: dispName
+                                    });
+                                    $(this).remove();
+                                    stDiv.remove();
+                                    fillStakeholderList();
+                                };
+                            })(name, displayName));
+                    removeProvider(name);
+                    fillStakeholderList();
+                }
+            }
+        });
         getAlgorithms();
     };
 
