@@ -48,18 +48,18 @@ public class FixedPercentageProcessor implements AlgorithmProcessor{
         accumulatedValue = model.getAggregatorValue();
 
         this.validatePercent(model.getOwnerValue());
-        accumulatedValue.add(model.getOwnerValue());
+        accumulatedValue = accumulatedValue.add(model.getOwnerValue());
 
         if (model.getStakeholders() != null) {
             for (StakeholderModel stakeholderModel: model.getStakeholders()) {
                 this.validatePercent(stakeholderModel.getModelValue());
-                accumulatedValue.add(stakeholderModel.getModelValue());
+                accumulatedValue = accumulatedValue.add(stakeholderModel.getModelValue());
             }
         }
 
          // Check that the total percentage is equal to 100
-        if (accumulatedValue.compareTo(BigDecimal.valueOf(100)) != 0) {
-            String[] args = {"The fixed percentage algorithm requires percentage values in the RS model to equals 100%"};
+        if (accumulatedValue.compareTo(new BigDecimal("100")) != 0) {
+            String[] args = {"The fixed percentage algorithm requires percentage values in the RS model to equals 100%, Current value: " + accumulatedValue };
             throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
         }
     }
