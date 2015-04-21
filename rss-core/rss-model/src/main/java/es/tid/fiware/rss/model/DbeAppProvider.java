@@ -108,7 +108,7 @@ public class DbeAppProvider implements java.io.Serializable {
         return txName;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class, mappedBy = "id.stakeholder")
     public Set<ModelProvider> getStakeholderModels() {
         return this.stakeholderModels;
     }
@@ -117,7 +117,7 @@ public class DbeAppProvider implements java.io.Serializable {
         this.stakeholderModels = stakeholderModels;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = SetRevenueShareConf.class)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = SetRevenueShareConf.class, mappedBy = "modelOwner")
     public Set<SetRevenueShareConf> getModels() {
         return models;
     }

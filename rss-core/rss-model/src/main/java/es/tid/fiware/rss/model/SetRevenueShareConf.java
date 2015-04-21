@@ -28,10 +28,11 @@ import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -46,10 +47,14 @@ public class SetRevenueShareConf implements Serializable{
     private String algorithmType;
 
     // Store (Aggregator) that is part of the revenue model
-    private RevenueShareAggregator shareAggregator;
+    private DbeAggregator aggregator;
+    private BigDecimal aggregatorValue;
 
     // Provider that owns the RS Model
-    private RevenueShareOwnerProvider ownerProvider;
+    // Application provider which is the owner of the revenue sharing model
+    private DbeAppProvider modelOwner;
+    // Value applied for the owner in the RS models
+    private BigDecimal ownerValue;
 
     // List of stakeholders (AppProviders) involved in the revenue sharing model
     // including its sharing value
@@ -66,19 +71,23 @@ public class SetRevenueShareConf implements Serializable{
      * 
      * @param id
      * @param algorithmType
-     * @param shareAggregator
-     * @param ownerProvider
+     * @param aggregator
+     * @param aggregatorValue
+     * @param modelOwner
+     * @param ownerValue
      * @param stakeholders
      * @param aggregatorPerc
      */
     public SetRevenueShareConf(SetRevenueShareConfId id, String algorithmType,
-            RevenueShareAggregator shareAggregator, RevenueShareOwnerProvider ownerProvider,
-            Set<ModelProvider> stakeholders,BigDecimal aggregatorPerc) {
+            DbeAggregator aggregator, BigDecimal aggregatorValue, DbeAppProvider modelOwner,
+            BigDecimal ownerValue, Set<ModelProvider> stakeholders,BigDecimal aggregatorPerc) {
 
         this.id = id;
         this.algorithmType = algorithmType;
-        this.shareAggregator = shareAggregator;
-        this.ownerProvider = ownerProvider;
+        this.aggregator = aggregator;
+        this.aggregatorValue = aggregatorValue;
+        this.modelOwner = modelOwner;
+        this.ownerValue = ownerValue;
         this.stakeholders = stakeholders;
     }
 
@@ -108,7 +117,7 @@ public class SetRevenueShareConf implements Serializable{
         this.algorithmType = algorithmType;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class)
+    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class, mappedBy = "id.model")
     public Set<ModelProvider> getStakeholders() {
         return this.stakeholders;
     }
@@ -117,24 +126,41 @@ public class SetRevenueShareConf implements Serializable{
         this.stakeholders = stakeholders;
     }
 
-    @Embedded
-    public RevenueShareAggregator getShareAggregator() {
-        return this.shareAggregator;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TX_AGGREGATOR_ID")
+    public DbeAggregator getAggregator() {
+        return this.aggregator;
     }
 
-    public void setShareAggregator(RevenueShareAggregator shareAggregator) {
-        this.shareAggregator = shareAggregator;
+    public void setAggregator(DbeAggregator aggregator) {
+        this.aggregator = aggregator;
     }
 
-    @Embedded
-    public RevenueShareOwnerProvider getOwnerProvider() {
-        return ownerProvider;
+    @Column(name = "AGGREGATOR_VALUE", nullable = false, precision = 5, scale = 0)
+    public BigDecimal getAggregatorValue() {
+        return this.aggregatorValue;
     }
 
-    public void setOwnerProvider(RevenueShareOwnerProvider ownerProvider) {
-        this.ownerProvider = ownerProvider;
+    public void setAggregatorValue (BigDecimal aggregatorValue) {
+        this.aggregatorValue = aggregatorValue;
     }
 
-    
-    
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DbeAppProvider.class)
+    @JoinColumn(name = "MODEL_OWNER_PROVIDER")
+    public DbeAppProvider getModelOwner() {
+        return modelOwner;
+    }
+
+    public void setModelOwner(DbeAppProvider modelOwner) {
+        this.modelOwner = modelOwner;
+    }
+
+    @Column(name = "OWNER_VALUE", nullable = false, precision = 5, scale = 0)
+    public BigDecimal getOwnerValue() {
+        return this.ownerValue;
+    }
+
+    public void setOwnerValue(BigDecimal ownerValue) {
+        this.ownerValue = ownerValue;
+    }
 }
