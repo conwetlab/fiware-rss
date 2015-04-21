@@ -80,12 +80,9 @@ function launchSettlement(aggregatorId){
 		 +"&providerId=" + newProviderId +"&aggregatorId=" + aggregatorId;
     	
     	$.getJSON(url, function(json){
-    		if(json.success){
-    			dialogMessage(json.message, "info");
-	    	  }else {
-	    		  dialogMessage(json.message);
-	    	  }
-  		});     	
+            if(json.success){
+                location.reload();
+            }});
     }
     
     function createAggregator() {    	
@@ -105,9 +102,7 @@ function launchSettlement(aggregatorId){
     	
     	$.getJSON(url, function(json){
     		if(json.success){
-    			dialogMessage(json.message, "info");
-	    	  }else {
-	    		  dialogMessage(json.message);
+                    location.reload();
 	    	  }
   		});     	
     }

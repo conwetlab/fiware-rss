@@ -54,7 +54,8 @@
         $('#select-stakeholder').empty();
         removeProvider($('#owner-provider').val());
         fillProviders(currentProviders, '#select-stakeholder');
-    }
+    };
+
     var paintProviders = function paintProviders(providers) {
         var i = 0;
         $('#stakeholder-container').empty();
