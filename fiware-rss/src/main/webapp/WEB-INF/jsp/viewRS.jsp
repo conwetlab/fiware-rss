@@ -12,7 +12,10 @@
 	<%@  include file="/jspf/header.jsp"%> 
     <%@  include file="/jspf/footer.jspf"%>
 
-    <a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">Back</a>
+    <a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Back
+    </a>
     <div style="margin-left:40px;">
      <table border="1">
         <tr>

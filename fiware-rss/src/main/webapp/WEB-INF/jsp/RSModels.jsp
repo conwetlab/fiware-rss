@@ -28,7 +28,10 @@
         <%@  include file="/jspf/header.jsp"%> 
         <%@  include file="/jspf/footer.jspf"%>
 
-        <a class="btn btn-default back" href="${contextPath}/settlement/settlement">Back</a>
+        <a class="btn btn-default back" href="${contextPath}/settlement/settlement">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Back
+        </a>
         <div class="container-fluid">
             <h3>Create Revenue Sharing model</h3>
             <div class="col-md-6">

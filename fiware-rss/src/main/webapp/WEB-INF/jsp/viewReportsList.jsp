@@ -19,7 +19,10 @@
 <%@  include file="/jspf/header.jsp"%> 
 <%@  include file="/jspf/footer.jspf"%>
 
-<a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">Back</a>
+<a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">
+    <span class="glyphicon glyphicon-arrow-left"></span>
+    Back
+</a>
 <div>
 <table width="90%" align="center" cellpadding="2" cellspacing="0" border="0">
 	<tr>
