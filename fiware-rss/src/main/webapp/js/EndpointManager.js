@@ -20,7 +20,8 @@
     var endpoints = {
         'AGGREGATOR_COLLECTION': '/settlement/aggregators',
         'PROVIDER_COLLECTION': '/settlement/providers',
-        'ALGORITHM_COLLECTION': '/settlement/algorithms'
+        'ALGORITHM_COLLECTION': '/settlement/algorithms',
+        'RSMODEL_COLLECTION': '/settlement/createRSModel'
     }
     
     EndpointManager = function EndpointManager () {

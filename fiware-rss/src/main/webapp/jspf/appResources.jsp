@@ -18,4 +18,5 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/core.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/json-serialization.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/assets/bootstrap/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">

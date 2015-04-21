@@ -34,6 +34,22 @@
         </a>
         <div class="container-fluid">
             <h3>Create Revenue Sharing model</h3>
+            <div id="msg-container" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h3>Error</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>Soy un modal</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-primary" data-dismiss="modal">Accept</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-6">
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
@@ -77,9 +93,16 @@
                             </a>
                             <div class="form-divider"></div>
                             <div id="stakeholder-container"></div>
+                            <div class="form-divider"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default" id="create-model">Create model</button>
                         </div>
                     </div>
                 </form>
             </div>
+        </div>
     </body>
 </html>

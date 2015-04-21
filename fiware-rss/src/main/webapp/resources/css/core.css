@@ -93,3 +93,11 @@ a:hover {
     margin-top: -34px;
 }
 
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-footer {
+    padding: 10px;
+}
+

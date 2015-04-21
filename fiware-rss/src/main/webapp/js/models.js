@@ -162,6 +162,37 @@
                 }
             }
         });
+
+        // Set create model listener
+        $('#create-model').click(function (evnt) {
+            evnt.preventDefault();
+            evnt.stopPropagation();
+            // Make create RS model request
+            var data = {
+                'ownerProviderId': $('#owner-provider').val(),
+                'ownerValue': $.trim($('#owner-value').val()),
+                'productClass': $.trim($('#product-class').val()),
+                'algorithmType': $('#algorithm-type').val(),
+                'aggregatorId': $('#rs-aggregator').val(), 
+                'aggregatorValue': $.trim($('#store-value').val()),
+                'stakeholders': []
+            };
+            var url = endpointManager.getEndpoint('RSMODEL_COLLECTION');
+            $.ajax({
+                method: 'POST',
+                url: url,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(data)
+            }).done(function (resp) {
+                if (!resp.success) {
+                    $('#msg-container .modal-body').empty();
+                    $('#msg-container .modal-body').append('<p>' + resp.message + '</p>');
+                    $('#msg-container').modal('show');
+                }
+            });
+        });
+
         getAlgorithms();
     };
 
