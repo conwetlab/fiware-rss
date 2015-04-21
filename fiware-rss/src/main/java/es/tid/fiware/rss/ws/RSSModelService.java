@@ -19,6 +19,8 @@
 
 package es.tid.fiware.rss.ws;
 
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -116,8 +118,14 @@ public class RSSModelService {
         RSSModelService.logger.debug("Into createRSSModel method");
         // check security
         ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
+
+        // Validate that the user can create a RS model for the given aggregator
+        if (!oauthManager.isAdmin(token) && !token.getEmail().equals(rssModel.getAggregatorId())) {
+            String[] args = {"You are not allowed to create a RS model for the given aggregatorId"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
         // Call service
-        RSSModel model = rssModelsManager.createRssModel(token.getEmail(), rssModel);
+        RSSModel model = rssModelsManager.createRssModel(rssModel);
         // Building response
         ResponseBuilder rb = Response.status(Response.Status.CREATED.getStatusCode());
         rb.entity(model);
@@ -141,8 +149,15 @@ public class RSSModelService {
         RSSModelService.logger.debug("Into modifyRSSModel method");
         // check security
         ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
+
+        // Validate that the user can update a RS model for the given aggregator
+        if (!oauthManager.isAdmin(token) && !token.getEmail().equals(rssModel.getAggregatorId())) {
+            String[] args = {"You are not allowed to create a RS model for the given aggregatorId"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
+
         // Call service
-        RSSModel model = rssModelsManager.updateRssModel(token.getEmail(), rssModel);
+        RSSModel model = rssModelsManager.updateRssModel(rssModel);
         // Building response
         ResponseBuilder rb = Response.status(Response.Status.CREATED.getStatusCode());
         rb.entity(model);

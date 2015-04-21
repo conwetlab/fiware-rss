@@ -49,8 +49,6 @@ import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.ModelProvider;
 import es.tid.fiware.rss.model.ModelProviderId;
 import es.tid.fiware.rss.model.RSSModel;
-import es.tid.fiware.rss.model.RevenueShareAggregator;
-import es.tid.fiware.rss.model.RevenueShareOwnerProvider;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 import es.tid.fiware.rss.model.StakeholderModel;
@@ -92,7 +90,7 @@ public class RSSModelsManager {
     /**
      * private properties
      */
-    private final Long countryId = Long.valueOf(1);
+    private final Long countryId = (long) 1;
 
     /**
      * Retrives a list of revenue sharing models filtered by aggregator, provider
@@ -135,28 +133,22 @@ public class RSSModelsManager {
         return id;
     }
 
-    private SetRevenueShareConf fillRSModelInfo(String aggregatorId,
-            RSSModel rssModel, SetRevenueShareConf model) {
+    private SetRevenueShareConf fillRSModelInfo(RSSModel rssModel,
+            SetRevenueShareConf model) {
 
         model.setAlgorithmType(rssModel.getAlgorithmType());
 
         // Create aggregator sharing object
-        RevenueShareAggregator aggregatorSharing = new RevenueShareAggregator();
+        DbeAggregator aggregator = this.aggregatorDao.getById(rssModel.getAggregatorId());
 
-        DbeAggregator aggregator = this.aggregatorDao.getById(aggregatorId);
-
-        aggregatorSharing.setAggregator(aggregator);
-        aggregatorSharing.setAggregatorValue(rssModel.getAggregatorValue());
-        model.setShareAggregator(aggregatorSharing);
+        model.setAggregator(aggregator);
+        model.setAggregatorValue(rssModel.getAggregatorValue());
 
         // Set provider owner
-        RevenueShareOwnerProvider ownerProvider= new RevenueShareOwnerProvider();
-
         DbeAppProvider provider = this.appProviderDao.getById(rssModel.getOwnerProviderId());
-        ownerProvider.setModelOwner(provider);
-        ownerProvider.setOwnerValue(rssModel.getOwnerValue());
 
-        model.setOwnerProvider(ownerProvider);
+        model.setModelOwner(provider);
+        model.setOwnerValue(rssModel.getOwnerValue());
 
         // Set stakeholders
         if (rssModel.getStakeholders() != null) {
@@ -184,8 +176,7 @@ public class RSSModelsManager {
         return model;
     }
 
-    private SetRevenueShareConf buildRSModel(String aggregatorId, 
-            RSSModel rssModel) {
+    private SetRevenueShareConf buildRSModel(RSSModel rssModel) {
 
         SetRevenueShareConfId id = this.buildRSModelId(rssModel);
 
@@ -193,28 +184,34 @@ public class RSSModelsManager {
         SetRevenueShareConf model = new SetRevenueShareConf();
         model.setId(id);
 
-        return this.fillRSModelInfo(aggregatorId, rssModel, model);
+        return this.fillRSModelInfo(rssModel, model);
     }
 
     /**
      * Creates a new RS Model.
      * 
-     * @param aggregatorId
      * @param rssModel
      * @return
      * @throws Exception
      */
-    public RSSModel createRssModel(String aggregatorId, RSSModel rssModel) throws Exception {
+    public RSSModel createRssModel(RSSModel rssModel) throws Exception {
         logger.debug("Into createRssModel() method");
 
         // check valid rssModel
         checkValidRSSModel(rssModel);
 
         // Build database model for RS Model
-        SetRevenueShareConf model = this.buildRSModel(aggregatorId, rssModel);
+        SetRevenueShareConf model = this.buildRSModel(rssModel);
+        Set<SetRevenueShareConf> models = model.getModelOwner().getModels();
 
+        if (null == models) {
+            models = new HashSet<>();
+        }
+        models.add(model);
+
+        this.appProviderDao.update(model.getModelOwner());
         // Save model into database
-        revenueShareConfDao.create(model);
+        this.revenueShareConfDao.create(model);
 
         // return model
         return rssModel;
@@ -223,12 +220,11 @@ public class RSSModelsManager {
     /**
      * Update RSS model.
      * 
-     * @param aggregatorId
      * @param rssModel
      * @return
      * @throws Exception
      */
-    public RSSModel updateRssModel(String aggregatorId, RSSModel rssModel) throws Exception {
+    public RSSModel updateRssModel(RSSModel rssModel) throws Exception {
         logger.debug("Into updateRssModel() method");
         // check valid rssModel
         checkValidRSSModel(rssModel);
@@ -244,7 +240,7 @@ public class RSSModelsManager {
         }
 
         // Save model into database
-        revenueShareConfDao.update(this.fillRSModelInfo(aggregatorId, rssModel, model));
+        revenueShareConfDao.update(this.fillRSModelInfo(rssModel, model));
 
         // return model
         return rssModel;
@@ -362,6 +358,7 @@ public class RSSModelsManager {
         this.checkField(rssModel.getAlgorithmType(), "algorithmType");
         this.checkNumberField(rssModel.getAggregatorValue(), "aggregatorValue");
 
+        this.checkField(rssModel.getProductClass(), "productClass");
         // Check valid provider owner
         this.checkValidAppProvider(rssModel.getAggregatorId(), rssModel.getOwnerProviderId());
 
@@ -399,13 +396,12 @@ public class RSSModelsManager {
         RSSModel rssModel = new RSSModel();
         // Fill basic revenue sharing model info
         rssModel.setOwnerProviderId(
-                model.getOwnerProvider().
-                        getModelOwner().
+                model.getModelOwner().
                         getTxAppProviderId()
         );
-        rssModel.setOwnerValue(model.getOwnerProvider().getOwnerValue());
-        rssModel.setAggregatorId(model.getShareAggregator().getAggregator().getTxEmail());
-        rssModel.setAggregatorShare(model.getShareAggregator().getAggregatorValue());
+        rssModel.setOwnerValue(model.getOwnerValue());
+        rssModel.setAggregatorId(model.getAggregator().getTxEmail());
+        rssModel.setAggregatorShare(model.getAggregatorValue());
         rssModel.setAlgorithmType(model.getAlgorithmType());
         rssModel.setProductClass(model.getId().getProductClass());
 

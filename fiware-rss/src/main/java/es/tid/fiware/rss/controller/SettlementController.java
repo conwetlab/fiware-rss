@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.ArrayList;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -51,18 +52,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.tid.fiware.rss.model.AppProviderParameter;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
+import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.RSSModelsManager;
 import es.tid.fiware.rss.service.SettlementManager;
-import java.util.ArrayList;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class SettlementController {
@@ -292,26 +295,25 @@ public class SettlementController {
     /**
      * Create Model.
      * 
+     * @param rsModel
      * @param model
      * @return
      */
-    @RequestMapping(value = "/createRSModel", headers = "Accept=*/*", produces = "application/json")
+    @RequestMapping(
+            value = "/createRSModel",
+            headers = "Accept=*/*",
+            produces = "application/json",
+            consumes ="application/json",
+            method = RequestMethod.POST)
     @ResponseBody
-    public JsonResponse createRSModel(@QueryParam("providerId") String providerId,
-        @QueryParam("productClass") String productClass, Long revenue, ModelMap model) {
+    public JsonResponse createRSModel(@RequestBody RSSModel rsModel, ModelMap model) {
         try {
-            logger.debug("createProvider.ProviderId:{} providerName:{}", providerId, productClass);
-            if (null == providerId || "".equalsIgnoreCase(providerId) || null == revenue) {
-                logger.error("No necesary data provided");
-                JsonResponse response = new JsonResponse();
-                response.setMessage("No necesary data provided");
-                response.setSuccess(false);
-                return response;
-            }
-            if (productClass == null) {
-                productClass = "";
-            }
-            //settlementManager.runCreateRSModel(providerId, productClass, revenue);
+            logger.debug("Creating RS model Aggregator: "
+                    + rsModel.getAggregatorId() + " Provider: "
+                    + rsModel.getOwnerProviderId() + " Class: "
+                    + rsModel.getProductClass());
+
+            modelsManager.createRssModel(rsModel);
             logger.debug("RS Model Created.");
             JsonResponse response = new JsonResponse();
             response.setMessage("RS Model Created.");
