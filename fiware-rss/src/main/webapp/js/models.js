@@ -19,6 +19,7 @@
 
     var endpointManager = new EndpointManager();
     var currentProviders = [];
+    var stakeholders = [];
 
     var makeRequest = function makeRequest(url, callback) {
         // Get aggregators
@@ -28,14 +29,14 @@
         }).done(callback);
     };
 
-    var removeProvider = function removeProvider(provider) {
+    var removeProvider = function removeProvider(list, idField, provider) {
         var newList = [];
-        for (var i = 0; i < currentProviders.length; i++) {
-            if (currentProviders[i].providerId !== provider) {
-                newList.push(currentProviders[i]);
+        for (var i = 0; i < list.length; i++) {
+            if (list[i][idField] !== provider) {
+                newList.push(list[i]);
             }
         }
-        currentProviders = newList;
+        return newList;
     };
 
     var fillProviders = function fillProviders(providers, container) {
@@ -52,7 +53,7 @@
 
     var fillStakeholderList = function fillStakeholderList() {
         $('#select-stakeholder').empty();
-        removeProvider($('#owner-provider').val());
+        currentProviders = removeProvider(currentProviders, 'providerId', $('#owner-provider').val());
         fillProviders(currentProviders, '#select-stakeholder');
     };
 
@@ -145,6 +146,11 @@
 
                     var stDiv = $(stHtml);
                     stDiv.appendTo('#stakeholder-container');
+                    stakeholders.push({
+                        stakeholderId: name,
+                        modelValue: value
+                    });
+
                     $('<a class="btn btn-default remove-st"><span class="glyphicon glyphicon-remove"></span></a>')
                             .appendTo('#stakeholder-container')
                             .click((function (id, dispName){
@@ -156,9 +162,10 @@
                                     $(this).remove();
                                     stDiv.remove();
                                     fillStakeholderList();
+                                    stakeholders = removeProvider(stakeholders, 'stakeholderId', id);
                                 };
                             })(name, displayName));
-                    removeProvider(name);
+                    currentProviders = removeProvider(currentProviders, 'providerId', name);
                     fillStakeholderList();
                 }
             }
@@ -176,8 +183,9 @@
                 'algorithmType': $('#algorithm-type').val(),
                 'aggregatorId': $('#rs-aggregator').val(), 
                 'aggregatorValue': $.trim($('#store-value').val()),
-                'stakeholders': []
+                'stakeholders': stakeholders
             };
+
             var url = endpointManager.getEndpoint('RSMODEL_COLLECTION');
             $.ajax({
                 method: 'POST',

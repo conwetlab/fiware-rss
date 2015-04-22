@@ -209,10 +209,15 @@ public class RSSModelsManager {
         }
         models.add(model);
 
+        // Persist models in the database
+        // Update provider model
         this.appProviderDao.update(model.getModelOwner());
-        // Save model into database
+        // Save new RS model into database
         this.revenueShareConfDao.create(model);
-
+        // Save model provider relationships for stakeholders
+        for(ModelProvider st: model.getStakeholders()) {
+            this.modelProviderDao.create(st);
+        }
         // return model
         return rssModel;
     }

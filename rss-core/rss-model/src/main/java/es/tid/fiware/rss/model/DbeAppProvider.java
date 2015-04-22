@@ -52,7 +52,6 @@ public class DbeAppProvider implements java.io.Serializable {
 
     private String txAppProviderId;
     private String txName;
-    private Set<ModelProvider> stakeholderModels;
     private Set<SetRevenueShareConf> models;
 
     /**
@@ -64,14 +63,12 @@ public class DbeAppProvider implements java.io.Serializable {
     /**
      * @param txAppProviderId
      * @param txName
-     * @param stakeholderModels
      * @param models
      */
-    public DbeAppProvider(String txAppProviderId, String txName, 
-            Set<ModelProvider> stakeholderModels, Set<SetRevenueShareConf> models) {
+    public DbeAppProvider(String txAppProviderId, String txName,
+            Set<SetRevenueShareConf> models) {
         this.txAppProviderId = txAppProviderId;
         this.txName = txName;
-        this.stakeholderModels = stakeholderModels;
         this.models = models;
     }
 
@@ -106,15 +103,6 @@ public class DbeAppProvider implements java.io.Serializable {
     @Column(name = "TX_NAME", length = 256)
     public String getTxName() {
         return txName;
-    }
-
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class, mappedBy = "id.stakeholder")
-    public Set<ModelProvider> getStakeholderModels() {
-        return this.stakeholderModels;
-    }
-
-    public void setStakeholderModels(Set<ModelProvider> stakeholderModels) {
-        this.stakeholderModels = stakeholderModels;
     }
 
     @OneToMany(fetch = FetchType.EAGER, targetEntity = SetRevenueShareConf.class, mappedBy = "modelOwner")
