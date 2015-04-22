@@ -88,17 +88,18 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
         SetRevenueShareConfDaoImpl.LOGGER.debug("getRevenueModelsByProviderId");
  
         // Build queries
-        String hql = "select * from set_revenue_share_conf l where tx_appprovider_id ='" + appProviderId + "'";
+        String hql = "select * from set_revenue_share_conf";
 
-        // if appProvider not specified
-        if (null == appProviderId || appProviderId.isEmpty()) {
-            hql = "select * from set_revenue_share_conf l where tx_appprovider_id in " +
-                "(select tx_appprovider_id from dbe_aggregator_appprovider where tx_email='" + aggregatorId + "')";
-        }
+        if (null != aggregatorId && !aggregatorId.isEmpty()) {
+            hql += " where tx_aggregator_id= '" + aggregatorId + "'";
 
-        // if product class specified
-        if (null != productClass) {
-            hql += " and  tx_product_class='" + productClass + "'";
+            if (null != appProviderId && !appProviderId.isEmpty()) {
+                hql += " and model_owner_provider= '" + appProviderId + "'";
+
+                if (null != productClass && !productClass.isEmpty()) {
+                    hql += " and tx_product_class= '" + productClass + "'";
+                }
+            }
         }
 
         List list = getSession().createSQLQuery(hql).addEntity(SetRevenueShareConf.class).list();

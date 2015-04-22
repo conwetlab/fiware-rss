@@ -79,6 +79,7 @@ public class RSSModelService {
      * @param authToken
      * @param appProvider
      * @param productClass
+     * @param aggregatorId
      * @return
      * @throws Exception
      */
@@ -87,13 +88,26 @@ public class RSSModelService {
     @Path("/")
     public Response getRssModels(@HeaderParam("X-Auth-Token") final String authToken,
         @QueryParam("appProviderId") String appProvider,
-        @QueryParam("productClass") String productClass)
+        @QueryParam("productClass") String productClass,
+        @QueryParam("aggregatorId") String aggregatorId)
         throws Exception {
+
         RSSModelService.logger.debug("Into getRssModels()");
-        // check security
-        ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
+        String effectiveAggregator;
+
+        ValidatedToken validToken = oauthManager.checkAuthenticationToken(authToken);
+
+        if (oauthManager.isAdmin(validToken)) {
+            effectiveAggregator = aggregatorId;
+        } else if (null == aggregatorId || aggregatorId.equals(validToken.getEmail())){
+            effectiveAggregator = validToken.getEmail();
+        } else {
+            String[] args = {"You are not allowed to retrieve RS models for the given aggregator"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
+
         // Call service
-        List<RSSModel> rssModels = rssModelsManager.getRssModels(token.getEmail(), appProvider, productClass);
+        List<RSSModel> rssModels = rssModelsManager.getRssModels(effectiveAggregator, appProvider, productClass);
 
         // Response
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
