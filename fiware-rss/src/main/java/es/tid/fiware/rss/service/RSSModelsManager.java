@@ -417,6 +417,7 @@ public class RSSModelsManager {
             StakeholderModel stModel = new StakeholderModel();
             stModel.setStakeholderId(stk.getStakeholder().getTxAppProviderId());
             stModel.setModelValue(stk.getModelValue());
+            stakeholdersList.add(stModel);
         }
         rssModel.setStakeholders(stakeholdersList);
         return rssModel;
