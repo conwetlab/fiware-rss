@@ -117,7 +117,7 @@ public class SetRevenueShareConf implements Serializable{
         this.algorithmType = algorithmType;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = ModelProvider.class, mappedBy = "id.model")
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = ModelProvider.class, mappedBy = "id.model")
     public Set<ModelProvider> getStakeholders() {
         return this.stakeholders;
     }
