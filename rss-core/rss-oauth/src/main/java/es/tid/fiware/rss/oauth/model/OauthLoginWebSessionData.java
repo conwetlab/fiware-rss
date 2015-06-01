@@ -37,6 +37,13 @@ public class OauthLoginWebSessionData {
 
     @JsonProperty("refresh_token")
     private String refreshToken;
+
+    @JsonProperty("state")
+    private String state;
+
+    @JsonProperty("scope")
+    private String scope;
+
     /** Profiling in web **/
     @JsonIgnore
     private String email;
@@ -77,6 +84,22 @@ public class OauthLoginWebSessionData {
         this.refreshToken = refreshToken;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+    
     /**
      * @return the email
      */

@@ -142,9 +142,9 @@ public class OauthManagerTest {
         OauthManagerTest.log.debug("getTokenUrlTest");
         Assert
             .assertTrue(oauthManager
-                .getTokenUrl("code")
+                .getTokenUrl()
                 .equalsIgnoreCase(
-                    "https://account.testbed.fi-ware.org/token?grant_type=authorization_code&code=code&redirect_uri=http://rss.testbed.fi-ware.org:8080/fiware-rss/settlement/settlement.html"));
+                    "https://account.testbed.fi-ware.org/token"));
     }
 
     /**

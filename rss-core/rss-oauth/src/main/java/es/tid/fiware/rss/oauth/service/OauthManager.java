@@ -23,6 +23,9 @@ package es.tid.fiware.rss.oauth.service;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -42,6 +45,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,8 +60,6 @@ import es.tid.fiware.rss.oauth.model.ApplicationInfo;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.oauth.model.Role;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import java.io.IOException;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -186,9 +191,8 @@ public class OauthManager {
      * @param code
      * @return
      */
-    public String getTokenUrl(String code) {
-        return this.baseSite + this.accessTokenUrl + "?grant_type=authorization_code&code=" + code
-            + "&redirect_uri=" + this.callbackURL;
+    public String getTokenUrl() {
+        return this.baseSite + this.accessTokenUrl;
     }
 
     /**
@@ -214,10 +218,11 @@ public class OauthManager {
     }
 
     /**
-     * Get token data.
+     * Get related data from the idm assoiciated with a given access token.
      * 
      * @param code
      *            Code to build url.
+     * @return Information of the user bound to the ouath session
      * @throws Exception
      */
     public OauthLoginWebSessionData getToken(String code) throws Exception {
@@ -226,19 +231,29 @@ public class OauthManager {
         // &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcallback_url
         try {
             OauthManager.log.debug("Code:" + code);
-            HttpPost httppost = new HttpPost(getTokenUrl(code));
+            HttpPost httppost = new HttpPost(getTokenUrl());
             httppost.addHeader("Authorization", buildHeader());
             httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            // Build params
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+            params.add(new BasicNameValuePair("code", code));
+            params.add(new BasicNameValuePair("redirect_uri", this.callbackURL));
+
+            httppost.setEntity(new UrlEncodedFormEntity(params));
 
             OauthManager.log.debug("executing request" + httppost.getRequestLine());
             // send request
             HttpResponse response = httpclient.execute(httppost, handler);
             OauthManager.log.debug("----------------------------------------");
             OauthManager.log.debug(response.getStatusLine().toString());
+
             if (handler.hasContent()) {
                 OauthManager.log.debug("----------------------------------------");
                 OauthManager.log.debug("Response content:");
                 OauthManager.log.debug(handler.getResponseContent());
+
                 if (handler.getStatus() != 200) {
                     OauthManager.log.error("Error Status different to 200 received " + handler.getResponseContent());
                     throw new RSSException(handler.getResponseContent());
@@ -281,7 +296,7 @@ public class OauthManager {
         OauthManager.log.debug("getUserInfo method");
         ValidatedToken userPermission = getUserInfo(session.getAccessToken());
         session.setEmail(userPermission.getEmail());
-        if (null != userPermission.getRoles() && userPermission.getRoles().size() > 0) {
+        if (null != userPermission.getRoles() && !userPermission.getRoles().isEmpty()) {
             for (Role role : userPermission.getRoles()) {
                 if (grantedRole.equalsIgnoreCase(role.getName())) {
                     session.setRole(role.getName());

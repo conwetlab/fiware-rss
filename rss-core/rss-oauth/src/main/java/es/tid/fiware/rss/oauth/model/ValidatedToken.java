@@ -25,10 +25,7 @@ import java.util.List;
 public class ValidatedToken {
 
     private String id;
-    private String actorId;
-    private String nickName;
     private String displayName;
-    private String name;
     private String email;
     private String app_id;
     private String app_slug;
@@ -41,30 +38,6 @@ public class ValidatedToken {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getActorId() {
-        return actorId;
-    }
-
-    public void setActorId(String actorId) {
-        this.actorId = actorId;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<Role> getRoles() {
