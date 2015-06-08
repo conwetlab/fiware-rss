@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import es.tid.fiware.rss.oauth.service.OauthManager;
 import es.tid.fiware.rss.service.CdrsManager;
 
 @WebService(serviceName = "Cdrs", name = "CdrsService")
@@ -62,8 +61,6 @@ public class CdrsService {
     /**
      * Oauth manager.
      */
-    @Autowired
-    private OauthManager oauthManager;
 
     /**
      * receive cdrs.
@@ -83,7 +80,6 @@ public class CdrsService {
     public Response createCdr(@HeaderParam("X-Auth-Token") final String authToken, String xml) throws Exception {
         logger.info("createCdr POST Start. Authenctication header: " + authToken);
         // check security
-        oauthManager.checkAuthenticationToken(authToken);
         try {
             InputStream stream = new ByteArrayInputStream(xml.getBytes());
             OutputStream out = new FileOutputStream(cdrsManager.getFile());

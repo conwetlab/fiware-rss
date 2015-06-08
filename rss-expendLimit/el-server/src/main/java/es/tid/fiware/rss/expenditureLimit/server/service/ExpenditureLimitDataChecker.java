@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,6 +21,7 @@
 
 package es.tid.fiware.rss.expenditureLimit.server.service;
 
+import es.tid.fiware.rss.common.properties.AppProperties;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +36,17 @@ import es.tid.fiware.rss.dao.CurrencyDao;
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.ServiceDao;
+import es.tid.fiware.rss.dao.UserDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.expenditureLimit.api.LimitBean;
 import es.tid.fiware.rss.model.BmCurrency;
 import es.tid.fiware.rss.model.BmService;
-import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
-import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
+import es.tid.fiware.rss.model.RSUser;
+import es.tid.fiware.rss.model.Role;
+import java.util.Iterator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -61,15 +66,16 @@ public class ExpenditureLimitDataChecker {
 
     @Autowired
     private ServiceDao serviceDao;
+
     @Autowired
     private DbeAppProviderDao dbeAppProviderDao;
+
     @Autowired
-    private DbeAggregatorDao dbeAggregatorDao;
-    /**
-     * Oauth manager.
-     */
+    private UserDao userDao;
+
     @Autowired
-    private OauthManager oauthManager;
+    @Qualifier(value = "oauthProperties")
+    private AppProperties oauthProperties;
     /**
      * 
      */
@@ -324,22 +330,26 @@ public class ExpenditureLimitDataChecker {
 
     }
 
-    /**
-     * Check valid token.
-     * 
-     * @param authToken
-     * @throws Exception
-     */
-    public void checkAuthenticationToken(String authToken) throws Exception {
-        ExpenditureLimitDataChecker.logger.debug("Into checkAuthenticationToken. Token:" + authToken);
-        ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
-        if (token != null) {
-            // if there is security to check...
-            DbeAggregator agregator = dbeAggregatorDao.getById(token.getEmail());
-            if (null == agregator) {
-                String[] args = {"User has not permission"};
-                throw new RSSException(UNICAExceptionType.INVALID_OAUTH_TOKEN, args);
+    public void checkCurrentUserPermissions() throws RSSException {
+        boolean found = false;
+        RSUser user = userDao.getCurrentUser();
+
+        String adminRole = oauthProperties.getProperty("config.grantedRole");
+        Iterator<Role> rolesIt = user.getRoles().iterator();
+
+        // If the user is admin or an aggregator, is authorized
+        while (!found && rolesIt.hasNext()) {
+            String role = rolesIt.next().getName();
+            if (role.equalsIgnoreCase(adminRole) ||
+                    role.equalsIgnoreCase("aggregator")) {
+                found = true;
             }
+        }
+
+        // No allowed role has been found
+        if (!found) {
+            String[] args = {"The user is authorized to retrieve ecpenditure limits"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
     }
 }

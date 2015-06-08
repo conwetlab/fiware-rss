@@ -22,12 +22,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
-  <modules>
+    <modules>
         <module>rss-common</module>
-		<module>rss-model</module>
-		<module>rss-dao</module>
-		<module>rss-exception</module>
-		<module>rss-oauth</module>	
+        <module>rss-model</module>
+        <module>rss-dao</module>
+        <module>rss-exception</module>
+        <module>rss-oauth</module>	
   </modules> 
    
 </project>

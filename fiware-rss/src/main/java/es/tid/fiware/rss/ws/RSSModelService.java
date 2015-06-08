@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,8 +21,6 @@
 
 package es.tid.fiware.rss.ws;
 
-import es.tid.fiware.rss.exception.RSSException;
-import es.tid.fiware.rss.exception.UNICAExceptionType;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -42,9 +42,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import es.tid.fiware.rss.model.RSSModel;
-import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
 import es.tid.fiware.rss.service.RSSModelsManager;
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.RSUser;
+import es.tid.fiware.rss.service.UserManager;
 
 /**
  * 
@@ -71,12 +73,11 @@ public class RSSModelService {
      * Oauth manager.
      */
     @Autowired
-    private OauthManager oauthManager;
+    private UserManager userManager;
 
     /**
      * Get Rss Models.
      * 
-     * @param authToken
      * @param appProvider
      * @param productClass
      * @param aggregatorId
@@ -86,21 +87,20 @@ public class RSSModelService {
     @WebMethod
     @GET
     @Path("/")
-    public Response getRssModels(@HeaderParam("X-Auth-Token") final String authToken,
-        @QueryParam("appProviderId") String appProvider,
+    public Response getRssModels(@QueryParam("appProviderId") String appProvider,
         @QueryParam("productClass") String productClass,
         @QueryParam("aggregatorId") String aggregatorId)
         throws Exception {
 
         RSSModelService.logger.debug("Into getRssModels()");
+
+        RSUser user = userManager.getCurrentUser();
         String effectiveAggregator;
 
-        ValidatedToken validToken = oauthManager.checkAuthenticationToken(authToken);
-
-        if (oauthManager.isAdmin(validToken)) {
+        if (userManager.isAdmin()) {
             effectiveAggregator = aggregatorId;
-        } else if (null == aggregatorId || aggregatorId.equals(validToken.getEmail())){
-            effectiveAggregator = validToken.getEmail();
+        } else if (null == aggregatorId || aggregatorId.equals(user.getEmail())){
+            effectiveAggregator = user.getEmail();
         } else {
             String[] args = {"You are not allowed to retrieve RS models for the given aggregator"};
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
@@ -118,7 +118,6 @@ public class RSSModelService {
     /**
      * Create Rss Model
      * 
-     * @param authToken
      * @param rssModel
      * @return
      * @throws Exception
@@ -127,14 +126,14 @@ public class RSSModelService {
     @POST
     @Path("/")
     @Consumes("application/json")
-    public Response createRSSModel(@HeaderParam("X-Auth-Token") final String authToken,
-        RSSModel rssModel) throws Exception {
+    public Response createRSSModel(RSSModel rssModel) throws Exception {
         RSSModelService.logger.debug("Into createRSSModel method");
         // check security
-        ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
+        RSUser user = userManager.getCurrentUser();
 
         // Validate that the user can create a RS model for the given aggregator
-        if (!oauthManager.isAdmin(token) && !token.getEmail().equals(rssModel.getAggregatorId())) {
+        if (!userManager.isAdmin() &&
+                !rssModel.getAggregatorId().equals(user.getEmail())) {
             String[] args = {"You are not allowed to create a RS model for the given aggregatorId"};
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
@@ -149,7 +148,6 @@ public class RSSModelService {
     /**
      * Update Rss model
      * 
-     * @param authToken
      * @param rssModel
      * @return
      * @throws Exception
@@ -158,14 +156,14 @@ public class RSSModelService {
     @PUT
     @Path("/")
     @Consumes("application/json")
-    public Response modifyRSSModel(@HeaderParam("X-Auth-Token") final String authToken,
-        RSSModel rssModel) throws Exception {
+    public Response modifyRSSModel(RSSModel rssModel) throws Exception {
         RSSModelService.logger.debug("Into modifyRSSModel method");
-        // check security
-        ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
 
-        // Validate that the user can update a RS model for the given aggregator
-        if (!oauthManager.isAdmin(token) && !token.getEmail().equals(rssModel.getAggregatorId())) {
+        RSUser user = userManager.getCurrentUser();
+
+        // Validate that the user can modify a RS model for the given aggregator
+        if (!userManager.isAdmin() &&
+                !rssModel.getAggregatorId().equals(user.getEmail())) {
             String[] args = {"You are not allowed to create a RS model for the given aggregatorId"};
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
@@ -196,9 +194,9 @@ public class RSSModelService {
         @QueryParam("productClass") String productClass) throws Exception {
         RSSModelService.logger.debug("Into deleteRSSModel method");
         // check security
-        ValidatedToken token = oauthManager.checkAuthenticationToken(authToken);
+        RSUser user = userManager.getCurrentUser();
         // Call service
-        rssModelsManager.deleteRssModel(token.getEmail(), appProvider, productClass);
+        rssModelsManager.deleteRssModel(user.getEmail(), appProvider, productClass);
         // Building response
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
         return rb.build();

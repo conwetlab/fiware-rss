@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+xmlns:beans="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+		   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		   http://www.springframework.org/schema/security
+		   http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="clientProvider" />
+    </authentication-manager>
+
+    <http auto-config="true" entry-point-ref="fiwareEntryPoint" use-expressions="true" disable-url-rewriting="true">
+        <custom-filter before="CAS_FILTER" ref="apiHeaderFilter" />
+        <custom-filter after="CAS_FILTER" ref="clientFilter" />
+
+        <!-- Callback URL must be unsecured -->
+        <intercept-url pattern="/callback" access="hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_USER')"/>
+
+        <intercept-url pattern="/**" access="hasRole('USER')" />
+        <logout />
+    </http>
+
+    <!-- entry points -->
+    <beans:bean id="fiwareEntryPoint" class="org.pac4j.springframework.security.web.ClientAuthenticationEntryPoint">
+        <beans:property name="client" ref="fiwareClient" />
+    </beans:bean>
+
+    <!-- clients definition -->
+    <beans:bean id="fiwareClient" class="es.tid.fiware.rss.oauth.service.FIWAREClient">
+        <beans:property name="serverURL" value="${config.baseUrl}" />
+        <beans:property name="key" value="${config.client_id}" />
+        <beans:property name="secret" value="${config.client_secret}"/>
+    </beans:bean>
+
+    <beans:bean id="clients" class="org.pac4j.core.client.Clients">
+        <beans:property name="callbackUrl" value="${config.callbackURL}" />
+        <beans:property name="clients">
+            <beans:list>
+                <beans:ref bean="fiwareClient" />
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+     <!-- common to all clients -->
+    <beans:bean id="clientFilter" class="org.pac4j.springframework.security.web.ClientAuthenticationFilter">
+        <beans:constructor-arg value="${config.callbackPath}" />
+        <beans:property name="clients" ref="clients" />
+        <beans:property name="sessionAuthenticationStrategy" ref="sas" />
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+
+    <beans:bean id="apiHeaderFilter" class="es.tid.fiware.rss.oauth.service.FIWAREHeaderAuthenticationFilter">
+        <beans:constructor-arg value="/rss/" index="0" />
+        <beans:constructor-arg value="Authentication" index="1"/>
+        <beans:property name="client" ref="fiwareClient" />
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+
+    <beans:bean id="clientProvider"
+          class="org.pac4j.springframework.security.authentication.ClientAuthenticationProvider">
+        <beans:property name="clients" ref="clients" />
+    </beans:bean>
+
+    <beans:bean id="httpSessionRequestCache"
+          class="org.springframework.security.web.savedrequest.HttpSessionRequestCache" />
+
+    <beans:bean id="sas"
+        class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
+
+</beans:beans>

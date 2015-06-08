@@ -28,6 +28,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +54,6 @@ import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.SetRevenueShareConf;
 import es.tid.fiware.rss.model.SetRevenueShareConfId;
 import es.tid.fiware.rss.model.StakeholderModel;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @Transactional

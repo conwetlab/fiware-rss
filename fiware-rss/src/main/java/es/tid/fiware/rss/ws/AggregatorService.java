@@ -17,21 +17,22 @@
 
 package es.tid.fiware.rss.ws;
 
-import es.tid.fiware.rss.exception.RSSException;
-import es.tid.fiware.rss.exception.UNICAExceptionType;
-import es.tid.fiware.rss.model.Aggregator;
-import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
-import es.tid.fiware.rss.service.SettlementManager;
 import java.util.List;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.Aggregator;
+import es.tid.fiware.rss.service.SettlementManager;
+import es.tid.fiware.rss.service.UserManager;
 
 /**
  *
@@ -42,7 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AggregatorService {
 
     @Autowired
-    OauthManager oauthManager;
+    UserManager userManager;
 
     @Autowired
     SettlementManager settlementManager;
@@ -50,12 +51,9 @@ public class AggregatorService {
     @WebMethod
     @Produces("application/json")
     @GET
-    public Response getAggregators(@HeaderParam("X-Auth-Token") final String authToken
-            ) throws Exception{
+    public Response getAggregators() throws Exception {
 
-        ValidatedToken validToken = oauthManager.checkAuthenticationToken(authToken);
-
-        if (!oauthManager.isAdmin(validToken)) {
+        if (!userManager.isAdmin()) {
             String[] args = {"You are not allowed to retrieve aggregators"};
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }

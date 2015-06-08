@@ -11,7 +11,7 @@
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<context:component-scan base-package="es.tid.fiware.rss" />
+    <context:component-scan base-package="es.tid.fiware.rss" />
 	
     <jaxrs:server id="cdrs" address="/cdrs">
         <jaxrs:serviceBeans>

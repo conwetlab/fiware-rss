@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -24,7 +26,6 @@ import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -84,19 +85,24 @@ public class ExpenditureLimitServer {
      * Get the expenditure limits for a provider given.
      * 
      * @param appProvider
+     * @param service
+     * @param currency
+     * @param type
      * @return
      * @throws Exception
      */
     @WebMethod
     @GET
     @Path("/{appProvider}")
-    public Response getProviderExpLimits(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("appProvider") final String appProvider,
-        @QueryParam("service") String service, @QueryParam("currency") String currency, @QueryParam("type") String type)
+    public Response getProviderExpLimits(@PathParam("appProvider") final String appProvider,
+        @QueryParam("service") String service,
+        @QueryParam("currency") String currency,
+        @QueryParam("type") String type)
         throws Exception {
+
         ExpenditureLimitServer.logger.debug("Into getProviderExpLimits() with appProvider=" + appProvider);
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         LimitGroupBean expLimits = expLimitManager
             .getGeneralProviderExpLimitsBean(appProvider, service, currency, type);
@@ -118,13 +124,12 @@ public class ExpenditureLimitServer {
     @POST
     @Path("/{appProvider}")
     @Consumes("application/json")
-    public Response createModifProviderExpLimit(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("appProvider") final String appProvider,
+    public Response createModifProviderExpLimit(@PathParam("appProvider") final String appProvider,
         LimitGroupBean expLimits) throws Exception {
 
         ExpenditureLimitServer.logger.debug("Into createModifProviderExpLimit method");
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         LimitGroupBean expInfoBean = expLimitManager.storeGeneralProviderExpLimit(appProvider, expLimits);
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, ExpenditureLimitServer.ui,
@@ -149,13 +154,12 @@ public class ExpenditureLimitServer {
     @DELETE
     @Path("/{appProvider}")
     @Consumes("application/json")
-    public Response deleteProviderExpLimits(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("appProvider") final String appProvider,
+    public Response deleteProviderExpLimits(@PathParam("appProvider") final String appProvider,
         @QueryParam("service") String service, @QueryParam("currency") String currency,
         @QueryParam("type") String type) throws Exception {
         ExpenditureLimitServer.logger.debug("Into deleteUserExpCtrl method");
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         expLimitManager.deleteProviderLimits(appProvider, service, currency, type);
 
@@ -178,14 +182,13 @@ public class ExpenditureLimitServer {
     @WebMethod
     @GET
     @Path("/{appProvider}/{endUserId}")
-    public Response getUserExpLimits(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("appProvider") final String appProvider,
+    public Response getUserExpLimits(@PathParam("appProvider") final String appProvider,
         @PathParam("endUserId") final String endUserId,
         @QueryParam("service") String service, @QueryParam("currency") String currency, @QueryParam("type") String type)
         throws Exception {
         ExpenditureLimitServer.logger.debug("Into getUserExpLimits() with endUserId=" + endUserId);
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         UserExpenditureLimitInfoBean expLimits = expLimitManager.getGeneralUserExpLimitsBean(endUserId, appProvider,
             service, currency, type);
@@ -209,12 +212,12 @@ public class ExpenditureLimitServer {
     @POST
     @Path("/{appProvider}/{endUserId}")
     @Consumes("application/json")
-    public Response createModifUserExpLimit(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("appProvider") final String appProvider,
-        @PathParam("endUserId") final String urlEndUserId, LimitGroupBean expLimits) throws Exception {
+    public Response createModifUserExpLimit(@PathParam("appProvider") final String appProvider,
+        @PathParam("endUserId") final String urlEndUserId,
+        LimitGroupBean expLimits) throws Exception {
         ExpenditureLimitServer.logger.debug("Into createModifUserExpLimit method for user: " + urlEndUserId);
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         // Store directly the given
         UserExpenditureLimitInfoBean expInfoBean = expLimitManager.storeGeneralUserExpLimit(appProvider, urlEndUserId,
@@ -243,14 +246,14 @@ public class ExpenditureLimitServer {
     @DELETE
     @Path("/{appProvider}/{endUserId}")
     @Consumes("application/json")
-    public Response deleteUserExpCtrl(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("appProvider") final String appProvider,
+    public Response deleteUserExpCtrl(@PathParam("appProvider") final String appProvider,
         @PathParam("endUserId") final String urlEndUserId,
-        @QueryParam("service") String service, @QueryParam("currency") String currency,
+        @QueryParam("service") String service,
+        @QueryParam("currency") String currency,
         @QueryParam("type") String type) throws Exception {
         ExpenditureLimitServer.logger.debug("Into deleteUserExpCtrl method");
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         expLimitManager.deleteUserLmits(appProvider, urlEndUserId, service, currency, type);
 

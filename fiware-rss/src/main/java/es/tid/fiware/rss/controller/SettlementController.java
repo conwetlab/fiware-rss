@@ -60,10 +60,11 @@ import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.RSSProvider;
-import es.tid.fiware.rss.model.SetRevenueShareConf;
+import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.RSSModelsManager;
 import es.tid.fiware.rss.service.SettlementManager;
+import es.tid.fiware.rss.service.UserManager;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -85,6 +86,9 @@ public class SettlementController {
     @Autowired
     private RSSModelsManager modelsManager;
 
+    @Autowired
+    private UserManager userManager;
+
     @Resource(name = "rssProps")
     private Properties rssProps;
 
@@ -99,12 +103,10 @@ public class SettlementController {
     @Transactional
     public String settlement(HttpServletRequest request, ModelMap model) {
         try {
-            OauthLoginWebSessionData session = (OauthLoginWebSessionData)
-                request.getSession().getAttribute(USER_SESSION);
-            String aggregatorId = null;
-            if (session != null) {
-                aggregatorId = session.getAggregatorId();
-            }
+
+            RSUser currUser = this.userManager.getCurrentUser();
+            String aggregatorId = currUser.getEmail();
+
             model.addAttribute("providers", settlementManager.getProviders(aggregatorId));
             model.addAttribute("aggregators", settlementManager.getAggregators());
             model.addAttribute("pentahoReportsUrl", rssProps.get("pentahoReportsUrl"));
@@ -279,10 +281,6 @@ public class SettlementController {
     public String viewRS(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
         try {
             logger.debug("viewRS - Start");
-
-            // List<String> result = settlementManager.runSelectRS();
-            List<SetRevenueShareConf> result = settlementManager.getRSModels(aggregatorId);
-            model.addAttribute("rsList", result);
             return "viewRS";
 
         } catch (Exception e) {
@@ -514,5 +512,16 @@ public class SettlementController {
         } catch (Exception e) {
         }
         return algorithms;
+    }
+
+    @RequestMapping(value="/models", headers="Accept=*/*", produces="application/json")
+    @ResponseBody
+    public List<RSSModel> getRsModels(ModelMap model) {
+        List<RSSModel> models = new ArrayList<>();
+        try {
+            models = modelsManager.getRssModels(USER_SESSION, USER_SESSION, USER_SESSION);
+        } catch (Exception e) {
+        }
+        return models;
     }
 }

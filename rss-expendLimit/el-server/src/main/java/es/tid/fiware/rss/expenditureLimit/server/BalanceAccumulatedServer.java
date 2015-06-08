@@ -23,7 +23,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -91,15 +90,14 @@ public class BalanceAccumulatedServer {
     @WebMethod
     @GET
     @Path("/{endUserId}")
-    public Response getUserAccumulated(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("endUserId") final String urlEndUserId,
+    public Response getUserAccumulated(@PathParam("endUserId") final String urlEndUserId,
         @QueryParam("service") String service, @QueryParam("appProvider") String appProvider,
         @QueryParam("currency") String currency, @QueryParam("type") String type)
         throws Exception {
         BalanceAccumulatedServer.logger.debug("Into getUserAccumulated() with endUserId="
             + urlEndUserId);
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
         // Call service
         AccumsExpend expLimits = balanceAccumulateManager.
             getUserAccumulated(urlEndUserId, service, appProvider, currency, type);
@@ -120,12 +118,11 @@ public class BalanceAccumulatedServer {
     @POST
     @Path("/{endUserId}")
     @Consumes("application/json")
-    public Response checkUserBalance(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("endUserId") final String urlEndUserId,
+    public Response checkUserBalance(@PathParam("endUserId") final String urlEndUserId,
         ExpendControl expendControl) throws Exception {
         BalanceAccumulatedServer.logger.debug("Into createModifUserExpLimit method");
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
         // Call service
         AccumsExpend expInfoBean = balanceAccumulateManager.checkUserBalance(urlEndUserId, expendControl);
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, BalanceAccumulatedServer.ui,
@@ -150,12 +147,11 @@ public class BalanceAccumulatedServer {
     @PUT
     @Path("/{endUserId}")
     @Consumes("application/json")
-    public Response updateUserAccumulated(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("endUserId") final String urlEndUserId,
+    public Response updateUserAccumulated(@PathParam("endUserId") final String urlEndUserId,
         ExpendControl expendControl) throws Exception {
         BalanceAccumulatedServer.logger.debug("Into updateUserAccumulated method");
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
         // Call service
         AccumsExpend expInfoBean = balanceAccumulateManager.updateUserAccumulated(urlEndUserId, expendControl);
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, BalanceAccumulatedServer.ui,
@@ -180,12 +176,11 @@ public class BalanceAccumulatedServer {
     @PUT
     @Path("/{endUserId}/reset")
     @Consumes("application/json")
-    public Response deleteUserAccumulated(@HeaderParam("X-Auth-Token") final String authToken,
-        @PathParam("endUserId") final String urlEndUserId,
+    public Response deleteUserAccumulated(@PathParam("endUserId") final String urlEndUserId,
         ExpendControl expendControl) throws Exception {
         BalanceAccumulatedServer.logger.debug("Into deleteUserAccumulated method");
         // check security
-        checker.checkAuthenticationToken(authToken);
+        checker.checkCurrentUserPermissions();
 
         balanceAccumulateManager.deleteUserAccumulated(urlEndUserId, expendControl);
 
