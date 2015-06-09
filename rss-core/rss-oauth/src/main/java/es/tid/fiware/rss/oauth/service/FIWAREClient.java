@@ -115,17 +115,13 @@ public class FIWAREClient extends BaseOAuth20Client<FIWAREProfile> {
                 }
                 profile.addAttribute(attribute, value);
             }
-
-            // FIXME: By default, we are adding the default Role...
             profile.addRole("ROLE_USER");
 
             // User information should be stored in the local users table
             userManager.updateUser(profile);
-
-            return profile;
-        } else {
-            return null;
         }
+
+        return profile;
     }
 
     @Override

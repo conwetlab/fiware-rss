@@ -5,22 +5,23 @@
  */
 package es.tid.fiware.rss.oauth.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.pac4j.oauth.profile.JsonHelper;
+import org.springframework.stereotype.Service;
 
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.RoleDao;
 import es.tid.fiware.rss.dao.UserDao;
 import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.oauth.model.Role;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.pac4j.oauth.profile.JsonHelper;
-import org.springframework.stereotype.Service;
 
 /**
  *
@@ -38,6 +39,10 @@ public class AuthUserManager {
     @Autowired
     private DbeAggregatorDao aggregatorDao;
 
+    /**
+     * Update Database users accordint to the provided FIWAREOProfile
+     * @param profile, FIWAREProfile of the user
+     */
     public void updateUser(FIWAREProfile profile) {
         RSUser user;
         // Get basic user info
@@ -47,24 +52,36 @@ public class AuthUserManager {
         // Modify the existing user
         user = userDao.getById(username);
 
-        if (user == null) {
-            // Create a new user
-            user = new RSUser();
+        // Check if th user do not have any role and not exists, return
+        if (!profile.getRSRoles().isEmpty()) {
+            if (user == null) {
+                // Create a new user
+                user = new RSUser();
+            }
+
+            // Set field values
+            user.setId(username);
+            user.setDisplayName(displayName);
+            user.setEmail(email);
+
+            // The user must exists before creating roles in the database
+            userDao.createOrUpdate(user);
+            this.populateUserRoles(user, profile);
+
+            // Save user roles to the database
+            userDao.createOrUpdate(user);
+        } else if (user != null) {
+            userDao.delete(user);
         }
-
-        // Set field values
-        user.setId(username);
-        user.setDisplayName(displayName);
-        user.setEmail(email);
-
-        // The user must exists before creating roles in the database
-        userDao.createOrUpdate(user);
-        this.populateUserRoles(user, profile);
-
-        // Save user roles to the database
-        userDao.createOrUpdate(user);
     }
 
+    /**
+     * Builds a list of Revenue Sharing roles according to the roles retrieved
+     * from the idm and the email of the user
+     * @param rolesNode, A JSON array containing the roles provided by the idm
+     * @param email, Email of the user
+     * @return List of revenue sharing roles
+     */
     public List<Role> buildUserRoles(ArrayNode rolesNode, String email) {
         List<Role> userRoles = new ArrayList<>();
 

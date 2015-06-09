@@ -22,6 +22,8 @@ import es.tid.fiware.rss.common.properties.AppProperties;
 import java.util.Iterator;
 
 import es.tid.fiware.rss.dao.UserDao;
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.model.Role;
 
@@ -48,17 +50,26 @@ public class UserManager {
     /**
      * Returns the current user
      * @return RSUser object containig the info of the current user
+     * @throws RSSException, if there is not a user object attached to the session
      */
-    public RSUser getCurrentUser() {
-        return userDao.getCurrentUser();
+    public RSUser getCurrentUser() throws RSSException {
+        RSUser user = userDao.getCurrentUser();
+
+        if (user == null) {
+            throw new RSSException(
+                    UNICAExceptionType.NON_EXISTENT_RESOURCE_ID,
+                    "Your user is not authorized to access the RSS");
+        }
+        return user;
     }
 
     /**
      * Checks whether the current a user contains a given role
      * @param role
      * @return true if the user contains the given role
+     * @throws RSSException, if there is not a user object attached to the session
      */
-    public boolean checkRole(String role) {
+    public boolean checkRole(String role) throws RSSException{
         boolean found = false;
         RSUser user = this.getCurrentUser();
         Iterator<Role> roles = user.getRoles().iterator();
@@ -75,8 +86,9 @@ public class UserManager {
      * Check whether a user contains the role specified in the properties file 
      * as admin of the system
      * @return true, if the role is found
+     * @throws RSSException, if there is not a user object attached to the session
      */
-    public boolean isAdmin() {
+    public boolean isAdmin() throws RSSException{
         return this.checkRole(
             oauthProperties.getProperty("config.grantedRole"));
     }
