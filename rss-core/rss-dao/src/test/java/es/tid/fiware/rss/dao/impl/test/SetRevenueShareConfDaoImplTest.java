@@ -61,9 +61,6 @@ public class SetRevenueShareConfDaoImplTest {
     @Autowired
     private DatabaseLoader databaseLoader;
     
-    /*@Autowired
-    @Qualifier("transactionManager")
-    private HibernateTransactionManager transactionManager;*/
 
     /**
      * Method to insert data before test.
@@ -82,71 +79,6 @@ public class SetRevenueShareConfDaoImplTest {
     @After
     public void tearDown() throws Exception {
         databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
-    }
-
-    /**
-     * Test method for
-     * {@link es.tid.fiware.rss.dao.impl.SetRevenueShareConfDaoImpl#getRevenueModelsByProviderId(java.lang.String)}.
-     */
-    @Test
-    public void testGetRevenueModelsByProviderId() {
-        // Call method to test
-        List<SetRevenueShareConf> c = setRevenueShareConfDao.getRevenueModelsByProviderId("123456");
-        // Check result
-        Assert.assertNotNull("List<SetRevenueShareConf> is null", c);
-        Assert.assertTrue("It has no results", c.size() > 0);
-        Assert.assertTrue("ID not equal", c.get(0).getId().getTxAppProviderId().equalsIgnoreCase("123456"));
-        Assert.assertTrue("ID not equal", c.get(0).getId().getCountryId() == 1);
-        Assert.assertTrue("ID not equal", c.get(0).getId().getNuObId() == 1);
-        // non existing provider
-        c = setRevenueShareConfDao.getRevenueModelsByProviderId("nonExisting");
-        Assert.assertNull("List<SetRevenueShareConf> is not null", c);
-    }
-
-    /**
-     * Test method for
-     * {@link es.tid.fiware.rss.dao.impl.SetRevenueShareConfDaoImpl#getRevenueModelsByParameters(java.lang.String, java.lang.String, java.lang.String)}
-     * .
-     */
-    @Test
-    public void testGetRevenueModelsByParameters() {
-        // tx_email="mail@mail.com"
-        // tx_appprovider_id="123456"
-        // tx_product_class="productClass"
-        // Call method to test
-        // check only aggregator
-        List<SetRevenueShareConf> result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "",
-            null);
-        checkResult(result);
-        // check aggregator and provider
-        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "123456", null);
-        checkResult(result);
-        // check aggregator and provider and class
-        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "123456", null);
-        checkResult(result);
-        // check aggregator and provider
-        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "", "productClass");
-        checkResult(result);
-        // empty product class
-        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "", "");
-        checkResult(result);
-        // non existing product class
-        result = setRevenueShareConfDao.getRevenueModelsByParameters("mail@mail.com", "", "nonExisting");
-        Assert.assertNull("List<SetRevenueShareConf> is not null", result);
-    }
-
-    /**
-     * Check the result.
-     * 
-     * @param result
-     */
-    private void checkResult(List<SetRevenueShareConf> result) {
-        // Check result
-        Assert.assertNotNull("List<SetRevenueShareConf> is null", result);
-        Assert.assertTrue("It has no results", result.size() > 0);
-        Assert.assertTrue("ID not equal", result.get(0).getId().getTxAppProviderId().equalsIgnoreCase("123456"));
-        Assert.assertTrue("ID not equal", result.get(0).getId().getCountryId() == 1);
-        Assert.assertTrue("ID not equal", result.get(0).getId().getNuObId() == 1);
     }
 
 }

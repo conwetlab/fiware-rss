@@ -47,7 +47,6 @@ import es.tid.fiware.rss.expenditureLimit.server.ExpenditureLimitServer;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChecker;
 import es.tid.fiware.rss.expenditureLimit.test.ExpenditureLimitBeanConstructor;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,10 +81,7 @@ public class ExpenditureLimitServerTest {
      */
     @Autowired
     private ExpenditureLimitServer server;
-    /**
-     * 
-     */
-    private OauthManager oauth;
+
     /**
      * 
      */
@@ -106,10 +102,8 @@ public class ExpenditureLimitServerTest {
     public void init() throws Exception {
         ValidatedToken validToken = new ValidatedToken();
         validToken.setEmail("mail@mail.com");
-        oauth = Mockito.mock(OauthManager.class);
-        Mockito.when(oauth.checkAuthenticationToken("authToken")).thenReturn(validToken);
         checker = (ExpenditureLimitDataChecker) ReflectionTestUtils.getField(server, "checker");
-        ReflectionTestUtils.setField(checker, "oauthManager", oauth);
+        //ReflectionTestUtils.setField(checker, "oauthManager", oauth);
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
         ReflectionTestUtils.setField(server, "ui", mockUriInfo);
@@ -141,7 +135,7 @@ public class ExpenditureLimitServerTest {
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserExpLimits() throws Exception {
-        Response response = server.getUserExpLimits("authToken", appProvider, userId,
+        Response response = server.getUserExpLimits(appProvider, userId,
             service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
@@ -153,7 +147,7 @@ public class ExpenditureLimitServerTest {
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getProviderExpLimits() throws Exception {
-        Response response = server.getProviderExpLimits("authToken", appProvider, service, currency, type);
+        Response response = server.getProviderExpLimits(appProvider, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
 
@@ -165,7 +159,7 @@ public class ExpenditureLimitServerTest {
     public void storeGeneralProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        Response response = server.createModifProviderExpLimit("Authtoken", appProvider, expLimits);
+        Response response = server.createModifProviderExpLimit(appProvider, expLimits);
         Assert.assertEquals(201, response.getStatus());
     }
 
@@ -177,7 +171,7 @@ public class ExpenditureLimitServerTest {
     public void storeGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralUserExpLimits method");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        Response response = server.createModifUserExpLimit("Authtoken", appProvider, userId, expLimits);
+        Response response = server.createModifUserExpLimit(appProvider, userId, expLimits);
         Assert.assertEquals(201, response.getStatus());
     }
 
@@ -189,7 +183,7 @@ public class ExpenditureLimitServerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteProviderExpLimits method");
-        Response response = server.deleteProviderExpLimits("authToken", appProvider, service, currency, type);
+        Response response = server.deleteProviderExpLimits(appProvider, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
 
@@ -201,7 +195,7 @@ public class ExpenditureLimitServerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteUserAccumulated method");
-        Response response = server.deleteUserExpCtrl("authToken", appProvider, userId, service, currency, type);
+        Response response = server.deleteUserExpCtrl(appProvider, userId, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
 }

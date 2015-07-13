@@ -42,7 +42,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
 import es.tid.fiware.rss.service.CdrsManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -64,7 +63,6 @@ public class CdrsServiceTest {
     /**
      * 
      */
-    private OauthManager oauthManager;
     /**
      * 
      */
@@ -75,16 +73,6 @@ public class CdrsServiceTest {
      */
     @PostConstruct
     public void init() throws Exception {
-        ValidatedToken validToken = new ValidatedToken();
-        validToken.setEmail("mail@mail.com");
-        oauthManager = Mockito.mock(OauthManager.class);
-        Mockito.when(oauthManager.checkAuthenticationToken("authToken")).thenReturn(validToken);
-        ReflectionTestUtils.setField(cdrsService, "oauthManager", oauthManager);
-        UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
-        Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
-        ReflectionTestUtils.setField(cdrsService, "ui", mockUriInfo);
-        cdrsManager = Mockito.mock(CdrsManager.class);
-        ReflectionTestUtils.setField(cdrsService, "cdrsManager", cdrsManager);
     }
 
     /**

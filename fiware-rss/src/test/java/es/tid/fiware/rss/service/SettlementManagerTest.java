@@ -43,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
+import es.tid.fiware.rss.model.Aggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
@@ -234,22 +235,10 @@ public class SettlementManagerTest {
     public void createAggregatorTest() {
         logger.debug("runClean");
         try {
-            settlementManager.runCreateAggretator("aggregatorId", "aggregatorName");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-
-    }
-
-    /**
-     * 
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void createRssModelTest() {
-        logger.debug("createRssModelTest");
-        try {
-            settlementManager.runCreateRSModel(providerId, "newProductClass", new Long(30));
+            Aggregator ag = new Aggregator();
+            ag.setAggregatorId("aggregatorId");
+            ag.setAggregatorName("aggregatorName");
+            settlementManager.createAggretator(ag);
         } catch (Exception e) {
             Assert.fail();
         }

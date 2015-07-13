@@ -47,7 +47,6 @@ import es.tid.fiware.rss.expenditureControl.api.ExpendControl;
 import es.tid.fiware.rss.expenditureLimit.server.BalanceAccumulatedServer;
 import es.tid.fiware.rss.expenditureLimit.server.service.ExpenditureLimitDataChecker;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,7 +84,6 @@ public class BalanceAccumulatedServerTest {
     /**
      * 
      */
-    private OauthManager oauth;
     private final String endUserId = "userIdUpdate";
     private final String serviceName = "ServiceTest1";
     private ExpenditureLimitDataChecker checker;
@@ -97,10 +95,8 @@ public class BalanceAccumulatedServerTest {
     public void init() throws Exception {
         ValidatedToken validToken = new ValidatedToken();
         validToken.setEmail("mail@mail.com");
-        oauth = Mockito.mock(OauthManager.class);
-        Mockito.when(oauth.checkAuthenticationToken("authToken")).thenReturn(validToken);
         checker = (ExpenditureLimitDataChecker) ReflectionTestUtils.getField(server, "checker");
-        ReflectionTestUtils.setField(checker, "oauthManager", oauth);
+        //ReflectionTestUtils.setField(checker, "oauthManager", oauth);
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
         ReflectionTestUtils.setField(server, "ui", mockUriInfo);
@@ -133,7 +129,7 @@ public class BalanceAccumulatedServerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserAccumulated() throws Exception {
 
-        Response response = server.getUserAccumulated("authToken", endUserId,
+        Response response = server.getUserAccumulated(endUserId,
             serviceName, "app123456", "EUR", "daily");
         Assert.assertEquals(200, response.getStatus());
     }
@@ -147,7 +143,7 @@ public class BalanceAccumulatedServerTest {
     public void checkUserBalance() throws Exception {
 
         ExpendControl expendControl = generateExpendControl();
-        Response response = server.checkUserBalance("authToken", "endUserId", expendControl);
+        Response response = server.checkUserBalance("endUserId", expendControl);
         Assert.assertEquals(201, response.getStatus());
     }
 
@@ -160,7 +156,7 @@ public class BalanceAccumulatedServerTest {
     public void updateUserAccumulated() throws Exception {
 
         ExpendControl expendControl = generateExpendControl();
-        Response response = server.updateUserAccumulated("authToken", endUserId, expendControl);
+        Response response = server.updateUserAccumulated(endUserId, expendControl);
         Assert.assertEquals(201, response.getStatus());
     }
 
@@ -173,7 +169,7 @@ public class BalanceAccumulatedServerTest {
     public void deleteUserAccumulated() throws Exception {
         BalanceAccumulatedServerTest.logger.debug("Into deleteUserAccumulated method");
         ExpendControl expendControl = generateExpendControl();
-        Response response = server.deleteUserAccumulated("authToken", endUserId, expendControl);
+        Response response = server.deleteUserAccumulated(endUserId, expendControl);
         Assert.assertEquals(200, response.getStatus());
     }
 

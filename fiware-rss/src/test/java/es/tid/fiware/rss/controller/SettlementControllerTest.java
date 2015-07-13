@@ -20,7 +20,6 @@
 package es.tid.fiware.rss.controller;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +44,6 @@ import org.springframework.validation.BindingResult;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.model.AppProviderParameter;
-import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.SettlementManager;
 import org.springframework.transaction.annotation.Propagation;
@@ -150,18 +148,6 @@ public class SettlementControllerTest {
         Assert.assertEquals("settlement", response);
     }
 
-    /**
-     * 
-     */
-    @Test
-    public void testLogout() {
-        logger.debug("into testLogout method");
-        String response = controller.logout(null, null, model);
-        Assert.assertEquals("error", response);
-        logger.debug("Correct logout");
-        response = controller.logout(request, null, model);
-        Assert.assertEquals("index", response);
-    }
 
     /**
      * 
@@ -230,38 +216,6 @@ public class SettlementControllerTest {
         Assert.assertEquals("viewTransactions", response);
     }
 
-    /**
-     * 
-     */
-    @Test
-    public void testViewRS() throws Exception {
-        logger.debug("into testViewRS method");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        String response = controller.viewRS(null, model);
-        Assert.assertEquals("error", response);
-        logger.debug("Correct logout");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito.when(settlementManager.getRSModels(Matchers.any(String.class))).thenReturn(null);
-        response = controller.viewRS("aggregatorId", model);
-        Assert.assertEquals("viewRS", response);
-    }
-
-    /**
-     * 
-     */
-    @Test
-    public void testViewProviders() throws Exception {
-        logger.debug("into testViewProviders method");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        String response = controller.viewProviders(null, model);
-        Assert.assertEquals("error", response);
-        logger.debug("Correct logout");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito.when(settlementManager.getProviders(Matchers.any(String.class))).thenReturn(
-            new ArrayList<DbeAppProvider>());
-        response = controller.viewProviders("aggregatorId", model);
-        Assert.assertEquals("viewProviders", response);
-    }
 
     /**
      * 
@@ -287,73 +241,5 @@ public class SettlementControllerTest {
         Mockito.when(result.hasErrors()).thenReturn(true);
         response = controller.clean(null, result, model);
         Assert.assertFalse(response.getSuccess());
-    }
-
-    /**
-     * 
-     */
-    @Test
-    public void testCreateAggregator() throws Exception {
-        logger.debug("into testCreateAggregator method");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        JsonResponse response = controller.createAggregator("agreggatorId", "agreggatorName", model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testCreateAggregator without data");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito
-            .doNothing()
-            .when(settlementManager)
-            .runCreateAggretator(Matchers.any(String.class), Matchers.any(String.class));
-        response = controller.createAggregator(null, "agreggatorName", model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testCreateAggregator with data");
-        response = controller.createAggregator("agreggatorId", "agreggatorName", model);
-        Assert.assertTrue(response.getSuccess());
-    }
-
-    /**
-    * 
-    */
-    @Test
-    public void testCreateProvider() throws Exception {
-        logger.debug("into testCreateProvider method");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        JsonResponse response = controller.createProvider("providerId", "providerName", "aggredatorId", model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testCreateProvider without data");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito
-            .doNothing()
-            .when(settlementManager)
-            .runCreateAggretator(Matchers.any(String.class), Matchers.any(String.class));
-        response = controller.createProvider(null, "providerName", "aggredatorId", model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testCreateProvider with data");
-        response = controller.createProvider("providerId", "providerName", "aggredatorId", model);
-        Assert.assertTrue(response.getSuccess());
-    }
-
-    /**
-     * 
-     */
-    @Test
-    public void testCreateRSModel() throws Exception {
-        logger.debug("into testCreateRSModel method");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        JsonResponse response = controller.createRSModel("providerId", "productClass", new Long(50), model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testCreateRSModel without data");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito
-            .doNothing()
-            .when(settlementManager)
-            .runCreateRSModel(Matchers.any(String.class), Matchers.any(String.class), Matchers.any(Long.class));
-        response = controller.createRSModel(null, "productClass", new Long(50), model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testCreateRSModel with data");
-        response = controller.createRSModel("providerId", "productClass", new Long(50), model);
-        Assert.assertTrue(response.getSuccess());
-        response = controller.createRSModel("providerId", "", new Long(50), model);
-        Assert.assertTrue(response.getSuccess());
     }
 }

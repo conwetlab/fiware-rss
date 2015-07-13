@@ -41,7 +41,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.oauth.model.ValidatedToken;
-import es.tid.fiware.rss.oauth.service.OauthManager;
 import es.tid.fiware.rss.service.RSSModelsManager;
 
 /**
@@ -70,10 +69,7 @@ public class RSSModelServiceTest {
      */
     @Autowired
     private RSSModelService rssModelService;
-    /**
-     * 
-     */
-    private OauthManager oauth;
+
     /**
      * 
      */
@@ -82,32 +78,6 @@ public class RSSModelServiceTest {
      * 
      */
     private RSSModel rssModel;
-
-    /**
-     * 
-     */
-    @PostConstruct
-    public void init() throws Exception {
-        ValidatedToken validToken = new ValidatedToken();
-        validToken.setEmail("mail@mail.com");
-        oauth = Mockito.mock(OauthManager.class);
-        Mockito.when(oauth.checkAuthenticationToken("authToken")).thenReturn(validToken);
-        ReflectionTestUtils.setField(rssModelService, "oauthManager", oauth);
-        // /
-        /*
-         * UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
-         * Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
-         * ReflectionTestUtils.setField(rssModelService, "ui", mockUriInfo);
-         */
-        //
-        rssModelsManager = Mockito.mock(RSSModelsManager.class);
-        ReflectionTestUtils.setField(rssModelService, "rssModelsManager", rssModelsManager);
-        //
-        rssModel = new RSSModel();
-        rssModel.setAppProviderId("appProviderId");
-        rssModel.setProductClass("productClass");
-        rssModel.setPercRevenueShare(BigDecimal.valueOf(30));
-    }
 
     /**
      * Method to insert data before test.
@@ -126,45 +96,6 @@ public class RSSModelServiceTest {
     @After
     public void tearDown() throws Exception {
         databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void getRSSModels() throws Exception {
-
-        Response response = rssModelService.getRssModels("authToken", "appProvider", "productClass");
-        Mockito.when(rssModelsManager.getRssModels("mail@mail.com", "appProvider", "productClass")).thenReturn(
-            new ArrayList<RSSModel>());
-        Assert.assertEquals(200, response.getStatus());
-    }
-
-    /**
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void createRSSModel() throws Exception {
-        Response response = rssModelService.createRSSModel("authToken", rssModel);
-        Mockito.when(rssModelsManager.createRssModel("mail@mail.com", rssModel)).thenReturn(rssModel);
-        Assert.assertEquals(201, response.getStatus());
-    }
-
-    /**
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void updateRSSModel() throws Exception {
-        RSSModel rssModel = new RSSModel();
-        rssModel.setAppProviderId("appProviderId");
-        rssModel.setProductClass("productClass");
-        rssModel.setPercRevenueShare(BigDecimal.valueOf(30));
-        Mockito.when(rssModelsManager.createRssModel("mail@mail.com", rssModel)).thenReturn(rssModel);
-        Response response = rssModelService.modifyRSSModel("authToken", rssModel);
-        Assert.assertEquals(201, response.getStatus());
     }
 
     /**
