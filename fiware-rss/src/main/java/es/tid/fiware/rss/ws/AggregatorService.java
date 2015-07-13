@@ -33,6 +33,8 @@ import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.Aggregator;
 import es.tid.fiware.rss.service.SettlementManager;
 import es.tid.fiware.rss.service.UserManager;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 
 /**
  *
@@ -61,6 +63,21 @@ public class AggregatorService {
         List<Aggregator> aggregators = settlementManager.getAPIAggregators();
         Response.ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
         rb.entity(aggregators);
+        return rb.build();
+    }
+
+    @WebMethod
+    @Consumes("application/json")
+    @POST
+    public Response createAggregator(Aggregator aggregator) throws Exception {
+        if (!this.userManager.isAdmin()) {
+            String[] args = {"You are not allowed to create aggregators"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
+
+        this.settlementManager.createAggretator(aggregator);
+
+        Response.ResponseBuilder rb = Response.status(Response.Status.CREATED.getStatusCode());
         return rb.build();
     }
 }

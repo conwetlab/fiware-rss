@@ -19,6 +19,7 @@
 
 package es.tid.fiware.rss.service;
 
+import es.tid.fiware.rss.dao.DbeTransactionDao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +55,9 @@ public class CdrsManager {
      * Runtime Environment
      */
     private Runtime runtime = Runtime.getRuntime();
+
+    @Autowired
+    private DbeTransactionDao transactionDao;
 
     /**
      * Get File where save cdrs.

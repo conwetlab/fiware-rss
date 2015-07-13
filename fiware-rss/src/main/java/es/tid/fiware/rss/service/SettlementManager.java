@@ -398,18 +398,18 @@ public class SettlementManager {
     }
 
     /**
-     * Create aggregator.
+     * Creates a new aggregator.
      * 
-     * @param providerId
-     * @param providerName
+     * @param aggregator
      * @throws IOException
      */
-    public void runCreateAggretator(String aggregatorId, String aggregatorName) throws Exception {
-        logger.debug("Creating aggregator: {}", aggregatorId);
-        DbeAggregator aggregator = new DbeAggregator();
-        aggregator.setTxEmail(aggregatorId);
-        aggregator.setTxName(aggregatorName);
-        aggregatorDao.create(aggregator);
+    public void createAggretator(Aggregator aggregator) throws Exception {
+        logger.debug("Creating aggregator: {}", aggregator.getAggregatorId());
+
+        DbeAggregator dbAggregator = new DbeAggregator();
+        dbAggregator.setTxEmail(aggregator.getAggregatorId());
+        dbAggregator.setTxName(aggregator.getAggregatorName());
+        aggregatorDao.create(dbAggregator);
     }
 
     /**

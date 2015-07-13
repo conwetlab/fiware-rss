@@ -53,7 +53,6 @@ public class ProviderService {
     UserManager userManager;
     /**
      * 
-     * @param authToken
      * @param providerInfo
      * @throws Exception
      * @return 
@@ -95,7 +94,7 @@ public class ProviderService {
         } else if (null == aggregatorId || aggregatorId.equals(user.getEmail())){
             effectiveAggregator = user.getEmail();
         } else {
-            String[] args = {"You are not allowed to get providers of the given aggregator"};
+            String[] args = {"You are not allowed to get the providers of the given aggregator"};
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
 

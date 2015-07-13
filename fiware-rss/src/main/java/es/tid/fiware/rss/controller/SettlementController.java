@@ -21,8 +21,6 @@
 
 package es.tid.fiware.rss.controller;
 
-import es.tid.fiware.rss.model.Aggregator;
-import es.tid.fiware.rss.model.Algorithm;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,7 +31,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
-import java.util.ArrayList;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -52,21 +49,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.transaction.annotation.Transactional;
 
 import es.tid.fiware.rss.model.AppProviderParameter;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
-import es.tid.fiware.rss.model.RSSModel;
-import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
-import es.tid.fiware.rss.service.RSSModelsManager;
 import es.tid.fiware.rss.service.SettlementManager;
 import es.tid.fiware.rss.service.UserManager;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class SettlementController {
@@ -84,9 +75,6 @@ public class SettlementController {
     private SettlementManager settlementManager;
 
     @Autowired
-    private RSSModelsManager modelsManager;
-
-    @Autowired
     private UserManager userManager;
 
     @Resource(name = "rssProps")
@@ -99,16 +87,15 @@ public class SettlementController {
      * @param model
      * @return
      */
-    @RequestMapping("/settlement")
-    @Transactional
+    @RequestMapping("/")
     public String settlement(HttpServletRequest request, ModelMap model) {
         try {
 
             RSUser currUser = this.userManager.getCurrentUser();
             String aggregatorId = currUser.getEmail();
 
-            model.addAttribute("providers", settlementManager.getProviders(aggregatorId));
-            model.addAttribute("aggregators", settlementManager.getAggregators());
+            model.addAttribute("aggregatorId", aggregatorId);
+            model.addAttribute("is_admin", this.userManager.isAdmin());
             model.addAttribute("pentahoReportsUrl", rssProps.get("pentahoReportsUrl"));
             return "settlement";
         } catch (Exception e) {
@@ -124,7 +111,7 @@ public class SettlementController {
      * @param model
      * @return The page to be rendered
      */
-    @RequestMapping("/RSModels")
+    @RequestMapping("/models")
     public String rsModelsView(HttpServletRequest request, ModelMap model) {
         String result = null;
         try {
@@ -198,7 +185,7 @@ public class SettlementController {
      * @param model
      * @return
      */
-    @RequestMapping("/viewFiles")
+    @RequestMapping("/files")
     public String viewFiles(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
         try {
             logger.debug("viewFiles - Start");
@@ -254,7 +241,7 @@ public class SettlementController {
      * @param model
      * @return
      */
-    @RequestMapping("/viewTransactions")
+    @RequestMapping("/transactions")
     public String viewTransactions(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
         try {
             logger.debug("viewTransactions - Start");
@@ -291,48 +278,12 @@ public class SettlementController {
     }
 
     /**
-     * Create Model.
-     * 
-     * @param rsModel
-     * @param model
-     * @return
-     */
-    @RequestMapping(
-            value = "/createRSModel",
-            headers = "Accept=*/*",
-            produces = "application/json",
-            consumes ="application/json",
-            method = RequestMethod.POST)
-    @ResponseBody
-    public JsonResponse createRSModel(@RequestBody RSSModel rsModel, ModelMap model) {
-        try {
-            logger.debug("Creating RS model Aggregator: "
-                    + rsModel.getAggregatorId() + " Provider: "
-                    + rsModel.getOwnerProviderId() + " Class: "
-                    + rsModel.getProductClass());
-
-            modelsManager.createRssModel(rsModel);
-            logger.debug("RS Model Created.");
-            JsonResponse response = new JsonResponse();
-            response.setMessage("RS Model Created.");
-            response.setSuccess(true);
-            return response;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            JsonResponse response = new JsonResponse();
-            response.setMessage(e.getMessage());
-            response.setSuccess(false);
-            return response;
-        }
-    }
-
-    /**
      * View Providers.
      * 
      * @param model
      * @return
      */
-    @RequestMapping("/viewProviders")
+    @RequestMapping("/providers")
     public String viewProviders(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
         try {
             logger.debug("viewProviders - Start");
@@ -346,44 +297,6 @@ public class SettlementController {
             logger.error(e.getMessage(), e);
             model.addAttribute("message", "View Providers:"  + e.getMessage());
             return "error";
-        }
-    }
-
-    /**
-     * Create Provider.
-     * 
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/createProvider", headers = "Accept=*/*", produces = "application/json")
-    @ResponseBody
-    public JsonResponse createProvider(@QueryParam("providerId") String providerId,
-        @QueryParam("providerName") String providerName, @QueryParam("aggregatorId") String aggregatorId,
-        ModelMap model) {
-        try {
-            logger.debug("createProvider.ProviderId:{} providerName:{} aggregatorId:{}", providerId, providerName,
-                aggregatorId);
-            if (null == providerName || "".equalsIgnoreCase(providerName) ||
-                null == providerId || "".equalsIgnoreCase(providerId)) {
-                logger.error("No necesary data provided");
-                JsonResponse response = new JsonResponse();
-                response.setMessage("No necesary data provided");
-                response.setSuccess(false);
-                return response;
-            }
-            settlementManager.runCreateProvider(providerId, providerName, aggregatorId);
-            logger.debug("Provider Created.");
-            JsonResponse response = new JsonResponse();
-            response.setMessage("Provider Created.");
-            response.setSuccess(true);
-            return response;
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            JsonResponse response = new JsonResponse();
-            response.setMessage(e.getMessage());
-            response.setSuccess(false);
-            return response;
         }
     }
 
@@ -421,107 +334,5 @@ public class SettlementController {
             response.setSuccess(false);
             return response;
         }
-    }
-
-    /**
-     * Logout.
-     * 
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     */
-    @RequestMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        try {
-            logger.debug("logout");
-            request.getSession().setAttribute(USER_SESSION, null);
-            return "index";
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            model.addAttribute("message", e.getMessage());
-            return "error";
-        }
-    }
-
-    /**
-     * Create Aggregator.
-     * 
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/createAggregator", headers = "Accept=*/*", produces = "application/json")
-    @ResponseBody
-    public JsonResponse createAggregator(@QueryParam("aggregatorId") String aggregatorId,
-        @QueryParam("aggregatorName") String aggregatorName, ModelMap model) {
-        try {
-            logger.debug("createAggregator.AggregatorId:{} aggregatorName:{}", aggregatorId, aggregatorName);
-            if (null == aggregatorName || "".equalsIgnoreCase(aggregatorName) ||
-                null == aggregatorId || "".equalsIgnoreCase(aggregatorId)) {
-                logger.error("No necesary data provided");
-                JsonResponse response = new JsonResponse();
-                response.setMessage("No necesary data provided");
-                response.setSuccess(false);
-                return response;
-            }
-            settlementManager.runCreateAggretator(aggregatorId, aggregatorName);
-            logger.debug("Aggregator Created.");
-            JsonResponse response = new JsonResponse();
-            response.setMessage("Store Created.");
-            response.setSuccess(true);
-            return response;
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            JsonResponse response = new JsonResponse();
-            response.setMessage(e.getMessage());
-            response.setSuccess(false);
-            return response;
-        }
-    }
-
-    @RequestMapping(value="/aggregators", headers = "Accept=*/*", produces = "application/json")
-    @ResponseBody
-    public List<Aggregator> getAggregators(ModelMap model) {
-        List<Aggregator> result = new ArrayList<>();
-        try {
-            result = settlementManager.getAPIAggregators();
-        } catch (Exception e) {
-        }
-        return result;
-    }
-
-    @RequestMapping(value="/providers", headers = "Accept=*/*", produces = "application/json")
-    @ResponseBody
-    public List<RSSProvider> getProviders(@QueryParam("aggregatorId") String aggregatorId,
-            ModelMap model) {
-        List<RSSProvider> result = new ArrayList<>();
-        try {
-            result = settlementManager.getAPIProviders(aggregatorId);
-        } catch (Exception e) {
-        }
-        return result;
-    }
-
-    @RequestMapping(value="/algorithms", headers = "Accept=*/*", produces = "application/json")
-    @ResponseBody
-    public List<Algorithm> getAlgorithms(ModelMap model) {
-        List<Algorithm> algorithms = new ArrayList<>();
-        try {
-            algorithms = modelsManager.getRSAlgorithms();
-        } catch (Exception e) {
-        }
-        return algorithms;
-    }
-
-    @RequestMapping(value="/models", headers="Accept=*/*", produces="application/json")
-    @ResponseBody
-    public List<RSSModel> getRsModels(ModelMap model) {
-        List<RSSModel> models = new ArrayList<>();
-        try {
-            models = modelsManager.getRssModels(USER_SESSION, USER_SESSION, USER_SESSION);
-        } catch (Exception e) {
-        }
-        return models;
     }
 }

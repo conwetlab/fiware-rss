@@ -18,11 +18,11 @@
 (function () {
 
     var endpoints = {
-        'AGGREGATOR_COLLECTION': '/settlement/aggregators',
-        'PROVIDER_COLLECTION': '/settlement/providers',
-        'ALGORITHM_COLLECTION': '/settlement/algorithms',
-        'RSMODEL_COLLECTION': '/settlement/createRSModel'
-    }
+        'AGGREGATOR_COLLECTION': '/rss/aggregators',
+        'PROVIDER_COLLECTION': '/rss/providers',
+        'ALGORITHM_COLLECTION': '/rss/algorithms',
+        'RSMODEL_COLLECTION': '/rss/models'
+    };
     
     EndpointManager = function EndpointManager () {
         
