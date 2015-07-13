@@ -55,7 +55,6 @@ import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.RSUser;
-import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.SettlementManager;
 import es.tid.fiware.rss.service.UserManager;
 
@@ -69,7 +68,6 @@ public class SettlementController {
     /**
      * User session attribute.
      */
-    private final String USER_SESSION = "userSession";
 
     @Autowired
     private SettlementManager settlementManager;
@@ -115,8 +113,8 @@ public class SettlementController {
     public String rsModelsView(HttpServletRequest request, ModelMap model) {
         String result = null;
         try {
-            OauthLoginWebSessionData session = (OauthLoginWebSessionData)
-                request.getSession().getAttribute(USER_SESSION);
+            RSUser currUser = this.userManager.getCurrentUser();
+            model.addAttribute("aggregatorId", currUser.getEmail());
 
             return "RSModels";
         } catch (Exception e) {
@@ -265,7 +263,7 @@ public class SettlementController {
      * @return
      */
     @RequestMapping("/viewRS")
-    public String viewRS(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
+    public String viewRS(ModelMap model) {
         try {
             logger.debug("viewRS - Start");
             return "viewRS";
@@ -284,15 +282,10 @@ public class SettlementController {
      * @return
      */
     @RequestMapping("/providers")
-    public String viewProviders(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
+    public String viewProviders(ModelMap model) {
         try {
             logger.debug("viewProviders - Start");
-            List<DbeAppProvider> result = settlementManager.getProviders(aggregatorId);
-            logger.debug("Provider list size: {}", result.size());
-            // List<String> result = settlementManager.runSelectProviders();
-            model.addAttribute("providersList", result);
             return "viewProviders";
-
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             model.addAttribute("message", "View Providers:"  + e.getMessage());

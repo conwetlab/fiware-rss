@@ -6,6 +6,11 @@
     <head>
         <%@include file="/jspf/appResources.jsp"%>
         <title>FIWARE RSS - Settlement</title>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/EndpointManager.js"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/providers.js"></script>
+        <script type="text/javascript">
+            CONTEXT_PATH="<%=request.getContextPath()%>";
+        </script>
     </head>
     <body>
 
@@ -24,12 +29,8 @@
                         <th>Provider ID</th>
                         <th>Provider Name</th>
                     </tr>
-                    <c:forEach var="provider" items="${providersList}">
-                        <tr>
-                            <td>${provider.txAppProviderId}</td>
-                            <td>${provider.txName}</td>
-                        </tr>
-                    </c:forEach>
+                    <tr id="providers">
+                    </tr>
 		</table>
             </div>
         </div>

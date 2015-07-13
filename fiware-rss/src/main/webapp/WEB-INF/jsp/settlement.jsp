@@ -140,7 +140,7 @@
                     </c:if>
                     <tr>
                         <td>
-                            <a href="${contextPath}/providers?aggregatorId=${aggregatorId}">View Providers in database</a>
+                            <a href="${contextPath}/providers">View Providers in database</a>
                         </td>
                     </tr>
                 </table>
