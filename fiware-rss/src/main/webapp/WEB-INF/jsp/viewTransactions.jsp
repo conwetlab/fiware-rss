@@ -5,14 +5,14 @@
 <html>
 <head>
 <%@include file="/jspf/appResources.jsp"%>
-<title>FI-WARE RSS - Settlement</title>
+<title>FIWARE RSS - Settlement</title>
 </head>
 <body>
 
 	<%@  include file="/jspf/header.jsp"%> 
     <%@  include file="/jspf/footer.jspf"%>
 
-    <a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">
+    <a class="btn btn-default back" href="${contextPath}">
         <span class="glyphicon glyphicon-arrow-left"></span>
         Back
     </a>

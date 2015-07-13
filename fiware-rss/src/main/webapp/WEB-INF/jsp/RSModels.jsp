@@ -8,7 +8,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <c:set var="contextPath" value="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>
-<c:set var="aggregatorId" value="${userSession.aggregatorId}"/>
+<c:set var="aggregatorId" value="${aggregatorId}"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,8 +18,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>FIWARE RSS - Settlement</title>
 
-        <script type="text/javascript" src="<%=request.getContextPath()%>/js/EndpointManager.js"></script>
-        <script type="text/javascript" src="<%=request.getContextPath()%>/js/models.js"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/EndpointManager.js"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/models.js"></script>
         <script type="text/javascript">
             CONTEXT_PATH="<%=request.getContextPath()%>"
         </script>
@@ -28,7 +28,7 @@
         <%@  include file="/jspf/header.jsp"%> 
         <%@  include file="/jspf/footer.jspf"%>
 
-        <a class="btn btn-default back" href="${contextPath}/settlement/settlement">
+        <a class="btn btn-default back" href="${contextPath}">
             <span class="glyphicon glyphicon-arrow-left"></span>
             Back
         </a>

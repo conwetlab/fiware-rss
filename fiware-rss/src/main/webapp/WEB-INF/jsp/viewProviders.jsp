@@ -12,7 +12,7 @@
         <%@  include file="/jspf/header.jsp"%>
         <%@  include file="/jspf/footer.jspf"%>
 
-        <a class="btn btn-default back" href="${contextPath}/settlement/settlement.html">
+        <a class="btn btn-default back" href="${contextPath}">
             <span class="glyphicon glyphicon-arrow-left"></span>
             Back
         </a>
