@@ -53,6 +53,16 @@
         </jaxrs:providers>
     </jaxrs:server>
 
+    <jaxrs:server id="algorithms" address="/algorithms">
+        <jaxrs:serviceBeans>
+            <bean class="es.tid.fiware.rss.ws.AlgorithmService" />
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider" />
+            <ref bean="jsonErrorParser" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
     <bean id="jsonErrorParser" class="es.tid.fiware.rss.exceptionhandles.RssExceptionMapper" />
     
         <!-- JSON CONFIG -->

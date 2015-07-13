@@ -16,9 +16,13 @@
  */
 package es.tid.fiware.rss.algorithm;
 
+import java.util.List;
+
 import es.tid.fiware.rss.algorithm.impl.FixedPercentageProcessor;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.Algorithm;
+import java.util.ArrayList;
 
 /**
  *
@@ -26,6 +30,14 @@ import es.tid.fiware.rss.exception.UNICAExceptionType;
  */
 public class AlgorithmFactory {
 
+    /**
+     * Returns the AlgorithmProcessor able to handle the concrete algorithm
+     * given as parameter
+     * @param algorithmType identifier of the algorithm to be handled
+     * @return AlgorithmProcessor instance able to handle the give algorithm
+     * @throws RSSException, thrown when no processsor is found
+     * for the given algorithm
+     */
     public AlgorithmProcessor getAlgorithmProcessor(Algorithms algorithmType) 
         throws RSSException{
 
@@ -40,5 +52,21 @@ public class AlgorithmFactory {
         }
 
         return processor;
+    }
+
+    /**
+     * Returns a list containing all the allowed revenue sharing algorithms
+     * @return, List of Algorithm instances containing the valid ones
+     */
+    public List<Algorithm> getAlgorithms() {
+        List<Algorithm> algorithms = new ArrayList<>();
+
+        for(Algorithms alg: Algorithms.values()){
+            Algorithm a = new Algorithm();
+            a.setAlgorithmId(alg.toString());
+            algorithms.add(a);
+        }
+
+        return algorithms;
     }
 }
