@@ -39,13 +39,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
-import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
 import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
 import es.tid.fiware.rss.exception.RSSException;
-import es.tid.fiware.rss.model.Aggregator;
-import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAggregatorAppProviderId;
 import es.tid.fiware.rss.model.DbeAppProvider;
@@ -85,11 +82,7 @@ public class SettlementManager {
      */
     @Autowired
     private DbeTransactionDao transactionDao;
-    /**
-     * 
-     */
-    @Autowired
-    private DbeAggregatorDao aggregatorDao;
+
     /**
      * 
      */
@@ -266,29 +259,6 @@ public class SettlementManager {
     }
 
     /**
-     * Get existing aggregators from the DB in a format ready to be serialized
-     * @return
-     * @throws RSSException
-     */
-    public List<Aggregator> getAPIAggregators() throws RSSException {
-            
-        List<Aggregator> apiAggregators = new ArrayList<>();
-        List<DbeAggregator> aggregators = this.getAggregators();
-
-        for (DbeAggregator aggregator: aggregators) {
-            Aggregator apiAggregator = new Aggregator();
-            apiAggregator.setAggregatorId(aggregator.getTxEmail());
-            apiAggregator.setAggregatorName(aggregator.getTxName());
-            apiAggregators.add(apiAggregator);
-        }
-        return apiAggregators;
-    }
-
-    public List<DbeAggregator> getAggregators() throws RSSException {
-        return aggregatorDao.getAll();
-    }
-
-    /**
      * Get providers from the DB in a format ready to be serialized
      * @param aggregatorId
      * @return
@@ -395,21 +365,6 @@ public class SettlementManager {
             id.setTxEmail(aggregatorId);
             aggregatorAppProviderDao.create(object);
         }
-    }
-
-    /**
-     * Creates a new aggregator.
-     * 
-     * @param aggregator
-     * @throws IOException
-     */
-    public void createAggretator(Aggregator aggregator) throws Exception {
-        logger.debug("Creating aggregator: {}", aggregator.getAggregatorId());
-
-        DbeAggregator dbAggregator = new DbeAggregator();
-        dbAggregator.setTxEmail(aggregator.getAggregatorId());
-        dbAggregator.setTxName(aggregator.getAggregatorName());
-        aggregatorDao.create(dbAggregator);
     }
 
     /**

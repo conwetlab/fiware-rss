@@ -232,24 +232,6 @@ public class SettlementManagerTest {
      */
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void createAggregatorTest() {
-        logger.debug("runClean");
-        try {
-            Aggregator ag = new Aggregator();
-            ag.setAggregatorId("aggregatorId");
-            ag.setAggregatorName("aggregatorName");
-            settlementManager.createAggretator(ag);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-
-    }
-
-    /**
-     * 
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
     public void CreateProviderTest() {
         logger.debug("CreateProviderTest");
         try {

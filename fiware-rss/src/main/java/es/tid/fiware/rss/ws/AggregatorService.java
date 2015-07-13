@@ -31,8 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.Aggregator;
-import es.tid.fiware.rss.service.SettlementManager;
+import es.tid.fiware.rss.service.AggregatorManager;
 import es.tid.fiware.rss.service.UserManager;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 
@@ -48,19 +49,22 @@ public class AggregatorService {
     UserManager userManager;
 
     @Autowired
-    SettlementManager settlementManager;
+    AggregatorManager aggregatorManager;
 
     @WebMethod
     @Produces("application/json")
     @GET
     public Response getAggregators() throws Exception {
 
-        if (!userManager.isAdmin()) {
-            String[] args = {"You are not allowed to retrieve aggregators"};
-            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        List<Aggregator> aggregators = null;
+
+        if (userManager.isAdmin()) {
+            aggregators = aggregatorManager.getAPIAggregators();
+        } else {
+            aggregators = new ArrayList<>();
+            aggregators.add(aggregatorManager.getAggregator(userManager.getCurrentUser().getEmail()));
         }
 
-        List<Aggregator> aggregators = settlementManager.getAPIAggregators();
         Response.ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
         rb.entity(aggregators);
         return rb.build();
@@ -75,7 +79,7 @@ public class AggregatorService {
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
 
-        this.settlementManager.createAggretator(aggregator);
+        this.aggregatorManager.createAggretator(aggregator);
 
         Response.ResponseBuilder rb = Response.status(Response.Status.CREATED.getStatusCode());
         return rb.build();
