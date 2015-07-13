@@ -17,9 +17,8 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 
         <!-- Callback URL must be unsecured -->
         <intercept-url pattern="/callback" access="hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_USER')"/>
-
+        <logout logout-url="/logout" logout-success-url="${config.baseUrl}${config.logoutPath}" delete-cookies="JSESSIONID" invalidate-session="true" />
         <intercept-url pattern="/**" access="hasRole('USER')" />
-        <logout />
     </http>
 
     <!-- entry points -->

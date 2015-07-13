@@ -149,9 +149,8 @@
 
         <div style="margin-left:40px;"><a href="${pentahoReportsUrl}" target="_blank">View Reports</a></div>
         <div style="margin-left:40px;">
-            <c:url var="logoutUrl" value="j_spring_security_logout"/>
-            <form action="${logoutUrl}" method="post">
-                <input type="submit" value="Log out" />
+            <form action="${contextPath}/logout" method="post">
+                <input type="submit" class="btn btn-default" value="Log out" />
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
         </div>
