@@ -18,8 +18,10 @@
 (function () {
     var fillProviders = function (providers) {
         for (var i = 0; i < providers.length; i++) {
-            $('<td></td>').text(providers[i].providerId).appendTo('#providers');
-            $('<td></td>').text(providers[i].providerName).appendTo('#providers');
+            var row = $('<tr></tr>');
+            $('<td></td>').text(providers[i].providerId).appendTo(row);
+            $('<td></td>').text(providers[i].providerName).appendTo(row);
+            row.appendTo('#providers');
         }
     };
 

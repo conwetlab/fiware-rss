@@ -24,12 +24,10 @@
         <div class="container-fluid">
             <div class="col-md-6">
                 <table class="table table-bordered table-responsive
-                       table-condensed">
+                       table-condensed" id="providers">
                     <tr>
                         <th>Provider ID</th>
                         <th>Provider Name</th>
-                    </tr>
-                    <tr id="providers">
                     </tr>
 		</table>
             </div>
