@@ -101,3 +101,6 @@ a:hover {
     padding: 10px;
 }
 
+table.table.table-bordered.table-responsive.table-condensed {
+  margin-top: 50px;
+}

@@ -51,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.tid.fiware.rss.model.AppProviderParameter;
-import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.RSUser;
@@ -124,7 +123,25 @@ public class SettlementController {
         }
         return result;
     }
-    
+
+    /**
+     * View RS models.
+     * 
+     * @param model
+     * @return
+     */
+    @RequestMapping("/models/list")
+    public String viewRS(ModelMap model) {
+        try {
+            logger.debug("viewRS - Start");
+            return "viewRS";
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            model.addAttribute("message", "View RS Models:"  + e.getMessage());
+            return "error";
+        }
+    }
     /**
      * Do settlement.
      * 
@@ -251,26 +268,6 @@ public class SettlementController {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             model.addAttribute("message","View Transactions:"  + e.getMessage());
-            return "error";
-        }
-    }
-
-    /**
-     * View RS models.
-     * 
-     * @param aggregatorId
-     * @param model
-     * @return
-     */
-    @RequestMapping("/viewRS")
-    public String viewRS(ModelMap model) {
-        try {
-            logger.debug("viewRS - Start");
-            return "viewRS";
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            model.addAttribute("message", "View RS Models:"  + e.getMessage());
             return "error";
         }
     }

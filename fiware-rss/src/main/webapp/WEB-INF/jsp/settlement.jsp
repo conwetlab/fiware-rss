@@ -65,12 +65,12 @@
                     </c:if>
                     <tr>
                         <td>
-                            <a href="${contextPath}/files?aggregatorId=${aggregatorId}">View files</a>
+                            <a href="${contextPath}/files">View files</a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a href="${contextPath}/transactions?aggregatorId=${aggregatorId}">View transactions in database</a>
+                            <a href="${contextPath}/transactions">View transactions in database</a>
                         </td>
                     </tr>
                 </table>
@@ -85,7 +85,7 @@
                     </th>
                     <tr>
                         <td>
-                            <a href="${contextPath}/viewRS?aggregatorId=${aggregatorId}">View RS models in database</a>
+                            <a href="${contextPath}/models/list">View RS models in database</a>
                         </td>
                     </tr>
                     <tr>
