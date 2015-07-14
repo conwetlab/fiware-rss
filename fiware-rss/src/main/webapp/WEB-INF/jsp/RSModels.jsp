@@ -16,6 +16,9 @@
     <head>
         <%@include file="/jspf/appResources.jsp"%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="_csrf" content="${_csrf.token}"/>
+        <!-- default header name is X-CSRF-TOKEN -->
+        <meta name="_csrf_header" content="${_csrf.headerName}"/>
         <title>FIWARE RSS - Settlement</title>
 
         <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/EndpointManager.js"></script>
@@ -42,7 +45,6 @@
                             <h3>Error</h3>
                         </div>
                         <div class="modal-body">
-                            <p>Soy un modal</p>
                         </div>
                         <div class="modal-footer">
                             <a href="#" class="btn btn-primary" data-dismiss="modal">Accept</a>
