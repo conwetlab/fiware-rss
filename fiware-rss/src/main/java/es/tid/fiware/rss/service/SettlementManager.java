@@ -308,35 +308,6 @@ public class SettlementManager {
     }
 
     /**
-     * Get RS models from database.
-     * 
-     * @param appProvider
-     * @return
-     * @throws Exception
-     */
-    public List<SetRevenueShareConf> getRSModels(String aggregatorId) throws Exception {
-        List<SetRevenueShareConf> models = new ArrayList<>();
-        if (null != aggregatorId && aggregatorId.length() > 0) {
-            List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-                .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-            if (null != provsAgg && provsAgg.size() > 0) {
-                for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    List<SetRevenueShareConf> modelsBBDD = revenueShareConfDao.getRevenueModelsByProviderId(provAgg
-                        .getDbeAppProvider()
-                        .getTxAppProviderId());
-                    if (null != modelsBBDD) {
-                        models.addAll(modelsBBDD);
-                    }
-
-                }
-            }
-        } else {
-            models = revenueShareConfDao.getAll();
-        }
-        return models;
-    }
-
-    /**
      * Create provider a new provider for a given aggregator.
      * 
      * @param providerId

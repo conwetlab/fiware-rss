@@ -43,7 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
-import es.tid.fiware.rss.model.Aggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
@@ -192,24 +191,6 @@ public class SettlementManagerTest {
         logger.debug("run no aggregatorId");
         providers = settlementManager.getProviders("nonExistingAggregatorId");
         Assert.assertTrue(providers.size() == 0);
-    }
-
-    /**
-     * 
-     * @throws Exception
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void getRSModelsTest() throws Exception {
-        logger.debug("run all models");
-        List<SetRevenueShareConf> models = settlementManager.getRSModels(null);
-        Assert.assertNotNull(models);
-        logger.debug("run models");
-        models = settlementManager.getRSModels(aggregatorId);
-        Assert.assertNotNull(models);
-        logger.debug("run no models");
-        models = settlementManager.getRSModels("nonExistingAggregatorId");
-        Assert.assertTrue(models.size() == 0);
     }
 
     /**
