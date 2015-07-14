@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,6 +21,7 @@
 
 package es.tid.fiware.rss.expenditureLimit.server.service;
 
+import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,18 +57,21 @@ public class BalanceAccumulateManager {
     private static Logger logger = LoggerFactory.getLogger(ExpenditureLimitManager.class);
     private final String tx_charge_type = "C";
     private final String tx_refund_type = "R";
-    private final String tx_charge_status = "D";
-    private final String tx_refund_status = "R";
 
     @Autowired
     private ExpenditureLimitDataChecker checker;
+
     @Autowired
     private DbeExpendLimitDao expLimitDao;
+
     @Autowired
     private ProcessingLimitService processingLimitService;
+
     @Autowired
     private DbeExpendControlDao expendControlDao;
 
+    @Autowired
+    private DbeAppProviderDao appProviderDao;
     /**
      * Get limits for a customer.
      * 
@@ -197,30 +203,25 @@ public class BalanceAccumulateManager {
     private DbeTransaction generateTransaction(String urlEndUserId, ExpendControl expendControl)
         throws RSSException {
         BalanceAccumulateManager.logger.debug("Into generateTransaction method.");
+
         DbeTransaction tx = new DbeTransaction();
         tx.setTxEndUserId(urlEndUserId);
+
         if (this.tx_charge_type.equalsIgnoreCase(expendControl.getChargeType())) {
             tx.setTcTransactionType(this.tx_charge_type);
-            tx.setTcTransactionStatus(this.tx_charge_status);
         } else if (this.tx_refund_type.equalsIgnoreCase(expendControl.getChargeType())) {
             tx.setTcTransactionType(this.tx_refund_type);
-            tx.setTcTransactionStatus(this.tx_refund_status);
         } else {
             BalanceAccumulateManager.logger.debug("Charge type not allowed.");
             String[] args = { "Currency Not found." };
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
-        tx.setFtChargedTotalAmount(expendControl.getAmount());
-        tx.setTxAppProvider(expendControl.getAppProvider());
-        tx.setBmService(checker.checkService(expendControl.getService()));
+
+        tx.setFtChargedAmount(expendControl.getAmount());
+        tx.setAppProvider(appProviderDao.getById(expendControl.getAppProvider()));
+
         // get currency
         tx.setBmCurrency(checker.checkCurrency(expendControl.getCurrency()));
-        BmObCountry bmClientObCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-        bmClientObCountry.setId(id);
-        tx.setBmClientObCountry(bmClientObCountry);
         // Use an generic id
         tx.setTxTransactionId("PursacheAttemp");
         // return tx
@@ -243,7 +244,7 @@ public class BalanceAccumulateManager {
         BalanceAccumulateManager.logger.debug("Into getControls method.");
         List<DbeExpendControl> controls = getControls(urlEndUserId, service, appProviderId, currency, elType);
         // change format to output format
-        List<AccumExpend> result = new ArrayList<AccumExpend>();
+        List<AccumExpend> result = new ArrayList<>();
         if (null != controls && controls.size() > 0) {
             for (DbeExpendControl control : controls) {
                 result.add(fillAccumExpendFromControl(control));
@@ -272,10 +273,11 @@ public class BalanceAccumulateManager {
         id.setNuObId(ExpenditureLimitDataChecker.obId);
         obCountry.setId(id);
         List<DbeExpendControl> controls =
-            expendControlDao.getExpendDataForUserAppProvCurrencyObCountry(urlEndUserId,
-                checker.checkService(service), appProviderId, checker.checkCurrency(currency), obCountry);
-        // filter type?
-        List<DbeExpendControl> controlsFinal = new ArrayList<DbeExpendControl>();
+            expendControlDao.getExpendDataForUserAppProvCurrency(urlEndUserId,
+                    appProviderId, checker.checkCurrency(currency));
+
+
+        List<DbeExpendControl> controlsFinal = new ArrayList<>();
         if (null != elType && elType.length() > 0) {
             if (null != controls && controls.size() > 0) {
                 for (DbeExpendControl control : controls) {

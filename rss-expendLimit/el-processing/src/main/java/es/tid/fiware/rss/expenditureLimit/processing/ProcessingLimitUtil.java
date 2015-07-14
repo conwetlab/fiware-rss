@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -121,33 +123,12 @@ public class ProcessingLimitUtil {
     public BigDecimal getValueToAddFromTx(DbeTransaction tx) {
         // first check TotalAmount -->if not, then amount + taxes amount
         BigDecimal amountToAdd = new BigDecimal(0);
-        // first search charged --> if not internals
-        if (null != tx.getFtChargedTotalAmount()) {
-            amountToAdd = amountToAdd.add(tx.getFtChargedTotalAmount());
-        } else if (null != tx.getFtChargedAmount()) {
+
+        if (null != tx.getFtChargedAmount()) {
             amountToAdd = amountToAdd.add(tx.getFtChargedAmount());
             // tax could be null
             if (null != tx.getFtChargedTaxAmount()) {
                 amountToAdd = amountToAdd.add(tx.getFtChargedTaxAmount());
-            }
-        } else if (null != tx.getFtInternalTotalAmount()) {
-            amountToAdd = amountToAdd.add(tx.getFtInternalTotalAmount());
-        } else if (null != tx.getFtInternalAmount()) {
-            amountToAdd = amountToAdd.add(tx.getFtInternalAmount());
-            // tax could be null
-            if (null != tx.getFtInternalTaxAmount()) {
-                amountToAdd = amountToAdd.add(tx.getFtInternalTaxAmount());
-            }
-        } else if (null != tx.getFtRequestTotalAmount()) {
-            amountToAdd = amountToAdd.add(tx.getFtRequestTotalAmount());
-        } else {
-            // amount could be null
-            if (null != tx.getFtRequestAmount()) {
-                amountToAdd = amountToAdd.add(tx.getFtRequestAmount());
-            }
-            // tax could be null
-            if (null != tx.getFtRequestTaxAmount()) {
-                amountToAdd = amountToAdd.add(tx.getFtRequestTaxAmount());
             }
         }
         return amountToAdd;
@@ -157,26 +138,22 @@ public class ProcessingLimitUtil {
      * Generate a new accumulate.
      * 
      * @param tx
-     * @param type
+     * @param limit
      * @return
+     * @throws RSSException
      */
-    public DbeExpendControl createControl(DbeTransaction tx, DbeExpendLimit limit) throws RSSException {
+    public DbeExpendControl createControl(DbeTransaction tx, DbeExpendLimit limit) 
+            throws RSSException {
+
         DbeExpendControl control = new DbeExpendControl();
         DbeExpendLimitPK expendLimitPK = new DbeExpendLimitPK();
-        if (null != tx.getTxEndUserId() && tx.getTxEndUserId().trim().length() > 0) {
-            expendLimitPK.setTxEndUserId(tx.getTxEndUserId());
-        } else {
-            expendLimitPK.setTxEndUserId(tx.getTxGlobalUserId());
-        }
+
+        expendLimitPK.setTxEndUserId(tx.getTxEndUserId());
+
         expendLimitPK.setTxElType(limit.getId().getTxElType());
-        expendLimitPK.setTxAppProviderId(tx.getTxAppProvider());
+        expendLimitPK.setTxAppProviderId(tx.getAppProvider().getTxAppProviderId());
         expendLimitPK.setNuCurrencyId(tx.getBmCurrency().getNuCurrencyId());
-        expendLimitPK.setNuCountryId(tx.getBmClientObCountry().getId().getNuCountryId());
-        expendLimitPK.setNuObId(tx.getBmClientObCountry().getId().getNuObId());
-        expendLimitPK.setNuServiceId(tx.getBmService().getNuServiceId());
         control.setId(expendLimitPK);
-        control.setBmService(tx.getBmService());
-        control.setBmObCountry(tx.getBmClientObCountry());
         control.setFtExpensedAmount(new BigDecimal(0));
         // set next period
         updateNextPeriodToStart(control);
@@ -188,7 +165,7 @@ public class ProcessingLimitUtil {
     /**
      * Get Limits from string.
      * 
-     * @param lista
+     * @param limits
      * @return
      */
     public List<BigDecimal> getLimitsFromString(String limits) {

@@ -42,8 +42,6 @@ import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimit;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimitPK;
 import es.tid.fiware.rss.model.BmCurrency;
 import es.tid.fiware.rss.model.BmObCountry;
-import es.tid.fiware.rss.model.BmObCountryId;
-import es.tid.fiware.rss.model.BmService;
 
 /**
  * 
@@ -85,9 +83,6 @@ public class ExpenditureLimitManager {
         // check mandatory information
         checker.checkRequiredSearchParameters(DbeExpendLimitDao.NO_USER_ID, service, appProvider);
 
-        // check service Existence
-        BmService bmService = checker.checkService(service);
-
         // Check valid currency
         BmCurrency bmCurrency = null;
         if (currency != null && currency.trim().length() > 0) {
@@ -100,16 +95,9 @@ public class ExpenditureLimitManager {
         // check valid elType
         checker.checkElType(type);
 
-        // unique ob
-        BmObCountry obCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-        obCountry.setId(id);
-
         // Get All limits associated to a provider
-        HashMap<String, List<DbeExpendLimit>> limitsHash = expLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(
-            DbeExpendLimitDao.NO_USER_ID, bmService, appProvider, bmCurrency, obCountry);
+        HashMap<String, List<DbeExpendLimit>> limitsHash = expLimitDao.getOrdExpLimitsForUserAppProvCurrency(
+            DbeExpendLimitDao.NO_USER_ID, appProvider, bmCurrency);
 
         List<DbeExpendLimit> result;
         if (null != type && type.length() > 0) {
@@ -148,15 +136,6 @@ public class ExpenditureLimitManager {
             throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
 
-        // check service Existence
-        BmService bmService = null;
-        if ((expLimits.getService() != null) && (expLimits.getService().trim().length() > 0)) {
-            bmService = checker.checkService(expLimits.getService());
-        } else {
-            String[] args = { "Service Identifier" };
-            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
-        }
-
         // check valid appPorviderId
         if ((provider != null) && (provider.trim().length() > 0)) {
             checker.checkDbeAppProvider(provider);
@@ -178,19 +157,12 @@ public class ExpenditureLimitManager {
             // Check valid currency
             bmCurrency = checker.checkCurrency(limitBean.getCurrency());
             // add new limit
-            newLimits.add(fillLimitDao(bmService, provider, DbeExpendLimitDao.NO_USER_ID, bmCurrency, limitBean));
+            newLimits.add(fillLimitDao(provider, DbeExpendLimitDao.NO_USER_ID, bmCurrency, limitBean));
         }
 
-        // Delete old provider limits
-        BmObCountry bmobCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        bmobCountry.setId(id);
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-
         // Get actual limits data
-        List<DbeExpendLimit> oldLimits = expLimitDao.getExpendLimitsByProviderUserService(bmService, provider,
-            DbeExpendLimitDao.NO_USER_ID, bmobCountry, null);
+        List<DbeExpendLimit> oldLimits = expLimitDao.getExpendLimitsByProviderUserService(provider,
+            DbeExpendLimitDao.NO_USER_ID, null);
         // Delete old limits.
         if ((oldLimits != null) && (oldLimits.size() > 0)) {
             // Delete old limits
@@ -236,8 +208,7 @@ public class ExpenditureLimitManager {
 
         // check mandatory information
         checker.checkRequiredSearchParameters(endUserId, service, appProvider);
-        // check service Existence
-        BmService bmService = checker.checkService(service);
+
         // Check valid currency
         BmCurrency bmCurrency = null;
         if (currency != null && currency.trim().length() > 0) {
@@ -247,15 +218,10 @@ public class ExpenditureLimitManager {
         checker.checkDbeAppProvider(appProvider);
         // check valid elType
         checker.checkElType(type);
-        // unique ob
-        BmObCountry obCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-        obCountry.setId(id);
+
         // Get All limits associated to a user
-        HashMap<String, List<DbeExpendLimit>> limitsHash = expLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(
-            endUserId, bmService, appProvider, bmCurrency, obCountry);
+        HashMap<String, List<DbeExpendLimit>> limitsHash = expLimitDao.getOrdExpLimitsForUserAppProvCurrency(
+            endUserId, appProvider, bmCurrency);
 
         // Fill in limits
         UserExpenditureLimitInfoBean userLimits = new UserExpenditureLimitInfoBean();
@@ -306,19 +272,13 @@ public class ExpenditureLimitManager {
      */
     private void createUserExpLimit(String provider, String userId,
         LimitGroupBean expLimits) throws RSSException {
+
         ExpenditureLimitManager.logger.debug("Into createUserExpLimit method");
         if (expLimits == null || expLimits.getLimits() == null || expLimits.getLimits().size() <= 0) {
             String[] args = { "LimitGroupBean" };
             throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
-        // check service Existence
-        BmService bmService = null;
-        if ((expLimits.getService() != null) && (expLimits.getService().trim().length() > 0)) {
-            bmService = checker.checkService(expLimits.getService());
-        } else {
-            String[] args = { "Service Identifier" };
-            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
-        }
+
         // check valid appPorviderId
         if ((provider != null) && (provider.trim().length() > 0)) {
             checker.checkDbeAppProvider(provider);
@@ -340,19 +300,12 @@ public class ExpenditureLimitManager {
             // Check valid currency
             bmCurrency = checker.checkCurrency(limitBean.getCurrency());
             // add new limit
-            newLimits.add(fillLimitDao(bmService, provider, userId, bmCurrency, limitBean));
+            newLimits.add(fillLimitDao(provider, userId, bmCurrency, limitBean));
         }
 
-        // Delete old limits (only provider limits or user limits too) and old accumulated?
-        BmObCountry bmobCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        bmobCountry.setId(id);
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-
         // Get actual limits data
-        List<DbeExpendLimit> oldLimits = expLimitDao.getExpendLimitsByProviderUserService(bmService, provider,
-            userId, bmobCountry, null);
+        List<DbeExpendLimit> oldLimits = expLimitDao.getExpendLimitsByProviderUserService(
+                provider, userId, null);
         // Delete old limits.
         if ((oldLimits != null) && (oldLimits.size() > 0)) {
             // Delete old limits
@@ -379,8 +332,7 @@ public class ExpenditureLimitManager {
         ExpenditureLimitManager.logger.debug("Into deleteUserLmits method:" + providerId + " userId:" + userId);
         // check mandatory information
         checker.checkRequiredSearchParameters(userId, service, providerId);
-        // check service Existence
-        BmService bmService = checker.checkService(service);
+
         // Check valid currency
         BmCurrency bmCurrency = null;
         if (currency != null && currency.trim().length() > 0) {
@@ -394,15 +346,8 @@ public class ExpenditureLimitManager {
             checker.checkElType(type);
         }
 
-        // Get limits to delete
-        BmObCountry bmobCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        bmobCountry.setId(id);
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-
-        List<DbeExpendLimit> limits = expLimitDao.getExpendLimitsByProviderUserService(bmService, providerId,
-            userId, bmobCountry, bmCurrency);
+        List<DbeExpendLimit> limits = expLimitDao.getExpendLimitsByProviderUserService(providerId,
+            userId, bmCurrency);
 
         // Delete limits
         if (limits != null && limits.size() > 0) {
@@ -529,7 +474,7 @@ public class ExpenditureLimitManager {
      * @param limitBean
      * @return
      */
-    private DbeExpendLimit fillLimitDao(BmService service, String appProvider, String endUserId,
+    private DbeExpendLimit fillLimitDao(String appProvider, String endUserId,
         BmCurrency currency, LimitBean limitBean) {
         ExpenditureLimitManager.logger.debug("Into fillLimitDao method");
         DbeExpendLimit expendLimit = new DbeExpendLimit();
@@ -537,9 +482,6 @@ public class ExpenditureLimitManager {
         expendLimit.setTxNotifAmounts(checker.getStringFromLisAmounts(limitBean.getNotificationAmounts()));
         DbeExpendLimitPK id = new DbeExpendLimitPK();
         expendLimit.setId(id);
-        id.setNuServiceId(service.getNuServiceId());
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
         id.setTxAppProviderId(appProvider);
         id.setNuCurrencyId(currency.getNuCurrencyId());
         id.setTxElType(limitBean.getType());

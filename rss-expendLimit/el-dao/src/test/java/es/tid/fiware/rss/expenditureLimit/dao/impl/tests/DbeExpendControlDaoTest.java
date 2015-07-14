@@ -73,15 +73,6 @@ public class DbeExpendControlDaoTest {
      */
     private static Logger logger = LoggerFactory.getLogger(DbeExpendControlDaoTest.class);
 
-    /**
-     * DAO for DBESystemProperties
-     */
-    @Autowired
-    private DbeSystemPropertiesDao dbeSystemPropertiesDao;
-
-    @Autowired
-    private DataSource dataSource;
-
     @Autowired
     private DbeExpendControlDao expLimitDao;
 
@@ -111,15 +102,10 @@ public class DbeExpendControlDaoTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testGetExpendLimitDataForaUser() {
 
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
-            "app123456", bmCurrency,
-            bmObCountry);
+        List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrency("userId01",
+            "app123456", bmCurrency);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
@@ -138,14 +124,10 @@ public class DbeExpendControlDaoTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testUpdateExpendLimitDataForaUser() {
 
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
-            "app123456", bmCurrency, bmObCountry);
+        List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrency("userId01",
+            "app123456", bmCurrency);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
@@ -170,8 +152,8 @@ public class DbeExpendControlDaoTest {
 
         transactionManager.commit(status);
 
-        l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
-            "app123456", bmCurrency, bmObCountry);
+        l = expLimitDao.getExpendDataForUserAppProvCurrency("userId01",
+            "app123456", bmCurrency);
 
         it = l.iterator();
         while (it.hasNext()) {
@@ -181,7 +163,7 @@ public class DbeExpendControlDaoTest {
                 Assert.assertTrue("Notifications: ", el.getTxNotifications() == null
                     || el.getTxNotifications().length() == 0);
             } else {
-                Assert.assertTrue("Notifications: ", el.getTxNotifications().indexOf("50") > -1);
+                Assert.assertTrue("Notifications: ", el.getTxNotifications().contains("50"));
             }
         }
     }
@@ -190,15 +172,11 @@ public class DbeExpendControlDaoTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testNewExpendLimitDataForaUser() {
 
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
 
-        List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId01", bmService,
-            "app123456", bmCurrency, bmObCountry);
+        List<DbeExpendControl> l = expLimitDao.getExpendDataForUserAppProvCurrency("userId01",
+            "app123456", bmCurrency);
 
         Assert.assertTrue("Elements found before " + l.toString(), l != null && l.size() == 3);
         Iterator<DbeExpendControl> it = l.iterator();
@@ -211,10 +189,6 @@ public class DbeExpendControlDaoTest {
             DbeExpendControl el = it.next();
             DbeExpendControl neoEc = new DbeExpendControl();
             neoEc.setId(new DbeExpendLimitPK());
-            neoEc.getId().setNuCountryId(el.getId().getNuCountryId());
-            neoEc.getId().setNuCurrencyId(el.getId().getNuCountryId());
-            neoEc.getId().setNuObId(el.getId().getNuCountryId());
-            neoEc.getId().setNuServiceId(el.getId().getNuCountryId());
             neoEc.getId().setTxAppProviderId("123456");
             neoEc.getId().setTxElType(el.getId().getTxElType());
             neoEc.getId().setTxEndUserId("userId101");
@@ -226,8 +200,8 @@ public class DbeExpendControlDaoTest {
 
         transactionManager.commit(status);
         
-        List<DbeExpendControl> l1 = expLimitDao.getExpendDataForUserAppProvCurrencyObCountry("userId101", bmService,
-            "123456", bmCurrency, bmObCountry);
+        List<DbeExpendControl> l1 = expLimitDao.getExpendDataForUserAppProvCurrency("userId101",
+            "123456", bmCurrency);
 
         Assert.assertTrue("Elements found after " +  l.toString() + " " + l1.toString(), l != null && l.size() == 3);
         it = l1.iterator();

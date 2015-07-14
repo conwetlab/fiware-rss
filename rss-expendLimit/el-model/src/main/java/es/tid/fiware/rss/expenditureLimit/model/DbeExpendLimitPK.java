@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014,  Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -39,9 +41,6 @@ public class DbeExpendLimitPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "NU_SERVICE_ID")
-    private long nuServiceId;
-
     @Column(name = "TX_END_USER_ID")
     private String txEndUserId;
 
@@ -54,21 +53,7 @@ public class DbeExpendLimitPK implements Serializable {
     @Column(name = "TX_EL_TYPE")
     private String txElType;
 
-    @Column(name = "NU_OB_ID")
-    private long nuObId;
-
-    @Column(name = "NU_COUNTRY_ID")
-    private long nuCountryId;
-
     public DbeExpendLimitPK() {
-    }
-
-    public long getNuServiceId() {
-        return this.nuServiceId;
-    }
-
-    public void setNuServiceId(long nuServiceId) {
-        this.nuServiceId = nuServiceId;
     }
 
     public String getTxEndUserId() {
@@ -103,22 +88,6 @@ public class DbeExpendLimitPK implements Serializable {
         this.txElType = txElType;
     }
 
-    public long getNuObId() {
-        return this.nuObId;
-    }
-
-    public void setNuObId(long nuObId) {
-        this.nuObId = nuObId;
-    }
-
-    public long getNuCountryId() {
-        return this.nuCountryId;
-    }
-
-    public void setNuCountryId(long nuCountryId) {
-        this.nuCountryId = nuCountryId;
-    }
-
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -130,13 +99,10 @@ public class DbeExpendLimitPK implements Serializable {
         }
         DbeExpendLimitPK castOther = (DbeExpendLimitPK) other;
 
-        return (this.nuServiceId == castOther.nuServiceId)
-            && this.txEndUserId.equals(castOther.txEndUserId)
+        return this.txEndUserId.equals(castOther.txEndUserId)
             && this.txAppProviderId.equals(castOther.txAppProviderId)
             && (this.nuCurrencyId == castOther.nuCurrencyId)
-            && this.txElType.equals(castOther.txElType)
-            && (this.nuObId == castOther.nuObId)
-            && (this.nuCountryId == castOther.nuCountryId);
+            && this.txElType.equals(castOther.txElType);
     }
 
     @Override
@@ -144,13 +110,10 @@ public class DbeExpendLimitPK implements Serializable {
         final int prime = 31;
         int hash = 17;
 
-        hash = hash * prime + ((int) (this.nuServiceId ^ (this.nuServiceId >>> 32)));
         hash = hash * prime + this.txEndUserId.hashCode();
         hash = hash * prime + this.txAppProviderId.hashCode();
         hash = hash * prime + ((int) (this.nuCurrencyId ^ (this.nuCurrencyId >>> 32)));
         hash = hash * prime + this.txElType.hashCode();
-        hash = hash * prime + ((int) (this.nuObId ^ (this.nuObId >>> 32)));
-        hash = hash * prime + ((int) (this.nuCountryId ^ (this.nuCountryId >>> 32)));
 
         return hash;
     }

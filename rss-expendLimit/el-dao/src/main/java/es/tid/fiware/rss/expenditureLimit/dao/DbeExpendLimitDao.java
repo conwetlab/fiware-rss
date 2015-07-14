@@ -51,14 +51,12 @@ public interface DbeExpendLimitDao extends GenericDao<DbeExpendLimit, DbeExpendL
      * Returns the limits related to the user. Includes generic provider and system limits
      * 
      * @param urlEndUserId
-     * @param bmService
      * @param appProviderId
      * @param bmCurrency
-     * @param bmObCountry
      * @return
      */
-    List<DbeExpendLimit> getExpendLimitsForUserAppProvCurrencyObCountry(String urlEndUserId, BmService bmService,
-        String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry);
+    List<DbeExpendLimit> getExpendLimitsForUserAppProvCurrency(String urlEndUserId,
+        String appProviderId, BmCurrency bmCurrency);
 
     /**
      * 
@@ -75,21 +73,18 @@ public interface DbeExpendLimitDao extends GenericDao<DbeExpendLimit, DbeExpendL
      * @param bmObCountry
      * @return
      */
-    HashMap<String, List<DbeExpendLimit>> getOrdExpLimitsForUserAppProvCurrencyObCountry(String urlEndUserId,
-        BmService bmService,
-        String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry);
+    HashMap<String, List<DbeExpendLimit>> getOrdExpLimitsForUserAppProvCurrency(String urlEndUserId,
+        String appProviderId, BmCurrency bmCurrency);
 
     /**
      * Get concrete limits.
      * 
-     * @param bmService
      * @param provider
      * @param userId
-     * @param bmObCountry
      * @param bmCurrency
      * @return
      */
-    List<DbeExpendLimit> getExpendLimitsByProviderUserService(BmService bmService, String provider, String userId,
-        BmObCountry bmObCountry, BmCurrency bmCurrency);
+    List<DbeExpendLimit> getExpendLimitsByProviderUserService(String provider,
+            String userId, BmCurrency bmCurrency);
 
 }

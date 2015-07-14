@@ -35,8 +35,6 @@ import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendControlDao;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendControl;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimitPK;
 import es.tid.fiware.rss.model.BmCurrency;
-import es.tid.fiware.rss.model.BmObCountry;
-import es.tid.fiware.rss.model.BmService;
 
 /**
  * 
@@ -67,22 +65,18 @@ public class DbeExpendControlDaoImpl extends GenericDaoImpl<DbeExpendControl, Db
      * es.tid.greta.dbe.model.BmObCountry)
      */
     @Override
-    public List<DbeExpendControl> getExpendDataForUserAppProvCurrencyObCountry(String urlEndUserId,
-        BmService bmService, String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry) {
+    public List<DbeExpendControl> getExpendDataForUserAppProvCurrency(String urlEndUserId,
+        String appProviderId, BmCurrency bmCurrency) {
         DbeExpendControlDaoImpl.logger.debug("Entering getExpendDataForUserAppProvCurrencyObCountry...");
 
-        String hql = " from DbeExpendControl el where el.id.txEndUserId = :usrID and el.id.nuServiceId = :nuServID"
-            + " and el.id.nuCurrencyId = :nuCurrID and el.id.nuCountryId = :nuCounID and el.id.nuObId = :nuObID "
-            + " and el.id.txAppProviderId = :txAppPID";
+        String hql = " from DbeExpendControl el where el.id.txEndUserId = :usrID"
+            + " and el.id.nuCurrencyId = :nuCurrID and el.id.txAppProviderId = :txAppPID";
 
         @SuppressWarnings("unchecked")
         List<DbeExpendControl> list = (List<DbeExpendControl>) this.getSession().
         		createQuery(hql).
         		setParameter("usrID", urlEndUserId).
-        		setParameter("nuServID", bmService.getNuServiceId()).
         		setParameter("nuCurrID", bmCurrency.getNuCurrencyId()).
-        		setParameter("nuCounID", bmObCountry.getId().getNuCountryId()).
-        		setParameter("nuObID", bmObCountry.getId().getNuObId()).
         		setParameter("txAppPID", appProviderId).
         		list();
 

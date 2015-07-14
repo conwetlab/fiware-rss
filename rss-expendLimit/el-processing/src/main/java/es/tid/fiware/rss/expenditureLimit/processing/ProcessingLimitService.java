@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -70,7 +72,7 @@ public class ProcessingLimitService {
     private DbeAppProviderDao appProviderDao;
 
     /**
-     * /**
+     *
      * Check that a charge do not exceed control limit.
      * 
      * @param tx
@@ -88,15 +90,18 @@ public class ProcessingLimitService {
             || operationType.equalsIgnoreCase(Constants.REFUND_TYPE)) {
 
         	ProcessingLimitService.logger.debug("===== IF");
+
             // Obtain accumulated
             List<DbeExpendControl> controls = getControls(tx);
             DbeExpendControl control;
             BigDecimal levelExceded = new BigDecimal(0);
 
             List<DbeExpendLimit> limits = getLimits(tx);
+
             if (null != limits && limits.size() > 0) {
             	ProcessingLimitService.logger.debug("===== IF LIMITS");
                 boolean notification = false;
+
                 for (DbeExpendLimit limit : limits) {
                     if (ProcessingLimitService.TRANSACTION_TYPE.equalsIgnoreCase(limit.getId().getTxElType())) {
                     	ProcessingLimitService.logger.debug("===== IF FOR");
@@ -173,8 +178,7 @@ public class ProcessingLimitService {
         String operationType = tx.getTcTransactionType();
         if ((operationType.equalsIgnoreCase(Constants.CAPTURE_TYPE)
             || operationType.equalsIgnoreCase(Constants.CHARGE_TYPE)
-            || operationType.equalsIgnoreCase(Constants.REFUND_TYPE))
-            && isValidTransactionStatus(tx)) {
+            || operationType.equalsIgnoreCase(Constants.REFUND_TYPE))) {
 
             ProcessingLimitUtil utils = new ProcessingLimitUtil();
             List<DbeExpendControl> controls = getControls(tx);
@@ -193,24 +197,6 @@ public class ProcessingLimitService {
     }
 
     /**
-     * Check transaction status for update expenditure limit after payment gateway's invocation.
-     * 
-     * @param transaction
-     * @return
-     */
-    private boolean isValidTransactionStatus(DbeTransaction transaction) {
-        // Check transaction status
-        if (Constants.CAPTURE_STATUS.equals(transaction.getTcTransactionStatus())
-            || Constants.REFUNDED_STATUS.equals(transaction.getTcTransactionStatus())
-            || Constants.ACCEPTED_STATUS.equals(transaction.getTcTransactionStatus())) {
-
-            return true;
-        }
-        // Transaction neither captured nor accepted or refunded.
-        return false;
-    }
-
-    /**
      * Get Controls.
      * 
      * @param tx
@@ -218,16 +204,9 @@ public class ProcessingLimitService {
      */
     private List<DbeExpendControl> getControls(DbeTransaction tx) throws RSSException {
         // could be end user or globlaUser
-        List<DbeExpendControl> controls = null;
-        if (null != tx.getTxEndUserId() && tx.getTxEndUserId().trim().length() > 0) {
-            controls = expendControlDao.getExpendDataForUserAppProvCurrencyObCountry(tx.getTxEndUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(),
-                tx.getBmClientObCountry());
-        } else {
-            controls = expendControlDao.getExpendDataForUserAppProvCurrencyObCountry(tx.getTxGlobalUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(),
-                tx.getBmClientObCountry());
-        }
+        List<DbeExpendControl> controls = expendControlDao.getExpendDataForUserAppProvCurrency(tx.getTxEndUserId(),
+                    tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+
         return controls;
     }
 
@@ -239,17 +218,11 @@ public class ProcessingLimitService {
      */
     private List<DbeExpendLimit> getLimits(DbeTransaction tx) throws RSSException {
         // could be end user or globlaUser
-        HashMap<String, List<DbeExpendLimit>> limitsHash = null;
-        if (null != tx.getTxEndUserId() && tx.getTxEndUserId().trim().length() > 0) {
-            limitsHash = expendLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(tx.getTxEndUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(),
-                tx.getBmClientObCountry());
-        } else {
-            limitsHash = expendLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(tx.getTxGlobalUserId(),
-                tx.getBmService(), tx.getTxAppProvider(), tx.getBmCurrency(),
-                tx.getBmClientObCountry());
-        }
-        List<DbeExpendLimit> limits = new ArrayList<DbeExpendLimit>();
+        HashMap<String, List<DbeExpendLimit>> limitsHash = expendLimitDao.
+                getOrdExpLimitsForUserAppProvCurrency(tx.getTxEndUserId(),
+                tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+
+        List<DbeExpendLimit> limits = new ArrayList<>();
         limits.addAll(limitsHash.get(DbeExpendLimitDao.USER_APP_PROV_KEY));
         limits.addAll(limitsHash.get(DbeExpendLimitDao.USER_KEY));
         limits.addAll(limitsHash.get(DbeExpendLimitDao.APP_PROV_KEY));

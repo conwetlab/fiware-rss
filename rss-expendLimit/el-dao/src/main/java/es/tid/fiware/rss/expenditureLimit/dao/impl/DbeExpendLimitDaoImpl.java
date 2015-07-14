@@ -64,12 +64,11 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
      * java.lang.Long)
      */
     @Override
-    public List<DbeExpendLimit> getExpendLimitsForUserAppProvCurrencyObCountry(String urlEndUserId,
-        BmService bmService, String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry) {
+    public List<DbeExpendLimit> getExpendLimitsForUserAppProvCurrency(String urlEndUserId,
+            String appProviderId, BmCurrency bmCurrency) {
         DbeExpendLimitDaoImpl.logger.debug("Entering getExpendLimitsForUserCurrencyObCountry...");
 
         String hql = " from DbeExpendLimit el where (el.id.txEndUserId = :txUsrId1 or el.id.txEndUserId = :txUsrId2 )" +
-            " and el.id.nuServiceId = :nuServID and el.id.nuCountryId = :nuCountrID and el.id.nuObId = :nuObID" +
             " and (el.id.txAppProviderId = :txAppPID1 or el.id.txAppProviderId = :txAppPID2)";
 
         @SuppressWarnings("unchecked")
@@ -79,9 +78,6 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
             list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
             		setParameter("txUsrId1", DbeExpendLimitDao.NO_USER_ID).
             		setParameter("txUsrId2", urlEndUserId).
-            		setParameter("nuServID", bmService.getNuServiceId()).
-            		setParameter("nuCountrID", bmObCountry.getId().getNuCountryId()).
-            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
             		setParameter("txAppPID1", appProviderId).
             		setParameter("txAppPID2", DbeExpendLimitDao.NO_APP_PROVIDER_ID).
             		setParameter("bmCurrID", bmCurrency.getNuCurrencyId()).
@@ -90,9 +86,6 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
         	list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
             		setParameter("txUsrId1", DbeExpendLimitDao.NO_USER_ID).
             		setParameter("txUsrId2", urlEndUserId).
-            		setParameter("nuServID", bmService.getNuServiceId()).
-            		setParameter("nuCountrID", bmObCountry.getId().getNuCountryId()).
-            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
             		setParameter("txAppPID1", appProviderId).
             		setParameter("txAppPID2", DbeExpendLimitDao.NO_APP_PROVIDER_ID).
             		list();
@@ -110,13 +103,12 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
      * es.tid.greta.dbe.model.BmObCountry)
      */
     @Override
-    public HashMap<String, List<DbeExpendLimit>> getOrdExpLimitsForUserAppProvCurrencyObCountry(String urlEndUserId,
-        BmService bmService, String appProviderId, BmCurrency bmCurrency, BmObCountry bmObCountry) {
+    public HashMap<String, List<DbeExpendLimit>> getOrdExpLimitsForUserAppProvCurrency(String urlEndUserId,
+            String appProviderId, BmCurrency bmCurrency) {
 
         HashMap<String, List<DbeExpendLimit>> hLimits = new HashMap<>();
-        List<DbeExpendLimit> allLimits = getExpendLimitsForUserAppProvCurrencyObCountry(urlEndUserId, bmService,
-            appProviderId,
-            bmCurrency, bmObCountry);
+        List<DbeExpendLimit> allLimits = getExpendLimitsForUserAppProvCurrency(urlEndUserId,
+            appProviderId, bmCurrency);
 
         // Split the limits
         List<DbeExpendLimit> userAppLimits = new ArrayList<>();
@@ -163,12 +155,11 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
      * .model.BmCurrency)
      */
     @Override
-    public List<DbeExpendLimit> getExpendLimitsByProviderUserService(BmService bmService, String provider,
-        String userId, BmObCountry bmObCountry, BmCurrency bmCurrency) {
+    public List<DbeExpendLimit> getExpendLimitsByProviderUserService(String provider,
+        String userId, BmCurrency bmCurrency) {
         DbeExpendLimitDaoImpl.logger.debug("Entering getExpendLimitsByProviderUserService...");
 
-        String hql = "from DbeExpendLimit el where el.id.txEndUserId = :txUsrID and el.id.txAppProviderId = :txAppPID " +
-            " and el.id.nuServiceId = :nuServID and el.id.nuCountryId = :nuCountID and el.id.nuObId = :nuObID";
+        String hql = "from DbeExpendLimit el where el.id.txEndUserId = :txUsrID and el.id.txAppProviderId = :txAppPID ";
 
         List<DbeExpendLimit> list;
         if (bmCurrency != null) {
@@ -176,18 +167,12 @@ public class DbeExpendLimitDaoImpl extends GenericDaoImpl<DbeExpendLimit, DbeExp
             list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
             		setParameter("txUsrID", userId).
             		setParameter("txAppPID", provider).
-            		setParameter("nuServID", bmService.getNuServiceId()).
-            		setParameter("nuCountID", bmObCountry.getId().getNuCountryId()).
-            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
             		setParameter("nuCurrID", bmCurrency.getNuCurrencyId()).
             		list();
         } else {
         	list = (List<DbeExpendLimit>) this.getSession().createQuery(hql).
             		setParameter("txUsrID", userId).
             		setParameter("txAppPID", provider).
-            		setParameter("nuServID", bmService.getNuServiceId()).
-            		setParameter("nuCountID", bmObCountry.getId().getNuCountryId()).
-            		setParameter("nuObID", bmObCountry.getId().getNuObId()).
             		list();
         }
 

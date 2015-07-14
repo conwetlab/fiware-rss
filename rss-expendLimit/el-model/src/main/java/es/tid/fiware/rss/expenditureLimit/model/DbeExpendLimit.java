@@ -62,20 +62,6 @@ public class DbeExpendLimit implements Serializable {
     @JoinColumn(name = "NU_CURRENCY_ID", updatable = false, insertable = false)
     private BmCurrency bmCurrency;
 
-    // bi-directional many-to-one association to BmObCountry
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "NU_COUNTRY_ID", referencedColumnName = "NU_COUNTRY_ID", updatable = false,
-            insertable = false),
-        @JoinColumn(name = "NU_OB_ID", referencedColumnName = "NU_OB_ID", updatable = false, insertable = false)
-    })
-    private BmObCountry bmObCountry;
-
-    // bi-directional many-to-one association to BmService
-    @ManyToOne
-    @JoinColumn(name = "NU_SERVICE_ID", updatable = false, insertable = false)
-    private BmService bmService;
-
     // bi-directional many-to-one association to DbeAppProvider
     @ManyToOne
     @JoinColumn(name = "TX_APPPROVIDER_ID", updatable = false, insertable = false)
@@ -116,22 +102,6 @@ public class DbeExpendLimit implements Serializable {
         this.bmCurrency = bmCurrency;
     }
 
-    public BmObCountry getBmObCountry() {
-        return this.bmObCountry;
-    }
-
-    public void setBmObCountry(BmObCountry bmObCountry) {
-        this.bmObCountry = bmObCountry;
-    }
-
-    public BmService getBmService() {
-        return this.bmService;
-    }
-
-    public void setBmService(BmService bmService) {
-        this.bmService = bmService;
-    }
-
     public DbeAppProvider getDbeAppProvider() {
         return this.dbeAppProvider;
     }
@@ -150,8 +120,6 @@ public class DbeExpendLimit implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) bmCurrency.getNuCurrencyId();
-        result = prime * result + ((bmObCountry == null) ? 0 : bmObCountry.getId().hashCode());
-        result = prime * result + (int) bmService.getNuServiceId();
         result = prime * result + ((dbeAppProvider == null) ? 0 : dbeAppProvider.getTxAppProviderId().hashCode());
         result = prime * result + ((ftMaxAmount == null) ? 0 : ftMaxAmount.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -181,20 +149,6 @@ public class DbeExpendLimit implements Serializable {
                 return false;
             }
         } else if (bmCurrency.getNuCurrencyId() != other.bmCurrency.getNuCurrencyId()) {
-            return false;
-        }
-        if (bmObCountry == null) {
-            if (other.bmObCountry != null) {
-                return false;
-            }
-        } else if (!bmObCountry.getId().equals(other.bmObCountry.getId())) {
-            return false;
-        }
-        if (bmService == null) {
-            if (other.bmService != null) {
-                return false;
-            }
-        } else if (bmService.getNuServiceId() != other.bmService.getNuServiceId()) {
             return false;
         }
         if (dbeAppProvider == null) {

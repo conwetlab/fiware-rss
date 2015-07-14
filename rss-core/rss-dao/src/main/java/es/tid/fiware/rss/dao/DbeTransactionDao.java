@@ -19,7 +19,6 @@
 
 package es.tid.fiware.rss.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import es.tid.fiware.rss.exception.RSSException;
@@ -32,36 +31,6 @@ import es.tid.fiware.rss.model.DbeTransaction;
 public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
 
     /**
-     * Described by the name.
-     */
-    List<DbeTransaction> getTransactionBySvcPrdtUserDate(final Long nuServiceId, final Long nuProductId,
-        final String enduserid, final Date rqDate);
-
-    /**
-     * Described by the name.
-     */
-    List<DbeTransaction> getLimitedTxBySvcRefcPrdtUserDateOrderByDate(final String transactionId,
-        final Long nuServiceId, final String refCode, final Long nuProductId, final Long nuMopId,
-        final String enduserid, final Date fromDate, final Date untilDate, final Integer offset, final Integer limit,
-        final String applicationID, final String[] txType, final String operationNature, final String originalTxId,
-        final String gUserId, final Long paymentMethodType);
-
-    /**
-     * Described by the name.
-     */
-    Long getNumTxBySvcRefcPrdtUserDate(String transactionId, Long nuServiceId, String referenceCode,
-        Long getlProductId, Long mopId, String endUserId, Date getdFromTime, Date getdUntilTime, String applicationId,
-        String[] txTypes, String operationNature, String originalTxId, String gUserId, final Long paymentMethodType);
-
-    /**
-     * Get the specified transaction by id with lazy fields initialized.
-     * 
-     * @param txid
-     * @return
-     */
-    DbeTransaction getTransactionByTxIdWithoutLazy(String txid);
-
-    /**
      * List of the transactions associated to a PBCorrelationID.
      * 
      * @param txid
@@ -72,7 +41,7 @@ public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
     /**
      * Described by the name.
      */
-    DbeTransaction getTransactionByRfCdeSvc(final long serviceId, final String txReferenceCode,
+    DbeTransaction getTransactionByRfCdeSvc(final String txReferenceCode,
         final String applicationId);
 
     /**
@@ -80,10 +49,6 @@ public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
      */
     DbeTransaction getTransactionByTxId(String transactionId) throws RSSException;
 
-    /**
-     * Described by the name.
-     */
-    List<DbeTransaction> getTransactionByOrgSvrRfCde(final String orgSrvrReferenceCode);
 
     /**
      * Described by the name.

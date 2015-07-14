@@ -39,15 +39,12 @@ public interface DbeExpendControlDao extends GenericDao<DbeExpendControl, DbeExp
      * Get the limits data for the user and application provider
      * 
      * @param urlEndUserId
-     * @param bmService
      * @param appProviderId
      * @param bmCurrency
-     * @param bmObCountry
      * @return
      */
-    List<DbeExpendControl> getExpendDataForUserAppProvCurrencyObCountry(String urlEndUserId, BmService bmService,
-        String appProviderId,
-        BmCurrency bmCurrency, BmObCountry bmObCountry);
+    List<DbeExpendControl> getExpendDataForUserAppProvCurrency(String urlEndUserId,
+        String appProviderId, BmCurrency bmCurrency);
 
     /**
      * Store the data passed

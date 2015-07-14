@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -47,9 +49,6 @@ import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendLimitDao;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimit;
 import es.tid.fiware.rss.model.BmCurrency;
-import es.tid.fiware.rss.model.BmObCountry;
-import es.tid.fiware.rss.model.BmObCountryId;
-import es.tid.fiware.rss.model.BmService;
 
 /**
  * 
@@ -94,15 +93,10 @@ public class DbeExpendLimitDaoTest {
     @Test
     public void testGetExpenditureLimitInfByUser() {
 
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrencyObCountry("userId01", bmService,
-            "app123456", bmCurrency,
-            bmObCountry);
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrency("userId01",
+            "app123456", bmCurrency);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 6);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -121,12 +115,8 @@ public class DbeExpendLimitDaoTest {
 
     @Test
     public void testGetExpenditureLimitInfByUserNullCurrency() {
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrencyObCountry("userId01", bmService,
-            "app123456", null, bmObCountry);
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrency("userId01",
+            "app123456", null);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 6);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -146,15 +136,10 @@ public class DbeExpendLimitDaoTest {
     @Test
     public void testOrderedGetExpenditureLimitInfByUser() {
 
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        HashMap<String, List<DbeExpendLimit>> h = expLimitDao.getOrdExpLimitsForUserAppProvCurrencyObCountry(
-            "userId01", bmService,
-            "app123456", bmCurrency, bmObCountry);
+        HashMap<String, List<DbeExpendLimit>> h = expLimitDao.getOrdExpLimitsForUserAppProvCurrency(
+            "userId01","app123456", bmCurrency);
 
         Assert.assertTrue("List founds", h != null && h.size() == 4);
         List<DbeExpendLimit> l = h.get(DbeExpendLimitDao.USER_APP_PROV_KEY);
@@ -212,14 +197,10 @@ public class DbeExpendLimitDaoTest {
 
     @Test
     public void getExpendLimitsByProviderUserService() {
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
         BmCurrency bmCurrency = new BmCurrency();
-        bmCurrency.setNuCurrencyId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(bmService,
-            "app123456", "userId01", bmObCountry, bmCurrency);
+        bmCurrency.setNuCurrencyId(1);;
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(
+            "app123456", "userId01", bmCurrency);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 1);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -238,12 +219,8 @@ public class DbeExpendLimitDaoTest {
 
     @Test
     public void getExpendLimitsByProviderUserServiceNullCurrency() {
-        BmService bmService = new BmService();
-        bmService.setNuServiceId(1);
-        BmObCountry bmObCountry = new BmObCountry();
-        bmObCountry.setId(new BmObCountryId(1, 1));
-        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(bmService,
-            "app123456", "userId01", bmObCountry, null);
+        List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(
+            "app123456", "userId01", null);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 1);
         Iterator<DbeExpendLimit> it = l.iterator();

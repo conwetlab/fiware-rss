@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014,  Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -27,13 +29,10 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import es.tid.fiware.rss.model.BmCurrency;
-import es.tid.fiware.rss.model.BmObCountry;
-import es.tid.fiware.rss.model.BmService;
 import es.tid.fiware.rss.model.DbeAppProvider;
 
 /**
@@ -66,24 +65,10 @@ public class DbeExpendControl implements Serializable {
     @JoinColumn(name = "NU_CURRENCY_ID", updatable = false, insertable = false)
     private BmCurrency bmCurrency;
 
-    // bi-directional many-to-one association to BmObCountry
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "NU_COUNTRY_ID", referencedColumnName = "NU_COUNTRY_ID", updatable = false,
-            insertable = false),
-        @JoinColumn(name = "NU_OB_ID", referencedColumnName = "NU_OB_ID", updatable = false, insertable = false)
-    })
-    private BmObCountry bmObCountry;
-
     // bi-directional many-to-one association to DbeAppProvider
     @ManyToOne
     @JoinColumn(name = "TX_APPPROVIDER_ID", updatable = false, insertable = false)
     private DbeAppProvider dbeAppProvider;
-
-    // bi-directional many-to-one association to BmService
-    @ManyToOne
-    @JoinColumn(name = "NU_SERVICE_ID", updatable = false, insertable = false)
-    private BmService bmService;
 
     public DbeExpendControl() {
     }
@@ -128,22 +113,6 @@ public class DbeExpendControl implements Serializable {
         this.bmCurrency = bmCurrency;
     }
 
-    public BmObCountry getBmObCountry() {
-        return this.bmObCountry;
-    }
-
-    public void setBmObCountry(BmObCountry bmObCountry) {
-        this.bmObCountry = bmObCountry;
-    }
-
-    public BmService getBmService() {
-        return this.bmService;
-    }
-
-    public void setBmService(BmService bmService) {
-        this.bmService = bmService;
-    }
-
     public DbeAppProvider getDbeAppProvider() {
         return this.dbeAppProvider;
     }
@@ -162,8 +131,6 @@ public class DbeExpendControl implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) bmCurrency.getNuCurrencyId();
-        result = prime * result + ((bmObCountry == null) ? 0 : bmObCountry.getId().hashCode());
-        result = prime * result + (int) bmService.getNuServiceId();
         result = prime * result + ((dbeAppProvider == null) ? 0 : dbeAppProvider.getTxAppProviderId().hashCode());
         result = prime * result + ((dtNextPeriodStart == null) ? 0 : dtNextPeriodStart.hashCode());
         result = prime * result + ((ftExpensedAmount == null) ? 0 : ftExpensedAmount.hashCode());
@@ -194,20 +161,6 @@ public class DbeExpendControl implements Serializable {
                 return false;
             }
         } else if (bmCurrency.getNuCurrencyId() != other.bmCurrency.getNuCurrencyId()) {
-            return false;
-        }
-        if (bmObCountry == null) {
-            if (other.bmObCountry != null) {
-                return false;
-            }
-        } else if (!bmObCountry.getId().equals(other.bmObCountry.getId())) {
-            return false;
-        }
-        if (bmService == null) {
-            if (other.bmService != null) {
-                return false;
-            }
-        } else if (bmService.getNuServiceId() != other.bmService.getNuServiceId()) {
             return false;
         }
         if (dbeAppProvider == null) {

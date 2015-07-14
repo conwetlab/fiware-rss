@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -46,6 +48,7 @@ import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimit;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimitPK;
 import es.tid.fiware.rss.expenditureLimit.processing.ProcessingLimitService;
 import es.tid.fiware.rss.expenditureLimit.processing.ProcessingLimitUtil;
+import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 
 /**
@@ -59,9 +62,6 @@ public class ProcessingLimitUtilTest {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(ProcessingLimitUtilTest.class);
-
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     private DatabaseLoader databaseLoader;
@@ -98,12 +98,14 @@ public class ProcessingLimitUtilTest {
         DbeExpendLimitPK id = new DbeExpendLimitPK();
         id.setTxElType(ProcessingLimitService.DAY_PERIOD_TYPE);
         control.setId(id);
+
         Date currentDate = new Date();
         control.setDtNextPeriodStart(currentDate);
         ProcessingLimitUtilTest.logger.debug("Current date: {}", control.getDtNextPeriodStart().toString());
         utils.updateNextPeriodToStart(control);
         ProcessingLimitUtilTest.logger.debug("New date: {}", control.getDtNextPeriodStart().toString());
         Assert.assertTrue(currentDate.compareTo(control.getDtNextPeriodStart()) < 0);
+
         // Week
         id.setTxElType(ProcessingLimitService.WEEK_TYPE);
         control.setId(id);
@@ -113,6 +115,7 @@ public class ProcessingLimitUtilTest {
         utils.updateNextPeriodToStart(control);
         ProcessingLimitUtilTest.logger.debug("New date: {}", control.getDtNextPeriodStart().toString());
         Assert.assertTrue(currentDate.compareTo(control.getDtNextPeriodStart()) < 0);
+
         // Month
         id.setTxElType(ProcessingLimitService.MONTH_PERIOD_TYPE);
         control.setId(id);
@@ -149,80 +152,38 @@ public class ProcessingLimitUtilTest {
         DbeExpendControl control = new DbeExpendControl();
         control.setFtExpensedAmount(new BigDecimal(0));
         DbeTransaction tx = new DbeTransaction();
-        tx.setFtInternalTotalAmount(new BigDecimal(4));
+
+        tx.setFtChargedAmount(new BigDecimal(4));
         tx.setTcTransactionType(Constants.CHARGE_TYPE);
         BigDecimal total = utils.updateAcccumalateValue(control, tx);
         Assert.assertTrue(new BigDecimal(4).compareTo(total) == 0);
+
         tx.setTcTransactionType(Constants.REFUND_TYPE);
         total = utils.updateAcccumalateValue(control, tx);
         Assert.assertTrue(new BigDecimal(-4).compareTo(total) == 0);
-        tx.setFtInternalTotalAmount(null);
-        tx.setFtInternalAmount(new BigDecimal(3));
-        tx.setFtInternalTaxAmount(new BigDecimal(2));
-        total = utils.updateAcccumalateValue(control, tx);
-        Assert.assertTrue(new BigDecimal(-5).compareTo(total) == 0);
-        tx.setFtChargedTotalAmount(new BigDecimal(7));
-        total = utils.updateAcccumalateValue(control, tx);
-        Assert.assertTrue(new BigDecimal(-7).compareTo(total) == 0);
     }
 
     @Test
     public void createControl() throws Exception {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setFtInternalTotalAmount(new BigDecimal(4));
+        tx.setFtChargedAmount(new BigDecimal(4));
         tx.setTxEndUserId("endUserId");
-        tx.setTxAppProvider("providerId");
+
+        DbeAppProvider provider = new DbeAppProvider();
+        provider.setTxAppProviderId("providerId");
+        tx.setAppProvider(provider);
+
         DbeExpendLimit limit = new DbeExpendLimit();
         DbeExpendLimitPK id = new DbeExpendLimitPK();
         id.setTxElType(ProcessingLimitService.DAY_PERIOD_TYPE);
         limit.setId(id);
+
         DbeExpendControl control = utils.createControl(tx, limit);
         Assert.assertEquals(tx.getTxEndUserId(), control.getId().getTxEndUserId());
         Assert.assertTrue(new BigDecimal(0).compareTo(control.getFtExpensedAmount()) == 0);
         Assert.assertEquals(ProcessingLimitService.DAY_PERIOD_TYPE, control.getId().getTxElType());
-        Assert.assertEquals(tx.getTxAppProvider(), control.getId().getTxAppProviderId());
+        Assert.assertEquals(tx.getAppProvider().getTxAppProviderId(), control.getId().getTxAppProviderId());
         Assert.assertEquals(tx.getBmCurrency().getNuCurrencyId(), control.getId().getNuCurrencyId());
-        Assert.assertEquals(tx.getBmService().getNuServiceId(), control.getId().getNuServiceId());
-    }
-
-    /**
-     * Test the createControl function with no endUserId
-     */
-    @Test
-    public void createControlNoEndUser() {
-        DbeExpendLimit limit = new DbeExpendLimit();
-        DbeExpendLimitPK id = new DbeExpendLimitPK();
-        id.setTxElType(ProcessingLimitService.DAY_PERIOD_TYPE);
-        limit.setId(id);
-        DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setTxEndUserId(null);
-        DbeExpendControl control;
-        try {
-            control = utils.createControl(tx, limit);
-            Assert.assertEquals(tx.getTxGlobalUserId(), control.getId().getTxEndUserId());
-        } catch (RSSException e) {
-            Assert.fail("Exception received: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Test the createControl function with Empty endUserId
-     */
-    @Test
-    public void createControlEmptyEndUser() {
-        DbeExpendLimit limit = new DbeExpendLimit();
-        DbeExpendLimitPK id = new DbeExpendLimitPK();
-        id.setTxElType(ProcessingLimitService.DAY_PERIOD_TYPE);
-        limit.setId(id);
-        DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setTxEndUserId(" ");
-        DbeExpendControl control;
-        try {
-            control = utils.createControl(tx, limit);
-            Assert.assertEquals(tx.getTxGlobalUserId(), control.getId().getTxEndUserId());
-        } catch (RSSException e) {
-            Assert.fail("Exception received: " + e.getMessage());
-        }
     }
 
     @Test
@@ -280,28 +241,8 @@ public class ProcessingLimitUtilTest {
     public void getValueToAddFromTxInternalAndNotTax() {
         BigDecimal txAmount = new BigDecimal("10.10");
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setFtChargedAmount(null);
+        tx.setFtChargedAmount(txAmount);
         tx.setFtChargedTaxAmount(null);
-        tx.setFtInternalTotalAmount(null);
-        tx.setFtInternalAmount(txAmount);
-        tx.setFtInternalTaxAmount(null);
-        BigDecimal value = utils.getValueToAddFromTx(tx);
-        Assert.assertEquals("Amount restored", value.intValue(), txAmount.intValue());
-    }
-
-    /**
-     * Test the function to get requested total amount.
-     */
-    @Test
-    public void getValueToAddFromTxRequestedTotal() {
-        BigDecimal txAmount = new BigDecimal("10.10");
-        DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setFtChargedAmount(null);
-        tx.setFtChargedTaxAmount(null);
-        tx.setFtInternalTotalAmount(null);
-        tx.setFtInternalAmount(null);
-        tx.setFtInternalTaxAmount(null);
-        tx.setFtRequestTotalAmount(txAmount);
         BigDecimal value = utils.getValueToAddFromTx(tx);
         Assert.assertEquals("Amount restored", value.intValue(), txAmount.intValue());
     }
@@ -314,35 +255,10 @@ public class ProcessingLimitUtilTest {
         BigDecimal txAmount = new BigDecimal("10.10");
         BigDecimal txTaxAmount = new BigDecimal("0.60");
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setFtChargedAmount(null);
-        tx.setFtChargedTaxAmount(null);
-        tx.setFtInternalTotalAmount(null);
-        tx.setFtInternalAmount(null);
-        tx.setFtInternalTaxAmount(null);
-        tx.setFtRequestTotalAmount(null);
-        tx.setFtRequestAmount(txAmount);
-        tx.setFtRequestTaxAmount(txTaxAmount);
+        tx.setFtChargedAmount(txAmount);
+        tx.setFtChargedTaxAmount(txTaxAmount);
         BigDecimal value = utils.getValueToAddFromTx(tx);
         Assert.assertEquals("Amount restored", value.intValue(), txAmount.intValue() + txTaxAmount.intValue());
-    }
-
-    /**
-     * Test the function to get requested amount.
-     */
-    @Test
-    public void getValueToAddFromTxRequestedAmount() {
-        BigDecimal txAmount = new BigDecimal("10.10");
-        DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
-        tx.setFtChargedAmount(null);
-        tx.setFtChargedTaxAmount(null);
-        tx.setFtInternalTotalAmount(null);
-        tx.setFtInternalAmount(null);
-        tx.setFtInternalTaxAmount(null);
-        tx.setFtRequestTotalAmount(null);
-        tx.setFtRequestAmount(txAmount);
-        tx.setFtRequestTaxAmount(null);
-        BigDecimal value = utils.getValueToAddFromTx(tx);
-        Assert.assertEquals("Amount restored", value.intValue(), txAmount.intValue());
     }
 
     /**
@@ -354,12 +270,6 @@ public class ProcessingLimitUtilTest {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
         tx.setFtChargedAmount(null);
         tx.setFtChargedTaxAmount(null);
-        tx.setFtInternalTotalAmount(null);
-        tx.setFtInternalAmount(null);
-        tx.setFtInternalTaxAmount(null);
-        tx.setFtRequestTotalAmount(null);
-        tx.setFtRequestAmount(null);
-        tx.setFtRequestTaxAmount(null);
         BigDecimal value = utils.getValueToAddFromTx(tx);
         Assert.assertEquals("Amount restored", value.intValue(), txAmount.intValue());
     }
