@@ -19,7 +19,7 @@
     var fillModels = function (models) {
         for (var i = 0; i < models.length; i++) {
             // Build table for RS model
-            var tableTmpl = '<table class="table table-bordered table-responsive table-condensed">';
+            var tableTmpl = '<table class="table table-bordered table-responsive table-condensed big-margin">';
             tableTmpl += '<tr><th>Algorithm</th><th>Product Class</th><th>Store</th>';
             tableTmpl += '<th>Store Value</th><th>Provider</th><th>Provider Value</th></tr>';
             tableTmpl += '</table>';

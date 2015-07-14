@@ -24,7 +24,7 @@
         <div class="container-fluid">
             <div class="col-md-6">
                 <table class="table table-bordered table-responsive
-                       table-condensed" id="providers">
+                       table-condensed big-margin" id="providers">
                     <tr>
                         <th>Provider ID</th>
                         <th>Provider Name</th>
