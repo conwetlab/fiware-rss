@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -85,6 +87,11 @@ public enum UNICAExceptionType implements InterfaceExceptionType {
      * Polling over a resource identifier which does not exist.
      */
     NON_EXISTENT_RESOURCE_ID("SVC1006", "Resource %s does not exist", HttpStatus.NOT_FOUND),
+
+    /**
+     * The provided resource already exists
+     */
+    RESOURCE_ALREADY_EXISTS("SVC1007", "Resource already exists: %s", HttpStatus.CONFLICT),
 
     /***
      * Requested operation failed because it couldn’t be charged for a quota problem.

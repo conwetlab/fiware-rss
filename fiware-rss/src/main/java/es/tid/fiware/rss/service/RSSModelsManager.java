@@ -192,9 +192,9 @@ public class RSSModelsManager {
      * 
      * @param rssModel
      * @return
-     * @throws Exception
+     * @throws RSSException
      */
-    public RSSModel createRssModel(RSSModel rssModel) throws Exception {
+    public RSSModel createRssModel(RSSModel rssModel) throws RSSException {
         logger.debug("Into createRssModel() method");
 
         // check valid rssModel
@@ -213,7 +213,12 @@ public class RSSModelsManager {
         // Update provider model
         this.appProviderDao.update(model.getModelOwner());
         // Save new RS model into database
-        this.revenueShareConfDao.create(model);
+        try {
+            this.revenueShareConfDao.create(model);
+        } catch (org.hibernate.NonUniqueObjectException e) {
+            String[] args = {"A model with the same Product Class already exists"};
+            throw new RSSException(UNICAExceptionType.RESOURCE_ALREADY_EXISTS, args);
+        }
         // Save model provider relationships for stakeholders
         for(ModelProvider st: model.getStakeholders()) {
             this.modelProviderDao.create(st);
