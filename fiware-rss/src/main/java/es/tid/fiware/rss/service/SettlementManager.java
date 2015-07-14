@@ -41,15 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
-import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
-import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
-import es.tid.fiware.rss.model.DbeAggregatorAppProviderId;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
-import es.tid.fiware.rss.model.RSSProvider;
-import es.tid.fiware.rss.model.SetRevenueShareConf;
 
 @Service
 @Transactional
@@ -68,15 +63,8 @@ public class SettlementManager {
      * 
      */
     @Autowired
-    /**
-     * 
-     */
     private DbeAppProviderDao appProviderDao;
-    /**
-     * 
-     */
-    @Autowired
-    private SetRevenueShareConfDao revenueShareConfDao;
+
     /**
      * 
      */
@@ -256,86 +244,6 @@ public class SettlementManager {
             transactions = transactionDao.getAll();
         }
         return transactions;
-    }
-
-    /**
-     * Get providers from the DB in a format ready to be serialized
-     * @param aggregatorId
-     * @return
-     * @throws RSSException 
-     */
-    public List<RSSProvider> getAPIProviders(String aggregatorId) throws RSSException {
-        List<RSSProvider> apiProviders = new ArrayList<>();
-        List<DbeAppProvider> providers = this.getProviders(aggregatorId);
-
-        for(DbeAppProvider p: providers) {
-            RSSProvider apiProvider = new RSSProvider();
-            // Get aggregator of the provider
-            apiProvider.setAggregatorId(
-                    aggregatorAppProviderDao.
-                            getDbeAggregatorAppProviderByProviderId(p.getTxAppProviderId()).
-                            getId().getTxEmail());
-
-            apiProvider.setProviderId(p.getTxAppProviderId());
-            apiProvider.setProviderName(p.getTxName());
-            apiProviders.add(apiProvider);
-        }
-        return apiProviders;
-    }
-
-    /**
-     * Get providers from bbdd.
-     * 
-     * @param aggregatorId
-     * @return
-     * @throws RSSException
-     */
-    public List<DbeAppProvider> getProviders(String aggregatorId) throws RSSException {
-        List<DbeAppProvider> providers = new ArrayList<>();
-
-        if (null != aggregatorId && !aggregatorId.isEmpty()) {
-            List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-                .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-            if (null != provsAgg && provsAgg.size() > 0) {
-                for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    providers.add(provAgg.getDbeAppProvider());
-                }
-            }
-        } else {
-            providers = appProviderDao.getAll();
-        }
-        return providers;
-    }
-
-    /**
-     * Create provider a new provider for a given aggregator.
-     * 
-     * @param providerId
-     * @param providerName
-     * @param aggregatorId
-     */
-    public void runCreateProvider(String providerId, String providerName,
-            String aggregatorId) {
-
-        logger.debug("Creating provider: {}", providerId);
-
-        // Build new Provider entity
-        DbeAppProvider provider = new DbeAppProvider();
-        provider.setTxAppProviderId(providerId);
-        provider.setTxName(providerName);
-
-        // Create provider
-        appProviderDao.create(provider);
-
-        // If an aggregator id has been specified create the aggregator provider
-        if (null != aggregatorId && !aggregatorId.isEmpty()) {
-            DbeAggregatorAppProvider object = new DbeAggregatorAppProvider();
-            DbeAggregatorAppProviderId id = new DbeAggregatorAppProviderId();
-            object.setId(id);
-            id.setTxAppProviderId(providerId);
-            id.setTxEmail(aggregatorId);
-            aggregatorAppProviderDao.create(object);
-        }
     }
 
     /**

@@ -35,7 +35,7 @@ import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.RSSProvider;
 import es.tid.fiware.rss.model.RSUser;
-import es.tid.fiware.rss.service.SettlementManager;
+import es.tid.fiware.rss.service.ProviderManager;
 import es.tid.fiware.rss.service.UserManager;
 
 /**
@@ -47,7 +47,7 @@ import es.tid.fiware.rss.service.UserManager;
 public class ProviderService {
 
     @Autowired
-    SettlementManager settlementManager;
+    ProviderManager providerManager;
 
     @Autowired
     UserManager userManager;
@@ -71,7 +71,7 @@ public class ProviderService {
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
         // Create a new provider for the store represented by the User (AggregatorID)
-        settlementManager.runCreateProvider(
+        providerManager.createProvider(
             providerInfo.getProviderId(),
             providerInfo.getProviderName(),
             providerInfo.getAggregatorId());
@@ -98,7 +98,7 @@ public class ProviderService {
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
 
-        List<RSSProvider> providers = settlementManager.getAPIProviders(effectiveAggregator);
+        List<RSSProvider> providers = providerManager.getAPIProviders(effectiveAggregator);
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
         rb.entity(providers);
         return rb.build();

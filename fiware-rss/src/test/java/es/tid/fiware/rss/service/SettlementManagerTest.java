@@ -46,7 +46,6 @@ import es.tid.fiware.rss.common.test.DatabaseLoader;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
-import es.tid.fiware.rss.model.SetRevenueShareConf;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
@@ -69,11 +68,11 @@ public class SettlementManagerTest {
     /**
      * 
      */
-    private String providerId = "123456";
+    private final String providerId = "123456";
     /**
      * 
      */
-    private String aggregatorId = "mail@mail.com";
+    private final String aggregatorId = "mail@mail.com";
     /**
      * 
      */
@@ -177,24 +176,6 @@ public class SettlementManagerTest {
 
     /**
      * 
-     * @throws Exception
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void getProvidersTest() throws Exception {
-        logger.debug("run all providers");
-        List<DbeAppProvider> providers = settlementManager.getProviders(null);
-        Assert.assertNotNull(providers);
-        logger.debug("run aggregatorId");
-        providers = settlementManager.getProviders(aggregatorId);
-        Assert.assertNotNull(providers);
-        logger.debug("run no aggregatorId");
-        providers = settlementManager.getProviders("nonExistingAggregatorId");
-        Assert.assertTrue(providers.size() == 0);
-    }
-
-    /**
-     * 
      */
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -202,24 +183,6 @@ public class SettlementManagerTest {
         logger.debug("runClean");
         try {
             settlementManager.runClean("appProvider");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-
-    }
-
-    /**
-     * 
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void CreateProviderTest() {
-        logger.debug("CreateProviderTest");
-        try {
-            logger.debug("run with aggregator");
-            settlementManager.runCreateProvider("newProvider1", "providerName", null);
-            logger.debug("run without aggregator");
-            settlementManager.runCreateProvider("newProvider12", "providerName", aggregatorId);
         } catch (Exception e) {
             Assert.fail();
         }
