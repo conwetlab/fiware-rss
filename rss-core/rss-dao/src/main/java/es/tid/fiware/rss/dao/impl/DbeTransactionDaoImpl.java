@@ -125,8 +125,8 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     @Override
     public List<DbeTransaction> getTransactionsByProviderId(String providerId) {
         DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByProviderId..");
-        String hql = "from DbeTransaction l where l.app_provider.txAppProviderId='" + providerId + "'"
-                + " l.tx_state='pending' order by l.correlation_number";
+        String hql = "from DbeTransaction l where l.appProvider.txAppProviderId='" + providerId + "'"
+                + " and l.state='pending' order by l.txPbCorrelationId";
 
         return listDbeTransactionQuery(hql);
     }
@@ -134,8 +134,8 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     @Override
     public List<DbeTransaction> getTransactionByAggregatorId(String aggregatorId) {
         DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByAggregatorId..");
-        String hql = "from DbeTransaction l where l.source_aggregator.txEmail='" + aggregatorId + "'"
-                + " l.tx_state='pending' order by l.correlation_number";
+        String hql = "from DbeTransaction l where l.cdrSource.txEmail='" + aggregatorId + "'"
+                + " and l.state='pending' order by l.txPbCorrelationId";
 
         return listDbeTransactionQuery(hql);
     }
@@ -143,7 +143,7 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     @Override
     public List<DbeTransaction> getTransactions() {
         DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByAggregatorId..");
-        String hql = "from DbeTransaction l where l.tx_state='pending'";
+        String hql = "from DbeTransaction l where l.state='pending'";
         return listDbeTransactionQuery(hql);
     }
 
