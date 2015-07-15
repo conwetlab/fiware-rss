@@ -21,7 +21,8 @@
         'AGGREGATOR_COLLECTION': '/rss/aggregators',
         'PROVIDER_COLLECTION': '/rss/providers',
         'ALGORITHM_COLLECTION': '/rss/algorithms',
-        'RSMODEL_COLLECTION': '/rss/models'
+        'RSMODEL_COLLECTION': '/rss/models',
+        'CDR_COLLECTION': '/rss/cdrs'
     };
     
     EndpointManager = function EndpointManager () {

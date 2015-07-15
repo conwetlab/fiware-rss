@@ -3,49 +3,43 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
-<head>
-<%@include file="/jspf/appResources.jsp"%>
-<title>FIWARE RSS - Settlement</title>
-</head>
-<body>
+    <head>
+        <%@include file="/jspf/appResources.jsp"%>
+        <title>FIWARE RSS - Settlement</title>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/EndpointManager.js"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/transactions.js"></script>
+        <script type="text/javascript">
+            CONTEXT_PATH="<%=request.getContextPath()%>";
+        </script>
+    </head>
+    <body>
+        <%@  include file="/jspf/header.jsp"%> 
+        <%@  include file="/jspf/footer.jspf"%>
 
-	<%@  include file="/jspf/header.jsp"%> 
-    <%@  include file="/jspf/footer.jspf"%>
+        <a class="btn btn-default back" href="${contextPath}">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+            Back
+        </a>
 
-    <a class="btn btn-default back" href="${contextPath}">
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        Back
-    </a>
-	<div style="margin-left:40px;">
-	  <table border="1">
-        <tr>
-          <th>Provider ID</th>
-          <th>User ID</th>
-          <th>Tx Type</th>
-          <th>App Id</th>
-          <th>Request Time</th>
-          <th>Ref Code</th>
-          <th>Amount</th>
-          <th>Tax Amount</th>
-          <th>Total Amount</th>
-          <th>Description</th>
-        </tr>
-		<c:forEach var="trans" items="${transactions}">
-		  <tr>
-		    <td>${trans.txAppProvider}</td>
-          	<td>${trans.txEndUserId}</td>
-            <td>${trans.tcTransactionType}</td>
-            <td>${trans.txApplicationId}</td>
-            <td>${trans.tsRequest}</td>
-            <td>${trans.txReferenceCode}</td>
-            <td>${trans.ftRequestAmount}</td>
-            <td>${trans.ftRequestTaxAmount}</td>
-            <td>${trans.ftRequestTotalAmount}</td>
-            <td>${trans.txRequestAmountDesc}</td>
-		  </tr>
-		</c:forEach>
+        <div class="container-fluid">
+            <div class="col-md-8">
+                <table class="table table-bordered table-responsive
+                       table-condensed big-margin" id="txs">
+                    <tr>
+                        <th>Product Class</th>
+                        <th>Provider ID</th>
+                        <th>User ID</th>
+                        <th>Tx Type</th>
+                        <th>App Id</th>
+                        <th>Request Time</th>
+                        <th>Ref Code</th>
+                        <th>Amount</th>
+                        <th>Tax Amount</th>
+                        <th>Currency</th>
+                        <th>Description</th>
+                    </tr>
 		</table>
-	</div>
-
-</body>
+            </div>
+        </div>
+    </body>
 </html>
