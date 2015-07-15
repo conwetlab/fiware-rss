@@ -19,6 +19,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
         <intercept-url pattern="/callback" access="hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_USER')"/>
         <logout logout-url="/logout" logout-success-url="${config.baseUrl}${config.logoutPath}" delete-cookies="JSESSIONID" invalidate-session="true" />
         <intercept-url pattern="/**" access="hasRole('USER')" />
+        <csrf disabled="true"/>
     </http>
 
     <!-- entry points -->
@@ -43,17 +44,17 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
     </beans:bean>
 
      <!-- common to all clients -->
+     <beans:bean id="apiHeaderFilter" class="es.tid.fiware.rss.oauth.service.FIWAREHeaderAuthenticationFilter">
+        <beans:constructor-arg value="/rss/" index="0" />
+        <beans:constructor-arg value="Authorization" index="1"/>
+        <beans:property name="client" ref="fiwareClient" />
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+
     <beans:bean id="clientFilter" class="org.pac4j.springframework.security.web.ClientAuthenticationFilter">
         <beans:constructor-arg value="${config.callbackPath}" />
         <beans:property name="clients" ref="clients" />
         <beans:property name="sessionAuthenticationStrategy" ref="sas" />
-        <beans:property name="authenticationManager" ref="authenticationManager" />
-    </beans:bean>
-
-    <beans:bean id="apiHeaderFilter" class="es.tid.fiware.rss.oauth.service.FIWAREHeaderAuthenticationFilter">
-        <beans:constructor-arg value="/rss/" index="0" />
-        <beans:constructor-arg value="Authentication" index="1"/>
-        <beans:property name="client" ref="fiwareClient" />
         <beans:property name="authenticationManager" ref="authenticationManager" />
     </beans:bean>
 

@@ -18,13 +18,16 @@
 package es.tid.fiware.rss.service;
 
 import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
+import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAggregatorAppProviderId;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.RSSProvider;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +54,9 @@ public class ProviderManager {
      */
     @Autowired
     private DbeAppProviderDao appProviderDao;
+
+    @Autowired
+    private DbeAggregatorDao aggregatorDao;
 
     /**
      * Get providers from the DB in a format ready to be serialized
@@ -102,33 +108,61 @@ public class ProviderManager {
     }
 
     /**
-     * Create provider a new provider for a given aggregator.
+     * Create a new provider for a given aggregator.
      * 
      * @param providerId
      * @param providerName
      * @param aggregatorId
+     * @throws RSSException
      */
     public void createProvider(String providerId, String providerName,
-            String aggregatorId) {
+            String aggregatorId) throws RSSException {
 
         logger.debug("Creating provider: {}", providerId);
 
+        // Validate required fields
+        if (providerId == null || providerId.isEmpty()) {
+            String[] args = {"ProviderID field is required for creating a provider"};
+            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+        }
+
+        if (providerName == null || providerName.isEmpty()) {
+            String[] args = {"ProviderName field is required for creating a provider"};
+            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+        }
+
+        if (aggregatorId == null || aggregatorId.isEmpty()) {
+            String[] args = {"AggregatorID field is required for creating a provider"};
+            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+        }
+
+        // Check that the aggregator exists
+        if (this.aggregatorDao.getById(aggregatorId) == null) {
+            String[] args = {"The given aggregator does not exists"};
+            throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+        }
+        
         // Build new Provider entity
         DbeAppProvider provider = new DbeAppProvider();
         provider.setTxAppProviderId(providerId);
         provider.setTxName(providerName);
+        provider.setTxCorrelationNumber(0);
+        provider.setTxTimeStamp(new Date());
 
         // Create provider
-        appProviderDao.create(provider);
-
-        // If an aggregator id has been specified create the aggregator provider
-        if (null != aggregatorId && !aggregatorId.isEmpty()) {
-            DbeAggregatorAppProvider object = new DbeAggregatorAppProvider();
-            DbeAggregatorAppProviderId id = new DbeAggregatorAppProviderId();
-            object.setId(id);
-            id.setTxAppProviderId(providerId);
-            id.setTxEmail(aggregatorId);
-            aggregatorAppProviderDao.create(object);
+        try {
+            appProviderDao.create(provider);
+        } catch (org.hibernate.NonUniqueObjectException e) {
+            String[] args = {"The given provider already exists"};
+            throw new RSSException(UNICAExceptionType.RESOURCE_ALREADY_EXISTS, args);
         }
+
+        // Create the aggregator provider object
+        DbeAggregatorAppProvider object = new DbeAggregatorAppProvider();
+        DbeAggregatorAppProviderId id = new DbeAggregatorAppProviderId();
+        object.setId(id);
+        id.setTxAppProviderId(providerId);
+        id.setTxEmail(aggregatorId);
+        aggregatorAppProviderDao.create(object);
     }
 }

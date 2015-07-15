@@ -7,9 +7,6 @@
 <html>
     <head>
         <%@include file="/jspf/appResources.jsp"%>
-        <meta name="_csrf" content="${_csrf.token}"/>
-        <!-- default header name is X-CSRF-TOKEN -->
-        <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
         <title>FIWARE RSS - Settlement</title>
         <script type="text/javascript">

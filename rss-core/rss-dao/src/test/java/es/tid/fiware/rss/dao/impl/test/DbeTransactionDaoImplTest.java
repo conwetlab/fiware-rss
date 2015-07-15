@@ -21,10 +21,6 @@
 
 package es.tid.fiware.rss.dao.impl.test;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -168,8 +164,8 @@ public class DbeTransactionDaoImplTest {
     @Transactional
     public void testGetTransactionByTxPbCorrelationId() {
 
-        String txTransactionId = new String("1234");
-        String pbcorrelationid = new String("null");
+        int txTransactionId = 1;
+        Integer pbcorrelationid = 0;
 
         List<DbeTransaction> listDbeTr = dbeTransactionDAO.getTransactionByTxPbCorrelationId(pbcorrelationid);
 
@@ -180,7 +176,7 @@ public class DbeTransactionDaoImplTest {
                 Assert.assertTrue("0 data obtained ", false);
             } else {
                 DbeTransactionDaoImplTest.LOGGER.debug("Obtained:" + listDbeTr.get(0).getTxTransactionId());
-                Assert.assertTrue("0 data obtained ", (listDbeTr.get(0).getTxTransactionId()).equals(txTransactionId));
+                Assert.assertTrue("0 data obtained ", listDbeTr.get(0).getTxTransactionId() == txTransactionId);
             }
         } else {
             DbeTransactionDaoImplTest.LOGGER.error("Obtained nothing is not possible with datatest values");
@@ -191,7 +187,7 @@ public class DbeTransactionDaoImplTest {
     @Test
     @Transactional
     public void testGetTransactionsByProviderId() {
-        String txTransactionId = new String("1234");
+        int txTransactionId = 1;
         String providerId = new String("provider");
 
         List<DbeTransaction> listDbeTr = dbeTransactionDAO.getTransactionsByProviderId(providerId);
@@ -203,7 +199,7 @@ public class DbeTransactionDaoImplTest {
                 Assert.assertTrue("0 data obtained ", false);
             } else {
                 DbeTransactionDaoImplTest.LOGGER.debug("Obtained:" + listDbeTr.get(0).getTxTransactionId());
-                Assert.assertTrue("0 data obtained ", (listDbeTr.get(0).getTxTransactionId()).equals(txTransactionId));
+                Assert.assertTrue("0 data obtained ", listDbeTr.get(0).getTxTransactionId() == txTransactionId);
             }
         } else {
             DbeTransactionDaoImplTest.LOGGER.error("Obtained nothing is not possible with datatest values");
@@ -215,7 +211,7 @@ public class DbeTransactionDaoImplTest {
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testDeleteTransactionsByProviderId() {
-        String txTransactionId = new String("1234");
+        int txTransactionId = 1;
         String providerId = new String("provider");
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(Propagation.REQUIRES_NEW.value());
@@ -227,7 +223,7 @@ public class DbeTransactionDaoImplTest {
         if (listDbeTr != null && listDbeTr.size() > 0) {
             DbeTransactionDaoImplTest.LOGGER.debug("looking result list data....");
             DbeTransactionDaoImplTest.LOGGER.error("Obtained:" + listDbeTr.get(0).getTxTransactionId());
-            Assert.assertTrue("0 data obtained ", (listDbeTr.get(0).getTxTransactionId()).equals(txTransactionId));
+            Assert.assertTrue("0 data obtained ", listDbeTr.get(0).getTxTransactionId() == txTransactionId);
         } else {
             DbeTransactionDaoImplTest.LOGGER.debug("Obtained 0 data is not possible with datatest values");
             Assert.assertTrue("0 data obtained ", true);

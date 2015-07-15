@@ -129,7 +129,6 @@ public class ProcessingLimitServiceTest {
      */
     public static DbeTransaction generateTransaction() {
         DbeTransaction tx = new DbeTransaction();
-        tx.setTxTransactionId("transactionsId");
         tx.setTcTransactionType(Constants.CHARGE_TYPE);
 
         BmCurrency currency = new BmCurrency();

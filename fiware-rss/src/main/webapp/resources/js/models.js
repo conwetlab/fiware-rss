@@ -20,17 +20,12 @@
     var endpointManager = new EndpointManager();
     var currentProviders = [];
     var stakeholders = [];
-    var header = $("meta[name='_csrf_header']").attr("content");
-    var token = $("meta[name='_csrf']").attr("content");
 
     var makeRequest = function makeRequest(url, callback) {
         // Get aggregators
         $.ajax({
             url: url,
-            dataType: 'json',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(header, token);
-            }
+            dataType: 'json'
         }).done(callback);
     };
 
@@ -198,9 +193,6 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header, token);
-                },
                 error: function (xhr) {
                     var resp = xhr.responseJSON;
                     $('#msg-container .modal-header h3').text('Error');

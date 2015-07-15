@@ -58,7 +58,7 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
 
 
     @Override
-    public List<DbeTransaction> getTransactionByTxPbCorrelationId(String pbCorrelationId) {
+    public List<DbeTransaction> getTransactionByTxPbCorrelationId(Integer pbCorrelationId) {
         String hql = "from DbeTransaction as trans where trans.txPbCorrelationId=:correlation";
         List<DbeTransaction> resultList;
         try {
@@ -125,19 +125,26 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     @Override
     public List<DbeTransaction> getTransactionsByProviderId(String providerId) {
         DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByProviderId..");
-        String hql = "from DbeTransaction l where l.app_provider.txAppProvider='" + providerId + "'";
-        try {
-            List<DbeTransaction> txs = listDbeTransactionQuery(hql);
-            if (txs.isEmpty()) {
-                DbeTransactionDaoImpl.LOGGER.debug("There is no data");
-                return null;
-            } else {
-                return txs;
-            }
-        } catch (Exception e) {
-            DbeTransactionDaoImpl.LOGGER.error("Error db", e);
-            return null;
-        }
+        String hql = "from DbeTransaction l where l.app_provider.txAppProviderId='" + providerId + "'"
+                + " l.tx_state='pending' order by l.correlation_number";
+
+        return listDbeTransactionQuery(hql);
+    }
+
+    @Override
+    public List<DbeTransaction> getTransactionByAggregatorId(String aggregatorId) {
+        DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByAggregatorId..");
+        String hql = "from DbeTransaction l where l.source_aggregator.txEmail='" + aggregatorId + "'"
+                + " l.tx_state='pending' order by l.correlation_number";
+
+        return listDbeTransactionQuery(hql);
+    }
+
+    @Override
+    public List<DbeTransaction> getTransactions() {
+        DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByAggregatorId..");
+        String hql = "from DbeTransaction l where l.tx_state='pending'";
+        return listDbeTransactionQuery(hql);
     }
 
     /* Private Methods */
@@ -150,13 +157,15 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
      */
     private List<DbeTransaction> listDbeTransactionQuery(final String hql) {
         DbeTransactionDaoImpl.LOGGER.debug("listDbeTransactionQuery hql-->" + hql);
-        List list = this.getSession().createQuery(hql).list();
-        List<DbeTransaction> resultList = Collections.checkedList(list, DbeTransaction.class);
-        if (resultList != null) {
-            DbeTransactionDaoImpl.LOGGER.debug("there is something to return");
+        List<DbeTransaction> resultList;
+        try {
+            List list = this.getSession().createQuery(hql).list();
+            resultList = Collections.checkedList(list, DbeTransaction.class);
+        } catch (Exception e) {
+            DbeTransactionDaoImpl.LOGGER.error("Error db", e);
+            return null;
         }
         return resultList;
-
     }
 
 }

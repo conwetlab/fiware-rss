@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,30 +21,31 @@
 
 package es.tid.fiware.rss.ws;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.CDR;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import es.tid.fiware.rss.service.CdrsManager;
+import es.tid.fiware.rss.service.UserManager;
+import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
-@WebService(serviceName = "Cdrs", name = "CdrsService")
-@Path("")
+
+@WebService(serviceName = "cdrs", name = "cdrs")
+@Path("/")
 public class CdrsService {
 
     /***
@@ -50,64 +53,55 @@ public class CdrsService {
      */
     private final Logger logger = LoggerFactory.getLogger(CdrsService.class);
 
-    /**
-     * Information about the context of the application.
-     */
-    @Context
-    private static UriInfo ui;
-
     @Autowired
     private CdrsManager cdrsManager;
-    /**
-     * Oauth manager.
-     */
+
+    @Autowired
+    private UserManager userManager;
 
     /**
-     * receive cdrs.
+     * Web service used to receive new CDRs defining a set of transactions.
      * 
-     * @param authToken
-     *            oauth authentication token.
-     * @param xml
-     *            cdrs file.
-     * @return
-     * @throws Exception
+     * @param cdrs, List of CDR document defining different transactions
+     * @return, A CREATED response
+     * @throws Exception, When a problem occur saving the transactions
      */
     @WebMethod
     @POST
-    @Path("")
-    @Consumes("application/xml")
-    @Produces("application/xml")
-    public Response createCdr(@HeaderParam("X-Auth-Token") final String authToken, String xml) throws Exception {
-        logger.info("createCdr POST Start. Authenctication header: " + authToken);
-        // check security
-        try {
-            InputStream stream = new ByteArrayInputStream(xml.getBytes());
-            OutputStream out = new FileOutputStream(cdrsManager.getFile());
+    @Consumes("application/json")
+    public Response createCdr(List<CDR> cdrs) throws Exception {
+        logger.info("createCdr POST Start.");
 
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while ((read = stream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            stream.close();
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            logger.error("Error saving cdr file: ", e);
-            return Response.serverError().entity(e.getMessage()).build();
-        }
-        logger.debug("XML file saved");
-        try {
-            String error = cdrsManager.runCdrToDB();
-            if (error != null) {
-                return Response.serverError().entity(error).build();
-            }
-        } catch (Exception e) {
-            logger.error("Error running settlement: ", e);
-            return Response.serverError().entity(e.getMessage()).build();
-        }
-        logger.info("createCdr POST: OK");
-        return Response.ok("CDRs saved").build();
+        this.cdrsManager.createCDRs(cdrs);
+        Response.ResponseBuilder rb = Response.status(Response.Status.CREATED.getStatusCode());
+        return rb.build();
     }
 
+    @WebMethod
+    @GET
+    @Produces("application/json")
+    public Response getCDRs(@QueryParam("aggregatorId") String aggregatorId,
+            @QueryParam("providerId") String providerId) throws Exception {
+
+        logger.debug("getCDRs GET start");
+
+        // Validate permissions
+        if (aggregatorId != null && !this.userManager.isAdmin() && 
+                !this.userManager.getCurrentUser().getEmail().equalsIgnoreCase(aggregatorId)) {
+
+            String[] args = {"You are not allowed to retrieve transactions of the Store owned by " + aggregatorId};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
+
+        String effectiveAggregator = aggregatorId;
+        if (!this.userManager.isAdmin()) {
+            effectiveAggregator = this.userManager.getCurrentUser().getEmail();
+        }
+
+        List<CDR> resp = this.cdrsManager.getCDRs(effectiveAggregator, providerId);
+
+        Response.ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
+        rb.entity(resp);
+        return rb.build();
+    }
 }

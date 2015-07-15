@@ -222,8 +222,6 @@ public class BalanceAccumulateManager {
 
         // get currency
         tx.setBmCurrency(checker.checkCurrency(expendControl.getCurrency()));
-        // Use an generic id
-        tx.setTxTransactionId("PursacheAttemp");
         // return tx
         return tx;
     }

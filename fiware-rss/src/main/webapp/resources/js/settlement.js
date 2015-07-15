@@ -22,9 +22,6 @@
 (function () {
 
     var endpointManager = new EndpointManager();
-    // Get csrf token
-    var header = $("meta[name='_csrf_header']").attr("content");
-    var token = $("meta[name='_csrf']").attr("content");
 
     function launchSettlement(aggregatorId){
     	dateFrom = document.getElementById("dateFrom").value;
@@ -95,9 +92,6 @@
             contentType: "application/json",
             method: 'POST',
             data: JSON.stringify(providerData),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(header, token);
-            }
         }).done(function () {
             location.reload();
         });
@@ -125,9 +119,6 @@
             contentType: "application/json",
             method: 'POST',
             data: JSON.stringify(aggregatorData),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(header, token);
-            }
         }).done(function () {
             location.reload();
         });

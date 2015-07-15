@@ -2,7 +2,9 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -87,27 +89,5 @@ public class CdrsManagerTest {
             Assert.fail(e.getMessage());
         }
 
-    }
-
-    /**
-     * Test runCdrToDB method.
-     */
-    @Test
-    public void runCdrToDB() throws IOException, InterruptedException {
-        Process p = Mockito.mock(Process.class);
-        Runtime runtime = Mockito.mock(Runtime.class);
-        Mockito.when(runtime.exec(Matchers.any(String.class))).thenReturn(p);
-        ReflectionTestUtils.setField(cdrsManager, "runtime", runtime);
-        InputStream inputStream = new ByteArrayInputStream("OK".getBytes());
-        Mockito.when(p.getInputStream()).thenReturn(inputStream);
-        Mockito.when(p.waitFor()).thenReturn(0);
-        String result = cdrsManager.runCdrToDB();
-        Assert.assertNull(result);
-        // Error
-        inputStream = new ByteArrayInputStream("ERROR".getBytes());
-        Mockito.when(p.getInputStream()).thenReturn(inputStream);
-        Mockito.when(p.waitFor()).thenReturn(-1);
-        result = cdrsManager.runCdrToDB();
-        Assert.assertEquals("ERROR", result);
     }
 }

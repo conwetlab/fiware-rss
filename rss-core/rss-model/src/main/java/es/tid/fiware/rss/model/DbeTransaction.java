@@ -29,13 +29,14 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.DynamicUpdate;
@@ -46,19 +47,21 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @DynamicUpdate(value=true)
 @DynamicInsert(value=true)
-@Table(name = "dbe_transaction", uniqueConstraints = { @UniqueConstraint(columnNames = { "REFERENCE_CODE", "APPLICATION_ID" }) })
+@Table(name = "dbe_transaction")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DbeTransaction implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
 
-    private String txTransactionId;
+    private int txTransactionId;
     private String txProductClass;
+    private String state;
     private DbeAggregator cdrSource;
-    private String txPbCorrelationId;
+    private Integer txPbCorrelationId;
     private Date tsClientDate;
     private String txApplicationId;
     private String tcTransactionType;
+    private String txEvent;
     private String txReferenceCode;
     private String txOperationNature;
     private BigDecimal ftChargedAmount;
@@ -70,19 +73,22 @@ public class DbeTransaction implements Serializable, Cloneable {
     public DbeTransaction() {        
     }
 
-    public DbeTransaction(String txTransactionId, String txProductClass, DbeAggregator cdrSource,
-            String txPbCorrelationId, Date tsClientDate, String txApplicationId,
-            String tcTransactionType, String txReferenceCode, String txOperationNature,
-            BigDecimal ftChargedAmount, BigDecimal ftChargedTaxAmount, BmCurrency bmCurrency,
-            String txEndUserId, DbeAppProvider appProvider) {
+    public DbeTransaction(int txTransactionId, String txProductClass, String state, 
+            DbeAggregator cdrSource, Integer txPbCorrelationId, Date tsClientDate,
+            String txApplicationId, String tcTransactionType, String txEvent,
+            String txReferenceCode, String txOperationNature, BigDecimal ftChargedAmount,
+            BigDecimal ftChargedTaxAmount, BmCurrency bmCurrency, String txEndUserId,
+            DbeAppProvider appProvider) {
 
         this.txTransactionId = txTransactionId;
         this.txProductClass = txProductClass;
+        this.state = state;
         this.cdrSource = cdrSource;
         this.txPbCorrelationId = txPbCorrelationId;
         this.tsClientDate = tsClientDate;
         this.txApplicationId = txApplicationId;
         this.tcTransactionType = tcTransactionType;
+        this.txEvent = txEvent;
         this.txReferenceCode = txReferenceCode;
         this.txOperationNature = txOperationNature;
         this.ftChargedAmount = ftChargedAmount;
@@ -93,11 +99,12 @@ public class DbeTransaction implements Serializable, Cloneable {
     }
 
     @Id
-    public String getTxTransactionId() {
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    public int getTxTransactionId() {
         return txTransactionId;
     }
 
-    public void setTxTransactionId(String txTransactionId) {
+    public void setTxTransactionId(int txTransactionId) {
         this.txTransactionId = txTransactionId;
     }
 
@@ -106,6 +113,16 @@ public class DbeTransaction implements Serializable, Cloneable {
         return txProductClass;
     }
 
+    @Column(name = "TX_STATE", length=10)
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    
     public void setTxProductClass(String txProductClass) {
         this.txProductClass = txProductClass;
     }
@@ -120,12 +137,12 @@ public class DbeTransaction implements Serializable, Cloneable {
         this.cdrSource = cdrSource;
     }
 
-    @Column(name = "CORRELATION_ID", length = 255)
-    public String getTxPbCorrelationId() {
+    @Column(name = "CORRELATION_ID")
+    public Integer getTxPbCorrelationId() {
         return txPbCorrelationId;
     }
 
-    public void setTxPbCorrelationId(String txPbCorrelationId) {
+    public void setTxPbCorrelationId(Integer txPbCorrelationId) {
         this.txPbCorrelationId = txPbCorrelationId;
     }
 
@@ -148,13 +165,22 @@ public class DbeTransaction implements Serializable, Cloneable {
         this.txApplicationId = txApplicationId;
     }
 
-    @Column(name = "TRANSACTION_TYPE", length=255)
+    @Column(name = "TRANSACTION_TYPE", length=10)
     public String getTcTransactionType() {
         return tcTransactionType;
     }
 
     public void setTcTransactionType(String tcTransactionType) {
         this.tcTransactionType = tcTransactionType;
+    }
+
+    @Column(name = "TRANSACTION_EVENT", length=100)
+    public String getTxEvent() {
+        return txEvent;
+    }
+
+    public void setTxEvent(String txEvent) {
+        this.txEvent = txEvent;
     }
 
     @Column(name = "REFERENCE_CODE", length=150)
@@ -184,7 +210,7 @@ public class DbeTransaction implements Serializable, Cloneable {
         this.ftChargedAmount = ftChargedAmount;
     }
 
-    @Column(name = "CHARGED_TAX_AMOUNT" , precision = 8, scale = 4)
+    @Column(name = "CHARGED_TAX_AMOUNT" , precision = 8, scale = 4, nullable = true)
     public BigDecimal getFtChargedTaxAmount() {
         return ftChargedTaxAmount;
     }

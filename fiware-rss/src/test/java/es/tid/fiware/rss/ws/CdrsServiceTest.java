@@ -97,26 +97,5 @@ public class CdrsServiceTest {
     /**
      * 
      */
-    @Test
-    public void testCreateCdr() throws Exception {
-        logger.debug("Into testCreateCdr test");
-        File file = new File("file");
-        Mockito.when(cdrsManager.runCdrToDB()).thenReturn(null);
-        logger.debug("Error creating file");
-        Response response = cdrsService.createCdr("authToken", "xml");
-        Assert.assertEquals(500, response.getStatus());
-        Mockito.when(cdrsManager.getFile()).thenReturn(file);
-        logger.debug("Normal End");
-        response = cdrsService.createCdr("authToken", "xml");
-        Assert.assertEquals(200, response.getStatus());
-        logger.debug("fail processing");
-        Mockito.when(cdrsManager.runCdrToDB()).thenReturn("ERROR");
-        response = cdrsService.createCdr("authToken", "xml");
-        Assert.assertEquals(500, response.getStatus());
-        logger.debug("Exception processing");
-        Mockito.doThrow(new IOException("Exception")).when(cdrsManager).runCdrToDB();
-        response = cdrsService.createCdr("authToken", "xml");
-        Assert.assertEquals(500, response.getStatus());
-    }
 
 }

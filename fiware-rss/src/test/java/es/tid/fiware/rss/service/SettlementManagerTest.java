@@ -43,7 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
-import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
 

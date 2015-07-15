@@ -23,6 +23,7 @@ import java.util.List;
 
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.model.DbeTransaction;
+import java.math.BigDecimal;
 
 /**
  * 
@@ -36,7 +37,7 @@ public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
      * @param txid
      * @return
      */
-    List<DbeTransaction> getTransactionByTxPbCorrelationId(String pbCorrelationId);
+    List<DbeTransaction> getTransactionByTxPbCorrelationId(Integer pbCorrelationId);
 
     /**
      * Described by the name.
@@ -76,4 +77,7 @@ public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
      */
     List<DbeTransaction> getTransactionsByProviderId(String providerId);
 
+    List<DbeTransaction> getTransactionByAggregatorId(String aggregatorId);
+
+    List<DbeTransaction> getTransactions();
 }

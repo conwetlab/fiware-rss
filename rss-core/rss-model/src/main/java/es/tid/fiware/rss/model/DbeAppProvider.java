@@ -26,6 +26,7 @@
  */
 package es.tid.fiware.rss.model;
 
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -34,6 +35,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -52,6 +55,8 @@ public class DbeAppProvider implements java.io.Serializable {
 
     private String txAppProviderId;
     private String txName;
+    private Integer txCorrelationNumber;
+    private Date txTimeStamp;
     private Set<SetRevenueShareConf> models;
 
     /**
@@ -114,5 +119,22 @@ public class DbeAppProvider implements java.io.Serializable {
         this.models = models;
     }
 
-    
+    @Column(name = "CORRELATION_NUMBER")
+    public Integer getTxCorrelationNumber() {
+        return txCorrelationNumber;
+    }
+
+    public void setTxCorrelationNumber(Integer txCorrelationNumber) {
+        this.txCorrelationNumber = txCorrelationNumber;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "TX_TIME_STAMP", length = 7)
+    public Date getTxTimeStamp() {
+        return txTimeStamp;
+    }
+
+    public void setTxTimeStamp(Date txTimeStamp) {
+        this.txTimeStamp = txTimeStamp;
+    }
 }

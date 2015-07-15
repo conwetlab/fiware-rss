@@ -102,5 +102,4 @@ public class ProxyOAuthFIWARE extends ProxyOAuth20ServiceImpl {
         final Response response = request.send();
         return this.api.getAccessTokenExtractor().extract(response.getBody());
     }
-    
 }

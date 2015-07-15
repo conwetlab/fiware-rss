@@ -18,7 +18,6 @@ package es.tid.fiware.rss.service;
  */
 
 import es.tid.fiware.rss.model.DbeAppProvider;
-import es.tid.fiware.rss.service.ProviderManager;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;

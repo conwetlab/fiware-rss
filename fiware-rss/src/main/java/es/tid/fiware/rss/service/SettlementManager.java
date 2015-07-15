@@ -41,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
+import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.model.CDR;
 import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
