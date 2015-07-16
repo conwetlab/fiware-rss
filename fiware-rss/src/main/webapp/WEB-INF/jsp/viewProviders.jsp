@@ -22,7 +22,7 @@
             Back
         </a>
         <div class="container-fluid">
-            <div class="col-md-6">
+            <div class="col-md-6 col-md-offset-3">
                 <table class="table table-bordered table-responsive
                        table-condensed big-margin" id="providers">
                     <tr>

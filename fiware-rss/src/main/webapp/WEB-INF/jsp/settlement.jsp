@@ -20,11 +20,10 @@
     <body>
         <%@  include file="/jspf/header.jsp"%>
         <%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
-	
-        <div style="margin-left:40px;"><a href="${contextPath}/rss/">RSS API</a></div>
  
         <div class="container-fluid">
-            <div class="col-md-8">
+            <div class="col-md-8 col-md-offset-2">
+                <div><a href="${contextPath}/rss/">RSS API</a></div>
                 <table class="table table-bordered table-responsive
                        table-condensed">
                     <th>
@@ -74,7 +73,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="col-md-8">
+            <div class="col-md-8 col-md-offset-2">
                 <table class="table table-bordered table-responsive
                        table-condensed">
                     <th>
@@ -94,7 +93,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="col-md-8">
+            <div class="col-md-8 col-md-offset-2">
                 <table class="table table-bordered table-responsive
                        table-condensed">
                     <th>
@@ -141,15 +140,14 @@
                         </td>
                     </tr>
                 </table>
+                <div><a href="${pentahoReportsUrl}" target="_blank">View Reports</a></div>
+                <div>
+                    <form action="${contextPath}/logout" method="post">
+                        <input type="submit" class="btn btn-default" value="Log out" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    </form>
+                </div>
             </div>
-        </div>
-
-        <div style="margin-left:40px;"><a href="${pentahoReportsUrl}" target="_blank">View Reports</a></div>
-        <div style="margin-left:40px;">
-            <form action="${contextPath}/logout" method="post">
-                <input type="submit" class="btn btn-default" value="Log out" />
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            </form>
         </div>
     </body>
 </html>

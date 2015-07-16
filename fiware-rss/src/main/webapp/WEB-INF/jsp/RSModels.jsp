@@ -33,7 +33,6 @@
             Back
         </a>
         <div class="container-fluid">
-            <h3>Create Revenue Sharing model</h3>
             <div id="msg-container" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -49,7 +48,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-md-offset-3">
+                <h3>Create Revenue Sharing model</h3>
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label for="algorithm-type" class="col-sm-2 control-label">Algorithm Type</label>
