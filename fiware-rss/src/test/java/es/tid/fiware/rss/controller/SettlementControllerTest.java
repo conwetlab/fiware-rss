@@ -211,7 +211,6 @@ public class SettlementControllerTest {
         Assert.assertEquals("error", response);
         logger.debug("Correct logout");
         ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito.when(settlementManager.runSelectTransactions(Matchers.any(String.class))).thenReturn(null);
         response = controller.viewTransactions("aggregatorId", model);
         Assert.assertEquals("viewTransactions", response);
     }

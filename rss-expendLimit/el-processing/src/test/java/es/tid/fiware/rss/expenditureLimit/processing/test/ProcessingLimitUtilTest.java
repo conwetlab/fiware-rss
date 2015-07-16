@@ -48,7 +48,9 @@ import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimit;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendLimitPK;
 import es.tid.fiware.rss.expenditureLimit.processing.ProcessingLimitService;
 import es.tid.fiware.rss.expenditureLimit.processing.ProcessingLimitUtil;
+import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
+import es.tid.fiware.rss.model.DbeAppProviderId;
 import es.tid.fiware.rss.model.DbeTransaction;
 
 /**
@@ -169,8 +171,16 @@ public class ProcessingLimitUtilTest {
         tx.setFtChargedAmount(new BigDecimal(4));
         tx.setTxEndUserId("endUserId");
 
+        DbeAggregator ag = new DbeAggregator();
+        ag.setTxEmail("test@email.com");
+        ag.setTxName("test");
+
+        DbeAppProviderId pid = new DbeAppProviderId();
+        pid.setTxAppProviderId("providerId");
+        pid.setAggregator(ag);
+
         DbeAppProvider provider = new DbeAppProvider();
-        provider.setTxAppProviderId("providerId");
+        provider.setId(pid);
         tx.setAppProvider(provider);
 
         DbeExpendLimit limit = new DbeExpendLimit();
@@ -182,7 +192,7 @@ public class ProcessingLimitUtilTest {
         Assert.assertEquals(tx.getTxEndUserId(), control.getId().getTxEndUserId());
         Assert.assertTrue(new BigDecimal(0).compareTo(control.getFtExpensedAmount()) == 0);
         Assert.assertEquals(ProcessingLimitService.DAY_PERIOD_TYPE, control.getId().getTxElType());
-        Assert.assertEquals(tx.getAppProvider().getTxAppProviderId(), control.getId().getTxAppProviderId());
+        Assert.assertEquals(tx.getAppProvider().getId().getTxAppProviderId(), control.getId().getTxAppProviderId());
         Assert.assertEquals(tx.getBmCurrency().getNuCurrencyId(), control.getId().getNuCurrencyId());
     }
 

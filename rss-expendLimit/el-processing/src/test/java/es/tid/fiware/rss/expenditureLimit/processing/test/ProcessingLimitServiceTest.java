@@ -60,7 +60,9 @@ import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendControlDao;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendControl;
 import es.tid.fiware.rss.expenditureLimit.processing.ProcessingLimitService;
 import es.tid.fiware.rss.model.BmCurrency;
+import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
+import es.tid.fiware.rss.model.DbeAppProviderId;
 import es.tid.fiware.rss.model.DbeTransaction;
 import java.net.URL;
 import org.dbunit.dataset.IDataSet;
@@ -135,8 +137,16 @@ public class ProcessingLimitServiceTest {
         currency.setNuCurrencyId(1);
         tx.setBmCurrency(currency);
 
+        DbeAggregator ag = new DbeAggregator();
+        ag.setTxEmail("test@email.com");
+        ag.setTxName("test");
+
+        DbeAppProviderId pid = new DbeAppProviderId();
+        pid.setAggregator(ag);
+        pid.setTxAppProviderId("app123456");
+
         DbeAppProvider provider = new DbeAppProvider();
-        provider.setTxAppProviderId("app123456");
+        provider.setId(pid);
 
         tx.setTxEndUserId("txEndUserId");
         tx.setAppProvider(provider);
@@ -153,7 +163,7 @@ public class ProcessingLimitServiceTest {
      */
     private List<DbeExpendControl> getExpenditureControls(DbeTransaction tx) {
     	return controlService.getExpendDataForUserAppProvCurrency(
-                tx.getTxEndUserId(), tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getTxEndUserId(), tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
     }
 
     /**
@@ -271,7 +281,7 @@ public class ProcessingLimitServiceTest {
             tx.setTxEndUserId("userForCreation");
 
             List<DbeExpendControl> controls = controlService.getExpendDataForUserAppProvCurrency(
-                tx.getTxEndUserId(), tx.getAppProvider().getTxAppProviderId(),
+                tx.getTxEndUserId(), tx.getAppProvider().getId().getTxAppProviderId(),
                     tx.getBmCurrency());
 
             Assert.assertTrue(controls.isEmpty());
@@ -284,7 +294,7 @@ public class ProcessingLimitServiceTest {
             transactionManager.commit(status);
 
             controls = controlService.getExpendDataForUserAppProvCurrency(tx.getTxEndUserId(),
-                tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
             Assert.assertNotNull(controls);
             Assert.assertTrue(controls.size() == 3);
@@ -310,7 +320,7 @@ public class ProcessingLimitServiceTest {
         tx.setTxEndUserId("userIdUpdate");
         try {
             List<DbeExpendControl> controlsBefore = controlService.getExpendDataForUserAppProvCurrency(
-                tx.getTxEndUserId(), tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getTxEndUserId(), tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
             Assert.assertNotNull(controlsBefore);
             // Reset dates to current date--> if not test fail
@@ -325,7 +335,7 @@ public class ProcessingLimitServiceTest {
 
             limitService.proccesLimit(tx);
             List<DbeExpendControl> controlsAfter = controlService.getExpendDataForUserAppProvCurrency(
-                tx.getTxEndUserId(), tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getTxEndUserId(), tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
             ProcessingLimitServiceTest.logger.debug("Controls:" + controlsAfter.size());
             for (DbeExpendControl controlInit : controlsBefore) {
@@ -357,7 +367,7 @@ public class ProcessingLimitServiceTest {
         try {
             tx.setFtChargedAmount(new BigDecimal(30));
             List<DbeExpendControl> controlsBefore = controlService.getExpendDataForUserAppProvCurrency(
-                tx.getTxEndUserId(), tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getTxEndUserId(), tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
             // Reset period
             DbeExpendControl control = controlsBefore.get(0);
@@ -376,7 +386,7 @@ public class ProcessingLimitServiceTest {
             limitService.proccesLimit(tx);
 
             List<DbeExpendControl> controlsAfter = controlService.getExpendDataForUserAppProvCurrency(
-                tx.getTxEndUserId(), tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getTxEndUserId(), tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
             boolean found = false;
             for (DbeExpendControl checkControl : controlsAfter) {
@@ -402,8 +412,16 @@ public class ProcessingLimitServiceTest {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
         tx.setTxEndUserId("userId01");
 
+        DbeAggregator ag = new DbeAggregator();
+        ag.setTxEmail("test@email.com");
+        ag.setTxName("test");
+
+        DbeAppProviderId pid = new DbeAppProviderId();
+        pid.setAggregator(ag);
+        pid.setTxAppProviderId("123456");
+
         DbeAppProvider provider = new DbeAppProvider();
-        provider.setTxAppProviderId("123456");
+        provider.setId(pid);
         tx.setAppProvider(provider);
 
         tx.setFtChargedAmount(new BigDecimal("60"));

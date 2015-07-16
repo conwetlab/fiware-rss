@@ -260,9 +260,6 @@ public class SettlementController {
     public String viewTransactions(@QueryParam("aggregatorId") String aggregatorId, ModelMap model) {
         try {
             logger.debug("viewTransactions - Start");
-            // List<String> result = settlementManager.runSelectTransactions();
-            List<DbeTransaction> result = settlementManager.runSelectTransactions(aggregatorId);
-            model.addAttribute("transactions", result);
             return "viewTransactions";
 
         } catch (Exception e) {

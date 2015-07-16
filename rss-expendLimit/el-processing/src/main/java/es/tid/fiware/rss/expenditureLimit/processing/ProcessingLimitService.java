@@ -205,7 +205,7 @@ public class ProcessingLimitService {
     private List<DbeExpendControl> getControls(DbeTransaction tx) throws RSSException {
         // could be end user or globlaUser
         List<DbeExpendControl> controls = expendControlDao.getExpendDataForUserAppProvCurrency(tx.getTxEndUserId(),
-                    tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                    tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
         return controls;
     }
@@ -220,7 +220,7 @@ public class ProcessingLimitService {
         // could be end user or globlaUser
         HashMap<String, List<DbeExpendLimit>> limitsHash = expendLimitDao.
                 getOrdExpLimitsForUserAppProvCurrency(tx.getTxEndUserId(),
-                tx.getAppProvider().getTxAppProviderId(), tx.getBmCurrency());
+                tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
 
         List<DbeExpendLimit> limits = new ArrayList<>();
         limits.addAll(limitsHash.get(DbeExpendLimitDao.USER_APP_PROV_KEY));

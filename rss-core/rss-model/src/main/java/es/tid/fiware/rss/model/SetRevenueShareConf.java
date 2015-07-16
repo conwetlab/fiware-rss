@@ -32,6 +32,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -146,7 +147,9 @@ public class SetRevenueShareConf implements Serializable{
     }
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = DbeAppProvider.class)
-    @JoinColumn(name = "MODEL_OWNER_PROVIDER")
+    @JoinColumns({
+            @JoinColumn(name = "MODEL_OWNER_PROVIDER", referencedColumnName = "TX_APPPROVIDER_ID"),
+            @JoinColumn(name = "AGGRGATOR_ID", referencedColumnName = "TX_AGGREGATOR_ID")})
     public DbeAppProvider getModelOwner() {
         return modelOwner;
     }

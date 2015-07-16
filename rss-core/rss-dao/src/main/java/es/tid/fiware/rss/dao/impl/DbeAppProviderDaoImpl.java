@@ -33,6 +33,8 @@ import org.springframework.stereotype.Repository;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 
@@ -54,5 +56,19 @@ public class DbeAppProviderDaoImpl extends GenericDaoImpl<DbeAppProvider, String
     protected Class<DbeAppProvider> getDomainClass() {
         return DbeAppProvider.class;
     }
+
+    @Override
+    public List<DbeAppProvider> getProvidersByAggregator(String aggregatorId) {
+        String hql = "from DbeAppProvider as p where p.id.aggregator='" + aggregatorId + "'";
+        List<DbeAppProvider> resultList;
+        try {
+            List list = this.getSession().createQuery(hql).list();
+            resultList = Collections.checkedList(list, DbeAppProvider.class);
+        } catch (Exception e) {
+            return null;
+        }
+        return resultList;
+    }
+
 
 }

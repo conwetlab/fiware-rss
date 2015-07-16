@@ -151,7 +151,7 @@ public class ProcessingLimitUtil {
         expendLimitPK.setTxEndUserId(tx.getTxEndUserId());
 
         expendLimitPK.setTxElType(limit.getId().getTxElType());
-        expendLimitPK.setTxAppProviderId(tx.getAppProvider().getTxAppProviderId());
+        expendLimitPK.setTxAppProviderId(tx.getAppProvider().getId().getTxAppProviderId());
         expendLimitPK.setNuCurrencyId(tx.getBmCurrency().getNuCurrencyId());
         control.setId(expendLimitPK);
         control.setFtExpensedAmount(new BigDecimal(0));

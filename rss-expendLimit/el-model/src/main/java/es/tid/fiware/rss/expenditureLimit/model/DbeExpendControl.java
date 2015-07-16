@@ -34,6 +34,7 @@ import javax.persistence.Table;
 
 import es.tid.fiware.rss.model.BmCurrency;
 import es.tid.fiware.rss.model.DbeAppProvider;
+import javax.persistence.JoinColumns;
 
 /**
  * 
@@ -67,7 +68,9 @@ public class DbeExpendControl implements Serializable {
 
     // bi-directional many-to-one association to DbeAppProvider
     @ManyToOne
-    @JoinColumn(name = "TX_APPPROVIDER_ID", updatable = false, insertable = false)
+    @JoinColumns({
+            @JoinColumn(name = "TX_APPPROVIDER_ID", referencedColumnName = "TX_APPPROVIDER_ID", updatable = false, insertable = false),
+            @JoinColumn(name = "AGGRGATOR_ID", referencedColumnName = "TX_AGGREGATOR_ID", updatable = false, insertable = false)})
     private DbeAppProvider dbeAppProvider;
 
     public DbeExpendControl() {
@@ -131,7 +134,7 @@ public class DbeExpendControl implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) bmCurrency.getNuCurrencyId();
-        result = prime * result + ((dbeAppProvider == null) ? 0 : dbeAppProvider.getTxAppProviderId().hashCode());
+        result = prime * result + ((dbeAppProvider == null) ? 0 : dbeAppProvider.getId().getTxAppProviderId().hashCode());
         result = prime * result + ((dtNextPeriodStart == null) ? 0 : dtNextPeriodStart.hashCode());
         result = prime * result + ((ftExpensedAmount == null) ? 0 : ftExpensedAmount.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -167,7 +170,7 @@ public class DbeExpendControl implements Serializable {
             if (other.dbeAppProvider != null) {
                 return false;
             }
-        } else if (!dbeAppProvider.getTxAppProviderId().equals(other.dbeAppProvider.getTxAppProviderId())) {
+        } else if (!dbeAppProvider.getId().getTxAppProviderId().equals(other.dbeAppProvider.getId().getTxAppProviderId())) {
             return false;
         }
         if (dtNextPeriodStart == null) {

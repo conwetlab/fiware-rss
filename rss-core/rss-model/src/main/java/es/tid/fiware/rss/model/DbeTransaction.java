@@ -33,6 +33,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -239,7 +240,9 @@ public class DbeTransaction implements Serializable, Cloneable {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "APP_PROVIDER")
+    @JoinColumns({
+            @JoinColumn(name = "TX_APPPROVIDER_ID", referencedColumnName = "TX_APPPROVIDER_ID"),
+            @JoinColumn(name = "AGGRGATOR_ID", referencedColumnName = "TX_AGGREGATOR_ID")})
     public DbeAppProvider getAppProvider() {
         return appProvider;
     }

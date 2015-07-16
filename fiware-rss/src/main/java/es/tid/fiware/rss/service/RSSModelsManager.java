@@ -36,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.ModelProviderDao;
@@ -44,7 +43,6 @@ import es.tid.fiware.rss.dao.SetRevenueShareConfDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.DbeAggregator;
-import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.ModelProvider;
 import es.tid.fiware.rss.model.ModelProviderId;
@@ -61,12 +59,6 @@ public class RSSModelsManager {
      * Logging system.
      */
     private final Logger logger = LoggerFactory.getLogger(RSSModelsManager.class);
-
-    /**
-     * 
-     */
-    @Autowired
-    private DbeAggregatorAppProviderDao aggregatorAppProviderDao;
 
     /**
      * 
@@ -308,29 +300,11 @@ public class RSSModelsManager {
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
 
-        List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-            .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-
-        // Check if the list of aggregators is empty
-        if (null == provsAgg || provsAgg.isEmpty()) {
-            String[] args = {"Non existing: appProviderId"};
-            throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
-        }
-
-        // Check that the given appProvider is included in an aggregator (Store)
-        boolean found = false;
-        Iterator<DbeAggregatorAppProvider> provsAggIt = provsAgg.iterator();
-
-        while (provsAggIt.hasNext() && !found) {
-            DbeAggregatorAppProvider provAgg = provsAggIt.next();
-            if (provAgg.getDbeAppProvider().getTxAppProviderId().equalsIgnoreCase(appProviderId)) {
-                    found = true;
-            }
-        }
-
-        if (!found) {
-            String[] args = {"Non existing: appProviderId"};
-            throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+        // Check that the given aggregator id is the provider one
+        if (!provider.getId().getAggregator().getTxEmail().equalsIgnoreCase(aggregatorId)) {
+            String[] args = {"The provider " + appProviderId + 
+                    " does not belong to the store owned by " + aggregatorId };
+            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
         }
     }
 
@@ -405,7 +379,7 @@ public class RSSModelsManager {
         // Fill basic revenue sharing model info
         rssModel.setOwnerProviderId(
                 model.getModelOwner().
-                        getTxAppProviderId()
+                        getId().getTxAppProviderId()
         );
         rssModel.setOwnerValue(model.getOwnerValue());
         rssModel.setAggregatorId(model.getAggregator().getTxEmail());
@@ -418,7 +392,7 @@ public class RSSModelsManager {
 
         for (ModelProvider stk: model.getStakeholders()) {
             StakeholderModel stModel = new StakeholderModel();
-            stModel.setStakeholderId(stk.getStakeholder().getTxAppProviderId());
+            stModel.setStakeholderId(stk.getStakeholder().getId().getTxAppProviderId());
             stModel.setModelValue(stk.getModelValue());
             stakeholdersList.add(stModel);
         }

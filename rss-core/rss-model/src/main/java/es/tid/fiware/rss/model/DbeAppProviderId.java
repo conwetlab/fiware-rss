@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package es.tid.fiware.rss.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
@@ -26,31 +28,38 @@ import javax.persistence.ManyToOne;
  * @author fdelavega
  */
 @Embeddable
-public class ModelProviderId implements Serializable {
+public class DbeAppProviderId implements Serializable {
 
-    private SetRevenueShareConf model;
-    private DbeAppProvider stakeholder;
+    private String txAppProviderId;
+    private DbeAggregator aggregator;
 
-    public ModelProviderId() {        
+    public DbeAppProviderId() {
     }
 
-    @ManyToOne
-    public SetRevenueShareConf getModel() {
-        return model;
+
+    /**
+     * @return the txAppProviderId
+     */
+    @Column(name = "TX_APPPROVIDER_ID", length = 100)
+    public String getTxAppProviderId() {
+        return txAppProviderId;
     }
 
-    public void setModel(SetRevenueShareConf model) {
-        this.model = model;
+    /**
+     * @param txAppProviderId
+     *            the txAppProviderId to set
+     */
+    public void setTxAppProviderId(String txAppProviderId) {
+        this.txAppProviderId = txAppProviderId;
     }
 
-    @ManyToOne
-    public DbeAppProvider getStakeholder() {
-        return stakeholder;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TX_AGGREGATOR_ID")
+    public DbeAggregator getAggregator() {
+        return aggregator;
     }
 
-    public void setStakeholder(DbeAppProvider stakeholder) {
-        this.stakeholder = stakeholder;
+    public void setAggregator(DbeAggregator aggregator) {
+        this.aggregator = aggregator;
     }
-
-    
 }

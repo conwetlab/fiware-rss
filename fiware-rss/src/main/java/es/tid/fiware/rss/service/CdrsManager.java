@@ -105,7 +105,7 @@ public class CdrsManager {
         for (DbeTransaction tx: txs) {
             CDR cdr = new CDR();
 
-            cdr.setAppProvider(tx.getAppProvider().getTxAppProviderId());
+            cdr.setAppProvider(tx.getAppProvider().getId().getTxAppProviderId());
             cdr.setApplication(tx.getTxApplicationId());
             cdr.setCdrSource(tx.getCdrSource().getTxEmail());
             cdr.setChargedAmount(tx.getFtChargedAmount());

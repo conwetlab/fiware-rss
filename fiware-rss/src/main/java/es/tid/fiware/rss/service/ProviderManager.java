@@ -17,14 +17,13 @@
 
 package es.tid.fiware.rss.service;
 
-import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
-import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
-import es.tid.fiware.rss.model.DbeAggregatorAppProviderId;
+import es.tid.fiware.rss.model.DbeAggregator;
 import es.tid.fiware.rss.model.DbeAppProvider;
+import es.tid.fiware.rss.model.DbeAppProviderId;
 import es.tid.fiware.rss.model.RSSProvider;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,8 +46,6 @@ public class ProviderManager {
      */
     private final Logger logger = LoggerFactory.getLogger(ProviderManager.class);
 
-    @Autowired
-    private DbeAggregatorAppProviderDao aggregatorAppProviderDao;
     /**
      * 
      */
@@ -70,13 +67,9 @@ public class ProviderManager {
 
         for(DbeAppProvider p: providers) {
             RSSProvider apiProvider = new RSSProvider();
-            // Get aggregator of the provider
-            apiProvider.setAggregatorId(
-                    aggregatorAppProviderDao.
-                            getDbeAggregatorAppProviderByProviderId(p.getTxAppProviderId()).
-                            getId().getTxEmail());
 
-            apiProvider.setProviderId(p.getTxAppProviderId());
+            apiProvider.setAggregatorId(p.getId().getAggregator().getTxEmail());
+            apiProvider.setProviderId(p.getId().getTxAppProviderId());
             apiProvider.setProviderName(p.getTxName());
             apiProviders.add(apiProvider);
         }
@@ -91,19 +84,18 @@ public class ProviderManager {
      * @throws RSSException
      */
     public List<DbeAppProvider> getProviders(String aggregatorId) throws RSSException {
-        List<DbeAppProvider> providers = new ArrayList<>();
+        List<DbeAppProvider> providers;
 
         if (null != aggregatorId && !aggregatorId.isEmpty()) {
-            List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-                .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-            if (null != provsAgg && provsAgg.size() > 0) {
-                for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    providers.add(provAgg.getDbeAppProvider());
-                }
-            }
+            providers = this.appProviderDao.getProvidersByAggregator(aggregatorId);
         } else {
-            providers = appProviderDao.getAll();
+            providers = this.appProviderDao.getAll();
         }
+
+        if (providers == null) {
+            providers = new ArrayList<>();
+        }
+
         return providers;
     }
 
@@ -137,14 +129,20 @@ public class ProviderManager {
         }
 
         // Check that the aggregator exists
-        if (this.aggregatorDao.getById(aggregatorId) == null) {
+        DbeAggregator aggregator = this.aggregatorDao.getById(aggregatorId);
+        if (aggregator == null) {
             String[] args = {"The given aggregator does not exists"};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
-        
+
+        // Build provider ID
+        DbeAppProviderId id = new DbeAppProviderId();
+        id.setTxAppProviderId(providerId);
+        id.setAggregator(aggregator);
+
         // Build new Provider entity
         DbeAppProvider provider = new DbeAppProvider();
-        provider.setTxAppProviderId(providerId);
+        provider.setId(id);
         provider.setTxName(providerName);
         provider.setTxCorrelationNumber(0);
         provider.setTxTimeStamp(new Date());
@@ -156,13 +154,5 @@ public class ProviderManager {
             String[] args = {"The given provider already exists"};
             throw new RSSException(UNICAExceptionType.RESOURCE_ALREADY_EXISTS, args);
         }
-
-        // Create the aggregator provider object
-        DbeAggregatorAppProvider object = new DbeAggregatorAppProvider();
-        DbeAggregatorAppProviderId id = new DbeAggregatorAppProviderId();
-        object.setId(id);
-        id.setTxAppProviderId(providerId);
-        id.setTxEmail(aggregatorId);
-        aggregatorAppProviderDao.create(object);
     }
 }

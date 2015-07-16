@@ -38,12 +38,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.tid.fiware.rss.dao.DbeAggregatorAppProviderDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.model.CDR;
-import es.tid.fiware.rss.model.DbeAggregatorAppProvider;
 import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
@@ -56,11 +54,7 @@ public class SettlementManager {
      * Logging system.
      */
     private final Logger logger = LoggerFactory.getLogger(SettlementManager.class);
-    /**
-     * 
-     */
-    @Autowired
-    private DbeAggregatorAppProviderDao aggregatorAppProviderDao;
+
     /**
      * 
      */
@@ -100,43 +94,7 @@ public class SettlementManager {
      * @param aggregatorId
      * @throws IOException
      */
-    public void runSettlement(String startPeriod, String endPeriod, String aggregatorId, String providerId)
-        throws IOException {
-        logger.debug("runSettlement - Provider: {} , aggregator: {}", providerId, aggregatorId);
-        logger.debug("runSettlement - Start: Init" + startPeriod + ",End:" + endPeriod);
-        String settlementScript = (String) rssProps.get("settlementScript");
-        File settlementSH = new File(settlementScript);
-        logger.debug("Running script: " + "." + settlementSH.getPath() + " " + startPeriod + " " + endPeriod);
-        if (null != providerId && providerId.length() > 0) {
-            DbeAppProvider provider = appProviderDao.getById(providerId);
-            if (provider != null) {
-                logger.debug("Running script for provider:{}", provider.getTxName().replace(" ", "_"));
-                runtime.exec(settlementSH.getPath() + " " + startPeriod + " " + endPeriod + " "
-                    + provider.getTxAppProviderId() + " " + provider.getTxName().replace(" ", "_"));
-            }
-
-        } else if (null != aggregatorId && aggregatorId.length() > 0) {
-            List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-                .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-            if (null != provsAgg && provsAgg.size() > 0) {
-                for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    logger.debug("Running script for provider:{}",
-                        provAgg.getDbeAppProvider().getTxName().replace(" ", "_"));
-                    runtime.exec(settlementSH.getPath() + " " + startPeriod + " " + endPeriod + " "
-                        + provAgg.getDbeAppProvider().getTxAppProviderId() + " "
-                        + provAgg.getDbeAppProvider().getTxName().replace(" ", "_"));
-                }
-            }
-        } else {
-            // run all reports
-            List<DbeAppProvider> providers = appProviderDao.getAll();
-            if (providers != null && providers.size() > 0) {
-                for (DbeAppProvider provider : providers) {
-                    runtime.exec("sh " + settlementSH.getPath() + " " + startPeriod + " " + endPeriod + " "
-                        + provider.getTxAppProviderId() + " " + provider.getTxName().replace(" ", "_"));
-                }
-            }
-        }
+    public void runSettlement(String startPeriod, String endPeriod, String aggregatorId, String providerId) {
     }
 
     /**
@@ -147,29 +105,6 @@ public class SettlementManager {
     public List<RSSFile> getSettlementFiles(String aggregatorId) {
         logger.debug("Into getSettlementFiles method.");
         List<RSSFile> rssFilesList = new ArrayList<RSSFile>();
-        String reportsPath = (String) rssProps.get("reportsPath");
-        if (null != aggregatorId && aggregatorId.length() > 0) {
-            List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-                .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-            if (null != provsAgg && provsAgg.size() > 0) {
-                String path;
-                for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    path = reportsPath + provAgg.getDbeAppProvider().getTxName().replace(" ", "_");
-                    logger.debug("Path to search into: {}" + path);
-                    rssFilesList.addAll(getSettlementFilesOfPath(path));
-                }
-            }
-        } else {
-            // Add all reports
-            rssFilesList = getSettlementFilesOfPath(reportsPath);
-        }
-        if (rssFilesList.isEmpty()) {
-            RSSFile rssf = new RSSFile();
-            rssf.setTxName("There are no RSS Files generated for you at this moment");
-            logger.warn("ELSE: There are no RSS Files generated for you at this moment");
-            rssf.setTxUrl("");
-            rssFilesList.add(rssf);
-        }
         return rssFilesList;
     }
 
@@ -218,34 +153,6 @@ public class SettlementManager {
             }
         }
         return rssFilesList;
-    }
-
-    /**
-     * Get transactions from ddbb.
-     * 
-     * @param appProvider
-     * @return
-     * @throws Exception
-     */
-    public List<DbeTransaction> runSelectTransactions(String aggregatorId) throws Exception {
-        List<DbeTransaction> transactions = new ArrayList<>();
-        if (null != aggregatorId && aggregatorId.length() > 0) {
-            List<DbeAggregatorAppProvider> provsAgg = aggregatorAppProviderDao
-                .getDbeAggregatorAppProviderByAggregatorId(aggregatorId);
-            if (null != provsAgg && provsAgg.size() > 0) {
-                List<DbeTransaction> transactionSelect;
-                for (DbeAggregatorAppProvider provAgg : provsAgg) {
-                    transactionSelect = transactionDao.getTransactionsByProviderId(provAgg.getDbeAppProvider()
-                        .getTxAppProviderId());
-                    if (null != transactionSelect && transactionSelect.size() > 0) {
-                        transactions.addAll(transactionSelect);
-                    }
-                }
-            }
-        } else {
-            transactions = transactionDao.getAll();
-        }
-        return transactions;
     }
 
     /**

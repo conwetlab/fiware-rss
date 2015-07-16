@@ -153,24 +153,9 @@ public class SettlementManagerTest {
             settlementManager.runSettlement("2013-01", "2013-12", null, providerId);
             logger.debug("run one aggregator/store");
             settlementManager.runSettlement("2013-01", "2013-12", aggregatorId, null);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
-    }
-
-    /**
-     * 
-     * @throws Exception
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void runSelectTransactionsTest() throws Exception {
-        logger.debug("run all providers");
-        List<DbeTransaction> transactions = settlementManager.runSelectTransactions(null);
-        logger.debug("run aggregatorId");
-        transactions = settlementManager.runSelectTransactions(aggregatorId);
-        logger.debug("run no aggregatorId");
-        transactions = settlementManager.runSelectTransactions("nonExistingAggregatorId");
     }
 
     /**

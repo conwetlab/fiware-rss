@@ -30,9 +30,9 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -52,8 +52,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class DbeAppProvider implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private String txAppProviderId;
+    private DbeAppProviderId id;
     private String txName;
     private Integer txCorrelationNumber;
     private Date txTimeStamp;
@@ -66,32 +65,25 @@ public class DbeAppProvider implements java.io.Serializable {
     }
 
     /**
-     * @param txAppProviderId
+     * @param id
      * @param txName
      * @param models
      */
-    public DbeAppProvider(String txAppProviderId, String txName,
+    public DbeAppProvider(DbeAppProviderId id, String txName,
             Set<SetRevenueShareConf> models) {
-        this.txAppProviderId = txAppProviderId;
+
+        this.id = id;
         this.txName = txName;
         this.models = models;
     }
 
-    /**
-     * @param txAppProviderId
-     *            the txAppProviderId to set
-     */
-    public void setTxAppProviderId(String txAppProviderId) {
-        this.txAppProviderId = txAppProviderId;
+    @EmbeddedId
+    public DbeAppProviderId getId() {
+        return id;
     }
 
-    /**
-     * @return the txAppProviderId
-     */
-    @Id
-    @Column(name = "TX_APPPROVIDER_ID", length = 50)
-    public String getTxAppProviderId() {
-        return txAppProviderId;
+    public void setId(DbeAppProviderId id) {
+        this.id = id;
     }
 
     /**
@@ -137,4 +129,5 @@ public class DbeAppProvider implements java.io.Serializable {
     public void setTxTimeStamp(Date txTimeStamp) {
         this.txTimeStamp = txTimeStamp;
     }
+    
 }
