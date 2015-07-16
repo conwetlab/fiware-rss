@@ -123,17 +123,17 @@ public class ProviderManager {
         // Validate required fields
         if (providerId == null || providerId.isEmpty()) {
             String[] args = {"ProviderID field is required for creating a provider"};
-            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
 
         if (providerName == null || providerName.isEmpty()) {
             String[] args = {"ProviderName field is required for creating a provider"};
-            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
 
         if (aggregatorId == null || aggregatorId.isEmpty()) {
             String[] args = {"AggregatorID field is required for creating a provider"};
-            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
         }
 
         // Check that the aggregator exists
