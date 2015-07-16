@@ -22,6 +22,7 @@ package es.tid.fiware.rss.model;
  */
 public class Algorithm {
     private String algorithmId;
+    private String description;
 
     public String getAlgorithmId() {
         return algorithmId;
@@ -30,4 +31,13 @@ public class Algorithm {
     public void setAlgorithmId(String algorithmId) {
         this.algorithmId = algorithmId;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

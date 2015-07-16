@@ -17,10 +17,30 @@
 
 package es.tid.fiware.rss.algorithm;
 
+import es.tid.fiware.rss.algorithm.impl.FixedPercentageProcessor;
+
 /**
  *
  * @author fdelavega
  */
 public enum Algorithms {
-    FIXED_PERCENTAGE
+    // Existing algorithms declaration
+    FIXED_PERCENTAGE(FixedPercentageProcessor.class, "Fixed percentage distribution of revenues");
+
+    // ================================
+    private final Class processor;
+    private final String description;
+
+    Algorithms(Class processor, String description) {
+        this.processor = processor;
+        this.description = description; 
+    }
+
+    public Class getProcessor() {
+        return processor;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

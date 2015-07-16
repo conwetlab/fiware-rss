@@ -390,7 +390,7 @@ public class RSSModelsManager {
         // Check algorithm specific restrictions
         AlgorithmFactory algorithmFactory = new AlgorithmFactory();
         AlgorithmProcessor processor = algorithmFactory.
-                getAlgorithmProcessor(Algorithms.valueOf(rssModel.getAlgorithmType()));
+                getAlgorithmProcessor(rssModel.getAlgorithmType());
 
         processor.validateModel(rssModel);
     }

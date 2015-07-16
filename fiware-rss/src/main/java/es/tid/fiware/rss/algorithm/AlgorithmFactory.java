@@ -18,7 +18,6 @@ package es.tid.fiware.rss.algorithm;
 
 import java.util.List;
 
-import es.tid.fiware.rss.algorithm.impl.FixedPercentageProcessor;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.Algorithm;
@@ -38,17 +37,23 @@ public class AlgorithmFactory {
      * @throws RSSException, thrown when no processsor is found
      * for the given algorithm
      */
-    public AlgorithmProcessor getAlgorithmProcessor(Algorithms algorithmType) 
+    public AlgorithmProcessor getAlgorithmProcessor(String algorithmType) 
         throws RSSException{
 
-        AlgorithmProcessor processor = null;
-
-        if (algorithmType.equals(Algorithms.FIXED_PERCENTAGE)) {
-            processor = new FixedPercentageProcessor();
-        } else {
+        AlgorithmProcessor processor;
+        try {
+             Algorithms algorithm = Algorithms.valueOf(algorithmType);
+             processor = (AlgorithmProcessor) algorithm.getProcessor().newInstance();
+        } catch (IllegalArgumentException e) {
             // There is no implementation for the given algorithm
             String[] args = {"No implementation found for the algorithm: " + algorithmType};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+
+        } catch (InstantiationException | IllegalAccessException ex) {
+            // The implementation for the given algorithm type cannot be instantiated
+            String[] args = {"The Algorithm Processor for " + algorithmType 
+                    + " cannot be instantiated"};
+            throw new RSSException(UNICAExceptionType.GENERIC_SERVER_FAULT, args);
         }
 
         return processor;
@@ -64,6 +69,7 @@ public class AlgorithmFactory {
         for(Algorithms alg: Algorithms.values()){
             Algorithm a = new Algorithm();
             a.setAlgorithmId(alg.toString());
+            a.setDescription(alg.getDescription());
             algorithms.add(a);
         }
 
