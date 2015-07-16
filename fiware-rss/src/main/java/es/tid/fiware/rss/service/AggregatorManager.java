@@ -18,10 +18,13 @@ package es.tid.fiware.rss.service;
 
 import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.Aggregator;
 import es.tid.fiware.rss.model.DbeAggregator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author fdelavega
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class AggregatorManager {
 
     /***
@@ -47,27 +50,65 @@ public class AggregatorManager {
     @Autowired
     private DbeAggregatorDao aggregatorDao;
 
+    private boolean isValidEmail(String email) {
+        String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches();
+    }
+
+    private List<DbeAggregator> getAggregators() {
+        return aggregatorDao.getAll();
+    }
+
     /**
      * Creates a new aggregator.
      * 
-     * @param aggregator
-     * @throws IOException
+     * @param aggregator, Aggregator instance
+     * @throws RSSException, If the aggregator info is not valid
      */
-    public void createAggretator(Aggregator aggregator) throws Exception {
+    public void createAggretator(Aggregator aggregator) throws RSSException {
         logger.debug("Creating aggregator: {}", aggregator.getAggregatorId());
 
+        // Validate aggregator fields
+        if (aggregator.getAggregatorId() == null || aggregator.getAggregatorId().isEmpty()) {
+            String[] args = {"AggregatorID field is required for creating an aggregator"};
+            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
+        }
+
+        if (!this.isValidEmail(aggregator.getAggregatorId())) {
+            String[] args = {"AggregatorID field must be an email identifiying a valid Store owner"};
+            throw new RSSException(UNICAExceptionType.INVALID_PARAMETER, args);
+        }
+
+        if (aggregator.getAggregatorName() == null || aggregator.getAggregatorName().isEmpty()) {
+            String[] args = {"AggregatorName field is required for creating an aggregator"};
+            throw new RSSException(UNICAExceptionType.MISSING_MANDATORY_PARAMETER, args);
+        }
+
+        // Build new aggregator object
         DbeAggregator dbAggregator = new DbeAggregator();
         dbAggregator.setTxEmail(aggregator.getAggregatorId());
         dbAggregator.setTxName(aggregator.getAggregatorName());
-        aggregatorDao.create(dbAggregator);
+
+        // Save aggregator to the DB
+        try {
+            this.aggregatorDao.create(dbAggregator);
+        } catch (org.hibernate.NonUniqueObjectException e) {
+            String[] args = {"The given aggregator already exists"};
+            throw new RSSException(UNICAExceptionType.RESOURCE_ALREADY_EXISTS, args);
+        }
     }
 
     /**
      * Get existing aggregators from the DB in a format ready to be serialized
-     * @return
-     * @throws RSSException
+     * @return, A list of Aggregator instances with the information of the
+     * existing aggregators
      */
-    public List<Aggregator> getAPIAggregators() throws RSSException {
+    public List<Aggregator> getAPIAggregators() {
             
         List<Aggregator> apiAggregators = new ArrayList<>();
         List<DbeAggregator> aggregators = this.getAggregators();
@@ -81,12 +122,21 @@ public class AggregatorManager {
         return apiAggregators;
     }
 
-    public List<DbeAggregator> getAggregators() throws RSSException {
-        return aggregatorDao.getAll();
-    }
-
-    public Aggregator getAggregator(String aggregatorId) {
+    /**
+     * Retrieves an aggregator object using its id
+     * @param aggregatorId, identifier of the aggregator to be retrieved
+     * @return An Aggregator instance with the information of the specified
+     * aggregator
+     * @throws RSSException, if the specified aggrgator does not exists
+     */
+    public Aggregator getAggregator(String aggregatorId) throws RSSException {
         DbeAggregator ag = aggregatorDao.getById(aggregatorId);
+
+        if (ag == null) {
+            String[] args = {aggregatorId};
+            throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+        }
+
         Aggregator aggregator = new Aggregator();
         aggregator.setAggregatorId(aggregatorId);
         aggregator.setAggregatorName(ag.getTxName());
