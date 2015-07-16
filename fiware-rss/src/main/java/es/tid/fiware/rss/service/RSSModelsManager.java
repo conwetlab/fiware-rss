@@ -23,7 +23,6 @@ package es.tid.fiware.rss.service;
 
 import es.tid.fiware.rss.algorithm.AlgorithmFactory;
 import es.tid.fiware.rss.algorithm.AlgorithmProcessor;
-import es.tid.fiware.rss.algorithm.Algorithms;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ import es.tid.fiware.rss.model.SetRevenueShareConfId;
 import es.tid.fiware.rss.model.StakeholderModel;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class RSSModelsManager {
 
     /***
