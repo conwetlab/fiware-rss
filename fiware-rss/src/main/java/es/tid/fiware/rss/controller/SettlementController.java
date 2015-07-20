@@ -51,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.tid.fiware.rss.model.AppProviderParameter;
-import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.service.SettlementManager;

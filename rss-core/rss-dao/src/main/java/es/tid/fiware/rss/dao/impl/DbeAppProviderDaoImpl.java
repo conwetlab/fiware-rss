@@ -70,5 +70,18 @@ public class DbeAppProviderDaoImpl extends GenericDaoImpl<DbeAppProvider, String
         return resultList;
     }
 
+    @Override
+    public DbeAppProvider getProvider(String aggregatorId, String providerId) {
+        String hql = "from DbeAppProvider as p where p.id.aggregator='" + aggregatorId + "' "
+                + "and p.id.txAppProviderId='" + providerId + "'";
 
+        DbeAppProvider provider;
+        try {
+            provider = (DbeAppProvider) this.getSession().createQuery(hql).uniqueResult();
+        } catch (Exception e) {
+            return null;
+        }
+        
+        return provider;
+    }
 }

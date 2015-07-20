@@ -25,14 +25,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -51,9 +48,6 @@ public class SetRevenueShareConf implements Serializable{
     private DbeAggregator aggregator;
     private BigDecimal aggregatorValue;
 
-    // Provider that owns the RS Model
-    // Application provider which is the owner of the revenue sharing model
-    private DbeAppProvider modelOwner;
     // Value applied for the owner in the RS models
     private BigDecimal ownerValue;
 
@@ -74,33 +68,23 @@ public class SetRevenueShareConf implements Serializable{
      * @param algorithmType
      * @param aggregator
      * @param aggregatorValue
-     * @param modelOwner
      * @param ownerValue
      * @param stakeholders
      * @param aggregatorPerc
      */
     public SetRevenueShareConf(SetRevenueShareConfId id, String algorithmType,
-            DbeAggregator aggregator, BigDecimal aggregatorValue, DbeAppProvider modelOwner,
+            DbeAggregator aggregator, BigDecimal aggregatorValue,
             BigDecimal ownerValue, Set<ModelProvider> stakeholders,BigDecimal aggregatorPerc) {
 
         this.id = id;
         this.algorithmType = algorithmType;
         this.aggregator = aggregator;
         this.aggregatorValue = aggregatorValue;
-        this.modelOwner = modelOwner;
         this.ownerValue = ownerValue;
         this.stakeholders = stakeholders;
     }
 
     @EmbeddedId
-    @AttributeOverrides({
-        @AttributeOverride(name = "txAppProviderId", column = @Column(name = "TX_APPPROVIDER_ID", nullable = false,
-            length = 50)),
-        @AttributeOverride(name = "nuCountryId", column = @Column(name = "NU_COUNTRY_OB_ID", nullable = false,
-            precision = 10, scale = 0)),
-        @AttributeOverride(name = "txProductClass", column = @Column(name = "TX_PRODUCT_CLASS", nullable = true,
-            length = 40))
-    })
     public SetRevenueShareConfId getId() {
         return this.id;
     }
@@ -144,18 +128,6 @@ public class SetRevenueShareConf implements Serializable{
 
     public void setAggregatorValue (BigDecimal aggregatorValue) {
         this.aggregatorValue = aggregatorValue;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DbeAppProvider.class)
-    @JoinColumns({
-            @JoinColumn(name = "MODEL_OWNER_PROVIDER", referencedColumnName = "TX_APPPROVIDER_ID"),
-            @JoinColumn(name = "AGGRGATOR_ID", referencedColumnName = "TX_AGGREGATOR_ID")})
-    public DbeAppProvider getModelOwner() {
-        return modelOwner;
-    }
-
-    public void setModelOwner(DbeAppProvider modelOwner) {
-        this.modelOwner = modelOwner;
     }
 
     @Column(name = "OWNER_VALUE", nullable = false, precision = 5, scale = 0)

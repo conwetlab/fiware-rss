@@ -102,7 +102,7 @@ public class DbeAppProvider implements java.io.Serializable {
         return txName;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, targetEntity = SetRevenueShareConf.class, mappedBy = "modelOwner")
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = SetRevenueShareConf.class, mappedBy = "id.modelOwner")
     public Set<SetRevenueShareConf> getModels() {
         return models;
     }

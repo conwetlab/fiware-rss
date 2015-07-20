@@ -88,22 +88,27 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
         SetRevenueShareConfDaoImpl.LOGGER.debug("getRevenueModelsByProviderId");
  
         // Build queries
-        String hql = "select * from set_revenue_share_conf";
+        String hql = "from SetRevenueShareConf l";
 
         if (null != aggregatorId && !aggregatorId.isEmpty()) {
-            hql += " where tx_aggregator_id= '" + aggregatorId + "'";
+            hql += " where l.aggregator= '" + aggregatorId + "'";
 
             if (null != appProviderId && !appProviderId.isEmpty()) {
-                hql += " and model_owner_provider= '" + appProviderId + "'";
+                hql += " and l.id.modelOwner.txAppProviderId= '" + appProviderId + "'";
 
                 if (null != productClass && !productClass.isEmpty()) {
-                    hql += " and tx_product_class= '" + productClass + "'";
+                    hql += " and l.id.productClass= '" + productClass + "'";
                 }
             }
         }
 
-        List list = getSession().createSQLQuery(hql).addEntity(SetRevenueShareConf.class).list();
-        List<SetRevenueShareConf> resultList = Collections.checkedList(list, SetRevenueShareConf.class);
+        List<SetRevenueShareConf> resultList;
+        try {
+            List list = this.getSession().createQuery(hql).list();
+            resultList = Collections.checkedList(list, SetRevenueShareConf.class);
+        } catch (Exception e) {
+            return null;
+        }
 
         if (null == resultList || resultList.isEmpty()) {
             resultList = null;

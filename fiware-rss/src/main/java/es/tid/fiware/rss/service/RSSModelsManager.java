@@ -26,7 +26,6 @@ import es.tid.fiware.rss.algorithm.AlgorithmProcessor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -77,10 +76,6 @@ public class RSSModelsManager {
 
     @Autowired
     private ModelProviderDao modelProviderDao;
-    /**
-     * private properties
-     */
-    private final Long countryId = (long) 1;
 
     /**
      * Retrives a list of revenue sharing models filtered by aggregator, provider
@@ -117,8 +112,10 @@ public class RSSModelsManager {
     private SetRevenueShareConfId buildRSModelId(RSSModel rssModel) {
         // Create new model id
         SetRevenueShareConfId id = new SetRevenueShareConfId();
-        id.setTxAppProviderId(rssModel.getOwnerProviderId());
-        id.setCountryId(countryId);
+        DbeAppProvider provider = this.appProviderDao.
+                getProvider(rssModel.getAggregatorId(), rssModel.getOwnerProviderId());
+
+        id.setModelOwner(provider);
         id.setProductClass(rssModel.getProductClass());
         return id;
     }
@@ -134,10 +131,6 @@ public class RSSModelsManager {
         model.setAggregator(aggregator);
         model.setAggregatorValue(rssModel.getAggregatorValue());
 
-        // Set provider owner
-        DbeAppProvider provider = this.appProviderDao.getById(rssModel.getOwnerProviderId());
-
-        model.setModelOwner(provider);
         model.setOwnerValue(rssModel.getOwnerValue());
 
         // Set stakeholders
@@ -145,7 +138,8 @@ public class RSSModelsManager {
             Set<ModelProvider> stakeholders = new HashSet<>();
 
             for (StakeholderModel stakeholderModel: rssModel.getStakeholders()) {
-                DbeAppProvider stakeholder = this.appProviderDao.getById(stakeholderModel.getStakeholderId());
+                DbeAppProvider stakeholder = this.appProviderDao.
+                        getProvider(rssModel.getAggregatorId(), stakeholderModel.getStakeholderId());
 
                 // Build stakeholder id
                 ModelProviderId stModelId = new ModelProviderId();
@@ -192,7 +186,7 @@ public class RSSModelsManager {
 
         // Build database model for RS Model
         SetRevenueShareConf model = this.buildRSModel(rssModel);
-        Set<SetRevenueShareConf> models = model.getModelOwner().getModels();
+        Set<SetRevenueShareConf> models = model.getId().getModelOwner().getModels();
 
         if (null == models) {
             models = new HashSet<>();
@@ -200,8 +194,6 @@ public class RSSModelsManager {
         models.add(model);
 
         // Persist models in the database
-        // Update provider model
-        this.appProviderDao.update(model.getModelOwner());
         // Save new RS model into database
         try {
             this.revenueShareConfDao.create(model);
@@ -294,7 +286,7 @@ public class RSSModelsManager {
             throws RSSException {
         logger.debug("Into checkValidAppProvider mehtod : aggregator:{} provider:{}", aggregatorId, appProviderId);
 
-        DbeAppProvider provider = appProviderDao.getById(appProviderId);
+        DbeAppProvider provider = appProviderDao.getProvider(aggregatorId, appProviderId);
         if (null == provider) {
             String[] args = {"Non existing: appProviderId"};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
@@ -378,7 +370,7 @@ public class RSSModelsManager {
         RSSModel rssModel = new RSSModel();
         // Fill basic revenue sharing model info
         rssModel.setOwnerProviderId(
-                model.getModelOwner().
+                model.getId().getModelOwner().
                         getId().getTxAppProviderId()
         );
         rssModel.setOwnerValue(model.getOwnerValue());

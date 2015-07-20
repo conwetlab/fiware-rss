@@ -33,4 +33,5 @@ public interface DbeAppProviderDao extends GenericDao<DbeAppProvider, String> {
 
     public List<DbeAppProvider> getProvidersByAggregator(String aggregatorId);
 
+    public DbeAppProvider getProvider(String aggregatorId, String providerId);
 }

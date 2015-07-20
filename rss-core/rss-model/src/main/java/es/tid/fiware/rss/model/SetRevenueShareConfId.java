@@ -1,50 +1,52 @@
+/**
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.tid.fiware.rss.model;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class SetRevenueShareConfId implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String txAppProviderId;
-    private Long countryId;
+    // Provider that owns the RS Model
+    // Application provider which is the owner of the revenue sharing model
+    private DbeAppProvider modelOwner;
     private String productClass;
 
     public SetRevenueShareConfId() {
     }
 
-    /**
-     * @return the txAppProviderId
-     */
-    @Column(name = "TX_APPPROVIDER_ID", nullable = false, length = 50)
-    public String getTxAppProviderId() {
-        return txAppProviderId;
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DbeAppProvider.class)
+    @JoinColumns({
+            @JoinColumn(name = "MODEL_OWNER_PROVIDER", referencedColumnName = "TX_APPPROVIDER_ID"),
+            @JoinColumn(name = "AGGREGATOR_ID", referencedColumnName = "TX_AGGREGATOR_ID")})
+    public DbeAppProvider getModelOwner() {
+        return modelOwner;
     }
 
-    /**
-     * @param txAppProviderId
-     *            the txAppProviderId to set
-     */
-    public void setTxAppProviderId(String txAppProviderId) {
-        this.txAppProviderId = txAppProviderId;
-    }
-
-    /**
-     * @return the countryId
-     */
-    @Column(name = "NU_COUNTRY_ID", nullable = false, precision = 10, scale = 0)
-    public Long getCountryId() {
-        return countryId;
-    }
-
-    /**
-     * @param countryId
-     *            the countryId to set
-     */
-    public void setCountryId(Long countryId) {
-        this.countryId = countryId;
+    public void setModelOwner(DbeAppProvider modelOwner) {
+        this.modelOwner = modelOwner;
     }
 
     /**
@@ -72,9 +74,9 @@ public class SetRevenueShareConfId implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((countryId == null) ? 0 : countryId.hashCode());
         result = prime * result + ((productClass == null) ? 0 : productClass.hashCode());
-        result = prime * result + ((txAppProviderId == null) ? 0 : txAppProviderId.hashCode());
+        result = prime * result + 
+                ((modelOwner.getId().getTxAppProviderId() == null) ? 0 : modelOwner.getId().getTxAppProviderId().hashCode());
         return result;
     }
 
@@ -95,13 +97,6 @@ public class SetRevenueShareConfId implements Serializable {
             return false;
         }
         SetRevenueShareConfId other = (SetRevenueShareConfId) obj;
-        if (countryId == null) {
-            if (other.countryId != null) {
-                return false;
-            }
-        } else if (!countryId.equals(other.countryId)) {
-            return false;
-        }
         if (productClass == null) {
             if (other.productClass != null) {
                 return false;
@@ -109,11 +104,12 @@ public class SetRevenueShareConfId implements Serializable {
         } else if (!productClass.equals(other.productClass)) {
             return false;
         }
-        if (txAppProviderId == null) {
-            if (other.txAppProviderId != null) {
+        if (modelOwner.getId().getTxAppProviderId() == null) {
+            if (other.getModelOwner().getId().getTxAppProviderId() != null) {
                 return false;
             }
-        } else if (!txAppProviderId.equals(other.txAppProviderId)) {
+        } else if (!modelOwner.getId().getTxAppProviderId().
+                equals(other.getModelOwner().getId().getTxAppProviderId())) {
             return false;
         }
         return true;
