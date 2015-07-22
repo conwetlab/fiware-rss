@@ -37,6 +37,8 @@ import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.StakeholderModel;
 import es.tid.fiware.rss.service.SettlementManager;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -90,7 +92,10 @@ public class ProductSettlementTask implements Runnable {
         path = this.createDir(path, sharingRes.getOwnerProviderId());
 
         // Create new report file
-        String reportId = sharingRes.getProductClass() + "_" + new Date() + ".csv";
+        Date date = new Date();
+        DateFormat formatter = new SimpleDateFormat("yyyyMMdd_hhmmss");
+
+        String reportId = sharingRes.getProductClass() + "_" + formatter.format(date) + ".csv";
         File reportFile = new File(path, reportId);
 
         FileWriter fw = new FileWriter(reportFile);
