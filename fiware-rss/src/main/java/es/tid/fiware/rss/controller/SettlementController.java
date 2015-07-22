@@ -141,56 +141,6 @@ public class SettlementController {
             return "error";
         }
     }
-    /**
-     * Do settlement.
-     * 
-     * @param dateFrom
-     * @param dateTo
-     * @param aggregatorId
-     * @param model
-     * @return the model and view
-     */
-    @RequestMapping(value = "/doSettlement", headers = "Accept=*/*", produces = "application/json")
-    @ResponseBody
-    public JsonResponse doSettlement(@QueryParam("dateFrom") String dateFrom,
-        @QueryParam("dateTo") String dateTo, @QueryParam("aggregatorId") String aggregatorId,
-        @QueryParam("providerId") String providerId, ModelMap model) {
-        try {
-            logger.debug("doSettlement - Provider: {} , aggregator: {}", providerId, aggregatorId);
-            logger.debug("doSettlement - Start: Init" + dateFrom + ",End:" + dateTo);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
-            SimpleDateFormat getDate = new SimpleDateFormat("MM/yyyy");
-            String initDate = "";
-            String endDate = "";
-            if (dateFrom != null && !"".equalsIgnoreCase(dateFrom) && dateTo != null && !"".equalsIgnoreCase(dateTo)) {
-                Date from = getDate.parse(dateFrom);
-                Date to = getDate.parse(dateTo);
-                initDate = format.format(from);
-                endDate = format.format(to);
-            } else {
-                // By default use the current month
-                GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
-                cal.setTime(new Date());
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                initDate = format.format(cal.getTime());
-                cal.add(Calendar.MONTH, 1);
-                endDate = format.format(cal.getTime());
-            }
-            // Calculate settlement.
-            settlementManager.runSettlement(initDate, endDate, aggregatorId, providerId);
-            JsonResponse response = new JsonResponse();
-            response.setMessage("Settlement proccess launched correctly.");
-            response.setSuccess(true);
-            return response;
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            JsonResponse response = new JsonResponse();
-            response.setMessage(e.getMessage());
-            response.setSuccess(false);
-            return response;
-        }
-    }
 
     /**
      * View RSS Files.

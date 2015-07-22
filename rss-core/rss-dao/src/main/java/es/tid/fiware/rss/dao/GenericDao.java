@@ -44,6 +44,8 @@ public abstract interface GenericDao<DomainObject, PK extends Serializable> {
      */
     DomainObject getById(PK id);
 
+    public void flush();
+
     /**
      * Update one instance.
      * 

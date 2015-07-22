@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -38,16 +37,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.DbeTransactionDao;
 import es.tid.fiware.rss.exception.RSSException;
-import es.tid.fiware.rss.model.CDR;
-import es.tid.fiware.rss.model.DbeAppProvider;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.Aggregator;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSFile;
+import es.tid.fiware.rss.model.RSSModel;
+import es.tid.fiware.rss.model.RSSProvider;
+import es.tid.fiware.rss.settlement.ProductSettlementTask;
+import es.tid.fiware.rss.settlement.SettlementTaskFactory;
+import es.tid.fiware.rss.settlement.ThreadPoolManager;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class SettlementManager {
 
     /***
@@ -59,42 +62,134 @@ public class SettlementManager {
      * 
      */
     @Autowired
-    private DbeAppProviderDao appProviderDao;
-
-    /**
-     * 
-     */
-    @Autowired
     private DbeTransactionDao transactionDao;
 
-    /**
-     * 
-     */
-    private Runtime runtime;
-    /**
-     * 
-     */
+    @Autowired
+    private SettlementTaskFactory taskFactory;
+
+    @Autowired
+    private AggregatorManager aggregatorManager;
+
+    @Autowired
+    private ProviderManager providerManager;
+
+    @Autowired
+    private RSSModelsManager modelsManager;
+
+    @Autowired
+    private ThreadPoolManager poolManager;
+
+    
     @Resource(name = "rssProps")
     private Properties rssProps;
 
-    /**
-     * 
-     * @throws Exception
-     */
-    @PostConstruct
-    private void init() throws Exception {
-        runtime = Runtime.getRuntime();
+    private List<Aggregator> getAggregators(String aggregatorId)  
+            throws RSSException{
+
+        // Get given aggregators if needed
+        List<Aggregator> aggregators;
+        if (aggregatorId == null || aggregatorId.isEmpty()) {
+            aggregators = this.aggregatorManager.getAPIAggregators();
+        } else {
+            aggregators = new ArrayList<>();
+            aggregators.add(this.aggregatorManager.getAggregator(aggregatorId));
+        }
+        return aggregators;
+    }
+
+    private List<RSSProvider> getProviders(String aggregatorId,
+            String providerId) throws RSSException {
+
+        List<RSSProvider> providers;
+        if (providerId != null && !providerId.isEmpty()) {
+            providers = new ArrayList<>();
+            providers.add(this.providerManager.getProvider(aggregatorId, providerId));
+        } else {
+            providers = this.providerManager.getAPIProviders(aggregatorId);
+        }
+        return providers;
+    }
+
+    private List<RSSModel> getModels(String aggregatorId,
+            String providerId, String productClass) throws RSSException {
+
+        return this.modelsManager.getRssModels(aggregatorId, providerId, productClass);
     }
 
     /**
      * Launch settlement process.
      * 
-     * @param startPeriod
-     * @param endPeriod
      * @param aggregatorId
-     * @throws IOException
+     * @param providerId
+     * @param productClass
+     * @throws RSSException
      */
-    public void runSettlement(String startPeriod, String endPeriod, String aggregatorId, String providerId) {
+    public void runSettlement(String aggregatorId,
+            String providerId, String productClass) throws RSSException {
+
+        // Validate fields
+        if (aggregatorId != null && !aggregatorId.isEmpty()) {
+            if (providerId != null && !providerId.isEmpty()) {
+
+                // Check that the given provider belongs to the aggregator
+                this.modelsManager.checkValidAppProvider(aggregatorId, providerId);
+
+                // Check that the provider has a RS model
+                // for the specified product class
+                if (productClass != null && !productClass.isEmpty()
+                        && !this.modelsManager.existModel(aggregatorId, providerId, productClass)) {
+
+                    String[] args = {productClass};
+                    throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+                }
+            }
+        }
+
+        // Launch settlement for the given transactions
+        for (Aggregator ag: this.getAggregators(aggregatorId)) {
+            List<RSSProvider> providers = this.getProviders(ag.getAggregatorId(), providerId);
+
+            for(RSSProvider pv: providers) {
+                List<RSSModel> models =
+                        this.getModels(ag.getAggregatorId(), pv.getProviderId(), productClass);
+
+                for (RSSModel m: models) {
+                    // Get related transactions
+                    List<DbeTransaction> txs = this.transactionDao.
+                            getTransactions(ag.getAggregatorId(), pv.getProviderId(), m.getProductClass());
+
+                    // Set transactions as processing
+                    if (txs != null && !txs.isEmpty()) {
+                        this.setTxState(txs, "processing", true);
+
+                        // Create processing task
+                        ProductSettlementTask settlementTask
+                                = this.taskFactory.getSettlementTask(m, txs);
+
+                        poolManager.getExecutorService().submit(settlementTask);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param transactions
+     * @param state
+     * @param toFlush 
+     */
+    public void setTxState(List<DbeTransaction> transactions,
+            String state, boolean toFlush) {
+
+        for (DbeTransaction tx: transactions) {
+            tx.setState(state);
+            this.transactionDao.update(tx);
+        }
+        // Flush state to the database
+        if (toFlush) {
+            this.transactionDao.flush();
+        }
     }
 
     /**

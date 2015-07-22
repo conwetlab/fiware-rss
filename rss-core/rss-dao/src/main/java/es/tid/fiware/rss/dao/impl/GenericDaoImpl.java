@@ -67,6 +67,10 @@ public abstract class GenericDaoImpl<DomainObject, PK extends Serializable> impl
     	return this.sessionFactory.getCurrentSession();
     }
 
+    public void flush() {
+        this.getSession().flush();
+    }
+
     /*
      * (non-Javadoc)
      * 

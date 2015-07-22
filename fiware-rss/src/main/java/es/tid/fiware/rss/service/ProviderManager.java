@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author fdelavega
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ProviderManager {
     /***
      * Logging system.
@@ -55,6 +55,19 @@ public class ProviderManager {
     @Autowired
     private DbeAggregatorDao aggregatorDao;
 
+    @Autowired
+    private RSSModelsManager modelsManager;
+
+
+    private RSSProvider getAPIModel(DbeAppProvider p) {
+        RSSProvider apiProvider = new RSSProvider();
+
+        apiProvider.setAggregatorId(p.getId().getAggregator().getTxEmail());
+        apiProvider.setProviderId(p.getId().getTxAppProviderId());
+        apiProvider.setProviderName(p.getTxName());
+        return apiProvider;
+    }
+
     /**
      * Get providers from the DB in a format ready to be serialized
      * @param aggregatorId
@@ -66,14 +79,33 @@ public class ProviderManager {
         List<DbeAppProvider> providers = this.getProviders(aggregatorId);
 
         for(DbeAppProvider p: providers) {
-            RSSProvider apiProvider = new RSSProvider();
-
-            apiProvider.setAggregatorId(p.getId().getAggregator().getTxEmail());
-            apiProvider.setProviderId(p.getId().getTxAppProviderId());
-            apiProvider.setProviderName(p.getTxName());
+            RSSProvider apiProvider = this.getAPIModel(p);
             apiProviders.add(apiProvider);
         }
         return apiProviders;
+    }
+
+    /**
+     * Builds the provider model identified by an aggregator and a provider id
+     * @param aggregatorId, id of the given aggregator
+     * @param providerId, id of the given provider within the given aggregator
+     * @throws RSSException, if the provided information is not valid
+     * @return RSSProvider instance with the info of the identified provider
+     */
+    public RSSProvider getProvider(String aggregatorId,
+            String providerId) throws RSSException {
+
+        // Validate ids
+        this.modelsManager.checkValidAppProvider(aggregatorId, providerId);
+
+        DbeAppProvider provModel = this.appProviderDao.getProvider(aggregatorId, providerId);
+
+        if (provModel == null) {
+            String[] args = {aggregatorId + " " + providerId};
+            throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
+        }
+
+        return this.getAPIModel(provModel);
     }
 
     /**

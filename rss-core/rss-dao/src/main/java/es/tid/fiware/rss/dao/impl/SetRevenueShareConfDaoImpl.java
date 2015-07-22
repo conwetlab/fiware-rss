@@ -94,7 +94,7 @@ public class SetRevenueShareConfDaoImpl extends GenericDaoImpl<SetRevenueShareCo
             hql += " where l.aggregator= '" + aggregatorId + "'";
 
             if (null != appProviderId && !appProviderId.isEmpty()) {
-                hql += " and l.id.modelOwner.txAppProviderId= '" + appProviderId + "'";
+                hql += " and l.id.modelOwner.id.txAppProviderId= '" + appProviderId + "'";
 
                 if (null != productClass && !productClass.isEmpty()) {
                     hql += " and l.id.productClass= '" + productClass + "'";

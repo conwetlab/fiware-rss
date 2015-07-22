@@ -26,6 +26,7 @@
                 <table class="table table-bordered table-responsive
                        table-condensed big-margin" id="providers">
                     <tr>
+                        <th>Store</th>
                         <th>Provider ID</th>
                         <th>Provider Name</th>
                     </tr>

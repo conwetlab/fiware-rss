@@ -14,20 +14,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package es.tid.fiware.rss.settlement;
 
-package es.tid.fiware.rss.algorithm;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import org.springframework.context.annotation.Scope;
 
-import es.tid.fiware.rss.exception.RSSException;
-import es.tid.fiware.rss.model.RSSModel;
-import java.math.BigDecimal;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author fdelavega
  */
-public interface AlgorithmProcessor {
+@Component
+@Scope("singleton")
+public class ThreadPoolManager {
+    private ExecutorService executorService;
 
-    public void validateModel(RSSModel model) throws RSSException;
+    @PostConstruct
+    public void init() {
+        this.executorService = Executors.newCachedThreadPool();
+    }
 
-    public RSSModel calculateRevenue (RSSModel model, BigDecimal value) throws RSSException;
+    @PreDestroy
+    public void cleanUp() {
+        this.executorService.shutdownNow();
+    }
+
+    public ExecutorService getExecutorService() {
+        return this.executorService;
+    }
 }

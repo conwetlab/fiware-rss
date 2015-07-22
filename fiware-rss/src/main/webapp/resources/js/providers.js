@@ -19,6 +19,7 @@
     var fillProviders = function (providers) {
         for (var i = 0; i < providers.length; i++) {
             var row = $('<tr></tr>');
+            $('<td></td>').text(providers[i].aggregatorId).appendTo(row);
             $('<td></td>').text(providers[i].providerId).appendTo(row);
             $('<td></td>').text(providers[i].providerName).appendTo(row);
             row.appendTo('#providers');

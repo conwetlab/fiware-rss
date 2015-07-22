@@ -79,5 +79,5 @@ public interface DbeTransactionDao extends GenericDao<DbeTransaction, String> {
 
     List<DbeTransaction> getTransactionByAggregatorId(String aggregatorId);
 
-    List<DbeTransaction> getTransactions();
+    List<DbeTransaction> getTransactions(String aggregatorId, String providerId, String productClass);
 }

@@ -136,13 +136,13 @@ public class CdrsManager {
 
         // Retrieve all pending transactions
         if (aggregatorId == null && providerId == null) {
-            result = this.getCDRsAPIFormat(this.transactionDao.getTransactions());
+            result = this.getCDRsAPIFormat(this.transactionDao.getTransactions(null, null, null));
         } else if (providerId == null) {
             result = this.getCDRsAPIFormat(
-                    this.transactionDao.getTransactionByAggregatorId(aggregatorId));
+                    this.transactionDao.getTransactions(aggregatorId, null, null));
         } else {
             result = this.getCDRsAPIFormat(
-                    this.transactionDao.getTransactionsByProviderId(providerId));
+                    this.transactionDao.getTransactions(aggregatorId, providerId, null));
         }
         return result;
     }
@@ -173,7 +173,7 @@ public class CdrsManager {
 
             // Validate the provider
             this.modelsManager.checkValidAppProvider(cdr.getCdrSource(), cdr.getAppProvider());
-            DbeAppProvider provider = this.appProviderDao.getById(cdr.getAppProvider());
+            DbeAppProvider provider = this.appProviderDao.getProvider(cdr.getCdrSource(), cdr.getAppProvider());
 
             // Validate the currency
             BmCurrency currency = this.currencyDao.getByIso4217StringCode(cdr.getCurrency());

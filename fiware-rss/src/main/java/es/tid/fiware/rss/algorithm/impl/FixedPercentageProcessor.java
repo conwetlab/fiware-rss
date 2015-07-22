@@ -22,6 +22,8 @@ import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.StakeholderModel;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -64,8 +66,39 @@ public class FixedPercentageProcessor implements AlgorithmProcessor{
         }
     }
 
-    @Override
-    public void launchSettlement() throws RSSException{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private BigDecimal calculatePercentage(BigDecimal value, BigDecimal perc) {
+        return value.multiply(perc).divide(new BigDecimal("100"));
     }
+
+    @Override
+    public RSSModel calculateRevenue(RSSModel model, BigDecimal value) throws RSSException {
+        RSSModel result = new RSSModel();
+
+        result.setProductClass(model.getProductClass());
+        result.setAlgorithmType(model.getAlgorithmType());
+
+        // Calculate aggregator value
+        result.setAggregatorId(model.getAggregatorId());
+        result.setAggregatorShare(this.calculatePercentage(value, model.getAggregatorValue()));
+
+        // Calculate provider value
+        result.setOwnerProviderId(model.getOwnerProviderId());
+        result.setOwnerValue(this.calculatePercentage(value, model.getOwnerValue()));
+
+        // Calculate stakeholders value
+        List<StakeholderModel> stRev = new ArrayList<>();
+
+        for(StakeholderModel st: model.getStakeholders()) {
+            StakeholderModel m = new StakeholderModel();
+            m.setStakeholderId(st.getStakeholderId());
+            m.setModelValue(this.calculatePercentage(value, st.getModelValue()));
+            stRev.add(m);
+        }
+
+        result.setStakeholders(stRev);
+
+        return result;
+    }
+
+    
 }

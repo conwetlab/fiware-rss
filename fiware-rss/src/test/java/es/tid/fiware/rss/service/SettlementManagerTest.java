@@ -144,25 +144,6 @@ public class SettlementManagerTest {
      */
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void runSettlementTest() {
-        logger.debug("Into runSettlementTest");
-        try {
-            logger.debug("run all providers");
-            settlementManager.runSettlement("2013-01", "2013-12", null, null);
-            logger.debug("run one provider");
-            settlementManager.runSettlement("2013-01", "2013-12", null, providerId);
-            logger.debug("run one aggregator/store");
-            settlementManager.runSettlement("2013-01", "2013-12", aggregatorId, null);
-        } catch (Exception e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
-    /**
-     * 
-     */
-    @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
     public void runCleanTest() throws IOException {
         logger.debug("runClean");
         try {

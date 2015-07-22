@@ -78,6 +78,26 @@ public class RSSModelsManager {
     private ModelProviderDao modelProviderDao;
 
     /**
+     * Check whether a given revenue sharing model exists in the database
+     * identified by it aggregator, provider owner and product class
+     * @param aggregatorId
+     * @param providerId
+     * @param productClass
+     * @return true if the model identified by aggregatorId, providerId and productClass exists
+     */
+    public boolean existModel(String aggregatorId, String providerId, String productClass) {
+        boolean res = true;
+
+        List<SetRevenueShareConf> result = revenueShareConfDao.getRevenueModelsByParameters(aggregatorId,
+            providerId, productClass);
+
+        if (null == result || result.isEmpty()) {
+            res = false;
+        }
+        return res;
+    }
+
+    /**
      * Retrives a list of revenue sharing models filtered by aggregator, provider
      * and product class
      * 

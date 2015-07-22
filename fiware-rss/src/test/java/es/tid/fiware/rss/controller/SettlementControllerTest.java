@@ -153,27 +153,6 @@ public class SettlementControllerTest {
      * 
      */
     @Test
-    public void testDoSettlement() throws Exception {
-        logger.debug("into testDoSettlement method");
-        JsonResponse response = controller.doSettlement("errorDate", "errorDate", null, null, null);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("into testDoSettlement without Date method");
-        Mockito
-            .doNothing()
-            .when(settlementManager)
-            .runSettlement(Matchers.any(String.class), Matchers.any(String.class), Matchers.any(String.class),
-                Matchers.any(String.class));
-        response = controller.doSettlement(null, null, null, null, null);
-        Assert.assertTrue(response.getSuccess());
-        logger.debug("into testDoSettlement with Date method");
-        response = controller.doSettlement("2014/01", "2014/03", null, null, null);
-        Assert.assertTrue(response.getSuccess());
-    }
-
-    /**
-     * 
-     */
-    @Test
     public void testViewFiles() {
         logger.debug("into testViewFiles method");
         ReflectionTestUtils.setField(controller, "settlementManager", null);

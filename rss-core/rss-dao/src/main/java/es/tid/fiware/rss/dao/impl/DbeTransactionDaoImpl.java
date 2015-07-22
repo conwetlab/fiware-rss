@@ -141,9 +141,23 @@ public class DbeTransactionDaoImpl extends GenericDaoImpl<DbeTransaction, String
     }
 
     @Override
-    public List<DbeTransaction> getTransactions() {
+    public List<DbeTransaction> getTransactions(String aggregatorId,
+            String providerId, String productClass) {
+
         DbeTransactionDaoImpl.LOGGER.debug("getTransactionsByAggregatorId..");
         String hql = "from DbeTransaction l where l.state='pending'";
+
+        if (aggregatorId != null && !aggregatorId.isEmpty()) {
+            hql += " and l.cdrSource.txEmail='" + aggregatorId + "'";
+
+            if (providerId != null && !providerId.isEmpty()) {
+                hql += " and l.appProvider.id.txAppProviderId='" + providerId + "'";
+
+                if (productClass != null && !productClass.isEmpty()) {
+                    hql += " and l.txProductClass='" + productClass + "'";
+                }
+            }
+        }
         return listDbeTransactionQuery(hql);
     }
 

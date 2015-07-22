@@ -15,19 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.tid.fiware.rss.algorithm;
+package es.tid.fiware.rss.settlement;
 
-import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSModel;
-import java.math.BigDecimal;
+import java.util.List;
+
 
 /**
  *
  * @author fdelavega
  */
-public interface AlgorithmProcessor {
-
-    public void validateModel(RSSModel model) throws RSSException;
-
-    public RSSModel calculateRevenue (RSSModel model, BigDecimal value) throws RSSException;
+public abstract class SettlementTaskFactory {
+    public abstract ProductSettlementTask getSettlementTask(RSSModel model, List<DbeTransaction> transactions);
 }

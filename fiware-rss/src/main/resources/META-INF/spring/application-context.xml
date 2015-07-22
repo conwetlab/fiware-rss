@@ -19,4 +19,9 @@
 	    <property name="defaultLocale" value="en_UK" />
 	</bean>
 
+        <bean name="settlementTask" class="es.tid.fiware.rss.settlement.ProductSettlementTask" scope="prototype"/>
+
+        <bean name="settlementTaskFactory" class="es.tid.fiware.rss.settlement.SettlementTaskFactory">
+            <lookup-method bean="settlementTask" name="getSettlementTask" />
+        </bean>
 </beans>
