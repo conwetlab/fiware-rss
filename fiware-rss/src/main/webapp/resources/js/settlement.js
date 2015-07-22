@@ -23,39 +23,46 @@
 
     var endpointManager = new EndpointManager();
 
-    function launchSettlement(aggregatorId){
-    	dateFrom = document.getElementById("dateFrom").value;
-    	dateTo = document.getElementById("dateTo").value;
-    	intervalMethod = true;
-    	if ((dateFrom == null || dateFrom == "") && ( dateTo == null || dateTo == "" )) {
-    		//Default way of working. current month    		
-    		intervalMethod = false;   		    		
-    	}else {
-    		if ((dateFrom == null || dateFrom == "") && ( dateTo != null || dateTo != "" )) {
-    			dialogMessage("Init Month can not be null");
-				return;
-    		
-    		}else if ((dateFrom != null || dateFrom != "") && ( dateTo == null || dateTo == "" )) {
-    			dialogMessage("End Month can not be null");
-				return;    		
-    		} else  if ( dateGreaorEqualThan(dateFrom,dateTo) ) {
-    			dialogMessage("Month end must be greater than month init");
-    			return;
-    		}   
-    	}
-    	providerId = $( "#providerSettlement option:selected" ).val();
-    	var url = CONTEXT_PATH + "/settlement/doSettlement.json?aggregatorId=" + aggregatorId + "&providerId=" + providerId;
-    	if (intervalMethod) {
-    		url = url +"&dateFrom=" + dateFrom + "&dateTo=" + dateTo;  	
-    	} 
-    	$.getJSON(url, function(json){
-    		if(json.success){
-    			dialogMessage(json.message, "info");
-	    	  }else {
-	    		  dialogMessage(json.message);
-	    	  }
-  		  });    	
+    var setProvidersSettlement = function (providers) {
+        $("#providerSettlement").empty();
+        $("#providerSettlement").append('<option value="">---</option>');
+        populateProviders(providers, $("#providerSettlement"));
+    };
+
+    var setAggregatorsSettlement = function (aggregators) {
+        $("#aggregatorSettlement").empty();
+        $("#aggregatorSettlement").append('<option value="">---</option>');
+        populateAggregators(aggregators, $("#aggregatorSettlement"));
+
+        // Create providers population handler
+        $("#aggregatorSettlement").change(function () {
+            var agg = $(this).val();
+            if (agg) {
+                getActors("PROVIDER_COLLECTION", [setProvidersSettlement], "?aggregatorId=" + agg);
+            } else {
+                $("#providerSettlement").empty();
+            }
+        });
     }
+
+    launchSettlement = function () {
+        var aggregator = $('#aggregatorSettlement').val();
+        var provider = $('#providerSettlement').val();
+        var query;
+
+        if (aggregator) {
+            query = "?aggregatorId=" + aggregator;
+            if (provider) {
+                query += "&providerId=" + provider;
+            }
+        }
+        getActors("SETTLEMENT_COLLECTION", [function () {
+            $('#msg-container .modal-header h3').text('Launched');
+            $('#msg-container .modal-body').empty();
+            $('#msg-container .modal-body').append('<p> The settlement process has been launched </p>');
+            $('#msg-container').modal('show');
+        }], query, true);
+    };
     
     createAggregatorProvider = function (aggregatorId) {
     	newProviderId = $("#newProviderId").val();
@@ -137,45 +144,68 @@
  		  });    	
     }
 
-    var populateProviders = function (providers) {
+    var populateProviders = function (providers, container) {
+        var cnt =  $('#providerTransaction');
+
+        if (container) {
+            cnt = container;
+        }
+
         for (var i = 0; i < providers.length; i++) {
             // Build option node
             var option = "<option value=" + providers[i].providerId + ">" + providers[i].providerName + "</option>";
-
-            // Include providers in settlement
-            $('#providerSettlement').append(option);
-
-            // Include providers in delete transactions if possible
-            if (IS_ADMIN) {
-                $('#providerTransaction').append(option);
-            }
+            cnt.append(option);
         }
     };
 
-    var populateAggregators = function (aggregators) {
+    var populateAggregators = function (aggregators, container) {
+        var cnt = $('#aggregator');
+        if (container) {
+            cnt = container;
+        }
         for (var i = 0; i < aggregators.length; i++) {
             var option = "<option value=" + aggregators[i].aggregatorId + ">" + aggregators[i].aggregatorName + "</option>";
-            $('#aggregator').append(option);
+            cnt.append(option);
         }
     };
 
-    $(document).ready(function () {
-        // Populate providers
-        var url = endpointManager.getEndpoint('PROVIDER_COLLECTION');
-        $.ajax({
-            url: url,
-            dataType: 'json'
-        }).done(populateProviders);
+    var getActors = function (ep, callbacks, query, notType) {
+        var url = endpointManager.getEndpoint(ep);
 
-        // Populate aggregators
-        if (IS_ADMIN) {
-            url = endpointManager.getEndpoint("AGGREGATOR_COLLECTION");
-            $.ajax({
-                url: url,
-                dataType: 'json'
-            }).done(populateAggregators);
+        if (query) {
+            url += query;
         }
-    })
-})(); 
 
+        var params = {
+            url: url,
+            error: function (xhr) {
+                var resp = xhr.responseJSON;
+                $('#msg-container .modal-body').empty();
+                $('#msg-container .modal-body').append('<p>' + resp.exceptionText + '</p>');
+                $('#msg-container').modal('show');
+            }
+        };
 
+        if (!notType) {
+            params.dataType = 'json';
+        }
+
+        $.ajax(params).done(function (data) {
+            for (var i = 0; i < callbacks.length; i++) {
+                callbacks[i](data);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        var agCall = [setAggregatorsSettlement];
+
+        if (IS_ADMIN) {
+            agCall.push(populateAggregators);
+            // Populate providers
+            getActors('PROVIDER_COLLECTION', [populateProviders]);
+        }
+        // Populate aggregators
+        getActors("AGGREGATOR_COLLECTION", agCall);
+    });
+})();

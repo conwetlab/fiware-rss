@@ -22,7 +22,8 @@
         'PROVIDER_COLLECTION': '/rss/providers',
         'ALGORITHM_COLLECTION': '/rss/algorithms',
         'RSMODEL_COLLECTION': '/rss/models',
-        'CDR_COLLECTION': '/rss/cdrs'
+        'CDR_COLLECTION': '/rss/cdrs',
+        'SETTLEMENT_COLLECTION': '/rss/settlement'
     };
     
     EndpointManager = function EndpointManager () {

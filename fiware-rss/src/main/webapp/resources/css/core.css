@@ -104,3 +104,8 @@ a:hover {
 table.big-margin {
   margin-top: 50px;
 }
+
+.small-sel {
+    width: auto;
+    display: inline;
+}

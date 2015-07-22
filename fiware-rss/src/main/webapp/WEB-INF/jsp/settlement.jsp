@@ -22,6 +22,21 @@
         <%@  include file="/jspf/footer.jspf"%> <br/> <br/> <br/><br/><br/>
  
         <div class="container-fluid">
+            <div id="msg-container" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h3>Error</h3>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-primary" data-dismiss="modal">Accept</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-8 col-md-offset-2">
                 <div><a href="${contextPath}/rss/">RSS API</a></div>
                 <table class="table table-bordered table-responsive
@@ -31,21 +46,12 @@
                     </th>
                     <tr>
                         <td>
-                            Launch Settlement: 
-                            <select id="providerSettlement" name="providerSettlement">
+                            Launch Settlement:
+                            <select id="aggregatorSettlement" class="form-control small-sel">
                             </select>
-                            From
-                            <input type="text" id="dateFrom" name="dateFrom" value='' size="10" onchange="validMonthDate(this)"
-                                onclick="displayCalendar(MM_findObj('dateFrom'),'mm/yyyy',this)"/>
-
-                            <img src="<%=request.getContextPath()%>/resources/dhtmlcalendar/dhtmlgoodies_calendar/images/calendar_icon5.gif"
-                                class="pointer" onclick="displayCalendar(MM_findObj('dateFrom'),'mm/yyyy',this)" />
-                            &nbsp;To&nbsp;
-                            <input type="text" id="dateTo" name="dateTo" value='' size="10" class="formInput1" onchange="validMonthDate(this)"
-                                onclick="displayCalendar(MM_findObj('dateTo'),'mm/yyyy',this)"/>
-                            <img src="<%=request.getContextPath()%>/resources/dhtmlcalendar/dhtmlgoodies_calendar/images/calendar_icon5.gif"
-                                class="pointer" onclick="displayCalendar(MM_findObj('dateTo'),'mm/yyyy',this)" />
-                            <input type="submit" class="btn btn-default" value="Launch" onclick="javascript:launchSettlement('${aggregatorId}');"/>
+                            <select id="providerSettlement" class="form-control small-sel">
+                            </select>
+                            <input type="submit" class="btn btn-default" value="Launch" onclick="javascript:launchSettlement('');"/>
                         </td>
                     </tr>
                     <c:if  test="${is_admin}">
@@ -53,7 +59,9 @@
                         <td>
                             Delete transactions: 
                             Provider
-                            <select id="providerTransaction" name="name">
+                            <select id="aggregatorTransaction" class="form-control small-sel">
+                            </select>
+                            <select id="providerTransaction" class="form-control small-sel">
                             </select>
                             <input type="submit" value="Delete" class="btn btn-default" onclick="javascript:deletingProvider();"/>
                         </td>
@@ -116,7 +124,7 @@
                                 Provider Name
                                 <input type="text" id="providerAdminName" name="providerAdminName" value='' size="40"/>
                                 Store
-                                <select id="aggregator" name="aggregator">
+                                <select class="form-control small-sel" id="aggregator" name="aggregator">
                                 </select>
                                 <input type="submit" class="btn btn-default" value="Create" onclick="createAdminProvider();"/>
                             </c:if>

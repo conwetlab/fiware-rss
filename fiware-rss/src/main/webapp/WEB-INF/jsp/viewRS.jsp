@@ -21,7 +21,7 @@
                 Back
         </a>
         <div class="container-fluid">
-            <div class="col-md-7" id="models-container">
+            <div class="col-md-8 col-md-offset-2" id="models-container">
             </div>
         </div>
     </body>
