@@ -1,1 +1,6257 @@
-My Page
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FIWARE RSS</title>
+    <link href="css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/idea.css">
+    <script src="js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <link rel="stylesheet" type="text/css" href="css/api-specification.css"> 
+
+    
+</head>
+<body id="respecDocument" class="h-entry">
+<div class="container">
+  <div id="TOC-container">
+    
+<section id="toc">
+
+        <div id="fiware-logo"></div>
+    <ul class="toc">
+
+
+    
+    
+
+
+
+
+
+<li><a href="#API_specification">API Specification</a>
+    <ul class="toc">
+    
+
+                        <li>
+                            
+                                <a href="#resource_group_aggregators-management" title = "Group Aggregators Management">Group Aggregators Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_aggregators-collection" title = "Resource Aggregators Collection">Resource Aggregators Collection</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_list-all-aggregators" title ="GET - List all Aggregators">GET - List all Aggregators</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_register-an-aggregator" title ="POST - Register an Aggregator">POST - Register an Aggregator</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+
+                        <li>
+                            
+                                <a href="#resource_group_providers-management" title = "Group Providers Management">Group Providers Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_providers-collection" title = "Resource Providers Collection">Resource Providers Collection</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_list-all-providers" title ="GET - List all providers">GET - List all providers</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_register-a-provider" title ="POST - Register a provider">POST - Register a provider</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+
+                        <li>
+                            
+                                <a href="#resource_group_algorithms-management" title = "Group Algorithms Management">Group Algorithms Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_algorithms-collection" title = "Resource Algorithms Collection">Resource Algorithms Collection</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_list-supported-algorithms" title ="GET - List Supported Algorithms">GET - List Supported Algorithms</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+
+                        <li>
+                            
+                                <a href="#resource_group_revenue-sharing-models-management" title = "Group Revenue Sharing Models Management">Group Revenue Sharing Models Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_revenue-sharing-models-collection" title = "Resource Revenue Sharing Models Collection">Resource Revenue Sharing Models Collection</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_list-revenue-sharing-models" title ="GET - List Revenue Sharing models">GET - List Revenue Sharing models</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_create-revenue-sharing-model" title ="POST - Create Revenue Sharing Model">POST - Create Revenue Sharing Model</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+
+                        <li>
+                            
+                                <a href="#resource_group_cdrs---transactions---management" title = "Group CDRs - Transactions - Management">Group CDRs - Transactions - Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_transactions-collection" title = "Resource Transactions Collection">Resource Transactions Collection</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_list-transactions" title ="GET - List Transactions">GET - List Transactions</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_create-transaction" title ="POST - Create Transaction">POST - Create Transaction</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                                
+                                    <li>
+                                        <a href="#resource_settlement-collection" title = "Resource Settlement Collection">Resource Settlement Collection</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_launch-settlement" title ="GET - Launch Settlement">GET - Launch Settlement</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+
+                        <li>
+                            
+                                <a href="#resource_group_expenditure-limit-management" title = "Group Expenditure Limit Management">Group Expenditure Limit Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_provider-limits-entry" title = "Resource Provider Limits Entry">Resource Provider Limits Entry</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_get-provider-limits" title ="GET - Get Provider Limits">GET - Get Provider Limits</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_create/update-provider-limit" title ="POST - Create/Update provider Limit">POST - Create/Update provider Limit</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_delete-provider-limits" title ="DELETE - Delete Provider Limits">DELETE - Delete Provider Limits</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                                
+                                    <li>
+                                        <a href="#resource_user-limits-entry" title = "Resource User Limits Entry">Resource User Limits Entry</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_get-user-limits" title ="GET - Get User Limits">GET - Get User Limits</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_create/update-user-limits" title ="POST - Create/Update User Limits">POST - Create/Update User Limits</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_delete-user-limits" title ="DELETE - Delete User Limits">DELETE - Delete User Limits</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+
+                        <li>
+                            
+                                <a href="#resource_group_balance-accumulated-management" title = "Group Balance Accumulated Management">Group Balance Accumulated Management</a>
+                            
+                            <ul class="toc">
+                              
+                                
+                                    <li>
+                                        <a href="#resource_user-balance-entry" title = "Resource User balance Entry">Resource User balance Entry</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_get-user-balance" title ="GET - Get User Balance">GET - Get User Balance</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_check--user-balance" title ="POST - Check  User Balance">POST - Check  User Balance</a></li>
+                                            
+
+                                        
+                                            
+                                                <li><a href="#action_update-user-balance" title ="PUT - Update User Balance">PUT - Update User Balance</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                                
+                                    <li>
+                                        <a href="#resource_reset-user-balance-entry" title = "Resource Reset User Balance Entry">Resource Reset User Balance Entry</a>
+                                        <ul class="toc  ">
+                                        
+                                            
+                                                <li><a href="#action_reset-user-balance" title ="PUT - Reset User Balance">PUT - Reset User Balance</a></li>
+                                            
+
+                                        
+                                        </ul>
+                                    </li>
+                                
+                              
+                            </ul>
+                        </li>
+                      
+    <li><a href="#examples">Examples</a></li>
+    </ul>
+</li>
+    
+    
+    
+    
+    
+    
+    
+        <li class="tocline"> <a href="#acknowledgements" title = "Acknowledgements"> Acknowledgements </a>
+
+    
+</li>
+    
+    
+    
+    
+    
+    
+    
+        <li><a href="#references">References</a></li>
+    
+   </ul>
+</section>
+
+  </div>
+  <div id="API-content">
+  
+	
+
+	
+
+	
+		<h1>FIWARE Revenue Settlement and Sharing System Open API Specification </h1>
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+		<span class="dateLabel">DATE:</span> <span class="dateValue"> 30 September 2015 </span>
+	
+
+	
+
+	
+
+	
+
+
+
+
+	
+
+	
+		
+		<dl>
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				<dt class="versionLabel">This version:</dt> 
+				<dd class="versionValue"> <a href="https://rss.store.lab.fiware.org/v4.3.3">
+					https://rss.store.lab.fiware.org/v4.3.3</a> </dd>
+			
+		
+			
+		
+			
+		
+
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				<dt class="versionLabel">Previous version:</dt> 
+				<dd class="versionValue"> <a href="https://rss.store.lab.fiware.org/v3.5.2">
+					https://rss.store.lab.fiware.org/v3.5.2
+				</a> </dd>
+			
+		
+			
+		
+
+		<dt class="versionLabel">Latest version:</dt> 
+		<dd class="versionValue"> <a href="https://rss.store.lab.fiware.org/latest">https://rss.store.lab.fiware.org/latest</a> </dd>
+
+
+		</dl>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+
+	
+		<h2 id="editors">Editors</h2>
+		<ul>
+<li>Francisco de la Vega, Universidad Politénica de Madrid</li>
+</ul>
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+		<h2 id="copyright">Copyright</h2>
+		<ul>
+<li>Copyright © 2015 by Universidad Politénica de Madrid</li>
+</ul>
+	
+
+	
+
+
+<hr>
+
+
+	<h2 id="abstract">Abstract</h2>
+	<p>The Revenue Settlement and Sharing System (RSS) GE is in charge of distributing the revenues originated by the usage of a given service among the involved stakeholders. In particular, it focuses on distributing part of the revenue generated by a service between the Store Provider and the Service Provider(s) responsible for the service. With the term "service" we refer to both final applications and backend application services (typically exposed through an API). Note that, in the case of composite services, more than one service provider may have to receive a share of the revenues.</p>
+<p>Additionally, as a supplementary functionality, expenditure limits functionality is offered in this GE. The expenditure limit API provides a mechanism through which an application provider can limit the amount of money spent by a customer using the services, along a specific time interval.</p>
+<p>This document describes the RSS Rest API, including the Stores API, Providers API, Revenue Sharing Models API, CDRs API, and Expenditure Limits API.</p>
+
+
+
+
+	
+
+	
+		<h2 id="status">Status of this document</h2>
+		<p>This is a work in progress and is changing on a daily basis. You can check the latest
+available version on: <a href="https://github.com/conwetlab/wstore/tree/develop">https://github.com/conwetlab/wstore/tree/develop</a>. 
+Please send your comments to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#114;&#115;&#115;&#64;&#99;&#111;&#110;&#119;&#101;&#116;&#46;&#99;&#111;&#109;">&#114;&#115;&#115;&#64;&#99;&#111;&#110;&#119;&#101;&#116;&#46;&#99;&#111;&#109;</a>.</p>
+<p>This specification is licensed under the <a href="https://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/FI-WARE_Open_Specification_Legal_Notice_%28implicit_patents_license%29">FIWARE Open Specification License</a></p>
+	
+
+	
+
+	
+
+	
+
+<hr>
+
+    
+    
+
+
+
+
+	
+		
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+	
+
+
+
+
+	
+	
+	
+		
+	
+		
+	
+		
+	
+		
+	
+		
+			<section>
+				<h2 id="specification"> Specification</h2>
+
+
+
+<h3 id="authentication"> Authentication</h3>
+<p>Each HTTP request against the RSS API requires the inclusion of specific authentication credentials. The specific implementation of this API may support multiple authentication schemes (OAuth, Basic Auth, Token) and will be determined by the specific provider that implements the GE. Please contact the provider to determine the best way to authenticate against this API. Remember that some authentication schemes may require that the API operates using SSL over HTTP (HTTPS).</p>
+<p>The RSS provides support for Cookie and OAuth2 authentication being OAuth2 the default in FIWARE Lab.</p>
+
+
+
+<h3 id="used_http_codes"> Used HTTP Codes</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Code</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>Your request has been completed properly</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Created</td>
+<td>Your resource has been created.</td>
+</tr>
+<tr>
+<td>202</td>
+<td>Accepted</td>
+<td>Your request has been accepted for processing.</td>
+</tr>
+<tr>
+<td>204</td>
+<td>No content</td>
+<td>Your request has been processed, but a response is not available. Generally used when deleting entities</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+<td>The content of your request is not correct (e.g. There is a missing field)</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Conflict</td>
+<td>The resource you are tring to create already exists</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>The resource you are looking for does not exists</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden</td>
+<td>You have no rights to perform the request</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+<td>You are not logged in or the Authorization token you are providing is not valid</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal server error</td>
+<td>There was an internal error in the system so your request cannot be completed</td>
+</tr>
+</tbody>
+</table>
+
+
+
+			</section>
+		
+	
+
+
+
+    
+
+  
+  <section id="API_specification">
+      <h1>API Specification</h1>
+      
+
+
+
+
+        
+            <section id="resource_group_aggregators-management" class="resourceGroup">
+            <h2 id="h-resource_group_aggregators-management">Aggregators Management</h2>
+        
+	<p>API for the management of aggregators that play the role of charging information sources. This API allows to register and retrieve aggregators information.</p>
+<p>This API uses the following fields:</p>
+<ul>
+<li>
+<p><strong>aggregatorName</strong> - Display name of the given aggregator</p>
+</li>
+<li>
+<p><strong>aggragtorId</strong> - Email used to identify the user that is authorized to send changing information (typically an admin of a Store instance)</p>
+</li>
+</ul>
+        
+            <section id="resource_aggregators-collection" class="resource">
+                <h3 id="h-resource_aggregators-collection">Aggregators Collection [/fiware-rss/rss/aggregator]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_list-all-aggregators" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_list-all-aggregators">
+        List all Aggregators -
+        GET
+        
+            /fiware-rss/rss/aggregator
+        
+    </h4>
+
+        
+                            <div id="list-all-aggregators_body" class="">
+                                
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_list-all-aggregators_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/aggregators-management/aggregators-collection/list-all-aggregators">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_register-an-aggregator" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_register-an-aggregator">
+        Register an Aggregator -
+        POST
+        
+            /fiware-rss/rss/aggregator
+        
+    </h4>
+
+        
+                            <div id="register-an-aggregator_body" class="">
+                                
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_register-an-aggregator_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/aggregators-management/aggregators-collection/register-an-aggregator">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+        
+            <section id="resource_group_providers-management" class="resourceGroup">
+            <h2 id="h-resource_group_providers-management">Providers Management</h2>
+        
+	<p>API for the management of providers. Providers are registered in the context of an aggregator, and are the owners of the applications and services that generate the charging information. This API allows to retrieve and register providers.</p>
+<p>This API manages the following fields:</p>
+<ul>
+<li>
+<p><strong>aggregatorId</strong> - Aggregator email that identifies the charging information source (Store instance)</p>
+</li>
+<li>
+<p><strong>providerId</strong> - Id of the given provider. Note that this id only needs to be unique in the context of an aggregator, so the same providerId can be used for different providers if the aggregator is different</p>
+</li>
+<li>
+<p><strong>providerName</strong> - Display name of the given provider</p>
+</li>
+</ul>
+        
+            <section id="resource_providers-collection" class="resource">
+                <h3 id="h-resource_providers-collection">Providers Collection [/fiware-rss/rss/providers{?aggregatorId}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_list-all-providers" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_list-all-providers">
+        List all providers -
+        GET
+        
+            /fiware-rss/rss/providers{?aggregatorId}
+        
+    </h4>
+
+        
+                            <div id="list-all-providers_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to retrieve only those providers registered for a given aggregator
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_list-all-providers_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/providers-management/providers-collection/list-all-providers">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_register-a-provider" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_register-a-provider">
+        Register a provider -
+        POST
+        
+            /fiware-rss/rss/providers{?aggregatorId}
+        
+    </h4>
+
+        
+                            <div id="register-a-provider_body" class="">
+                                
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_register-a-provider_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/providers-management/providers-collection/register-a-provider">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+        
+            <section id="resource_group_algorithms-management" class="resourceGroup">
+            <h2 id="h-resource_group_algorithms-management">Algorithms Management</h2>
+        
+	<p>API for the management of supported Algorithms. Supported algorithms are those that can be used to perform the revenue sharing. This API allows to retrieve supported algorithms</p>
+<p>This API manages the following fields:</p>
+<ul>
+<li>
+<p><strong>algorithmId</strong> - ID of the given algorithm</p>
+</li>
+<li>
+<p><strong>description</strong> - A textual description that explains how the algorithm works</p>
+</li>
+</ul>
+        
+            <section id="resource_algorithms-collection" class="resource">
+                <h3 id="h-resource_algorithms-collection">Algorithms Collection [/fiware-rss/rss/algorithms]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_list-supported-algorithms" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_list-supported-algorithms">
+        List Supported Algorithms -
+        GET
+        
+            /fiware-rss/rss/algorithms
+        
+    </h4>
+
+        
+                            <div id="list-supported-algorithms_body" class="">
+                                
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_list-supported-algorithms_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/algorithms-management/algorithms-collection/list-supported-algorithms">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+        
+            <section id="resource_group_revenue-sharing-models-management" class="resourceGroup">
+            <h2 id="h-resource_group_revenue-sharing-models-management">Revenue Sharing Models Management</h2>
+        
+	<p>API for the management of revenue sharing models. A Revenue Sharing Model specifies how the revenues must be distributed between the involved stakeholders. This API allows to retrieve, create, update, and delete revenue sharing models.</p>
+<p>This API manages the following fields:</p>
+<ul>
+<li>
+<p><strong>ownerProviderId</strong> - Provider Id of the owner of the model. This provider is the owner of the application and services whose revenues will be distributed using the Revenue Sharing Model</p>
+</li>
+<li>
+<p><strong>ownerValue</strong> - Value of the owner provider in the Revenue Sharing Model. The semantics of this field depends on the algorithm specified, for example if the algorithm is a fixed precentage, this field will contain the percetage of the revenue that belongs to the owner provider.</p>
+</li>
+<li>
+<p><strong>productClass</strong> - Id of the Revenue Sharing Model. This field represents a group of services or applications whose revenues are distributed in the same way</p>
+</li>
+<li>
+<p><strong>algorithmType</strong> - ID of the algorithm that is used in this model</p>
+</li>
+<li>
+<p><strong>aggregatorId</strong> - Id of the aggregator that represents the Store instance where the applications and services are offered, and thus, must receive part of the revenues</p>
+</li>
+<li>
+<p><strong>aggregatorValue</strong> - Value of the aggregator in the Revenue Sharing Model</p>
+</li>
+<li>
+<p><strong>stakeholders</strong> - List of providers that are stakeholders of the applications and services included in a given product class, and thus, must receive part of the revenues. For each stakeholder the following fields are included:</p>
+<ul>
+<li>stakeholderId - provider Id of the Stakeholder</li>
+<li>modelValue - Value of the stakeholder in the Revenue Sharing Model</li>
+</ul>
+</li>
+</ul>
+        
+            <section id="resource_revenue-sharing-models-collection" class="resource">
+                <h3 id="h-resource_revenue-sharing-models-collection">Revenue Sharing Models Collection [/fiware-rss/rss/models{?aggregatorId}{?appProviderId}{?productClass}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_list-revenue-sharing-models" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_list-revenue-sharing-models">
+        List Revenue Sharing models -
+        GET
+        
+            /fiware-rss/rss/models{?aggregatorId}{?appProviderId}{?productClass}
+        
+    </h4>
+
+        
+                            <div id="list-revenue-sharing-models_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by aggragtor Id
+				
+			</dd>
+		
+			<dt>
+				appProviderId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by provider Id
+				
+			</dd>
+		
+			<dt>
+				productClass (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by product class
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_list-revenue-sharing-models_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/revenue-sharing-models-management/revenue-sharing-models-collection/list-revenue-sharing-models">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_create-revenue-sharing-model" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_create-revenue-sharing-model">
+        Create Revenue Sharing Model -
+        POST
+        
+            /fiware-rss/rss/models{?aggregatorId}{?appProviderId}{?productClass}
+        
+    </h4>
+
+        
+                            <div id="create-revenue-sharing-model_body" class="">
+                                
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_create-revenue-sharing-model_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/revenue-sharing-models-management/revenue-sharing-models-collection/create-revenue-sharing-model">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+        
+            <section id="resource_group_cdrs---transactions---management" class="resourceGroup">
+            <h2 id="h-resource_group_cdrs---transactions---management">CDRs - Transactions - Management</h2>
+        
+	<p>API for the management of CDR documents describing transactions. This API allows to register and retrieve transactions. Additionally, this API allows to launch the settlement process that aggregates the transactions and calculates the distribution of revenues.</p>
+<p>This API manages the following fields:</p>
+<ul>
+<li>
+<p><strong>cdrSource</strong> - Id of the aggregator that represent the Store instance that is generating the charging information</p>
+</li>
+<li>
+<p><strong>productClass</strong> - Product Class used to identify the revenue sharing model that will be used to distribute the revenues generated in the current transaction</p>
+</li>
+<li>
+<p><strong>correlationNumber</strong> - Correlation number of the transaction</p>
+</li>
+<li>
+<p><strong>timestamp</strong> - Timestamp of the transaction</p>
+</li>
+<li>
+<p><strong>application</strong> - Textual field with the id of the application or service that generates the transaction</p>
+</li>
+<li>
+<p><strong>transactionType</strong> - Type of transaction. This field can contain "C" for charges and "R" for refunds</p>
+</li>
+<li>
+<p><strong>event</strong> - Textual field that describes the event that generated the transaction (e.g pay-per-use)</p>
+</li>
+<li>
+<p><strong>referenceCode</strong> - Reference code that identifies the purchase in the Store instance that generates the transaction</p>
+</li>
+<li>
+<p><strong>description</strong> - Textual description of the transaction</p>
+</li>
+<li>
+<p><strong>chargedAmount</strong> - Part of the total charged amount to be distributed. The total amount charged to the customer includes also the field chargedTaxAmount</p>
+</li>
+<li>
+<p><strong>chargedTaxAmount</strong> - Part of the total charged amount that are taxes. The total amount charged to the customer includes also the field chargedAmount</p>
+</li>
+<li>
+<p><strong>currency</strong> - Currency of the transaction</p>
+</li>
+<li>
+<p><strong>customerId</strong> - Id of the customer that acquires the given service or application</p>
+</li>
+<li>
+<p><strong>appProvider</strong> - provider Id of the owner of the charged applications or services</p>
+</li>
+</ul>
+        
+            <section id="resource_transactions-collection" class="resource">
+                <h3 id="h-resource_transactions-collection">Transactions Collection [/fiware-rss/rss/cdrs{?aggregatorId}{?providerId}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_list-transactions" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_list-transactions">
+        List Transactions -
+        GET
+        
+            /fiware-rss/rss/cdrs{?aggregatorId}{?providerId}
+        
+    </h4>
+
+        
+                            <div id="list-transactions_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter transactions by aggregatorId
+				
+			</dd>
+		
+			<dt>
+				providerId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter transactions by providerId
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_list-transactions_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/cdrs---transactions---management/transactions-collection/list-transactions">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_create-transaction" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_create-transaction">
+        Create Transaction -
+        POST
+        
+            /fiware-rss/rss/cdrs{?aggregatorId}{?providerId}
+        
+    </h4>
+
+        
+                            <div id="create-transaction_body" class="">
+                                
+                                
+                                
+                                
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_create-transaction_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/cdrs---transactions---management/transactions-collection/create-transaction">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+            <section id="resource_settlement-collection" class="resource">
+                <h3 id="h-resource_settlement-collection">Settlement Collection [/fiware-rss/rss/settlement{?aggregatorId}{?providerId}{?productClass}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_launch-settlement" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_launch-settlement">
+        Launch Settlement -
+        GET
+        
+            /fiware-rss/rss/settlement{?aggregatorId}{?providerId}{?productClass}
+        
+    </h4>
+
+        
+                            <div id="launch-settlement_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to aggregate only transactions with a given aggregator
+				
+			</dd>
+		
+			<dt>
+				providerId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to aggregate only transactions with a given provider
+				
+			</dd>
+		
+			<dt>
+				productClass (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to aggregate only transactions with a given product class
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 202</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_launch-settlement_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/cdrs---transactions---management/settlement-collection/launch-settlement">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+        
+            <section id="resource_group_expenditure-limit-management" class="resourceGroup">
+            <h2 id="h-resource_group_expenditure-limit-management">Expenditure Limit Management</h2>
+        
+	<p>API for the management of expenditure limits. This API allows to define a couple of limits that allow to control the maximun expenses of customers in different periods of time. This API allows to list, create, modify, and delete expenditure limits.</p>
+<p>This API manages the following fields:</p>
+<ul>
+<li>
+<p><strong>service</strong> - Service where the limits are applied</p>
+</li>
+<li>
+<p><strong>limits</strong> - List of expenditure limits. Each limit has the following fields:</p>
+<ul>
+<li><strong>type</strong> - Period of time of the limit. This field can contain perTransaction, daily, weekly, and monthly</li>
+<li><strong>currency</strong> - Currency of the limit</li>
+<li><strong>maxAmount</strong> - Maximum amount that can be expensed in the defined period.</li>
+</ul>
+</li>
+</ul>
+<p>Note that only a limit can be defined for a given type and a given currency.</p>
+<p>This API allows to manage limits for both providers and users. It is important to remark that provider limits are used as the default limits applied, if the user has not defined its own limits.</p>
+        
+            <section id="resource_provider-limits-entry" class="resource">
+                <h3 id="h-resource_provider-limits-entry">Provider Limits Entry [/expenditureLimits/limits/{provider}{?service}{?currency}{?type}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_get-provider-limits" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_get-provider-limits">
+        Get Provider Limits -
+        GET
+        
+            /expenditureLimits/limits/{provider}{?service}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="get-provider-limits_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider whose limits are defined
+				
+			</dd>
+		
+			<dt>
+				service (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by service
+				
+			</dd>
+		
+			<dt>
+				currency (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by currency
+				
+			</dd>
+		
+			<dt>
+				type (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by type
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_get-provider-limits_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/expenditure-limit-management/provider-limits-entry/get-provider-limits">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_create/update-provider-limit" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_create/update-provider-limit">
+        Create/Update provider Limit -
+        POST
+        
+            /expenditureLimits/limits/{provider}{?service}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="create/update-provider-limit_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider whose limits are defined
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_create/update-provider-limit_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/expenditure-limit-management/provider-limits-entry/create/update-provider-limit">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_delete-provider-limits" class="action DELETE">
+                        
+
+                        
+    <h4 id="h-action_delete-provider-limits">
+        Delete Provider Limits -
+        DELETE
+        
+            /expenditureLimits/limits/{provider}{?service}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="delete-provider-limits_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider whose limits are defined
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 204</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_delete-provider-limits_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/expenditure-limit-management/provider-limits-entry/delete-provider-limits">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+            <section id="resource_user-limits-entry" class="resource">
+                <h3 id="h-resource_user-limits-entry">User Limits Entry [/expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_get-user-limits" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_get-user-limits">
+        Get User Limits -
+        GET
+        
+            /expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="get-user-limits_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider where limits are applied
+				
+			</dd>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+			<dt>
+				service (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by service
+				
+			</dd>
+		
+			<dt>
+				currency (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by currency
+				
+			</dd>
+		
+			<dt>
+				type (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by type
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_get-user-limits_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/expenditure-limit-management/user-limits-entry/get-user-limits">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_create/update-user-limits" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_create/update-user-limits">
+        Create/Update User Limits -
+        POST
+        
+            /expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="create/update-user-limits_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider where limits are applied
+				
+			</dd>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_create/update-user-limits_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/expenditure-limit-management/user-limits-entry/create/update-user-limits">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_delete-user-limits" class="action DELETE">
+                        
+
+                        
+    <h4 id="h-action_delete-user-limits">
+        Delete User Limits -
+        DELETE
+        
+            /expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="delete-user-limits_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider where limits are applied
+				
+			</dd>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 204</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_delete-user-limits_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/expenditure-limit-management/user-limits-entry/delete-user-limits">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+        
+            <section id="resource_group_balance-accumulated-management" class="resourceGroup">
+            <h2 id="h-resource_group_balance-accumulated-management">Balance Accumulated Management</h2>
+        
+	<p>API for the management of accumulated balances. Accumulated balances are the total expenses used to check the expenditure limits. This API allows to retrieve, check and update balances.</p>
+<p>This API manages the following fields:</p>
+<ul>
+<li>
+<p><strong>service</strong> - Service where the limits are applied</p>
+</li>
+<li>
+<p><strong>appProvider</strong> - Provider where limits are applied</p>
+</li>
+<li>
+<p><strong>accums</strong> - List of accumulated balances for the existing expenditure limits</p>
+</li>
+<li>
+<p><strong>type</strong> - Period of time of the balance. This field can contain perTransaction, daily, weekly, and monthly</p>
+</li>
+<li>
+<p><strong>currency</strong> - Currency of the balance</p>
+</li>
+<li>
+<p><strong>nextPeriodStartDate</strong> - Start time of the next period for the given accumulated balance</p>
+</li>
+<li>
+<p><strong>expensedAmount</strong> - Total amount accumulated</p>
+</li>
+<li>
+<p><strong>chargeType</strong> - Type of transaction. This value can contain "C" for charges and "R" for refunds</p>
+</li>
+<li>
+<p><strong>amount</strong> - Amount charged in a transaction</p>
+</li>
+</ul>
+        
+            <section id="resource_user-balance-entry" class="resource">
+                <h3 id="h-resource_user-balance-entry">User balance Entry [/expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_get-user-balance" class="action GET">
+                        
+
+                        
+    <h4 id="h-action_get-user-balance">
+        Get User Balance -
+        GET
+        
+            /expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="get-user-balance_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User owner of the accumulated balance
+				
+			</dd>
+		
+			<dt>
+				service (Required)
+			</dt>
+			<dd>
+				(optional) Optional parameter used to filter by service
+				
+			</dd>
+		
+			<dt>
+				appProvider (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by provider
+				
+			</dd>
+		
+			<dt>
+				currency (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by currency
+				
+			</dd>
+		
+			<dt>
+				type (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by type
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_get-user-balance_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/balance-accumulated-management/user-balance-entry/get-user-balance">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_check--user-balance" class="action POST">
+                        
+
+                        
+    <h4 id="h-action_check--user-balance">
+        Check  User Balance -
+        POST
+        
+            /expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="check--user-balance_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_check--user-balance_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/balance-accumulated-management/user-balance-entry/check--user-balance">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+                        
+                            <div id="action_update-user-balance" class="action PUT">
+                        
+
+                        
+    <h4 id="h-action_update-user-balance">
+        Update User Balance -
+        PUT
+        
+            /expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}
+        
+    </h4>
+
+        
+                            <div id="update-user-balance_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_update-user-balance_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/balance-accumulated-management/user-balance-entry/update-user-balance">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+            <section id="resource_reset-user-balance-entry" class="resource">
+                <h3 id="h-resource_reset-user-balance-entry">Reset User Balance Entry [/expenditureLimits/balance/{user}/reset]</h3>
+                
+                
+                
+
+		        
+                
+                
+
+
+
+
+
+
+    
+
+
+                
+
+
+                    
+                        
+                            <div id="action_reset-user-balance" class="action PUT">
+                        
+
+                        
+    <h4 id="h-action_reset-user-balance">
+        Reset User Balance -
+        PUT
+        
+            /expenditureLimits/balance/{user}/reset
+        
+    </h4>
+
+        
+                            <div id="reset-user-balance_body" class="">
+                                
+                                
+                                
+                                
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User owner of the accumulated balance
+				
+			</dd>
+		
+	</dl>
+			
+                                
+                                
+      
+                                    
+        	                            
+                                            
+                                            
+                                            
+                                            
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+     
+</div>
+        	                            
+    
+        	                            
+        		                            
+                                        
+                                        
+                                        
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+     
+</div>
+        	                            
+                                    
+                                    <div class="goExample">
+                                        <a href="#action_reset-user-balance_examples">Go to example</a>
+                                    </div>
+                                    
+                                        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <div class="goApiary">
+                <a target="_blank" href="http://docs.fiwarerss.apiary.io/#reference/balance-accumulated-management/reset-user-balance-entry/reset-user-balance">View in Apiary</a>
+            </div>
+        
+    
+
+                                    
+                            </div>
+                        </div>
+                    
+            </section>
+        
+    </section>
+
+<section id="examples">
+    <h2>Examples</h2>
+    
+        
+            <section id="resource_group_aggregators-management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_aggregators-management_example">Aggregators Management</h3>
+        
+
+                
+                    <section id="resource_aggregators-collection_example" class="resourceExample">
+                        <h4 id="h-resource_aggregators-collection_example">Aggregators Collection [/fiware-rss/rss/aggregator]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_list-all-aggregators_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_list-all-aggregators_examples">
+        List all Aggregators -
+        GET
+        
+            /fiware-rss/rss/aggregator
+        
+    </h4>
+
+                
+                                    <div id="action_list-all-aggregators_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-all-aggregators_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-all-aggregators_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "aggregatorName": "WStore",
+        "aggregatorId": "fdelavega@conwet.com"
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_list-all-aggregators">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_register-an-aggregator_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_register-an-aggregator_examples">
+        Register an Aggregator -
+        POST
+        
+            /fiware-rss/rss/aggregator
+        
+    </h4>
+
+                
+                                    <div id="action_register-an-aggregator_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_register-an-aggregator_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "aggregatorName": "WStore",
+    "aggregatorId": "fdelavega@conwet.com"
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_register-an-aggregator_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_register-an-aggregator">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+        
+            <section id="resource_group_providers-management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_providers-management_example">Providers Management</h3>
+        
+
+                
+                    <section id="resource_providers-collection_example" class="resourceExample">
+                        <h4 id="h-resource_providers-collection_example">Providers Collection [/fiware-rss/rss/providers{?aggregatorId}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_list-all-providers_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_list-all-providers_examples">
+        List all providers -
+        GET
+        
+            /fiware-rss/rss/providers{?aggregatorId}
+        
+    </h4>
+
+                
+                                    <div id="action_list-all-providers_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to retrieve only those providers registered for a given aggregator
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-all-providers_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-all-providers_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "aggregatorId": "fdelavega@conwet.com",
+        "providerId": "conwet",
+        "providerName": "CoNWeT"
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_list-all-providers">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_register-a-provider_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_register-a-provider_examples">
+        Register a provider -
+        POST
+        
+            /fiware-rss/rss/providers{?aggregatorId}
+        
+    </h4>
+
+                
+                                    <div id="action_register-a-provider_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_register-a-provider_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "aggregatorId": "fdelavega@conwet.com",
+    "providerId": "conwet",
+    "providerName": "CoNWeT"
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_register-a-provider_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_register-a-provider">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+        
+            <section id="resource_group_algorithms-management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_algorithms-management_example">Algorithms Management</h3>
+        
+
+                
+                    <section id="resource_algorithms-collection_example" class="resourceExample">
+                        <h4 id="h-resource_algorithms-collection_example">Algorithms Collection [/fiware-rss/rss/algorithms]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_list-supported-algorithms_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_list-supported-algorithms_examples">
+        List Supported Algorithms -
+        GET
+        
+            /fiware-rss/rss/algorithms
+        
+    </h4>
+
+                
+                                    <div id="action_list-supported-algorithms_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-supported-algorithms_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-supported-algorithms_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "algorithmId": "FIXED_PERCENTAGE",
+        "description": "Fixed percentage distribution of revenues"
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_list-supported-algorithms">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+        
+            <section id="resource_group_revenue-sharing-models-management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_revenue-sharing-models-management_example">Revenue Sharing Models Management</h3>
+        
+
+                
+                    <section id="resource_revenue-sharing-models-collection_example" class="resourceExample">
+                        <h4 id="h-resource_revenue-sharing-models-collection_example">Revenue Sharing Models Collection [/fiware-rss/rss/models{?aggregatorId}{?appProviderId}{?productClass}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_list-revenue-sharing-models_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_list-revenue-sharing-models_examples">
+        List Revenue Sharing models -
+        GET
+        
+            /fiware-rss/rss/models{?aggregatorId}{?appProviderId}{?productClass}
+        
+    </h4>
+
+                
+                                    <div id="action_list-revenue-sharing-models_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by aggragtor Id
+				
+			</dd>
+		
+			<dt>
+				appProviderId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by provider Id
+				
+			</dd>
+		
+			<dt>
+				productClass (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by product class
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-revenue-sharing-models_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-revenue-sharing-models_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "ownerProviderId": "fdelavega",
+        "ownerValue": 60,
+        "productClass": "orionServices",
+        "algorithmType": "FIXED_PERCENTAGE",
+        "aggregatorId": "fdelavega@conwet.com",
+        "aggregatorValue": 20,
+        "stakeholders": [
+            {
+                "stakeholderId": "aarranz",
+                "modelValue": 20
+            }
+        ]
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_list-revenue-sharing-models">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_create-revenue-sharing-model_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_create-revenue-sharing-model_examples">
+        Create Revenue Sharing Model -
+        POST
+        
+            /fiware-rss/rss/models{?aggregatorId}{?appProviderId}{?productClass}
+        
+    </h4>
+
+                
+                                    <div id="action_create-revenue-sharing-model_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create-revenue-sharing-model_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "ownerProviderId": "fdelavega",
+    "ownerValue": 60,
+    "productClass": "orionServices",
+    "algorithmType": "FIXED_PERCENTAGE",
+    "aggregatorId": "fdelavega@conwet.com",
+    "aggregatorValue": 20,
+    "stakeholders": [
+        {
+            "stakeholderId": "aarranz",
+            "modelValue": 20
+        }
+    ]
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create-revenue-sharing-model_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_create-revenue-sharing-model">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+        
+            <section id="resource_group_cdrs---transactions---management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_cdrs---transactions---management_example">CDRs - Transactions - Management</h3>
+        
+
+                
+                    <section id="resource_transactions-collection_example" class="resourceExample">
+                        <h4 id="h-resource_transactions-collection_example">Transactions Collection [/fiware-rss/rss/cdrs{?aggregatorId}{?providerId}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_list-transactions_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_list-transactions_examples">
+        List Transactions -
+        GET
+        
+            /fiware-rss/rss/cdrs{?aggregatorId}{?providerId}
+        
+    </h4>
+
+                
+                                    <div id="action_list-transactions_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter transactions by aggregatorId
+				
+			</dd>
+		
+			<dt>
+				providerId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter transactions by providerId
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-transactions_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_list-transactions_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>[
+    {
+        "cdrSource": "fdelavega@conwet.com",
+        "productClass": "orionServices",
+        "correlationNumber": 112,
+        "timestamp": "2015-07-15T19:00:01.000Z",
+        "application": "OrionStarterKit",
+        "transactionType": "C",
+        "event": "use",
+        "referenceCode": "555b079d8e05ac213ff15827",
+        "description": "Usage of OrionStarterKit Offering",
+        "chargedAmount": 10,
+        "chargedTaxAmount": 3,
+        "currency": "EUR",
+        "customerId": "amagan",
+        "appProvider": "fdelavega"
+    }
+]
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_list-transactions">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_create-transaction_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_create-transaction_examples">
+        Create Transaction -
+        POST
+        
+            /fiware-rss/rss/cdrs{?aggregatorId}{?providerId}
+        
+    </h4>
+
+                
+                                    <div id="action_create-transaction_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create-transaction_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+        "cdrSource": "fdelavega@conwet.com",
+        "productClass": "orionServices",
+        "correlationNumber": 112,
+        "timestamp": "2015-07-15T19:00:01.000Z",
+        "application": "OrionStarterKit",
+        "transactionType": "C",
+        "event": "use",
+        "referenceCode": "555b079d8e05ac213ff15827",
+        "description": "Usage of OrionStarterKit Offering",
+        "chargedAmount": 10,
+        "chargedTaxAmount": 3,
+        "currency": "EUR",
+        "customerId": "amagan",
+        "appProvider": "fdelavega"
+    }
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create-transaction_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_create-transaction">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+                    <section id="resource_settlement-collection_example" class="resourceExample">
+                        <h4 id="h-resource_settlement-collection_example">Settlement Collection [/fiware-rss/rss/settlement{?aggregatorId}{?providerId}{?productClass}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_launch-settlement_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_launch-settlement_examples">
+        Launch Settlement -
+        GET
+        
+            /fiware-rss/rss/settlement{?aggregatorId}{?providerId}{?productClass}
+        
+    </h4>
+
+                
+                                    <div id="action_launch-settlement_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				aggregatorId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to aggregate only transactions with a given aggregator
+				
+			</dd>
+		
+			<dt>
+				providerId (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to aggregate only transactions with a given provider
+				
+			</dd>
+		
+			<dt>
+				productClass (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to aggregate only transactions with a given product class
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_launch-settlement_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 202</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_launch-settlement_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_launch-settlement">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+        
+            <section id="resource_group_expenditure-limit-management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_expenditure-limit-management_example">Expenditure Limit Management</h3>
+        
+
+                
+                    <section id="resource_provider-limits-entry_example" class="resourceExample">
+                        <h4 id="h-resource_provider-limits-entry_example">Provider Limits Entry [/expenditureLimits/limits/{provider}{?service}{?currency}{?type}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_get-provider-limits_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_get-provider-limits_examples">
+        Get Provider Limits -
+        GET
+        
+            /expenditureLimits/limits/{provider}{?service}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_get-provider-limits_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider whose limits are defined
+				
+			</dd>
+		
+			<dt>
+				service (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by service
+				
+			</dd>
+		
+			<dt>
+				currency (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by currency
+				
+			</dd>
+		
+			<dt>
+				type (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by type
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_get-provider-limits_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_get-provider-limits_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "limits": [
+        {
+            "type": "perTransaction",
+            "currency": "EUR", 
+            "maxAmount": 100,
+        },
+        {
+            "type": "weekly",
+            "currency": "GBP",
+            "maxAmount": 500
+        },
+        {
+            "type":"daily",
+            "currency": "EUR",
+            "maxAmount": 200
+        },
+        {
+            "type":"monthly",
+            "currency": "EUR",
+            "maxAmount": 5000
+        },
+        {
+            "type":"monthly",
+            "currency": "GBP",  
+            "maxAmount": 3000
+        }
+    ]
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_get-provider-limits">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_create/update-provider-limit_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_create/update-provider-limit_examples">
+        Create/Update provider Limit -
+        POST
+        
+            /expenditureLimits/limits/{provider}{?service}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_create/update-provider-limit_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider whose limits are defined
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create/update-provider-limit_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "limits": [
+        {
+            "type": "perTransaction",
+            "currency": "EUR", 
+            "maxAmount": 100,
+        },
+        {
+            "type": "weekly",
+            "currency": "GBP",
+            "maxAmount": 500
+        },
+        {
+            "type":"daily",
+            "currency": "EUR",
+            "maxAmount": 200
+        },
+        {
+            "type":"monthly",
+            "currency": "EUR",
+            "maxAmount": 5000
+        },
+        {
+            "type":"monthly",
+            "currency": "GBP",  
+            "maxAmount": 3000
+        }
+    ]
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create/update-provider-limit_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_create/update-provider-limit">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_delete-provider-limits_examples" class="actionExample DELETE">
+
+                                    
+    <h4 id="h-action_delete-provider-limits_examples">
+        Delete Provider Limits -
+        DELETE
+        
+            /expenditureLimits/limits/{provider}{?service}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_delete-provider-limits_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider whose limits are defined
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_delete-provider-limits_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 204</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_delete-provider-limits_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_delete-provider-limits">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+                    <section id="resource_user-limits-entry_example" class="resourceExample">
+                        <h4 id="h-resource_user-limits-entry_example">User Limits Entry [/expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_get-user-limits_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_get-user-limits_examples">
+        Get User Limits -
+        GET
+        
+            /expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_get-user-limits_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider where limits are applied
+				
+			</dd>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+			<dt>
+				service (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by service
+				
+			</dd>
+		
+			<dt>
+				currency (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by currency
+				
+			</dd>
+		
+			<dt>
+				type (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by type
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_get-user-limits_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_get-user-limits_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "limits": [
+        {
+            "type": "perTransaction",
+            "currency": "EUR", 
+            "maxAmount": 100,
+        },
+        {
+            "type": "weekly",
+            "currency": "GBP",
+            "maxAmount": 500
+        },
+        {
+            "type":"daily",
+            "currency": "EUR",
+            "maxAmount": 200
+        },
+        {
+            "type":"monthly",
+            "currency": "EUR",
+            "maxAmount": 5000
+        },
+        {
+            "type":"monthly",
+            "currency": "GBP",  
+            "maxAmount": 3000
+        }
+    ]
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_get-user-limits">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_create/update-user-limits_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_create/update-user-limits_examples">
+        Create/Update User Limits -
+        POST
+        
+            /expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_create/update-user-limits_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider where limits are applied
+				
+			</dd>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create/update-user-limits_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "limits": [
+        {
+            "type": "perTransaction",
+            "currency": "EUR", 
+            "maxAmount": 100,
+        },
+        {
+            "type": "weekly",
+            "currency": "GBP",
+            "maxAmount": 500
+        },
+        {
+            "type":"daily",
+            "currency": "EUR",
+            "maxAmount": 200
+        },
+        {
+            "type":"monthly",
+            "currency": "EUR",
+            "maxAmount": 5000
+        },
+        {
+            "type":"monthly",
+            "currency": "GBP",  
+            "maxAmount": 3000
+        }
+    ]
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 201</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_create/update-user-limits_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_create/update-user-limits">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_delete-user-limits_examples" class="actionExample DELETE">
+
+                                    
+    <h4 id="h-action_delete-user-limits_examples">
+        Delete User Limits -
+        DELETE
+        
+            /expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_delete-user-limits_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				provider (Required)
+			</dt>
+			<dd>
+				Provider where limits are applied
+				
+			</dd>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_delete-user-limits_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 204</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_delete-user-limits_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_delete-user-limits">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+        
+            <section id="resource_group_balance-accumulated-management_example" class="resourceGroupExample">
+                <h3 id="h-resource_group_balance-accumulated-management_example">Balance Accumulated Management</h3>
+        
+
+                
+                    <section id="resource_user-balance-entry_example" class="resourceExample">
+                        <h4 id="h-resource_user-balance-entry_example">User balance Entry [/expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_get-user-balance_examples" class="actionExample GET">
+
+                                    
+    <h4 id="h-action_get-user-balance_examples">
+        Get User Balance -
+        GET
+        
+            /expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_get-user-balance_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User owner of the accumulated balance
+				
+			</dd>
+		
+			<dt>
+				service (Required)
+			</dt>
+			<dd>
+				(optional) Optional parameter used to filter by service
+				
+			</dd>
+		
+			<dt>
+				appProvider (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by provider
+				
+			</dd>
+		
+			<dt>
+				currency (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by currency
+				
+			</dd>
+		
+			<dt>
+				type (Optional)
+			</dt>
+			<dd>
+				Optional parameter used to filter by type
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_get-user-balance_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+        
+            (application/json)
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_get-user-balance_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "appProvider": "conwet",
+    "accums": [
+        {
+            "type": "weekly",
+            "currency": "EUR",
+            "nextPeriodStartDate": "2015-07-15T19:00:01.000Z",
+            "expensedAmount": 140
+        },
+        {
+            "type": "weekly",
+            "currency": "GBP",
+            "nextPeriodStartDate": "2015-07-15T19:00:01.000Z",
+            "expensedAmount": 100
+        }
+    ]
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_get-user-balance">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_check--user-balance_examples" class="actionExample POST">
+
+                                    
+    <h4 id="h-action_check--user-balance_examples">
+        Check  User Balance -
+        POST
+        
+            /expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_check--user-balance_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_check--user-balance_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "appProvider": "conwet",
+    "chargeType": "C",
+    "currency": "EUR",
+    "amount": 50
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_check--user-balance_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_check--user-balance">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                                <div id="action_update-user-balance_examples" class="actionExample PUT">
+
+                                    
+    <h4 id="h-action_update-user-balance_examples">
+        Update User Balance -
+        PUT
+        
+            /expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}
+        
+    </h4>
+
+                
+                                    <div id="action_update-user-balance_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User whose limits are defined
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_update-user-balance_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "appProvider": "conwet",
+    "chargeType": "C",
+    "currency": "EUR",
+    "amount": 50
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_update-user-balance_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_update-user-balance">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+                    <section id="resource_reset-user-balance-entry_example" class="resourceExample">
+                        <h4 id="h-resource_reset-user-balance-entry_example">Reset User Balance Entry [/expenditureLimits/balance/{user}/reset]</h4>
+                            
+                            
+                            
+
+                            
+                            
+                            
+
+                            
+
+
+                            
+                                <div id="action_reset-user-balance_examples" class="actionExample PUT">
+
+                                    
+    <h4 id="h-action_reset-user-balance_examples">
+        Reset User Balance -
+        PUT
+        
+            /expenditureLimits/balance/{user}/reset
+        
+    </h4>
+
+                
+                                    <div id="action_reset-user-balance_body" class=""> 
+                                        
+                                        
+                                        
+                                        
+
+	<span class="parameters-title">Parameters</span>
+	<dl>
+		
+			<dt>
+				user (Required)
+			</dt>
+			<dd>
+				User owner of the accumulated balance
+				
+			</dd>
+		
+	</dl>
+         
+                                        
+                                            
+                                            
+                                                
+                                                    
+                                                    
+                                                    
+                                                    
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Request </span> 
+        
+            (application/json)
+        
+    
+        
+    
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_reset-user-balance_Request_1_body" class=" action-div-body">
+                <p></p>
+
+                
+        	        <p>Headers</p>
+                    
+                    
+                        
+                    
+                        
+                    
+
+        	        <pre><code>Content-Type: application/json
+Authorization: Bearer YOUR_OAUTH2_TOKEN</code></pre>
+                
+
+                
+                    <p>Body</p>
+                    <pre><code>{
+    "service": "fiware",
+    "appProvider": "conwet",
+    "currency": "EUR",
+    "type": "weekly"
+}
+</code></pre>
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+            
+                                                
+                                                    
+                                                
+                                                
+                                                
+
+<div class="rest-packet-div">
+
+            <span class="packetType">Response 200</span> 
+            
+            
+            
+            
+
+
+
+ 
+            <div id="action_reset-user-balance_Response_1_body" class=" action-div-body">
+                <p></p>
+
+                
+
+                
+
+                
+            </div>
+            
+            
+     
+</div>
+                                                
+                                            
+                                            <div class="goActions">
+                                                <a href="#action_reset-user-balance">Go to specification</a>
+                                            </div>
+                                    </div>
+                                </div>
+                            
+                    </section>
+            
+        </section>
+    
+
+
+
+</section>
+  </section>
+  
+   
+
+
+
+	
+
+	
+
+	
+	  	<section>
+			<h1 id="acknowledgements"> Acknowledgements</h1>
+<p>The editors would like to express their gratitude to the following people who actively contributed to this specification:
+Aitor Magán and Álvaro Arranz García.</p>
+
+
+		</section>
+	
+
+	
+
+	
+
+    
+    
+    
+      <section id="references">
+      <h1>References</h1>
+          <ul>
+              
+                  <li><a href="https://github.com/conwetlab/wstore/tree/develop">https://github.com/conwetlab/wstore/tree/develop</a></li>
+              
+                  <li><a href="https://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/FI-WARE_Open_Specification_Legal_Notice_%28implicit_patents_license%29">FIWARE Open Specification License</a></li>
+              
+          </ul>
+      </section>
+    
+  </div>
+</div>
+</body>
+</html>
