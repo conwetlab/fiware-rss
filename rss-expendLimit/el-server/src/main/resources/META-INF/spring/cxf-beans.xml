@@ -14,7 +14,7 @@
     <context:component-scan base-package="es.tid.fiware" />
 
     <!-- expenditureControl -->
-    <jaxrs:server id="BalanceAccumulated" address="/balanceAccumulated">
+    <jaxrs:server id="BalanceAccumulated" address="/balance">
         <jaxrs:serviceBeans>
             <bean class="es.tid.fiware.rss.expenditureLimit.server.BalanceAccumulatedServer"/> 
         </jaxrs:serviceBeans>
@@ -24,7 +24,7 @@
         </jaxrs:providers>
     </jaxrs:server>
     <!-- expenditureLimit -->
-    <jaxrs:server id="LimitManagement" address="/limitManagement">
+    <jaxrs:server id="LimitManagement" address="/limits">
         <jaxrs:serviceBeans>
             <bean class="es.tid.fiware.rss.expenditureLimit.server.ExpenditureLimitServer"/> 
         </jaxrs:serviceBeans>
