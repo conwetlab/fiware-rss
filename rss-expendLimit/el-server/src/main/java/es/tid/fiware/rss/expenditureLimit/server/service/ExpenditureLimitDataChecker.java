@@ -348,7 +348,7 @@ public class ExpenditureLimitDataChecker {
 
         // No allowed role has been found
         if (!found) {
-            String[] args = {"The user is authorized to retrieve ecpenditure limits"};
+            String[] args = {"The user is not authorized to retrieve ecpenditure limits"};
             throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
         }
     }

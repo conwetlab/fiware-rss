@@ -10,6 +10,7 @@
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    
     <!-- Root component scan -->
     <context:component-scan base-package="es.tid.fiware" />
 
@@ -33,8 +34,7 @@
             <ref bean="jsonSbErrorParser" />
         </jaxrs:providers>
     </jaxrs:server>
-    
-    
+
     <bean id="jsonSbErrorParser"
        class="es.tid.fiware.rss.expenditureLimit.server.exceptionhandles.ExpenditureLimitExceptionMapper" />
 

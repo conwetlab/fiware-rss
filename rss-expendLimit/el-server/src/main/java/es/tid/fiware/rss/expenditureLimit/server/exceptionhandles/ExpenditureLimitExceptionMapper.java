@@ -19,6 +19,7 @@
 
 package es.tid.fiware.rss.expenditureLimit.server.exceptionhandles;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -35,6 +36,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import es.tid.fiware.rss.common.properties.AppProperties;
 import es.tid.fiware.rss.exception.RSSException;
+import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.expenditureLimit.api.ExceptionTypeBean;
 import es.tid.fiware.rss.expenditureLimit.server.common.FactoryResponse;
 
@@ -52,23 +54,38 @@ public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exceptio
     private UriInfo ui;
     private final Logger logger = LoggerFactory.getLogger(ExpenditureLimitExceptionMapper.class);
 
+    private Response getResponseFromRSSException(RSSException e) {
+        logger.error("Return GRETAException: [" + ((RSSException) e).getExceptionType().getExceptionId()
+                + "] " + e.getMessage(), e);
+
+        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
+            ((RSSException) e), ui.getAbsolutePath().getPath());
+
+        return FactoryResponse.createResponseError(((RSSException) e), exceptObj);
+    }
+
     @Override
     public Response toResponse(Exception e) {
 
         if (e instanceof RSSException) {
-            logger.error("Return GRETAException: [" + ((RSSException) e).getExceptionType().getExceptionId()
-                + "] " + e.getMessage(), e);
-            ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
-                ((RSSException) e), ui.getAbsolutePath().getPath());
-            return FactoryResponse.createResponseError(((RSSException) e), exceptObj);
+            return this.getResponseFromRSSException((RSSException) e);
+
         } else if (e instanceof GenericJDBCException) {
             return FactoryResponse.catchNewConnectionJson(dbeProperties, ui, (GenericJDBCException) e,
                 ui.getAbsolutePath().getPath(), null);
+
         } else if (e instanceof JDBCConnectionException) {
             return FactoryResponse.catchConnectionJDBCJson(dbeProperties, ui, (JDBCConnectionException) e,
                 ui.getAbsolutePath().getPath(), null);
+
         } else if (e instanceof NotFoundException) {
             return Response.status(404).build();
+
+        } else if (e instanceof JsonMappingException) {
+            String[] args = {"The provided JSON document is not correct"};
+            RSSException newException = new RSSException(UNICAExceptionType.CONTENT_NOT_WELL_FORMED, args);
+            return this.getResponseFromRSSException((RSSException) newException);
+
         } else {
             logger.error("Return Exception: " + e.getMessage(), e);
 

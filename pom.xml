@@ -29,9 +29,10 @@
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <junit.version>4.12</junit.version>
         <org.springframework.version>4.1.6.RELEASE</org.springframework.version>
+        <org.springsecurity.version>4.0.1.RELEASE</org.springsecurity.version>
         <org.hibernate.version>4.3.8.Final</org.hibernate.version>
         <cxf.version>3.0.3</cxf.version>
-        <jackson.version>2.5.0</jackson.version>
+        <jackson.version>2.5.1</jackson.version>
         <logback.version>1.0.12</logback.version>	
         <janino.version>2.5.16</janino.version>
         <org.dbunit.version>2.4.9</org.dbunit.version>
