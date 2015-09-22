@@ -179,7 +179,7 @@ public class RSSModelService {
     /**
      * Delete Rss Models.
      * 
-     * @param authToken
+     * @param aggregatorId
      * @param appProvider
      * @param productClass
      * @return
@@ -189,14 +189,25 @@ public class RSSModelService {
     @DELETE
     @Path("/")
     @Consumes("application/json")
-    public Response deleteRSSModel(@HeaderParam("X-Auth-Token") final String authToken,
+    public Response deleteRSSModel(
+        @QueryParam("aggregatorId") String aggregatorId,
         @QueryParam("appProviderId") String appProvider,
         @QueryParam("productClass") String productClass) throws Exception {
         RSSModelService.logger.debug("Into deleteRSSModel method");
         // check security
         RSUser user = userManager.getCurrentUser();
+        String effectiveAggregator;
+
+        if (userManager.isAdmin()) {
+            effectiveAggregator = aggregatorId;
+        } else if (null == aggregatorId || aggregatorId.equals(user.getEmail())){
+            effectiveAggregator = user.getEmail();
+        } else {
+            String[] args = {"You are not allowed to remove RS Models for the given aggregator"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
         // Call service
-        rssModelsManager.deleteRssModel(user.getEmail(), appProvider, productClass);
+        rssModelsManager.deleteRssModel(effectiveAggregator, appProvider, productClass);
         // Building response
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
         return rb.build();

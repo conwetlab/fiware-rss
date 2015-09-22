@@ -270,10 +270,12 @@ public class RSSModelsManager {
         logger.debug("Into deleteRssModel() method");
 
         // check valid appProvider
-        if (null == appProviderId || appProviderId.equalsIgnoreCase("")) {
-            String[] args = {"Required parameters not found: appProviderId."};
+        if (null == aggregatorId || aggregatorId.trim().isEmpty()) {
+            String[] args = {"aggregatorId."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
-        } else {
+        }
+
+        if (appProviderId != null && !appProviderId.trim().isEmpty()) {
             checkValidAppProvider(aggregatorId, appProviderId);
         }
 
