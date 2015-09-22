@@ -4,17 +4,17 @@
  * Telefonica Investigacion y Desarrollo, S.A.
  *
  * Copyright (C) 2015, CoNWeT Lab., Universidad Politénica de Madrid
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,134 +24,99 @@ package es.tid.fiware.rss.service;
 import java.io.IOException;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.annotation.Propagation;
-
-import es.tid.fiware.rss.common.test.DatabaseLoader;
+import es.tid.fiware.rss.dao.DbeTransactionDao;
+import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.model.DbeTransaction;
-import es.tid.fiware.rss.model.RSSFile;
+import es.tid.fiware.rss.settlement.SettlementTaskFactory;
+import es.tid.fiware.rss.settlement.ThreadPoolManager;
+import java.io.File;
+import java.util.LinkedList;
+import java.util.Properties;
+import static org.junit.Assert.fail;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
-    "/META-INF/spring/cxf-beans.xml"})
 public class SettlementManagerTest {
-    /***
-     * Logging system.
-     */
-    private final Logger logger = LoggerFactory.getLogger(SettlementManagerTest.class);
-    /**
-     * 
-     */
-    @Autowired
-    private DatabaseLoader databaseLoader;
-    /**
-     * 
-     */
-    @Autowired
-    private SettlementManager settlementManager;
-    /**
-     * 
-     */
-    private final String providerId = "123456";
-    /**
-     * 
-     */
-    private final String aggregatorId = "mail@mail.com";
-    /**
-     * 
-     */
-    private Runtime runtime;
 
-    /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from dbb
-     */
+    @Mock private DbeTransactionDao transactionDao;
+    @Mock private SettlementTaskFactory taskFactory;
+    @Mock private AggregatorManager aggregatorManager;
+    @Mock private ProviderManager providerManager;
+    @Mock private RSSModelsManager modelsManager;
+    @Mock private ThreadPoolManager poolManager;
+    @Mock private Properties rssProps;
+    @InjectMocks private SettlementManager toTest;
+
     @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
-        // prepare mockito
-        Process p = Mockito.mock(Process.class);
-        runtime = Mockito.mock(Runtime.class);
-        Mockito.when(runtime.exec(Matchers.any(String.class))).thenReturn(p);
-        ReflectionTestUtils.setField(unwrapSettlementManager(), "runtime", runtime);
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
-    /**
-     * 
-     * @return
-     * @throws Exception
-     */
-    private SettlementManager unwrapSettlementManager() throws Exception {
-        if (AopUtils.isAopProxy(settlementManager) && settlementManager instanceof Advised) {
-            Object target = ((Advised) settlementManager).getTargetSource().getTarget();
-            return (SettlementManager) target;
-        }
-        return null;
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
-    }
-
-    /**
-    * 
-    */
     @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
     public void getSettlementFilesTest() {
-        List<RSSFile> fileList = settlementManager.getSettlementFiles(null);
-        if (fileList.isEmpty()) {
-            Assert.fail("No files returned");
-        } else if (fileList.size() == 1) {
-            if (fileList.get(0).getTxName().equals("There are not RSS Files generated for you at this moment")) {
-                Assert.fail("There are not RSS Files generated for you at this moment");
-            }
-        }
-
-        fileList = settlementManager.getSettlementFiles(aggregatorId);
-        if (fileList.isEmpty()) {
-            Assert.fail("No files returned");
-        } else if (fileList.size() == 1) {
-            if (fileList.get(0).getTxName().equals("There are not RSS Files generated for you at this moment")) {
-                Assert.fail("There are not RSS Files generated for you at this moment");
-            }
-        }
+        toTest.getSettlementFiles("");
     }
 
-    /**
-     * 
-     */
     @Test
-    @Transactional(propagation = Propagation.SUPPORTS)
+    public void getSettlementFilesOfPathTest() {
+        toTest.getSettlementFilesOfPath("./");
+    }
+
+    @Test
     public void runCleanTest() throws IOException {
-        logger.debug("runClean");
-        try {
-            settlementManager.runClean("appProvider");
-        } catch (Exception e) {
-            Assert.fail();
+        String folderPath = "./folderTest";
+        String appProvider = "appProvider";
+        File folder = new File(folderPath+appProvider);
+
+        if (!folder.mkdir()) {
+            fail();
         }
 
+        File file = new File(folderPath+appProvider+"/testfile");
+        file.createNewFile();
+        File folderInFolder = new File(folderPath+appProvider+"/testfolder");
+        folderInFolder.mkdir();
+
+        when(rssProps.get("reportsPath")).thenReturn("./folderTest");
+
+        toTest.runClean(appProvider);
+    }
+
+    @Test
+    //TODO:
+    public void runSettlementTest() throws RSSException {
+
+        String aggregatorId = "aggregator@mail.com";
+        String providerId = "provider@mail.com";
+        String productClass = "productClass";
+
+        toTest.runSettlement(aggregatorId, providerId, productClass);
+    }
+
+    @Test
+    public void setTxStateTest() {
+        String state = "state";
+        List <DbeTransaction> transactions = new LinkedList<>();
+
+        DbeTransaction transaction = new DbeTransaction();
+        transactions.add(transaction);
+
+        toTest.setTxState(transactions, state, true);
+    }
+
+    @Test
+    public void setTxStateNotFlushTest() {
+        String state = "state";
+        List <DbeTransaction> transactions = new LinkedList<>();
+
+        DbeTransaction transaction = new DbeTransaction();
+        transactions.add(transaction);
+
+        toTest.setTxState(transactions, state, false);
     }
 
 }
