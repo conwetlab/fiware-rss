@@ -29,6 +29,7 @@ public class AccumsExpend {
 
     private String service;
     private String appProvider;
+    private String aggregator;
     private List<AccumExpend> accums;
 
     public String getService() {
@@ -45,6 +46,14 @@ public class AccumsExpend {
 
     public void setAppProvider(String appProvider) {
         this.appProvider = appProvider;
+    }
+
+    public String getAggregator() {
+        return aggregator;
+    }
+
+    public void setAggregator(String aggregator) {
+        this.aggregator = aggregator;
     }
 
     public List<AccumExpend> getAccums() {

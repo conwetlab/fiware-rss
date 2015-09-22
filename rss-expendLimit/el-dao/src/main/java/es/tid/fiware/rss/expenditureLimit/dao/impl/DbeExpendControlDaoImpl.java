@@ -65,18 +65,22 @@ public class DbeExpendControlDaoImpl extends GenericDaoImpl<DbeExpendControl, Db
      * es.tid.greta.dbe.model.BmObCountry)
      */
     @Override
-    public List<DbeExpendControl> getExpendDataForUserAppProvCurrency(String urlEndUserId,
-        String appProviderId, BmCurrency bmCurrency) {
+    public List<DbeExpendControl> getExpendDataForUserAppProvCurrency(
+            String urlEndUserId, String aggregatorId,
+            String appProviderId, BmCurrency bmCurrency) {
+
         DbeExpendControlDaoImpl.logger.debug("Entering getExpendDataForUserAppProvCurrencyObCountry...");
 
         String hql = " from DbeExpendControl el where el.id.txEndUserId = :usrID"
-            + " and el.id.nuCurrencyId = :nuCurrID and el.id.txAppProviderId = :txAppPID";
+            + " and el.id.nuCurrencyId = :nuCurrID and el.id.txAppProviderId = :txAppPID "
+            + " and el.id.txAggregatorId = :txAgg";
 
         @SuppressWarnings("unchecked")
         List<DbeExpendControl> list = (List<DbeExpendControl>) this.getSession().
         		createQuery(hql).
         		setParameter("usrID", urlEndUserId).
         		setParameter("nuCurrID", bmCurrency.getNuCurrencyId()).
+                        setParameter("txAgg", aggregatorId).
         		setParameter("txAppPID", appProviderId).
         		list();
 

@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 public class ExpendControl {
 
     private String service;
+    private String aggregator;
     private String appProvider;
     private String currency;
     private String type;
@@ -40,6 +41,14 @@ public class ExpendControl {
 
     public void setService(String service) {
         this.service = service;
+    }
+
+    public String getAggregator() {
+        return aggregator;
+    }
+
+    public void setAggregator(String aggregator) {
+        this.aggregator = aggregator;
     }
 
     public String getAppProvider() {

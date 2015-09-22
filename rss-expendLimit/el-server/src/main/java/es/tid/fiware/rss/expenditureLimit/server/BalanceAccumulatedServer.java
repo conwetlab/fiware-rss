@@ -3,6 +3,8 @@
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
  * 
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -84,23 +86,36 @@ public class BalanceAccumulatedServer {
      * Get the expenditure control for the user given.
      * 
      * @param urlEndUserId
+     * @param service
+     * @param aggregator
+     * @param appProvider
+     * @param currency
+     * @param type
      * @return
      * @throws Exception
      */
     @WebMethod
     @GET
     @Path("/{endUserId}")
-    public Response getUserAccumulated(@PathParam("endUserId") final String urlEndUserId,
-        @QueryParam("service") String service, @QueryParam("appProvider") String appProvider,
-        @QueryParam("currency") String currency, @QueryParam("type") String type)
+    public Response getUserAccumulated(
+            @PathParam("endUserId") final String urlEndUserId,
+            @QueryParam("service") String service,
+            @QueryParam("aggregator") String aggregator,
+            @QueryParam("appProvider") String appProvider,
+            @QueryParam("currency") String currency,
+            @QueryParam("type") String type)
         throws Exception {
+
         BalanceAccumulatedServer.logger.debug("Into getUserAccumulated() with endUserId="
             + urlEndUserId);
+
         // check security
         checker.checkCurrentUserPermissions();
+
         // Call service
         AccumsExpend expLimits = balanceAccumulateManager.
-            getUserAccumulated(urlEndUserId, service, appProvider, currency, type);
+            getUserAccumulated(urlEndUserId, service, aggregator, appProvider, currency, type);
+
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
 
         rb.entity(expLimits);
@@ -110,21 +125,26 @@ public class BalanceAccumulatedServer {
     /**
      * Check user balance.
      * 
-     * @param transactionInfo
-     * @param subscriptionProfileResquest
-     * @return subscription profile.
+     * @param urlEndUserId
+     * @param expendControl
+     * @return
      */
     @WebMethod
     @POST
     @Path("/{endUserId}")
     @Consumes("application/json")
-    public Response checkUserBalance(@PathParam("endUserId") final String urlEndUserId,
-        ExpendControl expendControl) throws Exception {
+    public Response checkUserBalance(
+            @PathParam("endUserId") final String urlEndUserId,
+            ExpendControl expendControl)
+        throws Exception {
+
         BalanceAccumulatedServer.logger.debug("Into createModifUserExpLimit method");
         // check security
         checker.checkCurrentUserPermissions();
+
         // Call service
         AccumsExpend expInfoBean = balanceAccumulateManager.checkUserBalance(urlEndUserId, expendControl);
+
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, BalanceAccumulatedServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
 
@@ -147,13 +167,19 @@ public class BalanceAccumulatedServer {
     @PUT
     @Path("/{endUserId}")
     @Consumes("application/json")
-    public Response updateUserAccumulated(@PathParam("endUserId") final String urlEndUserId,
-        ExpendControl expendControl) throws Exception {
+    public Response updateUserAccumulated(
+            @PathParam("endUserId") final String urlEndUserId,
+            ExpendControl expendControl)
+        throws Exception {
+
         BalanceAccumulatedServer.logger.debug("Into updateUserAccumulated method");
+
         // check security
         checker.checkCurrentUserPermissions();
+
         // Call service
         AccumsExpend expInfoBean = balanceAccumulateManager.updateUserAccumulated(urlEndUserId, expendControl);
+
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, BalanceAccumulatedServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
 
@@ -176,8 +202,11 @@ public class BalanceAccumulatedServer {
     @PUT
     @Path("/{endUserId}/reset")
     @Consumes("application/json")
-    public Response deleteUserAccumulated(@PathParam("endUserId") final String urlEndUserId,
-        ExpendControl expendControl) throws Exception {
+    public Response deleteUserAccumulated(
+            @PathParam("endUserId") final String urlEndUserId,
+            ExpendControl expendControl)
+        throws Exception {
+
         BalanceAccumulatedServer.logger.debug("Into deleteUserAccumulated method");
         // check security
         checker.checkCurrentUserPermissions();

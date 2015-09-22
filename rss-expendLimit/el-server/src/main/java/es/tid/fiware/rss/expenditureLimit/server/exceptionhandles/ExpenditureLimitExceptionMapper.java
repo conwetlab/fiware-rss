@@ -85,7 +85,6 @@ public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exceptio
             String[] args = {"The provided JSON document is not correct"};
             RSSException newException = new RSSException(UNICAExceptionType.CONTENT_NOT_WELL_FORMED, args);
             return this.getResponseFromRSSException((RSSException) newException);
-
         } else {
             logger.error("Return Exception: " + e.getMessage(), e);
 

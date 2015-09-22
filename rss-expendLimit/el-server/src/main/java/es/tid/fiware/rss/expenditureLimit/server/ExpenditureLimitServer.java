@@ -84,6 +84,7 @@ public class ExpenditureLimitServer {
     /**
      * Get the expenditure limits for a provider given.
      * 
+     * @param aggregator
      * @param appProvider
      * @param service
      * @param currency
@@ -93,11 +94,13 @@ public class ExpenditureLimitServer {
      */
     @WebMethod
     @GET
-    @Path("/{appProvider}")
-    public Response getProviderExpLimits(@PathParam("appProvider") final String appProvider,
-        @QueryParam("service") String service,
-        @QueryParam("currency") String currency,
-        @QueryParam("type") String type)
+    @Path("/{aggregatorId}/{appProvider}")
+    public Response getProviderExpLimits(
+            @PathParam("aggregatorId") final String aggregator,
+            @PathParam("appProvider") final String appProvider,
+            @QueryParam("service") String service,
+            @QueryParam("currency") String currency,
+            @QueryParam("type") String type)
         throws Exception {
 
         ExpenditureLimitServer.logger.debug("Into getProviderExpLimits() with appProvider=" + appProvider);
@@ -105,7 +108,7 @@ public class ExpenditureLimitServer {
         checker.checkCurrentUserPermissions();
 
         LimitGroupBean expLimits = expLimitManager
-            .getGeneralProviderExpLimitsBean(appProvider, service, currency, type);
+            .getGeneralProviderExpLimitsBean(aggregator, appProvider, service, currency, type);
 
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
 
@@ -116,24 +119,33 @@ public class ExpenditureLimitServer {
     /**
      * Create and update a expenditure control.
      * 
+     * @param aggregator
      * @param appProvider
      * @param expLimits
      * @return
      */
     @WebMethod
     @POST
-    @Path("/{appProvider}")
+    @Path("/{aggregatorId}/{appProvider}")
     @Consumes("application/json")
-    public Response createModifProviderExpLimit(@PathParam("appProvider") final String appProvider,
+    public Response createModifProviderExpLimit(
+            @PathParam("aggregatorId") final String aggregator,
+            @PathParam("appProvider") final String appProvider,
         LimitGroupBean expLimits) throws Exception {
 
         ExpenditureLimitServer.logger.debug("Into createModifProviderExpLimit method");
         // check security
         checker.checkCurrentUserPermissions();
 
-        LimitGroupBean expInfoBean = expLimitManager.storeGeneralProviderExpLimit(appProvider, expLimits);
-        String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, ExpenditureLimitServer.ui,
-            appProvider, ExpenditureLimitServer.RESOURCE);
+        LimitGroupBean expInfoBean = expLimitManager.
+                storeGeneralProviderExpLimit(aggregator, appProvider, expLimits);
+
+        String resourceURL = ExpenditureLimitCommon.
+                getResourceUrl(
+                        appProperties,
+                        ExpenditureLimitServer.ui,
+                        appProvider,
+                        ExpenditureLimitServer.RESOURCE);
 
         // Building response
         ResponseBuilder rb = Response.status(Response.Status.CREATED.getStatusCode());
@@ -145,32 +157,42 @@ public class ExpenditureLimitServer {
     /**
      * Delete expenditure limits for a provider
      * 
+     * @param aggregator
      * @param appProvider
-     * @param fields
+     * @param service,
+     * @param currency,
+     * @param type
+     * 
      * @return
      * @throws Exception
      */
     @WebMethod
     @DELETE
-    @Path("/{appProvider}")
-    @Consumes("application/json")
-    public Response deleteProviderExpLimits(@PathParam("appProvider") final String appProvider,
-        @QueryParam("service") String service, @QueryParam("currency") String currency,
-        @QueryParam("type") String type) throws Exception {
+    @Path("/{aggregatorId}/{appProvider}")
+    public Response deleteProviderExpLimits(
+            @PathParam("aggregatorId") final String aggregator,
+            @PathParam("appProvider") final String appProvider,
+            @QueryParam("service") String service,
+            @QueryParam("currency") String currency,
+            @QueryParam("type") String type
+        ) throws Exception {
+
         ExpenditureLimitServer.logger.debug("Into deleteUserExpCtrl method");
+
         // check security
         checker.checkCurrentUserPermissions();
 
-        expLimitManager.deleteProviderLimits(appProvider, service, currency, type);
+        expLimitManager.deleteProviderLimits(aggregator, appProvider, service, currency, type);
 
         // Building response
-        ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
+        ResponseBuilder rb = Response.status(Response.Status.NO_CONTENT.getStatusCode());
         return rb.build();
     }
 
     /**
      * Get the expenditure control for the user given.
      * 
+     * @param aggregator
      * @param appProvider
      * @param endUserId
      * @param service
@@ -181,17 +203,23 @@ public class ExpenditureLimitServer {
      */
     @WebMethod
     @GET
-    @Path("/{appProvider}/{endUserId}")
-    public Response getUserExpLimits(@PathParam("appProvider") final String appProvider,
-        @PathParam("endUserId") final String endUserId,
-        @QueryParam("service") String service, @QueryParam("currency") String currency, @QueryParam("type") String type)
+    @Path("/{aggregatorId}/{appProvider}/{endUserId}")
+    public Response getUserExpLimits(
+            @PathParam("aggregatorId") final String aggregator,
+            @PathParam("appProvider") final String appProvider,
+            @PathParam("endUserId") final String endUserId,
+            @QueryParam("service") String service,
+            @QueryParam("currency") String currency,
+            @QueryParam("type") String type)
         throws Exception {
+
         ExpenditureLimitServer.logger.debug("Into getUserExpLimits() with endUserId=" + endUserId);
         // check security
         checker.checkCurrentUserPermissions();
 
-        UserExpenditureLimitInfoBean expLimits = expLimitManager.getGeneralUserExpLimitsBean(endUserId, appProvider,
-            service, currency, type);
+        UserExpenditureLimitInfoBean expLimits = expLimitManager.
+                getGeneralUserExpLimitsBean(endUserId, aggregator, appProvider,
+                service, currency, type);
 
         // build response
         ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
@@ -203,25 +231,31 @@ public class ExpenditureLimitServer {
     /**
      * Create and update a expenditure limit.
      * 
+     * @param aggregator
      * @param appProvider
      * @param urlEndUserId
+     * @param expLimits
      * @return
      * @throws Exception
      */
     @WebMethod
     @POST
-    @Path("/{appProvider}/{endUserId}")
+    @Path("{aggregatorId}/{appProvider}/{endUserId}")
     @Consumes("application/json")
-    public Response createModifUserExpLimit(@PathParam("appProvider") final String appProvider,
-        @PathParam("endUserId") final String urlEndUserId,
+    public Response createModifUserExpLimit(
+            @PathParam("aggregatorId") final String aggregator,
+            @PathParam("appProvider") final String appProvider,
+            @PathParam("endUserId") final String urlEndUserId,
+
         LimitGroupBean expLimits) throws Exception {
+
         ExpenditureLimitServer.logger.debug("Into createModifUserExpLimit method for user: " + urlEndUserId);
         // check security
         checker.checkCurrentUserPermissions();
 
         // Store directly the given
-        UserExpenditureLimitInfoBean expInfoBean = expLimitManager.storeGeneralUserExpLimit(appProvider, urlEndUserId,
-            expLimits);
+        UserExpenditureLimitInfoBean expInfoBean = expLimitManager.storeGeneralUserExpLimit(
+                aggregator, appProvider, urlEndUserId, expLimits);
 
         String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, ExpenditureLimitServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
@@ -236,29 +270,34 @@ public class ExpenditureLimitServer {
     /**
      * Delete the expenditure limits for an user.
      * 
+     * @param aggregator
      * @param appProvider
      * @param urlEndUserId
-     * @param fields
+     * @param service
+     * @param currency
+     * @param type
      * @return
      * @throws Exception
      */
     @WebMethod
     @DELETE
-    @Path("/{appProvider}/{endUserId}")
-    @Consumes("application/json")
-    public Response deleteUserExpCtrl(@PathParam("appProvider") final String appProvider,
-        @PathParam("endUserId") final String urlEndUserId,
-        @QueryParam("service") String service,
-        @QueryParam("currency") String currency,
-        @QueryParam("type") String type) throws Exception {
+    @Path("{aggregatorId}/{appProvider}/{endUserId}")
+    public Response deleteUserExpCtrl(
+            @PathParam("aggregatorId") final String aggregator,
+            @PathParam("appProvider") final String appProvider,
+            @PathParam("endUserId") final String urlEndUserId,
+            @QueryParam("service") String service,
+            @QueryParam("currency") String currency,
+            @QueryParam("type") String type) throws Exception {
+
         ExpenditureLimitServer.logger.debug("Into deleteUserExpCtrl method");
         // check security
         checker.checkCurrentUserPermissions();
 
-        expLimitManager.deleteUserLmits(appProvider, urlEndUserId, service, currency, type);
+        expLimitManager.deleteUserLmits(aggregator, appProvider, urlEndUserId, service, currency, type);
 
         // Building response
-        ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
+        ResponseBuilder rb = Response.status(Response.Status.NO_CONTENT.getStatusCode());
         return rb.build();
     }
 

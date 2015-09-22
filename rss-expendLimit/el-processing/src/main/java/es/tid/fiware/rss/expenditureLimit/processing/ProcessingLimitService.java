@@ -98,18 +98,15 @@ public class ProcessingLimitService {
 
             List<DbeExpendLimit> limits = getLimits(tx);
 
-            if (null != limits && limits.size() > 0) {
-            	ProcessingLimitService.logger.debug("===== IF LIMITS");
+            if (null != limits && !limits.isEmpty()) {
                 boolean notification = false;
 
                 for (DbeExpendLimit limit : limits) {
                     if (ProcessingLimitService.TRANSACTION_TYPE.equalsIgnoreCase(limit.getId().getTxElType())) {
-                    	ProcessingLimitService.logger.debug("===== IF FOR");
                         ProcessingLimitUtil utils = new ProcessingLimitUtil();
                         BigDecimal total = utils.getValueToAddFromTx(tx);
                         checkMaxAmountExceed(total, limit, tx);
                     } else {
-                    	ProcessingLimitService.logger.debug("===== ELSE FOR");
                         // Get control to check against the limit
                         control = getExpendControlToCheck(controls, limit, tx);
                         // check end period do not exceeded
@@ -118,6 +115,7 @@ public class ProcessingLimitService {
                         // Obtain the limits and accumulates of an user.
                         // check if there is notifications
                         BigDecimal controlLevelExceded = checkLimit(control, limit, tx);
+
                         if (controlLevelExceded.compareTo(levelExceded) > 0) {
                             ProcessingLimitService.logger.debug("level exceeded: " + controlLevelExceded);
                             levelExceded = controlLevelExceded;
@@ -158,7 +156,12 @@ public class ProcessingLimitService {
         DbeExpendControl control = utils.createControl(tx, limit);
         // save control.
         expendControlDao.createOrUpdate(control);
+
         // Add control to the list to take into account
+        if (controls == null) {
+            controls = new ArrayList<>();
+        }
+
         controls.add(control);
         return control;
     }
@@ -182,6 +185,7 @@ public class ProcessingLimitService {
 
             ProcessingLimitUtil utils = new ProcessingLimitUtil();
             List<DbeExpendControl> controls = getControls(tx);
+
             // always update limits to take into account two charges at the same time
             if (null != controls && controls.size() > 0) {
                 for (DbeExpendControl control : controls) {
@@ -204,8 +208,13 @@ public class ProcessingLimitService {
      */
     private List<DbeExpendControl> getControls(DbeTransaction tx) throws RSSException {
         // could be end user or globlaUser
-        List<DbeExpendControl> controls = expendControlDao.getExpendDataForUserAppProvCurrency(tx.getTxEndUserId(),
-                    tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
+        
+        List<DbeExpendControl> controls = expendControlDao.
+                getExpendDataForUserAppProvCurrency(
+                        tx.getTxEndUserId(),
+                        tx.getAppProvider().getId().getAggregator().getTxEmail(),
+                        tx.getAppProvider().getId().getTxAppProviderId(),
+                        tx.getBmCurrency());
 
         return controls;
     }
@@ -219,8 +228,11 @@ public class ProcessingLimitService {
     private List<DbeExpendLimit> getLimits(DbeTransaction tx) throws RSSException {
         // could be end user or globlaUser
         HashMap<String, List<DbeExpendLimit>> limitsHash = expendLimitDao.
-                getOrdExpLimitsForUserAppProvCurrency(tx.getTxEndUserId(),
-                tx.getAppProvider().getId().getTxAppProviderId(), tx.getBmCurrency());
+                getOrdExpLimitsForUserAppProvCurrency(
+                        tx.getTxEndUserId(),
+                        tx.getAppProvider().getId().getAggregator().getTxEmail(),
+                        tx.getAppProvider().getId().getTxAppProviderId(),
+                        tx.getBmCurrency());
 
         List<DbeExpendLimit> limits = new ArrayList<>();
         limits.addAll(limitsHash.get(DbeExpendLimitDao.USER_APP_PROV_KEY));

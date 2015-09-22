@@ -88,6 +88,7 @@ public class ExpenditureLimitManagerTest {
      */
     protected final ExpenditureLimitBeanConstructor constructor = new ExpenditureLimitBeanConstructor();
 
+    private final String aggregator = "agg123";
     private final String appProvider = "app123456";
     private final String currency = "EUR";
     private final String type = "daily";
@@ -120,7 +121,7 @@ public class ExpenditureLimitManagerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into getGeneralProviderExpLimits method");
-        LimitGroupBean limits = elManager.getGeneralProviderExpLimitsBean(appProvider, service, currency, type);
+        LimitGroupBean limits = elManager.getGeneralProviderExpLimitsBean(aggregator, appProvider, service, currency, type);
         ExpenditureLimitManagerTest.logger.debug("Limits size:" + limits.getLimits().size());
         Assert.assertEquals(1, limits.getLimits().size());
         Assert.assertEquals(service, limits.getService());
@@ -138,14 +139,14 @@ public class ExpenditureLimitManagerTest {
         thrown.expect(RSSException.class);
         thrown.expectMessage("LimitGroupBean");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        LimitGroupBean limits = elManager.storeGeneralProviderExpLimit(appProvider, expLimits);
+        LimitGroupBean limits = elManager.storeGeneralProviderExpLimit(aggregator, appProvider, expLimits);
         Assert.assertNotNull(limits);
         Assert.assertEquals(expLimits.getService(), limits.getService());
         Assert.assertEquals(expLimits.getLimits().size(), limits.getLimits().size());
         Assert.assertEquals(expLimits.getLimits().get(0).getCurrency(),
             limits.getLimits().get(0).getCurrency());
         ExpenditureLimitManagerTest.logger.debug("ObtainException Exception for test");
-        limits = elManager.storeGeneralProviderExpLimit(appProvider, null);
+        limits = elManager.storeGeneralProviderExpLimit(aggregator, appProvider, null);
     }
 
     /**
@@ -160,7 +161,7 @@ public class ExpenditureLimitManagerTest {
         thrown.expectMessage("Service Identifier");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
         expLimits.setService(null);
-        elManager.storeGeneralProviderExpLimit(appProvider, expLimits);
+        elManager.storeGeneralProviderExpLimit(aggregator, appProvider, expLimits);
         ExpenditureLimitManagerTest.logger.debug("Exception expected");
     }
 
@@ -175,7 +176,7 @@ public class ExpenditureLimitManagerTest {
         thrown.expect(RSSException.class);
         thrown.expectMessage("Provider Identifier");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        elManager.storeGeneralProviderExpLimit(null, expLimits);
+        elManager.storeGeneralProviderExpLimit(null, null, expLimits);
         ExpenditureLimitManagerTest.logger.debug("Exception expected");
     }
 
@@ -186,7 +187,7 @@ public class ExpenditureLimitManagerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into deleteGeneralProviderExpLimits method");
-        elManager.deleteProviderLimits(appProvider, service, currency, type);
+        elManager.deleteProviderLimits(aggregator, appProvider, service, currency, type);
         ExpenditureLimitManagerTest.logger.debug("No exception produced");
     }
 
@@ -197,7 +198,7 @@ public class ExpenditureLimitManagerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into getGeneralUserExpLimits method");
-        UserExpenditureLimitInfoBean limits = elManager.getGeneralUserExpLimitsBean(userId, appProvider, service,
+        UserExpenditureLimitInfoBean limits = elManager.getGeneralUserExpLimitsBean(userId, aggregator, appProvider, service,
             currency, type);
         ExpenditureLimitManagerTest.logger.debug("Limits size:" + limits.getGeneralUserLimits());
         Assert.assertEquals(1, limits.getGeneralUserLimits().size());
@@ -217,13 +218,13 @@ public class ExpenditureLimitManagerTest {
         thrown.expect(RSSException.class);
         thrown.expectMessage("LimitGroupBean");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        UserExpenditureLimitInfoBean limits = elManager.storeGeneralUserExpLimit(appProvider, userId, expLimits);
+        UserExpenditureLimitInfoBean limits = elManager.storeGeneralUserExpLimit(aggregator, appProvider, userId, expLimits);
         Assert.assertNotNull(limits);
         Assert.assertEquals(expLimits.getService(), limits.getService());
         Assert.assertEquals(expLimits.getLimits().get(0).getCurrency(),
             limits.getGeneralUserLimits().get(0).getCurrency());
         ExpenditureLimitManagerTest.logger.debug("ObtainException Exception for test");
-        elManager.storeGeneralUserExpLimit(appProvider, userId, null);
+        elManager.storeGeneralUserExpLimit(aggregator, appProvider, userId, null);
     }
 
     /**
@@ -238,7 +239,7 @@ public class ExpenditureLimitManagerTest {
         thrown.expectMessage("Service Identifier");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
         expLimits.setService(null);
-        elManager.storeGeneralUserExpLimit(appProvider, userId, expLimits);
+        elManager.storeGeneralUserExpLimit(aggregator, appProvider, userId, expLimits);
         ExpenditureLimitManagerTest.logger.debug("Exception expected");
     }
 
@@ -253,7 +254,7 @@ public class ExpenditureLimitManagerTest {
         thrown.expect(RSSException.class);
         thrown.expectMessage("Provider Identifier");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        elManager.storeGeneralUserExpLimit(null, userId, expLimits);
+        elManager.storeGeneralUserExpLimit(null, null, userId, expLimits);
         ExpenditureLimitManagerTest.logger.debug("Exception expected");
     }
 
@@ -264,7 +265,7 @@ public class ExpenditureLimitManagerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into deleteGeneralUserExpLimits method");
-        elManager.deleteUserLmits(appProvider, userId, service, currency, type);
+        elManager.deleteUserLmits(aggregator, appProvider, userId, service, currency, type);
         ExpenditureLimitManagerTest.logger.debug("No exception produced");
     }
 

@@ -94,10 +94,10 @@ public class ExpenditureLimitDataCheckerTest {
         thrown.expect(RSSException.class);
         thrown
             .expectMessage("Required parameters not found:enUserId, service, appProvider, currency, chargeType, amount.");
-        checker.checkChargeRequiredParameters("urlEndUserId", "service", "appPorviderId", "currency", "chargeType",
+        checker.checkChargeRequiredParameters("urlEndUserId", "service", "aggId","appPorviderId", "currency", "chargeType",
             new BigDecimal(10));
         ExpenditureLimitDataCheckerTest.logger.debug("No exception expected");
-        checker.checkChargeRequiredParameters(null, "service", "appPorviderId", "currency", "chargeType",
+        checker.checkChargeRequiredParameters(null, "service", "aggId","appPorviderId", "currency", "chargeType",
             new BigDecimal(10));
 
     }
@@ -112,9 +112,9 @@ public class ExpenditureLimitDataCheckerTest {
         thrown.expect(RSSException.class);
         thrown
             .expectMessage("Required parameters not found:enUserId, service, appProvider, currency.");
-        checker.checkRequiredParameters("urlEndUserId", "service", "appPorviderId", "currency");
+        checker.checkRequiredParameters("urlEndUserId", "service", "aggId", "appPorviderId", "currency");
         ExpenditureLimitDataCheckerTest.logger.debug("No exception expected");
-        checker.checkRequiredParameters(null, "service", "appPorviderId", "currency");
+        checker.checkRequiredParameters(null, "service", "aggId", "appPorviderId", "currency");
 
     }
 
@@ -128,9 +128,9 @@ public class ExpenditureLimitDataCheckerTest {
         thrown.expect(RSSException.class);
         thrown
             .expectMessage("Required parameters not found:enUserId, service, appProvider.");
-        checker.checkRequiredSearchParameters("urlEndUserId", "service", "appPorviderId");
+        checker.checkRequiredSearchParameters("urlEndUserId", "service", "aggId", "appPorviderId");
         ExpenditureLimitDataCheckerTest.logger.debug("No exception expected");
-        checker.checkRequiredSearchParameters(null, "service", "appPorvider");
+        checker.checkRequiredSearchParameters(null, "service", "aggId", "appPorvider");
 
     }
 
@@ -158,9 +158,9 @@ public class ExpenditureLimitDataCheckerTest {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkServiceTest mehtod");
         thrown.expect(RSSException.class);
         thrown.expectMessage("Service Not found.");
-        checker.checkService("ServiceTest1");
+        //checker.checkService("ServiceTest1");
         ExpenditureLimitDataCheckerTest.logger.debug("No exception expected");
-        checker.checkService("bluevia");
+        //checker.checkService("bluevia");
     }
 
     /**
@@ -172,9 +172,9 @@ public class ExpenditureLimitDataCheckerTest {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkDbeAppProviderTest mehtod");
         thrown.expect(RSSException.class);
         thrown.expectMessage("AppProvider Not found.");
-        checker.checkDbeAppProvider("app123456");
+        checker.checkDbeAppProvider("agg123", "app123456");
         ExpenditureLimitDataCheckerTest.logger.debug("No exception expected");
-        checker.checkDbeAppProvider("newone");
+        checker.checkDbeAppProvider("agg123", "newone");
     }
 
     /**

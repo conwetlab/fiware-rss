@@ -44,6 +44,9 @@ public class DbeExpendLimitPK implements Serializable {
     @Column(name = "TX_END_USER_ID")
     private String txEndUserId;
 
+    @Column(name = "TX_AGGREGATOR_ID")
+    private String txAggregatorId;
+
     @Column(name = "TX_APPPROVIDER_ID")
     private String txAppProviderId;
 
@@ -62,6 +65,14 @@ public class DbeExpendLimitPK implements Serializable {
 
     public void setTxEndUserId(String txEndUserId) {
         this.txEndUserId = txEndUserId;
+    }
+
+    public String getTxAggregatorId() {
+        return txAggregatorId;
+    }
+
+    public void setTxAggregatorId(String txAggregatorId) {
+        this.txAggregatorId = txAggregatorId;
     }
 
     public String getTxAppProviderId() {
@@ -100,6 +111,7 @@ public class DbeExpendLimitPK implements Serializable {
         DbeExpendLimitPK castOther = (DbeExpendLimitPK) other;
 
         return this.txEndUserId.equals(castOther.txEndUserId)
+            && this.txAggregatorId.equals(castOther.txAggregatorId)
             && this.txAppProviderId.equals(castOther.txAppProviderId)
             && (this.nuCurrencyId == castOther.nuCurrencyId)
             && this.txElType.equals(castOther.txElType);
@@ -111,6 +123,7 @@ public class DbeExpendLimitPK implements Serializable {
         int hash = 17;
 
         hash = hash * prime + this.txEndUserId.hashCode();
+        hash = hash * prime + this.txAggregatorId.hashCode();
         hash = hash * prime + this.txAppProviderId.hashCode();
         hash = hash * prime + ((int) (this.nuCurrencyId ^ (this.nuCurrencyId >>> 32)));
         hash = hash * prime + this.txElType.hashCode();

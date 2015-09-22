@@ -117,7 +117,7 @@ public class BalanceAccumulateManagerTest {
     public void getUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into getUserAccumulated method.");
         AccumsExpend result = balanceAccumulateManager.getUserAccumulated(endUserId,
-            serviceName, "app123456", "EUR", "daily");
+            serviceName, "agg123","app123456", "EUR", "daily");
         Assert.assertNotNull(result);
         Assert.assertTrue("No controls files found", result.getAccums().size() > 0);
 
@@ -164,8 +164,14 @@ public class BalanceAccumulateManagerTest {
         ExpendControl control = generateExpendControl();
         balanceAccumulateManager.deleteUserAccumulated(endUserId, control);
         BalanceAccumulateManagerTest.logger.debug("Get objects after deleting.");
-        AccumsExpend result = balanceAccumulateManager.getUserAccumulated(endUserId, control.getService(),
-            control.getAppProvider(), control.getCurrency(), control.getType());
+
+        AccumsExpend result = balanceAccumulateManager.getUserAccumulated(
+                endUserId, control.getService(),
+                control.getAggregator(),
+                control.getAppProvider(),
+                control.getCurrency(),
+                control.getType());
+
         Assert.assertTrue(result.getAccums().size() > 0);
         boolean changed = false;
         for (AccumExpend accum : result.getAccums()) {
@@ -186,6 +192,7 @@ public class BalanceAccumulateManagerTest {
         ExpendControl expendControl = new ExpendControl();
         expendControl.setService(serviceName);
         expendControl.setAmount(new BigDecimal(1));
+        expendControl.setAggregator("agg123");
         expendControl.setAppProvider("app123456");
         expendControl.setChargeType("C");
         expendControl.setCurrency("EUR");

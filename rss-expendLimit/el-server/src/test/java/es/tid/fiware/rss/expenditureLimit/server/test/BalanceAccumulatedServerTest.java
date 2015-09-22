@@ -130,7 +130,7 @@ public class BalanceAccumulatedServerTest {
     public void getUserAccumulated() throws Exception {
 
         Response response = server.getUserAccumulated(endUserId,
-            serviceName, "app123456", "EUR", "daily");
+            serviceName, "agg123", "app123456", "EUR", "daily");
         Assert.assertEquals(200, response.getStatus());
     }
 

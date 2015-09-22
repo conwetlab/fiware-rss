@@ -149,12 +149,15 @@ public class ProcessingLimitUtil {
         DbeExpendLimitPK expendLimitPK = new DbeExpendLimitPK();
 
         expendLimitPK.setTxEndUserId(tx.getTxEndUserId());
-
         expendLimitPK.setTxElType(limit.getId().getTxElType());
+        expendLimitPK.setTxAggregatorId(tx.getAppProvider().getId().getAggregator().getTxEmail());
         expendLimitPK.setTxAppProviderId(tx.getAppProvider().getId().getTxAppProviderId());
         expendLimitPK.setNuCurrencyId(tx.getBmCurrency().getNuCurrencyId());
+
         control.setId(expendLimitPK);
         control.setFtExpensedAmount(new BigDecimal(0));
+        control.setBmCurrency(tx.getBmCurrency());
+
         // set next period
         updateNextPeriodToStart(control);
         // notifications

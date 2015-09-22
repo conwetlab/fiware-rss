@@ -96,7 +96,7 @@ public class DbeExpendLimitDaoTest {
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrency("userId01",
-            "app123456", bmCurrency);
+            "agg123", "app123456", bmCurrency);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 6);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -116,7 +116,7 @@ public class DbeExpendLimitDaoTest {
     @Test
     public void testGetExpenditureLimitInfByUserNullCurrency() {
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrency("userId01",
-            "app123456", null);
+            "agg123", "app123456", null);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 6);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -139,7 +139,7 @@ public class DbeExpendLimitDaoTest {
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);
         HashMap<String, List<DbeExpendLimit>> h = expLimitDao.getOrdExpLimitsForUserAppProvCurrency(
-            "userId01","app123456", bmCurrency);
+            "agg123", "userId01","app123456", bmCurrency);
 
         Assert.assertTrue("List founds", h != null && h.size() == 4);
         List<DbeExpendLimit> l = h.get(DbeExpendLimitDao.USER_APP_PROV_KEY);
@@ -200,7 +200,7 @@ public class DbeExpendLimitDaoTest {
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);;
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(
-            "app123456", "userId01", bmCurrency);
+            "agg123", "app123456", "userId01", bmCurrency);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 1);
         Iterator<DbeExpendLimit> it = l.iterator();
@@ -220,7 +220,7 @@ public class DbeExpendLimitDaoTest {
     @Test
     public void getExpendLimitsByProviderUserServiceNullCurrency() {
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(
-            "app123456", "userId01", null);
+            "agg123", "app123456", "userId01", null);
 
         Assert.assertTrue("Elements founds", l != null && l.size() == 1);
         Iterator<DbeExpendLimit> it = l.iterator();

@@ -38,11 +38,8 @@ import es.tid.fiware.rss.expenditureControl.api.AccumExpend;
 import es.tid.fiware.rss.expenditureControl.api.AccumsExpend;
 import es.tid.fiware.rss.expenditureControl.api.ExpendControl;
 import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendControlDao;
-import es.tid.fiware.rss.expenditureLimit.dao.DbeExpendLimitDao;
 import es.tid.fiware.rss.expenditureLimit.model.DbeExpendControl;
 import es.tid.fiware.rss.expenditureLimit.processing.ProcessingLimitService;
-import es.tid.fiware.rss.model.BmObCountry;
-import es.tid.fiware.rss.model.BmObCountryId;
 import es.tid.fiware.rss.model.DbeTransaction;
 
 /**
@@ -62,9 +59,6 @@ public class BalanceAccumulateManager {
     private ExpenditureLimitDataChecker checker;
 
     @Autowired
-    private DbeExpendLimitDao expLimitDao;
-
-    @Autowired
     private ProcessingLimitService processingLimitService;
 
     @Autowired
@@ -76,29 +70,39 @@ public class BalanceAccumulateManager {
      * Get limits for a customer.
      * 
      * @param urlEndUserId
+     * @param service
+     * @param aggregator
      * @param appPorviderId
-     * @param curency
+     * @param currency
      * @param elType
      * @return
      * @throws RSSException
      */
-    public AccumsExpend getUserAccumulated(String urlEndUserId, String service, String appPorviderId, String currency,
-        String elType)
+    public AccumsExpend getUserAccumulated(
+            String urlEndUserId, String service, 
+            String aggregator, String appPorviderId,
+            String currency, String elType)
         throws RSSException {
+
         BalanceAccumulateManager.logger.debug("Into getUserAccumulated for user:{}", urlEndUserId);
         // check mandatory information
-        checker.checkRequiredParameters(urlEndUserId, service, appPorviderId, currency);
+        checker.checkRequiredParameters(urlEndUserId, service, aggregator, appPorviderId, currency);
         // check service Existence
-        checker.checkService(service);
+        //checker.checkService(service);
         // check valid appPorviderId
-        checker.checkDbeAppProvider(appPorviderId);
+        checker.checkDbeAppProvider(aggregator, appPorviderId);
         // check valid elType
         checker.checkElType(elType);
-        List<AccumExpend> accums = getUserRegisterAccumulated(urlEndUserId, service, appPorviderId, currency, elType);
+
+        List<AccumExpend> accums = getUserRegisterAccumulated(
+                urlEndUserId, service, aggregator, appPorviderId, currency, elType);
+
         AccumsExpend accumsExpend = new AccumsExpend();
         accumsExpend.setAccums(accums);
         accumsExpend.setAppProvider(appPorviderId);
         accumsExpend.setService(service);
+        accumsExpend.setAggregator(aggregator);
+
         return accumsExpend;
     }
 
@@ -114,23 +118,37 @@ public class BalanceAccumulateManager {
         throws RSSException {
         BalanceAccumulateManager.logger.debug("Into checkUserBalance for user:{}", urlEndUserId);
         // check mandatory information
-        checker.checkChargeRequiredParameters(urlEndUserId, expendControl.getService(), expendControl.getAppProvider(),
-            expendControl.getCurrency(), expendControl.getChargeType(), expendControl.getAmount());
-        // check service Existence
-        checker.checkService(expendControl.getService());
+        checker.checkChargeRequiredParameters(
+                urlEndUserId, expendControl.getService(),
+                expendControl.getAggregator(),
+                expendControl.getAppProvider(),
+                expendControl.getCurrency(),
+                expendControl.getChargeType(),
+                expendControl.getAmount());
+
         // check valid appPorviderId
-        checker.checkDbeAppProvider(expendControl.getAppProvider());
+        checker.checkDbeAppProvider(
+                expendControl.getAggregator(),
+                expendControl.getAppProvider());
+
         // check valid elType
         checker.checkElType(expendControl.getType());
+
         // check valid chargeType
         checker.checkChargeType(expendControl.getChargeType());
+
         // Generate Transaction
         DbeTransaction transaction = generateTransaction(urlEndUserId, expendControl);
         processingLimitService.proccesLimit(transaction);
+
         // After everything ok --> Return current accumulated
         BalanceAccumulateManager.logger.debug("Checking compplete.Returning status for user: {}", urlEndUserId);
-        return getUserAccumulated(urlEndUserId, expendControl.getService(), expendControl.getAppProvider(),
-            expendControl.getCurrency(), null);
+
+        return getUserAccumulated(
+                urlEndUserId, expendControl.getService(),
+                expendControl.getAggregator(),
+                expendControl.getAppProvider(),
+                expendControl.getCurrency(), null);
     }
 
     /**
@@ -142,24 +160,23 @@ public class BalanceAccumulateManager {
      */
     public AccumsExpend updateUserAccumulated(String urlEndUserId, ExpendControl expendControl)
         throws RSSException {
+
         BalanceAccumulateManager.logger.debug("Into updateUserAccumulated for user:{}", urlEndUserId);
-        // check mandatory information
-        checker.checkChargeRequiredParameters(urlEndUserId, expendControl.getService(), expendControl.getAppProvider(),
-            expendControl.getCurrency(), expendControl.getChargeType(), expendControl.getAmount());
-        // check service Existence
-        checker.checkService(expendControl.getService());
-        // check valid appPorviderId
-        checker.checkDbeAppProvider(expendControl.getAppProvider());
-        // check valid elType
-        checker.checkElType(expendControl.getType());
-        // check valid chargeType
-        checker.checkChargeType(expendControl.getChargeType());
+
+        // Check that the user has enought balance to perform the update
+        this.checkUserBalance(urlEndUserId, expendControl);
+
         // Generate Transaction
         DbeTransaction transaction = generateTransaction(urlEndUserId, expendControl);
         processingLimitService.updateLimit(transaction);
+
         BalanceAccumulateManager.logger.debug("Checking compplete.Returning status for user: {}", urlEndUserId);
-        return getUserAccumulated(urlEndUserId, expendControl.getService(), expendControl.getAppProvider(),
-            expendControl.getCurrency(), null);
+
+        return getUserAccumulated(
+                urlEndUserId, expendControl.getService(),
+                expendControl.getAggregator(),
+                expendControl.getAppProvider(),
+                expendControl.getCurrency(), null);
     }
 
     /**
@@ -171,19 +188,35 @@ public class BalanceAccumulateManager {
      */
     public void deleteUserAccumulated(String urlEndUserId, ExpendControl expendControl)
         throws RSSException {
+
         BalanceAccumulateManager.logger.debug("Into deleteUserAccumulated for user:{}", urlEndUserId);
+
         // check mandatory information
-        checker.checkRequiredParameters(urlEndUserId, expendControl.getService(), expendControl.getAppProvider(),
-            expendControl.getCurrency());
+        checker.checkRequiredParameters(
+                urlEndUserId,
+                expendControl.getService(),
+                expendControl.getAggregator(),
+                expendControl.getAppProvider(),
+                expendControl.getCurrency());
+
         // check service Existence
-        checker.checkService(expendControl.getService());
+        //checker.checkService(expendControl.getService());
+
         // check valid appPorviderId
-        checker.checkDbeAppProvider(expendControl.getAppProvider());
+        checker.checkDbeAppProvider(
+                expendControl.getAggregator(),
+                expendControl.getAppProvider());
+
         // check valid elType
         checker.checkElType(expendControl.getType());
-        List<DbeExpendControl> controls = getControls(urlEndUserId, expendControl.getService(),
-            expendControl.getAppProvider(),
-            expendControl.getCurrency(), expendControl.getType());
+        List<DbeExpendControl> controls = getControls(
+                urlEndUserId,
+                expendControl.getService(),
+                expendControl.getAggregator(),
+                expendControl.getAppProvider(),
+                expendControl.getCurrency(),
+                expendControl.getType());
+
         if (null != controls && controls.size() > 0) {
             for (DbeExpendControl control : controls) {
                 BalanceAccumulateManager.logger.debug("Deleting limit:{}", control.getId().getTxElType());
@@ -218,7 +251,8 @@ public class BalanceAccumulateManager {
         }
 
         tx.setFtChargedAmount(expendControl.getAmount());
-        tx.setAppProvider(appProviderDao.getById(expendControl.getAppProvider()));
+        tx.setAppProvider(appProviderDao.
+                getProvider(expendControl.getAggregator(), expendControl.getAppProvider()));
 
         // get currency
         tx.setBmCurrency(checker.checkCurrency(expendControl.getCurrency()));
@@ -236,11 +270,15 @@ public class BalanceAccumulateManager {
      * @return
      * @throws RSSException
      */
-    private List<AccumExpend> getUserRegisterAccumulated(String urlEndUserId, String service, String appProviderId,
-        String currency
-        , String elType) throws RSSException {
+    private List<AccumExpend> getUserRegisterAccumulated(
+            String urlEndUserId, String service, String aggregator,
+            String appProviderId, String currency, String elType)
+        throws RSSException {
+
         BalanceAccumulateManager.logger.debug("Into getControls method.");
-        List<DbeExpendControl> controls = getControls(urlEndUserId, service, appProviderId, currency, elType);
+        List<DbeExpendControl> controls = getControls(
+                urlEndUserId, service, aggregator, appProviderId, currency, elType);
+
         // change format to output format
         List<AccumExpend> result = new ArrayList<>();
         if (null != controls && controls.size() > 0) {
@@ -261,19 +299,16 @@ public class BalanceAccumulateManager {
      * @return
      * @throws RSSException
      */
-    private List<DbeExpendControl> getControls(String urlEndUserId, String service, String appProviderId,
-        String currency
-        , String elType) throws RSSException {
-        BalanceAccumulateManager.logger.debug("Into getControls method.");
-        BmObCountry obCountry = new BmObCountry();
-        BmObCountryId id = new BmObCountryId();
-        id.setNuCountryId(ExpenditureLimitDataChecker.countryId);
-        id.setNuObId(ExpenditureLimitDataChecker.obId);
-        obCountry.setId(id);
-        List<DbeExpendControl> controls =
-            expendControlDao.getExpendDataForUserAppProvCurrency(urlEndUserId,
-                    appProviderId, checker.checkCurrency(currency));
+    private List<DbeExpendControl> getControls(
+            String urlEndUserId, String service, String aggregator,
+            String appProviderId, String currency, String elType)
+        throws RSSException {
 
+        BalanceAccumulateManager.logger.debug("Into getControls method.");
+
+        List<DbeExpendControl> controls =
+            expendControlDao.getExpendDataForUserAppProvCurrency(
+                    urlEndUserId, aggregator, appProviderId, checker.checkCurrency(currency));
 
         List<DbeExpendControl> controlsFinal = new ArrayList<>();
         if (null != elType && elType.length() > 0) {

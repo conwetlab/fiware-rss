@@ -89,6 +89,7 @@ public class ExpenditureLimitServerTest {
     /**
      * Data
      */
+    private final String aggregator = "agg123";
     private final String appProvider = "app123456";
     private final String currency = "EUR";
     private final String type = "daily";
@@ -135,7 +136,7 @@ public class ExpenditureLimitServerTest {
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserExpLimits() throws Exception {
-        Response response = server.getUserExpLimits(appProvider, userId,
+        Response response = server.getUserExpLimits(aggregator, appProvider, userId,
             service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
@@ -147,7 +148,7 @@ public class ExpenditureLimitServerTest {
     @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getProviderExpLimits() throws Exception {
-        Response response = server.getProviderExpLimits(appProvider, service, currency, type);
+        Response response = server.getProviderExpLimits(aggregator, appProvider, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
 
@@ -159,7 +160,7 @@ public class ExpenditureLimitServerTest {
     public void storeGeneralProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralProviderExpLimits method");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        Response response = server.createModifProviderExpLimit(appProvider, expLimits);
+        Response response = server.createModifProviderExpLimit(aggregator, appProvider, expLimits);
         Assert.assertEquals(201, response.getStatus());
     }
 
@@ -171,7 +172,7 @@ public class ExpenditureLimitServerTest {
     public void storeGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralUserExpLimits method");
         LimitGroupBean expLimits = ExpenditureLimitBeanConstructor.generateLimitGroupBean();
-        Response response = server.createModifUserExpLimit(appProvider, userId, expLimits);
+        Response response = server.createModifUserExpLimit(aggregator, appProvider, userId, expLimits);
         Assert.assertEquals(201, response.getStatus());
     }
 
@@ -183,7 +184,7 @@ public class ExpenditureLimitServerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteProviderExpLimits method");
-        Response response = server.deleteProviderExpLimits(appProvider, service, currency, type);
+        Response response = server.deleteProviderExpLimits(aggregator, appProvider, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
 
@@ -195,7 +196,7 @@ public class ExpenditureLimitServerTest {
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteUserAccumulated method");
-        Response response = server.deleteUserExpCtrl(appProvider, userId, service, currency, type);
+        Response response = server.deleteUserExpCtrl(aggregator, appProvider, userId, service, currency, type);
         Assert.assertEquals(200, response.getStatus());
     }
 }

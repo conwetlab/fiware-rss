@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.tid.fiware.rss.dao.CurrencyDao;
-import es.tid.fiware.rss.dao.DbeAggregatorDao;
 import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import es.tid.fiware.rss.dao.ServiceDao;
 import es.tid.fiware.rss.dao.UserDao;
@@ -217,23 +216,26 @@ public class ExpenditureLimitDataChecker {
      * @return
      * @throws RSSException
      */
-    public BmService checkService(String serviceName) throws RSSException {
+    /*public BmService checkService(String serviceName) throws RSSException {
         BmService service = serviceDao.getServiceByName(serviceName);
         if (null == service) {
             String[] args = {"Service Not found."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
         return service;
-    }
+    }*/
 
     /**
      * Verify and get the DbeAppProvider.
      * 
-     * @param appProviderId
+     * @param appProviderId, Id of the provider
+     * @param aggregatorId , Id of the given aggregator
      * @return
      */
-    public DbeAppProvider checkDbeAppProvider(String appProviderId) throws RSSException {
-        DbeAppProvider appProvider = dbeAppProviderDao.getById(appProviderId);
+    public DbeAppProvider checkDbeAppProvider(String aggregatorId,
+            String appProviderId) throws RSSException {
+
+        DbeAppProvider appProvider = dbeAppProviderDao.getProvider(aggregatorId, appProviderId);
         if (null == appProvider) {
             String[] args = {"AppProvider Not found."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
@@ -277,17 +279,20 @@ public class ExpenditureLimitDataChecker {
      * @param currency
      * @throws RSSException
      */
-    public void checkChargeRequiredParameters(String urlEndUserId, String service, String appPorviderId,
-        String currency,
-        String chargeType, BigDecimal amount) throws RSSException {
+    public void checkChargeRequiredParameters(
+            String urlEndUserId, String service, String aggregator,
+            String appPorviderId, String currency, String chargeType,
+            BigDecimal amount)
+        throws RSSException {
 
-        if (null == urlEndUserId || urlEndUserId.length() == 0 ||
-            null == service || service.length() == 0 ||
-            null == appPorviderId || appPorviderId.length() == 0 ||
-            null == currency || currency.length() == 0 ||
-            null == chargeType || chargeType.length() == 0 ||
+        if (null == urlEndUserId || urlEndUserId.trim().isEmpty() ||
+            null == service || service.trim().isEmpty() ||
+            null == aggregator || aggregator.trim().isEmpty() ||
+            null == appPorviderId || appPorviderId.trim().isEmpty() ||
+            null == currency || currency.trim().isEmpty() ||
+            null == chargeType || chargeType.trim().isEmpty() ||
             null == amount || amount.compareTo(new BigDecimal(0)) < 1) {
-            String[] args = {"Required parameters not found:enUserId, service, appProvider, currency, chargeType, amount."};
+            String[] args = {"Required parameters not found:enUserId, service, aggregator, appProvider, currency, chargeType, amount."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
 
@@ -300,12 +305,16 @@ public class ExpenditureLimitDataChecker {
      * @param appPorviderId
      * @param currency
      */
-    public void checkRequiredParameters(String service, String urlEndUserId, String appPorviderId, String currency)
+    public void checkRequiredParameters(
+            String service, String urlEndUserId,
+            String aggregator, String appPorviderId, String currency)
         throws RSSException {
-        if (null == urlEndUserId || urlEndUserId.length() == 0 ||
-            null == service || service.length() == 0 ||
-            null == appPorviderId || appPorviderId.length() == 0 ||
-            null == currency || currency.length() == 0) {
+
+        if (null == urlEndUserId || urlEndUserId.trim().isEmpty() ||
+            null == service || service.trim().isEmpty() ||
+            null == aggregator || aggregator.trim().isEmpty() ||
+            null == appPorviderId || appPorviderId.trim().isEmpty() ||
+            null == currency || currency.trim().isEmpty()) {
             String[] args = {"Required parameters not found:enUserId, service, appProvider, currency."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
@@ -315,16 +324,20 @@ public class ExpenditureLimitDataChecker {
     /**
      * Check required information
      * 
+     * @param aggregator
      * @param service
      * @param urlEndUserId
      * @param appPorviderId
      */
-    public void checkRequiredSearchParameters(String service, String urlEndUserId, String appPorviderId)
+    public void checkRequiredSearchParameters(
+            String service, String urlEndUserId, String aggregator, String appPorviderId)
         throws RSSException {
-        if (null == urlEndUserId || urlEndUserId.length() == 0 ||
-            null == service || service.length() == 0 ||
-            null == appPorviderId || appPorviderId.length() == 0) {
-            String[] args = {"Required parameters not found:enUserId, service, appProvider."};
+
+        if (null == urlEndUserId || urlEndUserId.trim().isEmpty() ||
+            null == service || service.trim().isEmpty() ||
+            null == aggregator || aggregator.trim().isEmpty() ||
+            null == appPorviderId || appPorviderId.trim().isEmpty()) {
+            String[] args = {"Required parameters not found:endUserId, service, aggregator, appProvider."};
             throw new RSSException(UNICAExceptionType.NON_EXISTENT_RESOURCE_ID, args);
         }
 

@@ -44,7 +44,7 @@ public interface DbeExpendControlDao extends GenericDao<DbeExpendControl, DbeExp
      * @return
      */
     List<DbeExpendControl> getExpendDataForUserAppProvCurrency(String urlEndUserId,
-        String appProviderId, BmCurrency bmCurrency);
+        String aggregatorId, String appProviderId, BmCurrency bmCurrency);
 
     /**
      * Store the data passed
