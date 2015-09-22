@@ -2,100 +2,127 @@
  * Revenue Settlement and Sharing System GE
  * Copyright (C) 2011-2014, Javier Lucio - lucio@tid.es
  * Telefonica Investigacion y Desarrollo, S.A.
- * 
+ *
+ * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.tid.fiware.rss.ws;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-
-import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import es.tid.fiware.rss.common.test.DatabaseLoader;
-import es.tid.fiware.rss.oauth.model.ValidatedToken;
+import es.tid.fiware.rss.model.CDR;
+import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.service.CdrsManager;
+import es.tid.fiware.rss.service.UserManager;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.MissingFormatArgumentException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
-    "classpath:cxf-beans.xml"})
+
 public class CdrsServiceTest {
-    private final Logger logger = LoggerFactory.getLogger(CdrsServiceTest.class);
-    /**
-     * 
-     */
-    @Autowired
-    private DatabaseLoader databaseLoader;
-    /**
-     * /**
-     * 
-     */
-    @Autowired
-    private CdrsService cdrsService;
-    /**
-     * 
-     */
-    /**
-     * 
-     */
-    private CdrsManager cdrsManager;
 
-    /**
-     * 
-     */
-    @PostConstruct
-    public void init() throws Exception {
-    }
+    @Mock private UserManager userManager;
+    @Mock private CdrsManager cdrsManager;
+    @InjectMocks private CdrsService toTest;
 
-    /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from dbb
-     */
     @Before
     public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+
     }
 
-    /**
-     * @throws Exception
-     */
-    @After
+    @Before
     public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
+        MockitoAnnotations.initMocks(this);
     }
 
-    /**
-     * 
-     */
+    @Test
+    public void createCdrTest() throws Exception {
+
+        List <CDR> list = new LinkedList<>();
+
+        toTest.createCdr(list);
+        verify(cdrsManager).createCDRs(list);
+    }
+
+    @Test
+    public void getCDRsTest() throws Exception {
+        String aggregatorId = "aggregator@mail.com";
+        String providerId = "provider@mail.com";
+        String userId = "user@mail.com";
+
+        RSUser user = new RSUser();
+        user.setDisplayName("username");
+        user.setEmail("user@mail.com");
+
+        List <CDR> list = new LinkedList<>();
+
+        when(userManager.getCurrentUser()).thenReturn(user);
+        when(userManager.isAdmin()).thenReturn(true);
+        when(cdrsManager.getCDRs(userId, providerId)).thenReturn(list);
+
+        Response response = toTest.getCDRs(aggregatorId, providerId);
+        Assert.assertEquals(list, response.getEntity());
+    }
+
+
+    @Test
+    public void getCDRsNotAdminTest() throws Exception {
+        String providerId = "provider@mail.com";
+        String userId = "user@mail.com";
+
+        RSUser user = new RSUser();
+        user.setDisplayName("username");
+        user.setEmail("user@mail.com");
+
+        List <CDR> list = new LinkedList<>();
+
+        when(userManager.getCurrentUser()).thenReturn(user);
+        when(userManager.isAdmin()).thenReturn(false);
+        when(cdrsManager.getCDRs(userId, providerId)).thenReturn(list);
+
+        Response response = toTest.getCDRs(null, providerId);
+        Assert.assertEquals(list, response.getEntity());
+    }
+
+    @Test
+    (expected = MissingFormatArgumentException.class)
+    public void getCDRsNotAdmin2Test() throws Exception {
+        String aggregatorId = "aggregator@mail.com";
+        String providerId = "provider@mail.com";
+        String userId = "user@mail.com";
+
+        RSUser user = new RSUser();
+        user.setDisplayName("username");
+        user.setEmail("user@mail.com");
+
+        List <CDR> list = new LinkedList<>();
+
+        when(userManager.getCurrentUser()).thenReturn(user);
+        when(userManager.isAdmin()).thenReturn(false);
+        when(cdrsManager.getCDRs(userId, providerId)).thenReturn(list);
+
+        Response response = toTest.getCDRs(aggregatorId, providerId);
+        Assert.assertEquals(list, response.getEntity());
+    }
 
 }
