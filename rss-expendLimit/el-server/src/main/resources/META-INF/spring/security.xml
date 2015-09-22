@@ -45,7 +45,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 
      <!-- common to all clients -->
      <beans:bean id="apiHeaderFilter" class="es.tid.fiware.rss.oauth.service.FIWAREHeaderAuthenticationFilter">
-        <beans:constructor-arg value="/limits/" index="0" />
+        <beans:constructor-arg value="/" index="0" />
         <beans:constructor-arg value="Authorization" index="1"/>
         <beans:property name="client" ref="fiwareClient" />
         <beans:property name="authenticationManager" ref="authenticationManager" />
