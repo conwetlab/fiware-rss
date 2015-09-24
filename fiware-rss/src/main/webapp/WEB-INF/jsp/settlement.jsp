@@ -54,19 +54,6 @@
                             <input type="submit" class="btn btn-default" value="Launch" onclick="javascript:launchSettlement('');"/>
                         </td>
                     </tr>
-                    <c:if  test="${is_admin}">
-                    <tr>
-                        <td>
-                            Delete transactions: 
-                            Provider
-                            <select id="aggregatorTransaction" class="form-control small-sel">
-                            </select>
-                            <select id="providerTransaction" class="form-control small-sel">
-                            </select>
-                            <input type="submit" value="Delete" class="btn btn-default" onclick="javascript:deletingProvider();"/>
-                        </td>
-                    </tr>
-                    </c:if>
                     <tr>
                         <td>
                             <a href="${contextPath}/files">View files</a>
