@@ -21,13 +21,15 @@
 
 package es.tid.fiware.rss.service;
 
-import java.io.File;
+import es.tid.fiware.rss.dao.CurrencyDao;
+import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Properties;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -38,16 +40,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.tid.fiware.rss.dao.DbeTransactionDao;
+import es.tid.fiware.rss.dao.ReportProviderDao;
+import es.tid.fiware.rss.dao.SharingReportDao;
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
 import es.tid.fiware.rss.model.Aggregator;
+import es.tid.fiware.rss.model.BmCurrency;
+import es.tid.fiware.rss.model.DbeAppProvider;
 import es.tid.fiware.rss.model.DbeTransaction;
-import es.tid.fiware.rss.model.RSSFile;
 import es.tid.fiware.rss.model.RSSModel;
 import es.tid.fiware.rss.model.RSSProvider;
+import es.tid.fiware.rss.model.RSSReport;
+import es.tid.fiware.rss.model.ReportProvider;
+import es.tid.fiware.rss.model.ReportProviderId;
+import es.tid.fiware.rss.model.SharingReport;
+import es.tid.fiware.rss.model.StakeholderModel;
 import es.tid.fiware.rss.settlement.ProductSettlementTask;
 import es.tid.fiware.rss.settlement.SettlementTaskFactory;
 import es.tid.fiware.rss.settlement.ThreadPoolManager;
+
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -63,6 +74,18 @@ public class SettlementManager {
      */
     @Autowired
     private DbeTransactionDao transactionDao;
+
+    @Autowired 
+    private DbeAppProviderDao appProviderDao;
+
+    @Autowired
+    private SharingReportDao sharingReportDao;
+
+    @Autowired
+    private ReportProviderDao reportProviderDao;
+
+    @Autowired
+    private CurrencyDao currencyDao;
 
     @Autowired
     private SettlementTaskFactory taskFactory;
@@ -192,95 +215,115 @@ public class SettlementManager {
         }
     }
 
+    public void generateReport(RSSModel sharingRes, String curr) throws IOException {
+        this.logger.info("Generating report: " 
+                    + sharingRes.getAggregatorId() + " "
+                    + sharingRes.getOwnerProviderId() + " "
+                    + sharingRes.getProductClass());
+
+        // Fill basic report information
+        SharingReport report = new SharingReport();
+        report.setAlgorithmType(sharingRes.getAlgorithmType());
+        report.setProductClass(sharingRes.getProductClass());
+        report.setDate(new Date());
+        report.setAggregatorValue(sharingRes.getAggregatorValue());
+        report.setOwnerValue(sharingRes.getOwnerValue());
+
+        // Get provider object
+        report.setOwner(this.appProviderDao.getProvider(
+                sharingRes.getAggregatorId(), sharingRes.getOwnerProviderId()));
+
+        // Set currency
+        BmCurrency currency = this.currencyDao.getByIso4217StringCode(curr);
+        report.setCurrency(currency);
+
+        // Include stakeholders info
+        if (sharingRes.getStakeholders() != null) {
+            Set<ReportProvider> stakeholders = new HashSet<>();
+
+            for (StakeholderModel stakeholderModel: sharingRes.getStakeholders()) {
+                DbeAppProvider stakeholder = this.appProviderDao.
+                        getProvider(sharingRes.getAggregatorId(), stakeholderModel.getStakeholderId());
+
+                // Build stakeholder id
+                ReportProviderId stModelId = new ReportProviderId();
+                stModelId.setStakeholder(stakeholder);
+                stModelId.setReport(report);
+
+                // Build stakeholder
+                ReportProvider stModel = new ReportProvider();
+                stModel.setId(stModelId);
+                stModel.setModelValue(stakeholderModel.getModelValue());
+
+                // Add stakeholder to the set
+                stakeholders.add(stModel);
+            }
+
+            report.setStakeholders(stakeholders);
+        }
+
+        Set<SharingReport> reports = report.getOwner().getReports();
+
+        if (null == reports) {
+            reports = new HashSet<>();
+        }
+        reports.add(report);
+
+        // Save new report
+        this.sharingReportDao.create(report);
+
+        // Save stakeholders info
+        for(ReportProvider st: report.getStakeholders()) {
+            this.reportProviderDao.create(st);
+        }
+    }
+
     /**
-     * Get settlement files from file System.
+     * Get the generated sharing reports filtered by some parameters.
      * 
+     * @param aggregator, aggregator of the returned sharing reports
+     * @param provider, porvider of the returned sharing reports
+     * @param productClass, Product class of the returned sharing reports 
      * @return
      */
-    public List<RSSFile> getSettlementFiles(String aggregatorId) {
+    public List<RSSReport> getSharingReports(
+            String aggregator, String provider, String productClass) {
         logger.debug("Into getSettlementFiles method.");
-        List<RSSFile> rssFilesList = new ArrayList<RSSFile>();
-        return rssFilesList;
-    }
 
-    /**
-     * Get files from path.
-     * 
-     * @param path
-     * @return
-     */
-    public List<RSSFile> getSettlementFilesOfPath(String path) {
-        // Opening/creating the folder
-        File folder = new File(path);
-        List<RSSFile> rssFilesList = new ArrayList<>();
-        RSSFile rssf = new RSSFile();
+        // Get reports
+        List<SharingReport> dbReports = this.sharingReportDao.
+                getSharingReportsByParameters(aggregator, provider, productClass);
 
-        if (folder.exists() && folder.isDirectory()) {
-            File[] files = folder.listFiles();
-            Arrays.sort(files);
+        List<RSSReport> reports = new ArrayList<>();
 
-            if (files.length > 0) {
-                List<File> fileList = new ArrayList<File>(Arrays.asList(files));
-                ListIterator<File> lit = fileList.listIterator();
+        // Build API format
+        if (dbReports != null) {
+            for (SharingReport rp: dbReports) {
+                RSSReport rep = new RSSReport();
+                rep.setAggregatorId(rp.getOwner().getId().getAggregator().getTxEmail());
+                rep.setAggregatorValue(rp.getAggregatorValue());
 
-                while (lit.hasNext()) {
-                    File file = lit.next();
-                    logger.info(file.getAbsolutePath());
+                rep.setAlgorithmType(rp.getAlgorithmType());
+                rep.setCurrency(rp.getCurrency().getTxIso4217Code());
+                rep.setOwnerProviderId(rp.getOwner().getId().getTxAppProviderId());
+                rep.setOwnerValue(rp.getOwnerValue());
+                rep.setProductClass(rp.getProductClass());
+                rep.setTimestamp(rp.getDate());
 
-                    if (file.isDirectory()) {
-                        logger.debug("Is directory. Getting more files...");
-                        File[] moreFiles = file.listFiles();
-                        Arrays.sort(moreFiles);
-                        if (moreFiles.length > 0) {
-                            for (File f : moreFiles) {
-                                lit.add(f);
-                                lit.previous();
-                            }
-                        }
-                    } else {
-                        rssf = new RSSFile();
-                        rssf.setTxName(file.getName());
-                        rssf.setTxUrl(file.getAbsolutePath());
-                        rssFilesList.add(rssf);
-                        logger.debug("File added");
-                    }
+                // Set stakeholders
+                Set<ReportProvider> stakeholders = rp.getStakeholders();
+                List<StakeholderModel> st = new ArrayList<>();
+
+                for (ReportProvider rPro: stakeholders) {
+                    StakeholderModel stakeholder = new StakeholderModel();
+                    stakeholder.setStakeholderId(rPro.getStakeholder().getId().getTxAppProviderId());
+                    stakeholder.setModelValue(rPro.getModelValue());
+                    st.add(stakeholder);
                 }
+                rep.setStakeholders(st);
+                reports.add(rep);
             }
         }
-        return rssFilesList;
-    }
-
-    /**
-     * Delete data from provider.
-     * 
-     * @param appProvider
-     * @throws IOException
-     */
-    public void runClean(String appProvider) throws IOException {
-        logger.debug("Deleting  transactions. Provider: {}", appProvider);
-        transactionDao.deleteTransactionsByProviderId(appProvider);
-        String reportsPath = (String) rssProps.get("reportsPath");
-        reportsPath = reportsPath + appProvider;
-        File folder = new File(reportsPath);
-        deleteFolder(folder);
-    }
-
-    /**
-     * Delete folders.
-     * 
-     * @param folder
-     */
-    private void deleteFolder(File folder) {
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                if (f.isDirectory()) {
-                    deleteFolder(f);
-                } else {
-                    f.delete();
-                }
-            }
-        }
-        folder.delete();
+        return reports;
     }
 }

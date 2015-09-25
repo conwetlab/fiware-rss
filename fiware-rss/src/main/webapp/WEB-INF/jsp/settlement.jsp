@@ -56,7 +56,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <a href="${contextPath}/files">View files</a>
+                            <a href="${contextPath}/reports">View reports</a>
                         </td>
                     </tr>
                     <tr>

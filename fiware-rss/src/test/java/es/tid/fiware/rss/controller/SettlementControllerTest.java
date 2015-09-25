@@ -31,7 +31,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +39,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 
 import es.tid.fiware.rss.common.test.DatabaseLoader;
-import es.tid.fiware.rss.model.AppProviderParameter;
 import es.tid.fiware.rss.oauth.model.OauthLoginWebSessionData;
 import es.tid.fiware.rss.service.SettlementManager;
 import org.springframework.transaction.annotation.Propagation;
@@ -153,36 +150,6 @@ public class SettlementControllerTest {
      * 
      */
     @Test
-    public void testViewFiles() {
-        logger.debug("into testViewFiles method");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        String response = controller.viewFiles(null, model);
-        Assert.assertEquals("error", response);
-        logger.debug("Correct logout");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito.when(settlementManager.getSettlementFiles(Matchers.any(String.class))).thenReturn(null);
-        response = controller.viewFiles("aggregatorId", model);
-        Assert.assertEquals("viewReportsList", response);
-    }
-
-    /**
-     * 
-     */
-    @Test
-    public void testViewFile() throws Exception {
-        logger.debug("into testViewFile method");
-        Mockito.when(request.getParameter("rssname")).thenReturn("rss.xls");
-        controller.viewfile(request, response);
-        URL url = getClass().getClassLoader().getResource("rss.properties");
-        Mockito.when(request.getParameter("rssname")).thenReturn(url.getPath());
-        Mockito.when(response.getOutputStream()).thenReturn(output);
-        controller.viewfile(request, response);
-    }
-
-    /**
-     * 
-     */
-    @Test
     public void testViewTransactions() throws Exception {
         logger.debug("into viewTransactions method");
         ReflectionTestUtils.setField(controller, "settlementManager", null);
@@ -194,30 +161,4 @@ public class SettlementControllerTest {
         Assert.assertEquals("viewTransactions", response);
     }
 
-
-    /**
-     * 
-     */
-    @Test
-    public void testClean() throws Exception {
-        logger.debug("into testClean method");
-        AppProviderParameter provider = new AppProviderParameter();
-        provider.setName("provider");
-        ReflectionTestUtils.setField(controller, "settlementManager", null);
-        JsonResponse response = controller.clean(provider, null, model);
-        Assert.assertFalse(response.getSuccess());
-        logger.debug("Correct logout");
-        ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
-        Mockito
-            .doNothing()
-            .when(settlementManager)
-            .runClean(Matchers.any(String.class));
-        BindingResult result = Mockito.mock(BindingResult.class);
-        Mockito.when(result.hasErrors()).thenReturn(false);
-        response = controller.clean(provider, result, model);
-        Assert.assertTrue(response.getSuccess());
-        Mockito.when(result.hasErrors()).thenReturn(true);
-        response = controller.clean(null, result, model);
-        Assert.assertFalse(response.getSuccess());
-    }
 }

@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
- * 
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,25 +15,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-(function () {
+package es.tid.fiware.rss.dao.impl;
 
-    var endpoints = {
-        'AGGREGATOR_COLLECTION': '/rss/aggregators',
-        'PROVIDER_COLLECTION': '/rss/providers',
-        'ALGORITHM_COLLECTION': '/rss/algorithms',
-        'RSMODEL_COLLECTION': '/rss/models',
-        'CDR_COLLECTION': '/rss/cdrs',
-        'SETTLEMENT_COLLECTION': '/rss/settlement',
-        'REPORTS_COLLECTION': '/rss/settlement/reports'
-    };
-    
-    EndpointManager = function EndpointManager () {
-        
-    };
+import es.tid.fiware.rss.dao.ReportProviderDao;
+import es.tid.fiware.rss.model.ReportProvider;
+import org.springframework.stereotype.Repository;
 
-    EndpointManager.prototype.getEndpoint = function (endpoint) {
-        return CONTEXT_PATH + endpoints[endpoint];
+/**
+ *
+ * @author fdelavega
+ */
+@Repository
+public class ReportProviderDaoImpl extends GenericDaoImpl<ReportProvider, Integer> 
+   implements ReportProviderDao {
+
+    @Override
+    protected Class<ReportProvider> getDomainClass() {
+        return ReportProvider.class;
     }
-})();
-
-
+    
+}

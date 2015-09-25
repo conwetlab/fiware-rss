@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
- * 
+ * Copyright (C) 2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,25 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-(function () {
+package es.tid.fiware.rss.dao;
 
-    var endpoints = {
-        'AGGREGATOR_COLLECTION': '/rss/aggregators',
-        'PROVIDER_COLLECTION': '/rss/providers',
-        'ALGORITHM_COLLECTION': '/rss/algorithms',
-        'RSMODEL_COLLECTION': '/rss/models',
-        'CDR_COLLECTION': '/rss/cdrs',
-        'SETTLEMENT_COLLECTION': '/rss/settlement',
-        'REPORTS_COLLECTION': '/rss/settlement/reports'
-    };
-    
-    EndpointManager = function EndpointManager () {
-        
-    };
-
-    EndpointManager.prototype.getEndpoint = function (endpoint) {
-        return CONTEXT_PATH + endpoints[endpoint];
-    }
-})();
+import es.tid.fiware.rss.model.ReportProvider;
 
 
+/**
+ *
+ * @author fdelavega
+ */
+public interface ReportProviderDao extends GenericDao<ReportProvider, Integer> {
+}

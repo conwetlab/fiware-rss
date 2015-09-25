@@ -57,36 +57,6 @@ public class SettlementManagerTest {
     }
 
     @Test
-    public void getSettlementFilesTest() {
-        toTest.getSettlementFiles("");
-    }
-
-    @Test
-    public void getSettlementFilesOfPathTest() {
-        toTest.getSettlementFilesOfPath("./");
-    }
-
-    @Test
-    public void runCleanTest() throws IOException {
-        String folderPath = "./folderTest";
-        String appProvider = "appProvider";
-        File folder = new File(folderPath+appProvider);
-
-        if (!folder.mkdir()) {
-            fail();
-        }
-
-        File file = new File(folderPath+appProvider+"/testfile");
-        file.createNewFile();
-        File folderInFolder = new File(folderPath+appProvider+"/testfolder");
-        folderInFolder.mkdir();
-
-        when(rssProps.get("reportsPath")).thenReturn("./folderTest");
-
-        toTest.runClean(appProvider);
-    }
-
-    @Test
     //TODO:
     public void runSettlementTest() throws RSSException {
 

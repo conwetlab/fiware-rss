@@ -17,12 +17,6 @@
 
 package es.tid.fiware.rss.settlement;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import java.util.Date;
 import java.util.Properties;
 import java.util.List;
 
@@ -35,10 +29,7 @@ import es.tid.fiware.rss.algorithm.AlgorithmFactory;
 import es.tid.fiware.rss.algorithm.AlgorithmProcessor;
 import es.tid.fiware.rss.model.DbeTransaction;
 import es.tid.fiware.rss.model.RSSModel;
-import es.tid.fiware.rss.model.StakeholderModel;
 import es.tid.fiware.rss.service.SettlementManager;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -69,61 +60,6 @@ public class ProductSettlementTask implements Runnable {
         this.transactions = transactions;
     }
 
-    private String createDir(String path, String id) {
-        File provFolder = new File(path, id);
-        if (!provFolder.exists()) {
-            provFolder.mkdir();
-        }
-        return provFolder.getPath();
-    }
-
-    private void generateReport(RSSModel sharingRes, String curr) throws IOException {
-        this.logger.info("Generating report: " 
-                    + this.model.getAggregatorId() + " "
-                    + this.model.getOwnerProviderId() + " "
-                    + this.model.getProductClass());
-
-        String reportsPath = (String) rssProps.get("reportsPath");
-
-        // Create aggregator folder if it does not exists
-        String path = this.createDir(reportsPath, sharingRes.getAggregatorId());
-
-        // Create provider folder if it does not exists
-        path = this.createDir(path, sharingRes.getOwnerProviderId());
-
-        // Create new report file
-        Date date = new Date();
-        DateFormat formatter = new SimpleDateFormat("yyyyMMdd_hhmmss");
-
-        String reportId = sharingRes.getProductClass() + "_" + formatter.format(date) + ".csv";
-        File reportFile = new File(path, reportId);
-
-        FileWriter fw = new FileWriter(reportFile);
-
-        try(BufferedWriter bw = new BufferedWriter(fw)) {
-            int i = 0;
-            String title = "algorithm,class,store_owner,store_value,owner,owner_value,currency";
-
-            String value = sharingRes.getAlgorithmType() + ","
-                    + sharingRes.getProductClass() + ","
-                    + sharingRes.getAggregatorId() + ","
-                    + sharingRes.getAggregatorValue() + ","
-                    + sharingRes.getOwnerProviderId() + ","
-                    + sharingRes.getOwnerValue() + ","
-                    + curr;
-
-            for (StakeholderModel st: sharingRes.getStakeholders()) {
-                title += ",stakeholder_" + i + ",stakeholder_value_" + i;
-                value += "," +st.getStakeholderId() + "," + st.getModelValue();
-                i++;
-            }
-
-            bw.write(title + "\n");
-            bw.write(value + "\n");
-        }
-        
-    }
-
     @Override
     public void run() {
         this.logger.info("Processing class " + this.model.getProductClass());
@@ -147,7 +83,7 @@ public class ProductSettlementTask implements Runnable {
             AlgorithmProcessor processor = factory.getAlgorithmProcessor(this.model.getAlgorithmType());
 
             sharingRes = processor.calculateRevenue(model, value);
-            this.generateReport(sharingRes, curr);
+            this.settlementManager.generateReport(sharingRes, curr);
 
         } catch (Exception e) {
             this.logger.info("Error processing transactions of: "

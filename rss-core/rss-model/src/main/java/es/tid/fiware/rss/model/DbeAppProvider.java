@@ -57,6 +57,7 @@ public class DbeAppProvider implements java.io.Serializable {
     private Integer txCorrelationNumber;
     private Date txTimeStamp;
     private Set<SetRevenueShareConf> models;
+    private Set<SharingReport> reports;
 
     /**
      * 
@@ -109,6 +110,15 @@ public class DbeAppProvider implements java.io.Serializable {
 
     public void setModels(Set<SetRevenueShareConf> models) {
         this.models = models;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = SharingReport.class, mappedBy = "owner")
+    public Set<SharingReport> getReports() {
+        return reports;
+    }
+
+    public void setReports(Set<SharingReport> reports) {
+        this.reports = reports;
     }
 
     @Column(name = "CORRELATION_NUMBER")

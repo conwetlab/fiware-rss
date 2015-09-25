@@ -18,13 +18,16 @@ package es.tid.fiware.rss.ws;
 
 import es.tid.fiware.rss.exception.RSSException;
 import es.tid.fiware.rss.exception.UNICAExceptionType;
+import es.tid.fiware.rss.model.RSSReport;
 import es.tid.fiware.rss.model.RSUser;
 import es.tid.fiware.rss.service.SettlementManager;
 import es.tid.fiware.rss.service.UserManager;
+import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +48,8 @@ public class SettlementService {
 
     @WebMethod
     @GET
-    public Response launchSettlement(@QueryParam("aggregatorId") String aggregatorId,
+    public Response launchSettlement(
+            @QueryParam("aggregatorId") String aggregatorId,
             @QueryParam("providerId") String providerId,
             @QueryParam("productClass") String productClass)
             throws Exception {
@@ -62,6 +66,35 @@ public class SettlementService {
         // Launch process
         settlementManager.runSettlement(aggregatorId, providerId, productClass);
         Response.ResponseBuilder rb = Response.status(Response.Status.ACCEPTED.getStatusCode());
+        return rb.build();
+    }
+
+    @WebMethod
+    @GET
+    @Produces("application/json")
+    @Path("/reports")
+    public Response getReports(
+            @QueryParam("aggregatorId") String aggregatorId,
+            @QueryParam("providerId") String providerId,
+            @QueryParam("productClass") String productClass)
+            throws Exception {
+   
+        // Check basic permissions
+        RSUser user = this.userManager.getCurrentUser();
+        String effectiveAggregator;
+
+        if (userManager.isAdmin()) {
+            effectiveAggregator = aggregatorId;
+        } else if (null == aggregatorId || aggregatorId.equals(user.getEmail())){
+            effectiveAggregator = user.getEmail();
+        } else {
+            String[] args = {"You are not allowed to retrieve report files for the given parameters"};
+            throw new RSSException(UNICAExceptionType.NON_ALLOWED_OPERATION, args);
+        }
+
+        List<RSSReport> files = settlementManager.getSharingReports(effectiveAggregator, providerId, productClass);
+        Response.ResponseBuilder rb = Response.status(Response.Status.OK.getStatusCode());
+        rb.entity(files);
         return rb.build();
     }
 }
