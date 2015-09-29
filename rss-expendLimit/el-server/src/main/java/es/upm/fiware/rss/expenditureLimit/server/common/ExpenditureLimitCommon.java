@@ -29,7 +29,6 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.upm.fiware.rss.common.properties.AppProperties;
 import es.upm.fiware.rss.exception.RSSException;
 import es.upm.fiware.rss.exception.UNICAExceptionType;
 
@@ -90,9 +89,8 @@ public final class ExpenditureLimitCommon {
      * @param resource
      * @return
      */
-    public static String getResourceUrl(AppProperties appProperties, UriInfo ui, String profileId, String resource) {
+    public static String getResourceUrl(UriInfo ui, String profileId, String resource) {
         String resourceUrl, urlEnd;
-        String serviceUrl = ExpenditureLimitCommon.getServiceUrl(appProperties);
 
         // Init urlEnd
         if (profileId == null || profileId.equals("")) {
@@ -120,21 +118,4 @@ public final class ExpenditureLimitCommon {
         }
         return resourceUrl;
     }
-
-    /**
-     * Take the service.url property from the file.
-     * 
-     * @return the serviceUrl
-     */
-    public static String getServiceUrl(AppProperties appProperties) {
-        ExpenditureLimitCommon.logger.debug("Into getServiceUrl method.");
-        if (ExpenditureLimitCommon.serviceUrl == null) {
-            ExpenditureLimitCommon.serviceUrl = appProperties.getProperty("service.url");
-            if (ExpenditureLimitCommon.serviceUrl == null) {
-                ExpenditureLimitCommon.logger.error("Property 'service.url' not defined");
-            }
-        }
-        return ExpenditureLimitCommon.serviceUrl;
-    }
-
 }

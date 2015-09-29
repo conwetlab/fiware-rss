@@ -69,12 +69,7 @@ public class ExpenditureLimitServer {
     private ExpenditureLimitManager expLimitManager;
     @Autowired
     private ExpenditureLimitDataChecker checker;
-    /**
-     * 
-     */
-    @Autowired
-    @Qualifier(value = "appProperties")
-    private AppProperties appProperties;
+
     /**
      * Information about the context of the application.
      */
@@ -142,7 +137,6 @@ public class ExpenditureLimitServer {
 
         String resourceURL = ExpenditureLimitCommon.
                 getResourceUrl(
-                        appProperties,
                         ExpenditureLimitServer.ui,
                         appProvider,
                         ExpenditureLimitServer.RESOURCE);
@@ -257,7 +251,7 @@ public class ExpenditureLimitServer {
         UserExpenditureLimitInfoBean expInfoBean = expLimitManager.storeGeneralUserExpLimit(
                 aggregator, appProvider, urlEndUserId, expLimits);
 
-        String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, ExpenditureLimitServer.ui,
+        String resourceURL = ExpenditureLimitCommon.getResourceUrl(ExpenditureLimitServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
 
         // Building response

@@ -21,7 +21,6 @@ package es.upm.fiware.rss.expenditureLimit.server.manager.common.test;
 import java.net.URI;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -33,12 +32,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import es.upm.fiware.rss.common.properties.AppProperties;
-import es.upm.fiware.rss.common.test.DatabaseLoader;
 import es.upm.fiware.rss.exception.RSSException;
 import es.upm.fiware.rss.expenditureLimit.api.ExceptionTypeBean;
 import es.upm.fiware.rss.expenditureLimit.server.common.FactoryResponse;
@@ -54,21 +50,6 @@ public class FactoryResponseTest {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(FactoryResponseTest.class);
-    /**
-     * For database access.
-     */
-    @Autowired
-    private DataSource dataSource;
-    /**
-     * 
-     */
-    @Autowired
-    private DatabaseLoader databaseLoader;
-    /**
-     * 
-     */
-    @Autowired
-    private AppProperties appProperties;
 
     /**
      * 
@@ -98,7 +79,7 @@ public class FactoryResponseTest {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
         RSSException exception = new RSSException("RssException");
-        ExceptionTypeBean bean = FactoryResponse.exceptionJson(appProperties, mockUriInfo,
+        ExceptionTypeBean bean = FactoryResponse.exceptionJson(mockUriInfo,
             exception, "resource");
         Assert.assertTrue(true);
     }
@@ -110,7 +91,7 @@ public class FactoryResponseTest {
     public void createResponseErrorJson() throws Exception {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
-        Response bean = FactoryResponse.createResponseErrorJson(appProperties, mockUriInfo,
+        Response bean = FactoryResponse.createResponseErrorJson(mockUriInfo,
             "message", "resource");
         Assert.assertTrue(true);
     }
@@ -123,7 +104,7 @@ public class FactoryResponseTest {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
         GenericJDBCException exception = new GenericJDBCException("sql", new SQLException("reason"));
-        Response bean = FactoryResponse.catchNewConnectionJson(appProperties, mockUriInfo,
+        Response bean = FactoryResponse.catchNewConnectionJson(mockUriInfo,
             exception, "message", "resource");
         Assert.assertTrue(true);
     }
@@ -136,7 +117,7 @@ public class FactoryResponseTest {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
         JDBCConnectionException exception = new JDBCConnectionException("sql", new SQLException("reason"));
-        Response bean = FactoryResponse.catchConnectionJDBCJson(appProperties, mockUriInfo,
+        Response bean = FactoryResponse.catchConnectionJDBCJson(mockUriInfo,
             exception, "resource", "txId");
         Assert.assertTrue(true);
     }
@@ -149,7 +130,7 @@ public class FactoryResponseTest {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
         RSSException exception = new RSSException("RssException");
-        Response bean = FactoryResponse.catchExceptionJson(appProperties, mockUriInfo, exception,
+        Response bean = FactoryResponse.catchExceptionJson(mockUriInfo, exception,
             "resource");
         Assert.assertTrue(true);
     }

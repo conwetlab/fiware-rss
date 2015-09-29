@@ -21,7 +21,6 @@ package es.upm.fiware.rss.expenditureLimit.server.manager.common.test;
 import java.net.URI;
 import java.util.Date;
 
-import javax.sql.DataSource;
 import javax.ws.rs.core.UriInfo;
 
 import org.junit.Assert;
@@ -30,12 +29,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import es.upm.fiware.rss.common.properties.AppProperties;
-import es.upm.fiware.rss.common.test.DatabaseLoader;
 import es.upm.fiware.rss.expenditureLimit.server.common.ExpenditureLimitCommon;
 
 /**
@@ -49,21 +45,6 @@ public class ExpenditureLimitCommonTest {
      * Logging system.
      */
     private static Logger logger = LoggerFactory.getLogger(ExpenditureLimitCommonTest.class);
-    /**
-     * For database access.
-     */
-    @Autowired
-    private DataSource dataSource;
-    /**
-     * 
-     */
-    @Autowired
-    private DatabaseLoader databaseLoader;
-    /**
-     * 
-     */
-    @Autowired
-    private AppProperties appProperties;
 
     /**
      * 
@@ -94,19 +75,10 @@ public class ExpenditureLimitCommonTest {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
 
-        ExpenditureLimitCommon.getResourceUrl(appProperties, null, "profileId", "resource");
-        ExpenditureLimitCommon.getResourceUrl(appProperties, mockUriInfo, "", "resource");
+        ExpenditureLimitCommon.getResourceUrl(null, "profileId", "resource");
+        ExpenditureLimitCommon.getResourceUrl(mockUriInfo, "", "resource");
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/"));
-        ExpenditureLimitCommon.getResourceUrl(appProperties, mockUriInfo, "", null);
-        Assert.assertTrue(true);
-    }
-
-    /**
-     * 
-     */
-    @Test
-    public void getServiceUrl() {
-        ExpenditureLimitCommon.getServiceUrl(appProperties);
+        ExpenditureLimitCommon.getResourceUrl(mockUriInfo, "", null);
         Assert.assertTrue(true);
     }
 }

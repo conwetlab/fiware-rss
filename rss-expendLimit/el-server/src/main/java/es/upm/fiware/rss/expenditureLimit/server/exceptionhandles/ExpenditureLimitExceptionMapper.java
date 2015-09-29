@@ -47,9 +47,6 @@ import es.upm.fiware.rss.expenditureLimit.server.common.FactoryResponse;
 @Provider
 public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exception> {
 
-    @Autowired
-    @Qualifier(value = "appProperties")
-    private AppProperties dbeProperties;
     @Context
     private UriInfo ui;
     private final Logger logger = LoggerFactory.getLogger(ExpenditureLimitExceptionMapper.class);
@@ -58,7 +55,7 @@ public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exceptio
         logger.error("Return GRETAException: [" + ((RSSException) e).getExceptionType().getExceptionId()
                 + "] " + e.getMessage(), e);
 
-        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
+        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(ui,
             ((RSSException) e), ui.getAbsolutePath().getPath());
 
         return FactoryResponse.createResponseError(((RSSException) e), exceptObj);
@@ -71,11 +68,11 @@ public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exceptio
             return this.getResponseFromRSSException((RSSException) e);
 
         } else if (e instanceof GenericJDBCException) {
-            return FactoryResponse.catchNewConnectionJson(dbeProperties, ui, (GenericJDBCException) e,
+            return FactoryResponse.catchNewConnectionJson(ui, (GenericJDBCException) e,
                 ui.getAbsolutePath().getPath(), null);
 
         } else if (e instanceof JDBCConnectionException) {
-            return FactoryResponse.catchConnectionJDBCJson(dbeProperties, ui, (JDBCConnectionException) e,
+            return FactoryResponse.catchConnectionJDBCJson(ui, (JDBCConnectionException) e,
                 ui.getAbsolutePath().getPath(), null);
 
         } else if (e instanceof NotFoundException) {
@@ -90,17 +87,17 @@ public class ExpenditureLimitExceptionMapper implements ExceptionMapper<Exceptio
 
             // Write response
             if (e.getCause() instanceof GenericJDBCException) {
-                return FactoryResponse.catchNewConnectionJson(dbeProperties, ui, (GenericJDBCException) e.getCause(),
+                return FactoryResponse.catchNewConnectionJson(ui, (GenericJDBCException) e.getCause(),
                     ui.getAbsolutePath().getPath(), null);
             } else if (e.getCause() instanceof JDBCConnectionException) {
-                return FactoryResponse.catchConnectionJDBCJson(dbeProperties, ui,
+                return FactoryResponse.catchConnectionJDBCJson(ui,
                     (JDBCConnectionException) e.getCause(),
                     ui.getAbsolutePath().getPath(), null);
             } else {
                 logger.error("Return Exception: " + e.getMessage(), e);
 
                 // Write response
-                return FactoryResponse.createResponseErrorJson(dbeProperties, ui,
+                return FactoryResponse.createResponseErrorJson(ui,
                     FactoryResponse.createErrorMsg(e), ui.getAbsolutePath().getPath());
             }
         }

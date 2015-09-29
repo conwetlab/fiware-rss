@@ -73,9 +73,6 @@ public class BalanceAccumulatedServer {
          * 
          */
 
-    @Autowired
-    @Qualifier(value = "appProperties")
-    private AppProperties appProperties;
     /**
      * Information about the context of the application.
      */
@@ -145,7 +142,7 @@ public class BalanceAccumulatedServer {
         // Call service
         AccumsExpend expInfoBean = balanceAccumulateManager.checkUserBalance(urlEndUserId, expendControl);
 
-        String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, BalanceAccumulatedServer.ui,
+        String resourceURL = ExpenditureLimitCommon.getResourceUrl(BalanceAccumulatedServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
 
         // Building response
@@ -180,7 +177,7 @@ public class BalanceAccumulatedServer {
         // Call service
         AccumsExpend expInfoBean = balanceAccumulateManager.updateUserAccumulated(urlEndUserId, expendControl);
 
-        String resourceURL = ExpenditureLimitCommon.getResourceUrl(appProperties, BalanceAccumulatedServer.ui,
+        String resourceURL = ExpenditureLimitCommon.getResourceUrl(BalanceAccumulatedServer.ui,
             urlEndUserId, ExpenditureLimitServer.RESOURCE);
 
         // Building response
