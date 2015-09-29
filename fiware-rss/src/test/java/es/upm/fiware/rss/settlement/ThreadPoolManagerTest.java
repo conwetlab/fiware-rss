@@ -23,40 +23,32 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /**
  *
  * @author jortiz
  */
 public class ThreadPoolManagerTest {
+
     @Mock private ExecutorService executorService;
     @InjectMocks private ThreadPoolManager toTest;
 
     public ThreadPoolManagerTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
-    @After
-    public void tearDown() {
-    }
-
-    /*@Test
+    @Test
     public void test() {
         toTest.cleanUp();
         toTest.getExecutorService();
         toTest.init();
-    }*/
+    }
 }
