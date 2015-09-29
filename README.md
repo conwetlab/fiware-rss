@@ -1,97 +1,61 @@
+# Revenue Settlement and Sharing System 
 
-# Revenue Settlement and Sharing System [![Build Status](https://travis-ci.org/telefonicaid/fiware-rss.svg?branch=develop)](https://travis-ci.org/telefonicaid/fiware-rss?branch=develop) [![Coverage Status](https://coveralls.io/repos/telefonicaid/fiware-rss/badge.png?branch=develop)](https://coveralls.io/r/telefonicaid/fiware-rss?branch=develop)
+ * [Introduction](#introduction)
+ * [GEi Overall Description](#gei-overall-description)
+ * [Installation](#build-and-install)
+ * [API Overview](#api-overview)
+ * [API Reference](#api-reference)
+ * [Testing](#testing)
+ * [Advanced Topics](#advanced-topics)
 
-This is the code repository for the Revenue Settlement and Sharing System, a Java implementation developed as a part of the FI-WARE project (http://www.fi-ware.org/).
+# Introduction
 
-You find all the information on Revenue Settlement and Sharing System in its page in the FI-WARE Catalogue:
+This is the code repository for the Revenue Settlement and Sharing System, a Java implementation developed as a part of [FIWARE](http://www.fiware.org/), and the reference implementation of the Revenue Settlement and Sharing System GE.
 
-http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system
+You find all the information related to the RSS in its page in the [FIWARE Catalogue](http://catalogue.fiware.org/enablers/revenue-settlement-and-sharing-system-rss-ri)
 
-Note that you don't need this repository code if you install it using the packages at FI-WARE repository: https://forge.fi-ware.org/frs/?group_id=7  
+Any feedback is highly welcome, including bugs, typos or things you think should be included but aren't. You can use [GitHub Issues](https://github.com/conwetlab/fiware-rss/issues/new) to provide feedback.
 
+You can find the User & Programmer's Manual and the Administration Guide on [readthedocs.org](https://fiware-rss.readthedocs.org)
 
-## Installing and Using the Revenue Settlement and Sharing System
-
-The administration and programming manuals for Revenue Settlement and Sharing System are found in the FI-WARE Catalogue page,
-under the "Documentation" tab.
-
-http://catalogue.fi-ware.org/enablers/revenue-settlement-and-sharing-system/documentation
-
-
-## Building Revenue Settlement and Sharing System
-
-This section includes indications on how to build Revenue Settlement and Sharing System from this code repository.
-The final result of this step will be 2 wars files: 
-* one for RSS (fiware-rss.war) located at ${base_code}/fiware-rss/fiware-rss/target
-* other for Expenditure Limits(expenditureLimit.war) located at ${base_code}/fiware-rss/rss-expendLimit/el-server/target.
-
-where ${base_code} is the folder where the code will be downloaded from the repository.
+# GEi Overal Description
 
 
-Revenue Settlement and Sharing System is a Java 6 project built using for its management the software project tool Apache Maven.This means that it is required to install them. The following installation  has been done using as base O.S. Ubuntu 12.04.2 LTS. To do it:
+# Installation
 
-* Install Java 6
+The instructions to install the RSS can be found at [the Installation Guide](http://fiware-rss.readthedocs.org/en/latest/installation-administration-guide.html). You can install the software in three different ways:
 
-```
-sudo apt-get install openjdk-6-jdk
-```
+* Using the provided war packages
+* Using a [Docker Container](https://hub.docker.com/r/fiware/rss/)
+* Manually
 
-* Install Apache Maven
+# API Overview
 
-```
-sudo apt-get install maven
-```
 
-The best way to obtain the code is by cloning the respository using git tool. 
+# API Reference
 
-* Install Git
+For further documentation, you can check the API Reference available at:
 
-```
-sudo apt-get install git
-```
+* [Apiary](http://docs.fiwarerss.apiary.io)
+* [GitHub Pages](http://conwetlab.github.io/fiware-rss)
 
-* Obtain the code
+# Testing
+### End-to-End tests
 
-```
-git clone https://github.com/telefonicaid/fiware-rss
-```
+End-to-End tests are described in the [Installation Guide](http://fiware-rss.readthedocs.org/en/latest/installation-administration-guide.html#end-to-end-testing)
 
-The first thing to do, it is compiling the code, avoiding running the test, to download dependencies. 
-To do it, run the following command inside the folder download in the previous step.
+### Unit tests
 
-```
-mvn install -Dmaven.test.skip=true
-```
-
-## Testing Revenue Settlement and Sharing System
-
-For testing purpose, a Mysql database will be necessary. To install it, use the following command:
-
-```
-sudo apt-get install mysql-server-5.5
-```
-
-During the installation you will be asked for a password: use root, that is the one use by default by testing.
-
-Create a database for test purpose using the following command:
-
-```
-mysql -uroot -proot -e 'create database FIWARE_SETTLEMENT;'
-```
-
-Create the necessary tables using the following command from the directory ${base_code}/fiware-rss/
-
-```
-mysql -uroot -proot FIWARE_SETTLEMENT < ./rss-core/resources/datamodel/dbmodel.sql
-```
-
-Finally run the following command to execute the test:
+To execute the unit tests, just run:
 
 ```
 mvn test -fae
 ```
 
+## Advanced Topics
 
-## License
+* [User & Programmers Guide](doc/user-programmer-guide.rst)
+* [Installation & Administration Guide](doc/installation-administration-guide.rst)
 
-Revenue Settlement and Sharing System is licensed under Affero General Public License (GPL) version 3 (http://www.gnu.org/licenses/agpl-3.0.html).
+You can also find this documentation on [ReadTheDocs](http://fiware-rss.readthedocs.org)
+
