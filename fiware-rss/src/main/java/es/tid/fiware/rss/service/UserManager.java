@@ -64,7 +64,7 @@ public class UserManager {
     }
 
     /**
-     * Checks whether the current a user contains a given role
+     * Checks whether the current user contains a given role
      * @param role
      * @return true if the user contains the given role
      * @throws RSSException, if there is not a user object attached to the session

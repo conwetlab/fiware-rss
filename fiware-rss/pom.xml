@@ -12,7 +12,7 @@
 	<artifactId>fiware-rss</artifactId>
 	<packaging>war</packaging>
 	<name>fiware-rss</name>
-	<description>FI-WARE RSS</description>
+	<description>FIWARE RSS</description>
 
 	<organization>
 		<name>Universidad Politécnica de Madrid</name>

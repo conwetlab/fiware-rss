@@ -19,9 +19,6 @@
 
 package es.tid.fiware.rss.exceptionhandles;
 
-import java.util.Properties;
-
-import javax.annotation.Resource;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -56,11 +53,6 @@ public class RssExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Context
     protected UriInfo uriInfo;
-    /**
-     * 
-     */
-    @Resource(name = "rssProps")
-    private Properties rssProps;
 
     /**
      * 
@@ -79,7 +71,6 @@ public class RssExceptionMapper implements ExceptionMapper<Exception> {
         if (isJSONAccept()) {
             // JSON
             JsonExceptionMapper mapperJSON = new JsonExceptionMapper();
-            mapperJSON.setRssProps(rssProps);
             mapperJSON.setUriInfo(uriInfo);
             return mapperJSON.toResponse(e);
         } else if (e instanceof RSSException) {

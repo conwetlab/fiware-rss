@@ -48,7 +48,6 @@ public class SettlementManagerTest {
     @Mock private ProviderManager providerManager;
     @Mock private RSSModelsManager modelsManager;
     @Mock private ThreadPoolManager poolManager;
-    @Mock private Properties rssProps;
     @InjectMocks private SettlementManager toTest;
 
     @Before

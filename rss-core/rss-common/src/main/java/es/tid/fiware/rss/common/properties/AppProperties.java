@@ -19,6 +19,7 @@
 
 package es.tid.fiware.rss.common.properties;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -108,12 +109,11 @@ public class AppProperties {
      * @return prop
      */
     public static Properties loadProperties(final String filename) {
-        AppProperties.logger.debug("Into AppProperties.loadProperties()");
+        AppProperties.logger.debug("Into AppProperties.loadProperties() " + filename);
 
         Properties prop = new Properties();
         try {
-            ClassLoader loader = AppProperties.class.getClassLoader();
-            InputStream input = loader.getResourceAsStream(filename);
+            InputStream input = new FileInputStream(filename);
             prop.load(input);
         } catch (IOException ioe) {
             AppProperties.logger.error("Error >>>>>>> " + ioe.getMessage(), ioe);

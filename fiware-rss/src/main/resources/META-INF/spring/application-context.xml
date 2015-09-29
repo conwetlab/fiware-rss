@@ -12,8 +12,6 @@
        http://www.springframework.org/schema/security/spring-security-3.0.xsd
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd">
-       
-	<util:properties id="rssProps" location="classpath:rss.properties"/>
 
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 	    <property name="defaultLocale" value="en_UK" />

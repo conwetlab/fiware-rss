@@ -21,9 +21,6 @@
 
 package es.tid.fiware.rss.controller;
 
-import java.util.Properties;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.QueryParam;
 
@@ -51,8 +48,6 @@ public class SettlementController {
     @Autowired
     private UserManager userManager;
 
-    @Resource(name = "rssProps")
-    private Properties rssProps;
 
     /**
      * Main page redirection.
@@ -70,7 +65,6 @@ public class SettlementController {
 
             model.addAttribute("aggregatorId", aggregatorId);
             model.addAttribute("is_admin", this.userManager.isAdmin());
-            model.addAttribute("pentahoReportsUrl", rssProps.get("pentahoReportsUrl"));
             return "settlement";
         } catch (Exception e) {
             model.addAttribute("message", "Settlement:"  + e.getMessage());

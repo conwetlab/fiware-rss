@@ -40,9 +40,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,8 +58,6 @@ public class CdrsManager {
     /**
      * Properties.
      */
-    @Resource(name = "rssProps")
-    private Properties rssProps;
 
     @Autowired
     private DbeTransactionDao transactionDao;
@@ -82,22 +77,6 @@ public class CdrsManager {
     @Autowired
     private RSSModelsManager modelsManager;
 
-    /**
-     * Get File where save cdrs.
-     * 
-     * @return
-     * @throws IOException
-     */
-    public File getFile() throws IOException {
-        Date date = Calendar.getInstance().getTime();
-        DateFormat formatter = new SimpleDateFormat("yyyyMMdd_hhmmss");
-        String dateFormatted = formatter.format(date);
-        String path = (String) rssProps.get("cdrfilepath");
-        File cdrFile = new File(path + "fiwarecdr_" + dateFormatted + ".xml");
-        cdrFile.createNewFile();
-        logger.debug("File created: " + cdrFile.getCanonicalPath());
-        return cdrFile;
-    }
 
     private List<CDR> getCDRsAPIFormat(List<DbeTransaction> txs) {
         List<CDR> result = new ArrayList<>();

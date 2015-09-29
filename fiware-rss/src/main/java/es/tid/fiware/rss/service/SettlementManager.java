@@ -26,12 +26,9 @@ import es.tid.fiware.rss.dao.DbeAppProviderDao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,10 +98,6 @@ public class SettlementManager {
 
     @Autowired
     private ThreadPoolManager poolManager;
-
-    
-    @Resource(name = "rssProps")
-    private Properties rssProps;
 
     private List<Aggregator> getAggregators(String aggregatorId)  
             throws RSSException{

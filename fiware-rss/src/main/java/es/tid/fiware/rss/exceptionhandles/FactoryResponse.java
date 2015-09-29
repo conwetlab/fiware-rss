@@ -86,16 +86,12 @@ public final class FactoryResponse {
      * @param resource
      * @return
      */
-    public static ExceptionTypeBean exceptionJson(Properties dbeProperties,
+    public static ExceptionTypeBean exceptionJson(
         UriInfo ui, RSSException exception, String resource) {
 
         ExceptionTypeBean oErr = new ExceptionTypeBean();
         oErr.setExceptionId(exception.getExceptionType().getExceptionId());
         oErr.setExceptionText(exception.getMessage());
-        if ((null != resource) && (null != exception.getMoreInfo()) && (exception.getMoreInfo().length() > 0)) {
-            oErr.setMoreInfo(FactoryResponse.getResourceUrl(dbeProperties, ui, exception.getMoreInfo(),
-                resource));
-        }
         oErr.setUserMessage(exception.getUserMessage());
         return oErr;
     }
@@ -107,12 +103,14 @@ public final class FactoryResponse {
      *            String message
      * @return Response
      */
-    public static Response createResponseErrorJson(Properties dbeProperties, UriInfo ui, final String message,
+    public static Response createResponseErrorJson( UriInfo ui, final String message,
         final String resource) {
+
         String[] args = {message};
         RSSException exception = new RSSException(RSSExceptionType.GENERIC_EXCEPTION, args);
-        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
+        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(ui,
             exception, resource);
+
         return FactoryResponse.createResponseError(exception, exceptObj);
     }
 
@@ -125,7 +123,7 @@ public final class FactoryResponse {
      * @param resource
      * @return
      */
-    public static Response catchNewConnectionJson(Properties dbeProperties, UriInfo ui, GenericJDBCException e,
+    public static Response catchNewConnectionJson(UriInfo ui, GenericJDBCException e,
         String resource, String txId) {
         // ALARM DETECTED
         FactoryResponse.logger.error(Constants.LOG_ALARM + " Cannot open connection with the database");
@@ -136,7 +134,7 @@ public final class FactoryResponse {
         FactoryResponse.logger.error("Return GRETAException: [" + newException.getExceptionType().getExceptionId()
             + "] "
             + newException.getMessage(), e);
-        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
+        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson( ui,
             newException, resource);
         return FactoryResponse.createResponseError(newException, exceptObj);
     }
@@ -150,7 +148,7 @@ public final class FactoryResponse {
      * @param resource
      * @return
      */
-    public static Response catchConnectionJDBCJson(Properties dbeProperties, UriInfo ui, JDBCConnectionException e,
+    public static Response catchConnectionJDBCJson(UriInfo ui, JDBCConnectionException e,
         String resource, String txId) {
         // ALARM DETECTED
         FactoryResponse.logger.error(Constants.LOG_ALARM + " Problems connecting to the database: {}", resource);
@@ -161,7 +159,7 @@ public final class FactoryResponse {
         FactoryResponse.logger.error("Return GRETAException: [" + newException.getExceptionType().getExceptionId()
             + "] "
             + newException.getMessage(), e);
-        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
+        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(ui,
             newException, resource);
         return FactoryResponse.createResponseError(newException, exceptObj);
     }
@@ -174,67 +172,13 @@ public final class FactoryResponse {
      * @param resource
      * @return
      */
-    public static Response catchExceptionJson(Properties dbeProperties, UriInfo ui,
+    public static Response catchExceptionJson(UriInfo ui,
         RSSException e, String resource) {
         // ALARM DETECTED
         FactoryResponse.logger.error("Error: " + e.toString(), e);
-        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(dbeProperties, ui,
+        ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(ui,
             e, resource);
         return FactoryResponse.createResponseError(e, exceptObj);
-    }
-
-    /**
-     * Generate and return the resource url.
-     * 
-     * @param profileId
-     * @param resource
-     * @return
-     */
-    public static String getResourceUrl(Properties appProperties, UriInfo ui, String profileId, String resource) {
-        String resourceUrl, urlEnd;
-        String serviceUrl = FactoryResponse.getServiceUrl(appProperties);
-
-        // Init urlEnd
-        if (profileId == null || profileId.equals("")) {
-            urlEnd = "";
-        } else {
-            urlEnd = "/" + profileId;
-        }
-
-        if (resource == null) {
-            resource = "/";
-        }
-
-        // Set resourceUrl
-        if (null == serviceUrl || "".equalsIgnoreCase(serviceUrl) && (null != ui) && (null != ui.getBaseUri())) {
-            // get default path from context
-            String urlBase = ui.getBaseUri().toString().replace(resource, "/");
-            if (urlBase.endsWith("/")) {
-                resourceUrl = urlBase + resource.substring(1) + urlEnd;
-            } else {
-                resourceUrl = urlBase + resource + urlEnd;
-            }
-        } else {
-            // Use in case of load balancer
-            resourceUrl = serviceUrl + resource + urlEnd;
-        }
-        return resourceUrl;
-    }
-
-    /**
-     * Take the service.url property from the file.
-     * 
-     * @return the serviceUrl
-     */
-    public static String getServiceUrl(Properties appProperties) {
-        FactoryResponse.logger.debug("Into getServiceUrl method.");
-        if (FactoryResponse.serviceUrl == null) {
-            FactoryResponse.serviceUrl = appProperties.getProperty("service.url");
-            if (FactoryResponse.serviceUrl == null) {
-                FactoryResponse.logger.error("Property 'service.url' not defined");
-            }
-        }
-        return FactoryResponse.serviceUrl;
     }
 
 }

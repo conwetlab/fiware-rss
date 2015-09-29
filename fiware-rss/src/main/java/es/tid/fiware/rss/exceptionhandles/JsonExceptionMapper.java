@@ -47,10 +47,6 @@ public class JsonExceptionMapper implements ExceptionMapper<Exception> {
  */
     private final Logger logger = LoggerFactory.getLogger(JsonExceptionMapper.class);
     /**
-     * Properties.
-     */
-    private Properties rssProps;
-    /**
          * 
          */
     @Context
@@ -65,14 +61,14 @@ public class JsonExceptionMapper implements ExceptionMapper<Exception> {
         if (e instanceof RSSException) {
             logger.error("Return GRETAException: [" + ((RSSException) e).getExceptionType().getExceptionId()
                 + "] " + e.getMessage(), e);
-            ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(rssProps, uriInfo,
+            ExceptionTypeBean exceptObj = FactoryResponse.exceptionJson(uriInfo,
                 ((RSSException) e), uriInfo.getAbsolutePath().getPath());
             return FactoryResponse.createResponseError(((RSSException) e), exceptObj);
         } else if (e instanceof GenericJDBCException) {
-            return FactoryResponse.catchNewConnectionJson(rssProps, uriInfo, (GenericJDBCException) e,
+            return FactoryResponse.catchNewConnectionJson(uriInfo, (GenericJDBCException) e,
                 uriInfo.getAbsolutePath().getPath(), null);
         } else if (e instanceof JDBCConnectionException) {
-            return FactoryResponse.catchConnectionJDBCJson(rssProps, uriInfo, (JDBCConnectionException) e,
+            return FactoryResponse.catchConnectionJDBCJson(uriInfo, (JDBCConnectionException) e,
                 uriInfo.getAbsolutePath().getPath(), null);
         } else if (e instanceof NotFoundException) {
             return Response.status(404).build();
@@ -81,18 +77,18 @@ public class JsonExceptionMapper implements ExceptionMapper<Exception> {
 
             // Write response
             if (e.getCause() instanceof GenericJDBCException) {
-                return FactoryResponse.catchNewConnectionJson(rssProps, uriInfo,
+                return FactoryResponse.catchNewConnectionJson(uriInfo,
                     (GenericJDBCException) e.getCause(),
                     uriInfo.getAbsolutePath().getPath(), null);
             } else if (e.getCause() instanceof JDBCConnectionException) {
-                return FactoryResponse.catchConnectionJDBCJson(rssProps, uriInfo,
+                return FactoryResponse.catchConnectionJDBCJson(uriInfo,
                     (JDBCConnectionException) e.getCause(),
                     uriInfo.getAbsolutePath().getPath(), null);
             } else {
                 logger.error("Return Exception: " + e.getMessage(), e);
 
                 // Write response
-                return FactoryResponse.createResponseErrorJson(rssProps, uriInfo,
+                return FactoryResponse.createResponseErrorJson(uriInfo,
                     FactoryResponse.createErrorMsg(e), uriInfo.getAbsolutePath().getPath());
             }
         }
@@ -104,13 +100,5 @@ public class JsonExceptionMapper implements ExceptionMapper<Exception> {
      */
     public void setUriInfo(UriInfo uriInfo) {
         this.uriInfo = uriInfo;
-    }
-
-    /**
-     * @param rssProps
-     *            the rssProps to set
-     */
-    public void setRssProps(Properties rssProps) {
-        this.rssProps = rssProps;
     }
 }

@@ -83,22 +83,6 @@ public class CdrsManagerTest {
 
     }
 
-    /**
-     *
-     */
-    @Test
-    public void getCdrFileTest() {
-        File cdrFile;
-        try {
-            cdrFile = cdrsManager.getFile();
-            Assert.assertNotNull(cdrFile);
-            Assert.assertTrue(cdrFile.exists());
-
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
     @Test
     public void createCDRsRSS() throws RSSException {
         List <CDR> cdrs = new LinkedList<>();
@@ -521,15 +505,5 @@ public class CdrsManagerTest {
         when(dbeAppProvider.getTxTimeStamp()).thenReturn(preDate);
 
         cdrsManager.createCDRs(cdrs);
-    }
-
-
-    @Test
-    public void getFileTest() throws IOException {
-
-        when(rssProps.get("cdrfilepath")).thenReturn("path");
-
-        cdrsManager.getFile();
-
     }
 }
