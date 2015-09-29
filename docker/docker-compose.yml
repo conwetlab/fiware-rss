@@ -1,0 +1,18 @@
+rss_db:
+    image: mysql:latest
+    volumes:
+        - /var/lib/mysql
+    environment:
+        - MYSQL_ROOT_PASSWORD=my-secret-pw
+        - MYSQL_DATABASE=rss
+
+rss:
+    image: rss
+    ports:
+        - "9999:8080"
+    links:
+        - rss_db
+    environment:
+        - RSS_CLIENT_ID=
+        - RSS_SECRET=
+        - RSS_URL=
