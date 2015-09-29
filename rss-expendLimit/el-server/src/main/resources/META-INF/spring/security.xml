@@ -28,7 +28,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
     </beans:bean>
 
     <!-- clients definition -->
-    <beans:bean id="fiwareClient" class="es.tid.fiware.rss.oauth.service.FIWAREClient">
+    <beans:bean id="fiwareClient" class="es.upm.fiware.rss.oauth.service.FIWAREClient">
         <beans:property name="serverURL" value="${config.baseUrl}" />
         <beans:property name="key" value="${config.client_id}" />
         <beans:property name="secret" value="${config.client_secret}"/>
@@ -44,7 +44,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
     </beans:bean>
 
      <!-- common to all clients -->
-     <beans:bean id="apiHeaderFilter" class="es.tid.fiware.rss.oauth.service.FIWAREHeaderAuthenticationFilter">
+     <beans:bean id="apiHeaderFilter" class="es.upm.fiware.rss.oauth.service.FIWAREHeaderAuthenticationFilter">
         <beans:constructor-arg value="/" index="0" />
         <beans:constructor-arg value="Authorization" index="1"/>
         <beans:property name="client" ref="fiwareClient" />

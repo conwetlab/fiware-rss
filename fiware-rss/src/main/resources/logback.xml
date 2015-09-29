@@ -58,7 +58,7 @@
 
     <logger name="org.apache.cxf.interceptor" level="WARN" />
 
-    <logger name="es.tid.fiware" level="DEBUG" />
+    <logger name="es.upm.fiware" level="DEBUG" />
 
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT"/>

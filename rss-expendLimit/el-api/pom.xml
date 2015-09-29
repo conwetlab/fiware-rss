@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>rss-expendLimit</artifactId>
-    <groupId>es.tid.fiware.rss</groupId>
-    <version>1.0.0</version>
+    <groupId>es.upm.fiware.rss</groupId>
+    <version>4.4.3</version>
   </parent>
 
-  <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+  <groupId>es.upm.fiware.rss.expenditureLimit</groupId>
   <artifactId>el-api</artifactId>
   <name>el-api</name>
   <url>http://maven.apache.org</url>

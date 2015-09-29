@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>rss-core</artifactId>
-        <groupId>es.tid.fiware.rss</groupId>
-        <version>1.0.0</version>
+        <groupId>es.upm.fiware.rss</groupId>
+        <version>4.4.3</version>
         <relativePath>..</relativePath>
     </parent>
-    <groupId>es.tid.fiware.rss.core</groupId>
+    <groupId>es.upm.fiware.rss.core</groupId>
     <artifactId>rss-oauth</artifactId>
     <name>rss-oauth</name>
     <properties>
@@ -17,7 +17,7 @@
     <dependencies>
         <!-- Internal dependencies -->
         <dependency>
-            <groupId>es.tid.fiware.rss.core</groupId>
+            <groupId>es.upm.fiware.rss.core</groupId>
             <artifactId>rss-exception</artifactId>
             <version>${core.version}</version>
             <exclusions>
@@ -28,12 +28,12 @@
             </exclusions>
         </dependency>    
         <dependency>
-            <groupId>es.tid.fiware.rss.core</groupId>
+            <groupId>es.upm.fiware.rss.core</groupId>
             <artifactId>rss-common</artifactId>
             <version>${core.version}</version>
         </dependency> 
         <dependency>
-            <groupId>es.tid.fiware.rss.core</groupId>
+            <groupId>es.upm.fiware.rss.core</groupId>
             <artifactId>rss-dao</artifactId>
             <version>${core.version}</version>
         </dependency> 

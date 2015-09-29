@@ -10,11 +10,11 @@
 
 	
 	<!-- Repository en Dao necesita saber el paquete base -->
-	<context:component-scan base-package="es.tid.fiware" />
+	<context:component-scan base-package="es.upm.fiware" />
 	<!-- Load all properties in classpath -->
 	<context:property-placeholder location="classpath*:*.properties"/>
 	
-    <bean id="oauthProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    <bean id="oauthProperties" class="es.upm.fiware.rss.common.properties.AppProperties">
     	<constructor-arg value="oauth.properties" name="filename" type="java.lang.String"></constructor-arg>
     </bean>
     

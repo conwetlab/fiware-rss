@@ -12,12 +12,12 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
     
     <!-- Root component scan -->
-    <context:component-scan base-package="es.tid.fiware" />
+    <context:component-scan base-package="es.upm.fiware" />
 
     <!-- expenditureControl -->
     <jaxrs:server id="BalanceAccumulated" address="/balance">
         <jaxrs:serviceBeans>
-            <bean class="es.tid.fiware.rss.expenditureLimit.server.BalanceAccumulatedServer"/> 
+            <bean class="es.upm.fiware.rss.expenditureLimit.server.BalanceAccumulatedServer"/> 
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider" />
@@ -27,7 +27,7 @@
     <!-- expenditureLimit -->
     <jaxrs:server id="LimitManagement" address="/limits">
         <jaxrs:serviceBeans>
-            <bean class="es.tid.fiware.rss.expenditureLimit.server.ExpenditureLimitServer"/> 
+            <bean class="es.upm.fiware.rss.expenditureLimit.server.ExpenditureLimitServer"/> 
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider" />
@@ -36,7 +36,7 @@
     </jaxrs:server>
 
     <bean id="jsonSbErrorParser"
-       class="es.tid.fiware.rss.expenditureLimit.server.exceptionhandles.ExpenditureLimitExceptionMapper" />
+       class="es.upm.fiware.rss.expenditureLimit.server.exceptionhandles.ExpenditureLimitExceptionMapper" />
 
     <!-- JSON CONFIG -->
     <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">

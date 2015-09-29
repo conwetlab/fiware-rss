@@ -4,11 +4,11 @@
 
 	<parent>
 		<artifactId>rss</artifactId>
-		<groupId>es.tid.fiware</groupId>
-		<version>1.0.0</version>
+		<groupId>es.upm.fiware</groupId>
+		<version>4.4.3</version>
 	</parent>
 
-	<groupId>es.tid.fiware.rss</groupId>
+	<groupId>es.upm.fiware.rss</groupId>
 	<artifactId>fiware-rss</artifactId>
 	<packaging>war</packaging>
 	<name>fiware-rss</name>
@@ -25,22 +25,22 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>es.tid.fiware.rss.core</groupId>
+			<groupId>es.upm.fiware.rss.core</groupId>
 			<artifactId>rss-common</artifactId>
 			<version>${core.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>es.tid.fiware.rss.core</groupId>
+			<groupId>es.upm.fiware.rss.core</groupId>
 			<artifactId>rss-model</artifactId>
 			<version>${core.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>es.tid.fiware.rss.core</groupId>
+			<groupId>es.upm.fiware.rss.core</groupId>
 			<artifactId>rss-dao</artifactId>
 			<version>${core.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>es.tid.fiware.rss.core</groupId>
+			<groupId>es.upm.fiware.rss.core</groupId>
 			<artifactId>rss-oauth</artifactId>
 			<version>${core.version}</version>
 		</dependency>
@@ -265,41 +265,40 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>license</id>
-			<activation>
-				<property>
-					<name>run-license</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<inherited>false</inherited>
-						<groupId>com.mycila.maven-license-plugin</groupId>
-						<artifactId>maven-license-plugin</artifactId>
-						<version>1.8.0</version>
-						<configuration>
-							<header>${basedir}/license/license.txt</header>
-							<failIfMissing>true</failIfMissing>
-							<aggregate>true</aggregate>
-							<properties>
-								<organisation>
-									Telefonica Investigacion y Desarrollo, S.A.
-								</organisation>
-								<year>2011-2014</year>
-								<Author>Javier Lucio - lucio@tid.es</Author>
-							</properties>
-							<includes>
-								<include>**/*.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
+    <profiles>
+        <profile>
+            <id>license</id>
+            <activation>
+                <property>
+                    <name>run-license</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <inherited>false</inherited>
+                        <groupId>com.mycila.maven-license-plugin</groupId>
+                        <artifactId>maven-license-plugin</artifactId>
+                        <version>1.8.0</version>
+                        <configuration>
+                            <header>${basedir}/license/license.txt</header>
+                            <failIfMissing>true</failIfMissing>
+                            <aggregate>true</aggregate>
+                            <properties>
+                                <organisation>
+                                    Universidad Politécnica de Madrid
+                                </organisation>						
+                                <year>2015</year>
+                                <Author>Francisco de la Vega - fdelavega@fi.upm.es</Author>
+                            </properties>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -18,11 +18,11 @@
         </property>
     </bean>
 
-    <bean id="oauthProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    <bean id="oauthProperties" class="es.upm.fiware.rss.common.properties.AppProperties">
         <constructor-arg value="/etc/default/rss/oauth.properties" name="filename" type="java.lang.String"></constructor-arg>
     </bean>
 
-    <bean id="databaseProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    <bean id="databaseProperties" class="es.upm.fiware.rss.common.properties.AppProperties">
         <constructor-arg value="/etc/default/rss/database.properties" name="filename" type="java.lang.String"></constructor-arg>
     </bean>
 
@@ -70,8 +70,8 @@
         </property>
         <property name="packagesToScan">
             <list>
-               <value>es.tid.fiware.rss.expenditureLimit.model</value>
-               <value>es.tid.fiware.rss.model</value>
+               <value>es.upm.fiware.rss.expenditureLimit.model</value>
+               <value>es.upm.fiware.rss.model</value>
             </list>
         </property>
     </bean>  

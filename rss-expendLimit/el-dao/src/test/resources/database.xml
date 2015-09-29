@@ -9,16 +9,16 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- Repository en Dao necesita saber el paquete base -->
-	<context:component-scan base-package="es.tid.fiware" />
+	<context:component-scan base-package="es.upm.fiware" />
 	<!-- Load all properties in classpath -->
 	<context:property-placeholder location="classpath*:*.properties"/>
 	
-    <bean id="databaseProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    <bean id="databaseProperties" class="es.upm.fiware.rss.common.properties.AppProperties">
     	<constructor-arg value="database.properties" name="filename" type="java.lang.String"></constructor-arg>
     	<!-- <property name="filename" value="database.properties"></property>-->
     </bean>
     
-    <bean id="databaseLoader" class="es.tid.fiware.rss.common.test.DatabaseLoader"  init-method="init" destroy-method="cleanup">
+    <bean id="databaseLoader" class="es.upm.fiware.rss.common.test.DatabaseLoader"  init-method="init" destroy-method="cleanup">
     </bean>
 	
 	<!-- Database config -->
@@ -63,8 +63,8 @@
         </property>
         <property name="packagesToScan">
             <list>
-               <value>es.tid.fiware.rss.expenditureLimit.model</value>
-               <value>es.tid.fiware.rss.model</value>
+               <value>es.upm.fiware.rss.expenditureLimit.model</value>
+               <value>es.upm.fiware.rss.model</value>
             </list>
         </property>  
     </bean>  

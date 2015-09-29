@@ -11,11 +11,11 @@
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<context:component-scan base-package="es.tid.fiware.rss" />
+	<context:component-scan base-package="es.upm.fiware.rss" />
 	
     <jaxrs:server id="cdrs" address="/cdrs">
         <jaxrs:serviceBeans>
-            <bean class="es.tid.fiware.rss.ws.CdrsService" />
+            <bean class="es.upm.fiware.rss.ws.CdrsService" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider" />
@@ -25,7 +25,7 @@
     
     <jaxrs:server id="rsModelsMgmt" address="/rsModelsMgmt">
         <jaxrs:serviceBeans>
-            <bean class="es.tid.fiware.rss.ws.RSSModelService" />
+            <bean class="es.upm.fiware.rss.ws.RSSModelService" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider" />
@@ -33,11 +33,11 @@
         </jaxrs:providers>        
     </jaxrs:server>
     
-    <bean id="cdrService" class="es.tid.fiware.rss.ws.CdrsService" />
+    <bean id="cdrService" class="es.upm.fiware.rss.ws.CdrsService" />
     
-    <bean id="rssModelService" class="es.tid.fiware.rss.ws.RSSModelService" />               
+    <bean id="rssModelService" class="es.upm.fiware.rss.ws.RSSModelService" />               
     
-    <bean id="jsonErrorParser" class="es.tid.fiware.rss.exceptionhandles.RssExceptionMapper" />
+    <bean id="jsonErrorParser" class="es.upm.fiware.rss.exceptionhandles.RssExceptionMapper" />
     
         <!-- JSON CONFIG -->
     <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">

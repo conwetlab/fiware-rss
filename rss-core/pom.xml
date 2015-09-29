@@ -5,17 +5,17 @@
   
   <parent>
     <artifactId>rss</artifactId>
-    <groupId>es.tid.fiware</groupId>
-    <version>1.0.0</version>
+    <groupId>es.upm.fiware</groupId>
+    <version>4.4.3</version>
   </parent>
   
-  <groupId>es.tid.fiware.rss</groupId>
+  <groupId>es.upm.fiware.rss</groupId>
   <artifactId>rss-core</artifactId>
   <packaging>pom</packaging>
   <name>rss-core</name>  
   <organization>
-        <name>Telefonica Investigación y Desarrollo</name>
-        <url>http://www.tid.es</url>
+        <name>Universidad Politécnica de Madrid</name>
+        <url>http://conwet.fi.upm.es</url>
    </organization>
 
   <properties>

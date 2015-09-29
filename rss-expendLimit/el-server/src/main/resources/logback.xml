@@ -57,7 +57,7 @@
 
     <logger name="org.apache.cxf.interceptor" level="${log.cxf.level}" />
 
-    <logger name="es.tid.fiware" level="${log.application.level}" />
+    <logger name="es.upm.fiware" level="${log.application.level}" />
 
     <root level="${log.default.level}">
         <!-- appender-ref ref="STDOUT"/-->

@@ -37,7 +37,7 @@
         </beans:property>
         <beans:property name="packagesToScan">
             <beans:list>
-                <beans:value>es.tid.fiware.rss.model</beans:value>
+                <beans:value>es.upm.fiware.rss.model</beans:value>
             </beans:list>
         </beans:property>
     </beans:bean>  
@@ -46,12 +46,12 @@
         <beans:property name="sessionFactory" ref="sessionFactory" />
     </beans:bean>
 
-    <context:component-scan base-package="es.tid.fiware.rss" />
+    <context:component-scan base-package="es.upm.fiware.rss" />
 	
     <interceptors>
         <interceptor>
             <mapping path="/**"/>
-            <beans:bean class="es.tid.fiware.rss.controller.SessionMultiActionController" />
+            <beans:bean class="es.upm.fiware.rss.controller.SessionMultiActionController" />
         </interceptor>
     </interceptors>
 

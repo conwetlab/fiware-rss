@@ -11,21 +11,21 @@
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util.xsd">
 
-     <context:component-scan base-package="es.tid.fiware" />
+     <context:component-scan base-package="es.upm.fiware" />
 
     <!-- Load all properties in classpath -->
     <context:property-placeholder location="classpath*:*.properties"/>
     
     <util:properties id="rssProps" location="classpath:rss.properties"/>
     
-    <bean id="databaseProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    <bean id="databaseProperties" class="es.upm.fiware.rss.common.properties.AppProperties">
     	<constructor-arg value="database.properties" name="filename" type="java.lang.String"></constructor-arg>
     </bean>
-    <bean id="oauthProperties" class="es.tid.fiware.rss.common.properties.AppProperties">
+    <bean id="oauthProperties" class="es.upm.fiware.rss.common.properties.AppProperties">
     	<constructor-arg value="oauth.properties" name="filename" type="java.lang.String"></constructor-arg>
     </bean>
     
-    <bean id="databaseLoader" class="es.tid.fiware.rss.common.test.DatabaseLoader"  init-method="init" destroy-method="cleanup"/>
+    <bean id="databaseLoader" class="es.upm.fiware.rss.common.test.DatabaseLoader"  init-method="init" destroy-method="cleanup"/>
 
     <!-- Database config -->
 	<!-- Pool -->
@@ -64,7 +64,7 @@
         </property>
         <property name="packagesToScan">
             <list>
-               <value>es.tid.fiware.rss.model</value>
+               <value>es.upm.fiware.rss.model</value>
             </list>
         </property>  
     </bean>  

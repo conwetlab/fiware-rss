@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>es.tid.fiware</groupId>
+    <groupId>es.upm.fiware</groupId>
     <artifactId>rss</artifactId>
     <packaging>pom</packaging>
     <name>RSS</name>
-    <version>1.0.0</version>
+    <version>4.4.3</version>
     <description></description>
 
     <organization>
@@ -20,9 +20,9 @@
         <pathToFilters>.</pathToFilters>
         <tomcat.home>/usr/share/tomcat${tomcat.version}</tomcat.home>  
         
-        <rss.version>1.0.0</rss.version>        
-        <core.version>1.0.0</core.version>
-        <expenditureLimit.version>1.0.0</expenditureLimit.version>        
+        <rss.version>4.4.3</rss.version>        
+        <core.version>4.4.3</core.version>
+        <expenditureLimit.version>4.4.3</expenditureLimit.version>        
         
         <jdk.version>1.7</jdk.version>
         <maven.version>3.2.5</maven.version>
@@ -57,18 +57,13 @@
 
     <modules>
         <!--module>Modules that compose the whole bigger module are located here.</module -->               	 		
-		<module>rss-core</module>       
-		<module>rss-expendLimit</module>   
-		<module>fiware-rss</module>  
+        <module>rss-core</module>       
+        <module>rss-expendLimit</module>   
+        <module>fiware-rss</module>  
     </modules>
-
-
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
-        <filters>
-                <filter>${pathToFilters}/src/main/filters/${env}.properties</filter>
-        </filters>
 
         <resources>
             <resource>
@@ -152,8 +147,8 @@
                     <aggregate>true</aggregate>
                     <instrumentation>
                         <ignores>
-                            <ignore>es.tid.fiware.rss.exception.*</ignore>
-                            <ignore>es.tid.fiware.rss.exception.beans*</ignore>
+                            <ignore>es.upm.fiware.rss.exception.*</ignore>
+                            <ignore>es.upm.fiware.rss.exception.beans*</ignore>
                         </ignores>
                         <excludes>
                             <exclude>**/*Test*.class</exclude>
@@ -212,46 +207,46 @@
             </properties>
         </profile>     
         <profile>
-			<id>license</id>
-			<activation>
-				<property>
-					<name>run-license</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<inherited>false</inherited>
-						<groupId>com.mycila.maven-license-plugin</groupId>
-						<artifactId>maven-license-plugin</artifactId>
-						<version>1.8.0</version>
-						<configuration>
-							<header>${basedir}/license/license.txt</header>
-							<failIfMissing>true</failIfMissing>
-							<aggregate>true</aggregate>
-							<properties>
-								<organisation>
-								Telefónica Investigación y Desarrollo, S.A.
-								</organisation>						
-								<year>2011-2014</year>
-								<Author>Javier Lucio - lucio@tid.es</Author>
-							</properties>
-							<includes>
-								<include>**/*.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+            <id>license</id>
+            <activation>
+                <property>
+                    <name>run-license</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <inherited>false</inherited>
+                        <groupId>com.mycila.maven-license-plugin</groupId>
+                        <artifactId>maven-license-plugin</artifactId>
+                        <version>1.8.0</version>
+                        <configuration>
+                            <header>${basedir}/license/license.txt</header>
+                            <failIfMissing>true</failIfMissing>
+                            <aggregate>true</aggregate>
+                            <properties>
+                                <organisation>
+                                    Universidad Politécnica de Madrid
+                                </organisation>						
+                                <year>2015</year>
+                                <Author>Francisco de la Vega - fdelavega@fi.upm.es</Author>
+                            </properties>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <developers>
         <developer>
-            <id>javier.lucio</id>
-            <name>Javier Lucio</name>
-            <email>lucio@tid.es</email>
+            <id>fdelavega</id>
+            <name>Francisco de la Vega</name>
+            <email>fdelavega@fi.upm.es</email>
             <roles>
                 <role>Developer</role>
             </roles>

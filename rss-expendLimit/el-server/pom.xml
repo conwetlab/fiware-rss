@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>rss-expendLimit</artifactId>
-		<groupId>es.tid.fiware.rss</groupId>
-		<version>1.0.0</version>
+		<groupId>es.upm.fiware.rss</groupId>
+		<version>4.4.3</version>
 	</parent>
 
-	<groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+	<groupId>es.upm.fiware.rss.expenditureLimit</groupId>
 	<artifactId>el-server</artifactId>
 	<packaging>war</packaging>
 	<name>el-server</name>
@@ -26,22 +26,22 @@
 	<dependencies>
         <!-- Internal dependencies -->
         <dependency>
-            <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+            <groupId>es.upm.fiware.rss.expenditureLimit</groupId>
             <artifactId>el-dao</artifactId>
             <version>${expenditureLimit.version}</version>
         </dependency>
         <dependency>
-            <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+            <groupId>es.upm.fiware.rss.expenditureLimit</groupId>
             <artifactId>el-api</artifactId>
             <version>${expenditureLimit.version}</version>
         </dependency>
         <dependency>
-            <groupId>es.tid.fiware.rss.expenditureLimit</groupId>
+            <groupId>es.upm.fiware.rss.expenditureLimit</groupId>
             <artifactId>el-processing</artifactId>
             <version>${expenditureLimit.version}</version>
         </dependency>
        <dependency>
-           <groupId>es.tid.fiware.rss.core</groupId>
+           <groupId>es.upm.fiware.rss.core</groupId>
            <artifactId>rss-common</artifactId>
            <version>${core.version}</version>
            <exclusions>
@@ -52,22 +52,22 @@
            </exclusions>
        </dependency>   
        <dependency>
-           <groupId>es.tid.fiware.rss.core</groupId>
+           <groupId>es.upm.fiware.rss.core</groupId>
            <artifactId>rss-model</artifactId>
            <version>${core.version}</version>
        </dependency>   
         <dependency>
-           <groupId>es.tid.fiware.rss.core</groupId>
+           <groupId>es.upm.fiware.rss.core</groupId>
            <artifactId>rss-exception</artifactId>
            <version>${core.version}</version>
        </dependency>
        <dependency>
-           <groupId>es.tid.fiware.rss.core</groupId>
+           <groupId>es.upm.fiware.rss.core</groupId>
            <artifactId>rss-dao</artifactId>
            <version>${core.version}</version>
        </dependency> 
        <dependency>
-           <groupId>es.tid.fiware.rss.core</groupId>
+           <groupId>es.upm.fiware.rss.core</groupId>
            <artifactId>rss-oauth</artifactId>
            <version>${core.version}</version>
        </dependency> 

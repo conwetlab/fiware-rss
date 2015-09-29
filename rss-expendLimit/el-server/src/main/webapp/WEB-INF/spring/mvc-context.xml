@@ -13,7 +13,7 @@
 
     <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
     <!-- Root component scan -->
-    <context:component-scan base-package="es.tid.fiware" />
+    <context:component-scan base-package="es.upm.fiware" />
     
     <!-- Enables the Spring MVC @Controller programming model -->
     <annotation-driven />
