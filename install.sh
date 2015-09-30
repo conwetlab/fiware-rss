@@ -54,7 +54,7 @@ read -s MYSQLPASS
 
 set +e
 
-mysqladmin -u $MYSQLUSR -p$MYSQLPASS create rss
+mysqladmin -u $MYSQLUSR -p$MYSQLPASS create RSS
 
 set -e
 # Update database.properties
