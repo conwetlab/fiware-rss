@@ -18,8 +18,12 @@ fi
 
 if [[ $SYS_V == "centos" ]] ; then
     ./scripts/install_centos.sh
+    TOMCATUSR="tomcat"
+    TOMCATPATH=/usr/share/tomcat7/webapps
 elif [[ $SYS_V == "ubuntu" || $SYS_V == "debian" ]]; then
     ./scripts/install_debian.sh
+    TOMCATUSR="tomcat7"
+    TOMCATPATH=/var/lib/tomcat7/webapps
 else
     echo "Operating system not supported"
     exit 1
@@ -79,10 +83,6 @@ sudo cp $INSPWD/fiware-rss.war $TOMCATPATH/fiware-rss.war
 sudo cp $INSPWD/expenditureLimit.war $TOMCATPATH/expenditureLimit.war
 
 sudo service tomcat7 restart
-
-echo "Waiting for table creation"
-sleep 60
-mysql rss -u $MYSQLUSR -p$MYSQLPASS < scripts/currencies.sql
 
 echo "Successfully Installed the RSS. You can update your properties located in /etc/default/rss"
 
