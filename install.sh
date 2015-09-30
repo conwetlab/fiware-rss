@@ -16,10 +16,10 @@ elif [ -f "/etc/issue" ]; then
     fi
 fi
 
-if [[ $SYS_V == "centos" ]] ; then
+if [[ $SYS_V == "centos" ]]; then
     ./scripts/install_centos.sh
     TOMCATUSR="tomcat"
-    TOMCATPATH=/usr/share/tomcat7/webapps
+    TOMCATPATH=/var/lib/tomcat/webapps
 elif [[ $SYS_V == "ubuntu" || $SYS_V == "debian" ]]; then
     ./scripts/install_debian.sh
     TOMCATUSR="tomcat7"
@@ -82,7 +82,10 @@ sudo sed -i "s|config.callbackURL=.*$|config.callbackURL=$RSS_URL/fiware-rss/cal
 sudo cp $INSPWD/fiware-rss.war $TOMCATPATH/fiware-rss.war
 sudo cp $INSPWD/expenditureLimit.war $TOMCATPATH/expenditureLimit.war
 
-sudo service tomcat7 restart
-
+if [[ $SYS_V == "centos" ]]; then
+    sudo service tomcat restart
+else
+    sudo service tomcat7 restart
+fi
 echo "Successfully Installed the RSS. You can update your properties located in /etc/default/rss"
 
