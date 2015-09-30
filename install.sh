@@ -18,13 +18,14 @@ fi
 
 if [[ $SYS_V == "centos" ]] ; then
     ./scripts/install_centos.sh
-elif [[ $SYS_V == "ubuntu" || $SYS_V == "debian" ]]
+elif [[ $SYS_V == "ubuntu" || $SYS_V == "debian" ]]; then
     ./scripts/install_debian.sh
 else
     echo "Operating system not supported"
     exit 1
 fi
 
+set -e
 # Compile source code is needed
 if [ -d "$INSPWD/fiware-rss" ]; then
     mvn clean
@@ -47,11 +48,14 @@ read MYSQLUSR
 echo "> Password:"
 read -s MYSQLPASS
 
+set +e
+
 mysqladmin -u $MYSQLUSR -p$MYSQLPASS create rss
 
+set -e
 # Update database.properties
-sed -i "s|database.username=.*$|database.username=$MYSQLUSR|" /etc/default/rss/database.properties
-sed -i "s|database.password=.*$|database.password=$MYSQLPASS|" /etc/default/rss/database.properties
+sudo sed -i "s|database.username=.*$|database.username=$MYSQLUSR|" /etc/default/rss/database.properties
+sudo sed -i "s|database.password=.*$|database.password=$MYSQLPASS|" /etc/default/rss/database.properties
 
 
 # Retrieve OAUth2 preferences
@@ -65,9 +69,9 @@ echo "> Include the URL (including port) where the RSS is going to run:"
 read RSS_URL
 
 # Update oauth.properties
-sed -i "s/config.client_id=.*$/config.client_id=$RSS_CLIENT_ID/" /etc/default/rss/oauth.properties
-sed -i "s/config.client_secret=.*$/config.client_secret=$RSS_SECRET/" /etc/default/rss/oauth.properties
-sed -i "s|config.callbackURL=.*$|config.callbackURL=$RSS_URL/fiware-rss/callback|" /etc/default/rss/oauth.prope
+sudo sed -i "s/config.client_id=.*$/config.client_id=$RSS_CLIENT_ID/" /etc/default/rss/oauth.properties
+sudo sed -i "s/config.client_secret=.*$/config.client_secret=$RSS_SECRET/" /etc/default/rss/oauth.properties
+sudo sed -i "s|config.callbackURL=.*$|config.callbackURL=$RSS_URL/fiware-rss/callback|" /etc/default/rss/oauth.properties
 
 
 # Deploy war files
