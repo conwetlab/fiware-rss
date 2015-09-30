@@ -47,7 +47,6 @@ import es.upm.fiware.rss.model.BmServdeployMop;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -86,7 +85,6 @@ public class ServDeployMopDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.ServDeployMopDaoImpl#getServDeployMopFilter(java.lang.Long, java.lang.Long)}.
      */
-    @Test
     public void test10GetServDeployMopFilter() {
         // Call method to test
         List<BmServdeployMop> list = servDeployMopDao.getServDeployMopFilter(new Long(1), new Long(1));
@@ -141,7 +139,6 @@ public class ServDeployMopDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.ServDeployMopDaoImpl#getDefaultMop(java.lang.Long, java.lang.Long)}.
      */
-    @Test
     public void test20GetDefaultMop() {
         // Call method to test
         BmServdeployMop list = servDeployMopDao.getDefaultMop(new Long(1), new Long(2));
@@ -159,7 +156,6 @@ public class ServDeployMopDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.ServDeployMopDaoImpl#getDefaultMop(java.lang.Long, java.lang.Long)}.
      */
-    @Test
     public void testGetServiceDeployMop() {
         // Call method to test
         BmServdeployMop list = servDeployMopDao.getServiceDeployMop(new Long(1), new Long(1));
@@ -176,7 +172,6 @@ public class ServDeployMopDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.ServDeployMopDaoImpl#listServDeployMopsbyDeploymentId(java.lang.Long)}.
      */
-    @Test
     public void testListServDeployMopsbyDeploymentId() {
         // Call method to test
         List<BmServdeployMop> list = servDeployMopDao.listServDeployMopsbyDeploymentId(new Long(1));

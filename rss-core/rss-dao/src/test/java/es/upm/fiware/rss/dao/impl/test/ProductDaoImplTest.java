@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmProduct;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -85,7 +84,6 @@ public class ProductDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.ProductDaoImpl#getProductByName(java.lang.String)}.
      */
-    @Test
     public void testGetCustomerTypeByName() {
         // Call method to test
         BmProduct c = productDao.getProductByName("ProductTest1");
@@ -101,7 +99,6 @@ public class ProductDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.ProductDaoImpl#getByDefault(java.lang.String)}.
      */
-    @Test
     public void testGetByDefault() {
         // Call method to test
         BmProduct c = productDao.getByDefault(1);

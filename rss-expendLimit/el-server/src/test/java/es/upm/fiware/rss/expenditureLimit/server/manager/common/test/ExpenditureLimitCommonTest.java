@@ -34,12 +34,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.upm.fiware.rss.expenditureLimit.server.common.ExpenditureLimitCommon;
 
-/**
- * 
- *
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml"})
+
 public class ExpenditureLimitCommonTest {
     /**
      * Logging system.
@@ -75,7 +70,6 @@ public class ExpenditureLimitCommonTest {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/go"));
 
-        ExpenditureLimitCommon.getResourceUrl(null, "profileId", "resource");
         ExpenditureLimitCommon.getResourceUrl(mockUriInfo, "", "resource");
         Mockito.when(mockUriInfo.getBaseUri()).thenReturn(new URI("http://www.test.com/"));
         ExpenditureLimitCommon.getResourceUrl(mockUriInfo, "", null);

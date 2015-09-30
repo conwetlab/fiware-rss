@@ -45,12 +45,7 @@ import es.upm.fiware.rss.expenditureLimit.test.ExpenditureLimitBeanConstructor;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * 
- * 
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
+
 public class ExpenditureLimitDataCheckerTest {
     /**
      * Logging system.
@@ -65,29 +60,10 @@ public class ExpenditureLimitDataCheckerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from db
-     */
-    @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
 
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkChargeRequiredParametersTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkChargeRequiredParametersTest mehtod");
@@ -105,7 +81,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkRequiredParametersTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkChargeRequiredParametersTest mehtod");
@@ -121,7 +96,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkRequiredSearchParametersTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkRequiredSearchParametersTest mehtod");
@@ -137,7 +111,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkCurrencyTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkCurrencyTest mehtod");
@@ -152,7 +125,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkServiceTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkServiceTest mehtod");
@@ -166,7 +138,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkDbeAppProviderTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkDbeAppProviderTest mehtod");
@@ -180,7 +151,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkElTypeTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkElTypeTest mehtod");
@@ -194,7 +164,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkChargeTypeTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkChargeTypeTest mehtod");
@@ -208,7 +177,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkMandatoryDatumExistenceTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkMandatoryDatumExistenceTest mehtod");
@@ -222,7 +190,6 @@ public class ExpenditureLimitDataCheckerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkExpLimitDataTest() throws RSSException {
         ExpenditureLimitDataCheckerTest.logger.debug("Into checkExpLimitDataTest mehtod");

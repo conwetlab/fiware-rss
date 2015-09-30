@@ -43,7 +43,6 @@ import es.upm.fiware.rss.model.BmLanguage;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -84,7 +83,6 @@ public class LanguageDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.LanguageDaoImpl#getByIso6391Code(java.lang.String)}.
      */
-    @Test
     public void test10GetByIso6391Code() {
         // Call method to test
         BmLanguage l = languageDAO.getByIso6391Code("spa");

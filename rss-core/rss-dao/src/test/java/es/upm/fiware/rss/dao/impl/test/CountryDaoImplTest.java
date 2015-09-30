@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmCountry;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -88,7 +87,6 @@ public class CountryDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.CountryDaoImpl#getByIso3166Code(java.lang.String)}.
      */
-    @Test
     public void test10GetByIso3166Code() {
         // Call method to test
         BmCountry c = countryDAO.getByIso3166Code("ES");
@@ -105,7 +103,6 @@ public class CountryDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.CountryDaoImpl#getByItuT212Code(java.lang.String)}.
      */
-    @Test
     public void test20GetByItuT212Code() {
         // Call method to test
         BmCountry c = countryDAO.getByItuT212Code("214");

@@ -50,7 +50,6 @@ import es.upm.fiware.rss.model.BmPaymentbroker;
 import es.upm.fiware.rss.model.BmService;
 import es.upm.fiware.rss.model.DbeTransaction;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 public class DbeTransactionDaoImplTest {
 
@@ -111,7 +110,6 @@ public class DbeTransactionDaoImplTest {
      * test60GetTransactionByTxId searchs a inexistent SrvRfCode
      */
 
-    @Test
     @Transactional
     public void test60GetTransactionByTxId() {
 
@@ -137,8 +135,6 @@ public class DbeTransactionDaoImplTest {
     /**
      * test65GetTransactionByTxId searchs a inexistent txId
      */
-
-    @Test
     @Transactional
     public void test65GetTransactionByTxId() {
 
@@ -160,7 +156,6 @@ public class DbeTransactionDaoImplTest {
     }
 
     // obtained the value of the datatest
-    @Test
     @Transactional
     public void testGetTransactionByTxPbCorrelationId() {
 
@@ -184,7 +179,6 @@ public class DbeTransactionDaoImplTest {
         }
     }
 
-    @Test
     @Transactional
     public void testGetTransactionsByProviderId() {
         int txTransactionId = 1;
@@ -208,7 +202,6 @@ public class DbeTransactionDaoImplTest {
 
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testDeleteTransactionsByProviderId() {
         int txTransactionId = 1;

@@ -54,8 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml", "classpath:cxf-beans.xml"})
 public class ExpenditureLimitServerTest {
     /**
      * Logging system.
@@ -111,29 +109,9 @@ public class ExpenditureLimitServerTest {
     }
 
     /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from db
-     */
-    @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserExpLimits() throws Exception {
         Response response = server.getUserExpLimits(aggregator, appProvider, userId,
@@ -145,7 +123,6 @@ public class ExpenditureLimitServerTest {
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getProviderExpLimits() throws Exception {
         Response response = server.getProviderExpLimits(aggregator, appProvider, service, currency, type);
@@ -155,7 +132,6 @@ public class ExpenditureLimitServerTest {
     /**
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into storeGeneralProviderExpLimits method");
@@ -180,7 +156,6 @@ public class ExpenditureLimitServerTest {
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteProviderExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteProviderExpLimits method");
@@ -192,7 +167,6 @@ public class ExpenditureLimitServerTest {
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws Exception {
         ExpenditureLimitServerTest.logger.debug("Into deleteUserAccumulated method");

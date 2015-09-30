@@ -48,10 +48,7 @@ import es.upm.fiware.rss.common.test.DatabaseLoader;
 import es.upm.fiware.rss.dao.DbeSystemPropertiesDao;
 import es.upm.fiware.rss.model.DbeSystemProperties;
 
-/**
- * 
- */
-@RunWith(SpringJUnit4ClassRunner.class)
+
 @ContextConfiguration({"classpath:database.xml"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DbeSystemPropertiesDaoImplTest {
@@ -92,7 +89,6 @@ public class DbeSystemPropertiesDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.DbeSystemPropertiesDaoImpl#getAllByParamClass(java.lang.String)}.
      */
-    @Test
     @Transactional
     public void testaGetAllByParamClass() {
         // Call method to test
@@ -105,26 +101,22 @@ public class DbeSystemPropertiesDaoImplTest {
 
     }
 
-    @Test
     @Transactional
     public void testbExit() {
         Assert.assertTrue(dbeSystemPropertiesDao.exists("name"));
         Assert.assertFalse(dbeSystemPropertiesDao.exists("noname"));
     }
 
-    @Test
     @Transactional
     public void testcSize() {
         Assert.assertEquals(2, dbeSystemPropertiesDao.count());
     }
 
-    @Test
     @Transactional
     public void testdGetAll() {
         Assert.assertTrue(dbeSystemPropertiesDao.getAll().size() == 2);
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testeUpdate() {
         DbeSystemProperties c = dbeSystemPropertiesDao.getById("name");
@@ -139,7 +131,6 @@ public class DbeSystemPropertiesDaoImplTest {
             .equalsIgnoreCase("new description"));
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testfDelete() {
         DbeSystemProperties c = dbeSystemPropertiesDao.getById("name");
@@ -147,7 +138,6 @@ public class DbeSystemPropertiesDaoImplTest {
         Assert.assertTrue(dbeSystemPropertiesDao.getById("name") == null);
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testgDeleteById() {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -158,7 +148,6 @@ public class DbeSystemPropertiesDaoImplTest {
         Assert.assertTrue(dbeSystemPropertiesDao.getById("name2") == null);
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testhDeleteAll() {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();

@@ -57,7 +57,6 @@ import es.upm.fiware.rss.model.BmCurrency;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 public class DbeExpendControlDaoTest {
@@ -92,7 +91,6 @@ public class DbeExpendControlDaoTest {
         databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testGetExpendLimitDataForaUser() {
 
@@ -114,7 +112,6 @@ public class DbeExpendControlDaoTest {
         }
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testUpdateExpendLimitDataForaUser() {
 
@@ -162,7 +159,6 @@ public class DbeExpendControlDaoTest {
         }
     }
 
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testNewExpendLimitDataForaUser() {
 

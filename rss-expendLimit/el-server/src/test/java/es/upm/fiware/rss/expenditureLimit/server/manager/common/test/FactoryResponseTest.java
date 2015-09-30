@@ -43,8 +43,6 @@ import es.upm.fiware.rss.expenditureLimit.server.common.FactoryResponse;
  * 
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml"})
 public class FactoryResponseTest {
     /**
      * Logging system.

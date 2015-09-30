@@ -74,7 +74,6 @@ import org.springframework.beans.factory.annotation.Value;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 public class ProcessingLimitServiceTest {
     /**
@@ -172,7 +171,6 @@ public class ProcessingLimitServiceTest {
     /**
      * Check that the limits are updated.
      */
-    @Test
     @Transactional
     public void updateControls() {
     	try {
@@ -230,7 +228,6 @@ public class ProcessingLimitServiceTest {
     /**
      * Check that the acummulated is set to 0 and added a negative value (refund)
      */
-    @Test
     @Transactional
     public void updateResetControls() {
     	try {
@@ -275,7 +272,6 @@ public class ProcessingLimitServiceTest {
      * 
      * Check that not existing control are created.
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void creationControls() {
         try {
@@ -321,7 +317,6 @@ public class ProcessingLimitServiceTest {
     /**
      * Update periods and check amounts.
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkControls() {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
@@ -426,7 +421,6 @@ public class ProcessingLimitServiceTest {
     /**
      * Verifies that the limit perTransaction is applied correctly
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void perTransactionLimit() {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();

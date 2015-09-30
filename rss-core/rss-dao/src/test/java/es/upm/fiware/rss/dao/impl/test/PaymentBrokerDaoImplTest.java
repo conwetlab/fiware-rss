@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmPaymentbroker;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -85,7 +84,6 @@ public class PaymentBrokerDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.PaymentBrokerDaoImpl#getByName(java.lang.String)}.
      */
-    @Test
     public void testGetByName() {
         // Call method to test
         BmPaymentbroker c = paymentBrokerDao.getByName("eBC");

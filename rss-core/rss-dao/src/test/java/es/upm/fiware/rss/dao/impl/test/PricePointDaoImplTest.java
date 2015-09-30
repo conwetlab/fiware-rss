@@ -53,7 +53,6 @@ import es.upm.fiware.rss.model.BmPricePoint;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -107,7 +106,6 @@ public class PricePointDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.PricePointDaoImpl#getListPricePoint(es.upm.fiware.rss.model.BmObCountry)}.
      */
-    @Test
     public void test10GetListPricePointBmObCountry() {
         int i;
 
@@ -156,7 +154,6 @@ public class PricePointDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.PricePointDaoImpl#getListPricePoint(es.upm.fiware.rss.model.BmOb)}.
      */
-    @Test
     public void test30GetListPricePointBmOb() {
         int i;
 
@@ -201,7 +198,6 @@ public class PricePointDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.PricePointDaoImpl#getListPricePoint(float)}.
      */
-    @Test
     public void test40GetListPricePointFloat() {
         int i;
 
@@ -240,7 +236,6 @@ public class PricePointDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.PricePointDaoImpl#getListPricePoint(float, float)}.
      */
-    @Test
     public void test50GetListPricePointFloatFloat() {
         int i;
 
@@ -295,7 +290,6 @@ public class PricePointDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.PricePointDaoImpl#getPricePoint(es.upm.fiware.rss.model.BmObCountry, long)}.
      */
-    @Test
     public void test60GetPricePoint() {
         // Call method to test
         BmObCountryId id = new BmObCountryId();
@@ -315,7 +309,6 @@ public class PricePointDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.PricePointDaoImpl#getPricePoint(es.upm.fiware.rss.model.BmObCountry, float)}.
      */
-    @Test
     public void tesGetPricePoint() {
         // Call method to test
         BmObCountryId id = new BmObCountryId();

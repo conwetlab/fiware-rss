@@ -47,7 +47,6 @@ import es.upm.fiware.rss.model.BmCurrency;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -93,7 +92,6 @@ public class CurrencyDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.CurrencyDaoImpl#getByIso4217Code(java.lang.String)}.
      */
-    @Test
     public void test10GetByIso4217Code() {
         CurrencyDaoImplTest.LOGGER.debug("Into test10GetByIso4217Code()");
         // Call method to test
@@ -110,7 +108,6 @@ public class CurrencyDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.CurrencyDaoImpl#getByIso4217StringCode(java.lang.String)}.
      */
-    @Test
     public void test20GetByIso4217StringCode() {
         CurrencyDaoImplTest.LOGGER.debug("Into test20GetByIso4217StringCode()");
         // Call method to test
@@ -128,7 +125,6 @@ public class CurrencyDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.CurrencyDaoImpl#getByIso4217IntegerCode(int)}.
      */
-    @Test
     public void test30GetByIso4217IntegerCode() {
         CurrencyDaoImplTest.LOGGER.debug("Into test30GetByIso4217IntegerCode()");
         // Call method to test

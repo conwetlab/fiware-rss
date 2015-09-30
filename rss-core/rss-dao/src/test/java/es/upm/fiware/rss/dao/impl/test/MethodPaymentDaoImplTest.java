@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmMethodsOfPayment;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -85,7 +84,6 @@ public class MethodPaymentDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.MethodPaymentDaoImpl#getMopByName(java.lang.String)}.
      */
-    @Test
     public void testGetMopByName() {
         // Call method to test
         BmMethodsOfPayment c = methodPaymentDao.getMopByName("Visa");
@@ -102,7 +100,6 @@ public class MethodPaymentDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.MethodPaymentDaoImpl#getMopByCode(java.lang.String)}.
      */
-    @Test
     public void testGetMopByCode() {
         // Call method to test
         BmMethodsOfPayment c = methodPaymentDao.getMopByCode("CreditCard");

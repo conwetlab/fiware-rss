@@ -54,7 +54,6 @@ import es.upm.fiware.rss.model.BmCurrency;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -90,7 +89,6 @@ public class DbeExpendLimitDaoTest {
         databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
     }
 
-    @Test
     public void testGetExpenditureLimitInfByUser() {
 
         BmCurrency bmCurrency = new BmCurrency();
@@ -113,7 +111,6 @@ public class DbeExpendLimitDaoTest {
         }
     }
 
-    @Test
     public void testGetExpenditureLimitInfByUserNullCurrency() {
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsForUserAppProvCurrency("userId01",
             "agg123", "app123456", null);
@@ -133,7 +130,6 @@ public class DbeExpendLimitDaoTest {
         }
     }
 
-    @Test
     public void testOrderedGetExpenditureLimitInfByUser() {
 
         BmCurrency bmCurrency = new BmCurrency();
@@ -195,7 +191,6 @@ public class DbeExpendLimitDaoTest {
         }
     }
 
-    @Test
     public void getExpendLimitsByProviderUserService() {
         BmCurrency bmCurrency = new BmCurrency();
         bmCurrency.setNuCurrencyId(1);;
@@ -217,7 +212,6 @@ public class DbeExpendLimitDaoTest {
         }
     }
 
-    @Test
     public void getExpendLimitsByProviderUserServiceNullCurrency() {
         List<DbeExpendLimit> l = expLimitDao.getExpendLimitsByProviderUserService(
             "agg123", "app123456", "userId01", null);

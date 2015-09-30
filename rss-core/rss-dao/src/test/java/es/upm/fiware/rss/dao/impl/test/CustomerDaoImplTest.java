@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmCustomerType;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -85,7 +84,6 @@ public class CustomerDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.CountryDaoImpl#getByIso3166Code(java.lang.String)}.
      */
-    @Test
     public void testGetCustomerTypeByName() {
         // Call method to test
         BmCustomerType c = customerTypeDao.getCustomerTypeByName("Cliente Telefonica");

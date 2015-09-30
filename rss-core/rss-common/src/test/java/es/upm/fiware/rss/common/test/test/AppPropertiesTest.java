@@ -21,26 +21,17 @@ package es.upm.fiware.rss.common.test.test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.upm.fiware.rss.common.properties.AppProperties;
 
-/**
- * 
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml"})
+
 public class AppPropertiesTest {
 
-    @Test
     public void getProperty() {
         String prop = AppProperties.getProperty("database.properties", "database.test.url");
         Assert.assertTrue(prop.startsWith("jdbc"));
     }
 
-    @Test
     public void nullProperties() {
         AppProperties props = new AppProperties("database.properties");
         String prop = props.getProperty("database.test.url");
@@ -50,7 +41,6 @@ public class AppPropertiesTest {
         Assert.assertTrue(prop.startsWith("jdbc"));
     }
 
-    @Test
     public void getFilenaName() {
         AppProperties props = new AppProperties("database.properties");
         Assert.assertTrue(props.getFilename().equalsIgnoreCase("database.properties"));

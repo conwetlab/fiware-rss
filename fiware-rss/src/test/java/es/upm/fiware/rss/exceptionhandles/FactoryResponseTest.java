@@ -28,12 +28,9 @@ import org.hibernate.exception.GenericJDBCException;
 import org.hibernate.exception.JDBCConnectionException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.upm.fiware.rss.exception.RSSException;
 import es.upm.fiware.rss.model.ExceptionTypeBean;
@@ -42,8 +39,6 @@ import es.upm.fiware.rss.model.ExceptionTypeBean;
  * 
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml"})
 public class FactoryResponseTest {
     /**
      * Logging system.

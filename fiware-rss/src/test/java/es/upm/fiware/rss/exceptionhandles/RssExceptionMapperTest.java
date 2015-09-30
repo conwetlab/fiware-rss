@@ -77,10 +77,6 @@ public class RssExceptionMapperTest {
         Mockito.when(mockUriInfo.getAbsolutePath()).thenReturn(new URI("http://www.test.com/go"));
         ReflectionTestUtils.setField(mapper, "uriInfo", mockUriInfo);
 
-        Properties rssProps = Mockito.mock(Properties.class);
-        Mockito.when(rssProps.get("service.url")).thenReturn("");
-        ReflectionTestUtils.setField(mapper, "rssProps", rssProps);
-
         HttpHeaders headers = Mockito.mock(HttpHeaders.class);
         Mockito.when(headers.getAcceptableMediaTypes()).thenReturn(Arrays.asList(MediaType.APPLICATION_JSON_TYPE));
         ReflectionTestUtils.setField(mapper, "headers", headers);

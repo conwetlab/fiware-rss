@@ -50,12 +50,7 @@ import es.upm.fiware.rss.oauth.model.ValidatedToken;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * 
- *
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml", "classpath:cxf-beans.xml"})
+
 public class BalanceAccumulatedServerTest {
     /**
      * Logging system.
@@ -103,29 +98,9 @@ public class BalanceAccumulatedServerTest {
     }
 
     /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from db
-     */
-    @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserAccumulated() throws Exception {
 
@@ -138,7 +113,6 @@ public class BalanceAccumulatedServerTest {
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkUserBalance() throws Exception {
 
@@ -151,7 +125,6 @@ public class BalanceAccumulatedServerTest {
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void updateUserAccumulated() throws Exception {
 
@@ -164,7 +137,6 @@ public class BalanceAccumulatedServerTest {
      * 
      * @throws Exception
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteUserAccumulated() throws Exception {
         BalanceAccumulatedServerTest.logger.debug("Into deleteUserAccumulated method");

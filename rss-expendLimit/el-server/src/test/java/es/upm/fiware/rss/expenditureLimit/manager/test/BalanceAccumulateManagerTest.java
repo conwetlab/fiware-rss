@@ -52,8 +52,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:database.xml" })
 public class BalanceAccumulateManagerTest {
     /**
      * Logging system.
@@ -73,24 +71,6 @@ public class BalanceAccumulateManagerTest {
     private final String endUserId = "userIdUpdate";
     private final String serviceName = "ServiceTest1";
 
-    /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from db
-     */
-    @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
 
     /**
      * Data to take into account in test
@@ -112,7 +92,6 @@ public class BalanceAccumulateManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into getUserAccumulated method.");
@@ -126,7 +105,6 @@ public class BalanceAccumulateManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void checkUserBalance() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into checkUserBalance method.");
@@ -145,7 +123,6 @@ public class BalanceAccumulateManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void updateUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into updateUserAccumulated method.");
@@ -157,7 +134,6 @@ public class BalanceAccumulateManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteUserAccumulated() throws RSSException {
         BalanceAccumulateManagerTest.logger.debug("Into getUserAccumulated method.");

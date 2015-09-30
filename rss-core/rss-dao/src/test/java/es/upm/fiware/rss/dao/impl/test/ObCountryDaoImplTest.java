@@ -46,7 +46,6 @@ import es.upm.fiware.rss.model.BmObCountry;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -87,7 +86,6 @@ public class ObCountryDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.ObCountryDaoImpl#listByPricePointYn(java.lang.String)}.
      */
-    @Test
     public void testListByPricePointYn() {
         // Call method to test
         List<BmObCountry> c = obCountryDao.listByPricePointYn("Y");
@@ -102,7 +100,6 @@ public class ObCountryDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.ObCountryDaoImpl#getBmObByITUData(java.lang.String)}.
      */
-    @Test
     public void testGetBmObByITUData() {
         // Call method to test
         BmObCountry c = obCountryDao.getBmObByITUData("214-07");

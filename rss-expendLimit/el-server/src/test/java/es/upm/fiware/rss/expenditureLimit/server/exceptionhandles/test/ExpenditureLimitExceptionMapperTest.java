@@ -45,12 +45,7 @@ import es.upm.fiware.rss.common.test.DatabaseLoader;
 import es.upm.fiware.rss.exception.RSSException;
 import es.upm.fiware.rss.expenditureLimit.server.exceptionhandles.ExpenditureLimitExceptionMapper;
 
-/**
- * 
- *
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:database.xml", "classpath:cxf-beans.xml"})
+
 public class ExpenditureLimitExceptionMapperTest {
     /**
      * Logging system.
@@ -70,20 +65,6 @@ public class ExpenditureLimitExceptionMapperTest {
     @Autowired
     ExpenditureLimitExceptionMapper mapper;
 
-    @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    @Test
     public void toResponse() throws Exception {
         UriInfo mockUriInfo = Mockito.mock(UriInfo.class);
         Mockito.when(mockUriInfo.getAbsolutePath()).thenReturn(new URI("http://www.test.com/go"));

@@ -46,7 +46,6 @@ import es.upm.fiware.rss.model.BmServiceDeployment;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -88,7 +87,6 @@ public class ServiceDeploymentDaoImplTest {
      * Test method for {@link
      * es.upm.fiware.rss.dao.impl.ServiceDeploymentDaoImpl#getDeploymentsbyServiceId(java.lang.long)}.
      */
-    @Test
     public void testGetDeploymentsbyServiceIdId() {
         // Call method to test
         List<BmServiceDeployment> c = serviceDeploymentDao.getDeploymentsbyServiceId(1);
@@ -104,7 +102,6 @@ public class ServiceDeploymentDaoImplTest {
      * {@link es.upm.fiware.rss.dao.impl.ServiceDeploymentDaoImpl#getBySvcCountryOB(java.lang.Long,java.lang.Long,java.lang. Long)}
      * .
      */
-    @Test
     public void testGetBySvcCountryOB() {
         // Call method to test
         BmServiceDeployment c = serviceDeploymentDao.getBySvcCountryOB(new Long(1), new Long(1), new Long(1));

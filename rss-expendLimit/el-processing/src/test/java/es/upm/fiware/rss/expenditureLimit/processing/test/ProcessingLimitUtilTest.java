@@ -57,7 +57,6 @@ import es.upm.fiware.rss.model.DbeTransaction;
  * 
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath:database.xml" })
 public class ProcessingLimitUtilTest {
     /**
@@ -94,7 +93,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Check the valid next period to start.
      */
-    @Test
     public void updateNextPeriodToStart() throws RSSException {
         DbeExpendControl control = new DbeExpendControl();
         DbeExpendLimitPK id = new DbeExpendLimitPK();
@@ -132,7 +130,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Check the invalid next period to start.
      */
-    @Test
     public void updateInvalidNextPeriodToStart() {
         DbeExpendControl control = new DbeExpendControl();
         DbeExpendLimitPK id = new DbeExpendLimitPK();
@@ -149,7 +146,6 @@ public class ProcessingLimitUtilTest {
         }
     }
 
-    @Test
     public void updateAcccumalateValue() {
         DbeExpendControl control = new DbeExpendControl();
         control.setFtExpensedAmount(new BigDecimal(0));
@@ -165,7 +161,6 @@ public class ProcessingLimitUtilTest {
         Assert.assertTrue(new BigDecimal(-4).compareTo(total) == 0);
     }
 
-    @Test
     public void createControl() throws Exception {
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
         tx.setFtChargedAmount(new BigDecimal(4));
@@ -196,7 +191,6 @@ public class ProcessingLimitUtilTest {
         Assert.assertEquals(tx.getBmCurrency().getNuCurrencyId(), control.getId().getNuCurrencyId());
     }
 
-    @Test
     public void getLimitsFromString() {
         List<BigDecimal> limits = utils.getLimitsFromString("[1,2,3]");
         Assert.assertEquals(3, limits.size());
@@ -206,7 +200,6 @@ public class ProcessingLimitUtilTest {
         Assert.assertTrue(limits.contains(new BigDecimal(2)));
     }
 
-    @Test
     public void addValueToLimits() {
         String result = utils.addValueToLimits(new BigDecimal(3.5), "[1]");
         Assert.assertEquals(result, "[1,3.5]");
@@ -220,7 +213,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Test the function to get charged and charged tax amount without total charged amount.
      */
-    @Test
     public void getValueToAddFromTxChargedAndTax() {
         BigDecimal txAmount = new BigDecimal("10.10");
         BigDecimal txTaxAmount = new BigDecimal("0.50");
@@ -234,7 +226,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Test the function to get charged amount without total charged amount.
      */
-    @Test
     public void getValueToAddFromTxChargedAndNotTax() {
         BigDecimal txAmount = new BigDecimal("10.10");
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
@@ -247,7 +238,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Test the function to get internal amount.
      */
-    @Test
     public void getValueToAddFromTxInternalAndNotTax() {
         BigDecimal txAmount = new BigDecimal("10.10");
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();
@@ -260,7 +250,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Test the function to get requested amount and requested tax.
      */
-    @Test
     public void getValueToAddFromTxRequestedAmountAndTax() {
         BigDecimal txAmount = new BigDecimal("10.10");
         BigDecimal txTaxAmount = new BigDecimal("0.60");
@@ -274,7 +263,6 @@ public class ProcessingLimitUtilTest {
     /**
      * Test the function to get nulled requested amount.
      */
-    @Test
     public void getValueToAddFromTxNulledAmount() {
         BigDecimal txAmount = new BigDecimal("0");
         DbeTransaction tx = ProcessingLimitServiceTest.generateTransaction();

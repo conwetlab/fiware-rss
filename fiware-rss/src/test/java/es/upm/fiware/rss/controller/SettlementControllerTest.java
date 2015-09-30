@@ -33,8 +33,6 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
 
@@ -44,9 +42,6 @@ import es.upm.fiware.rss.service.SettlementManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:database.xml", "/META-INF/spring/application-context.xml",
-    "/META-INF/spring/cxf-beans.xml"})
 public class SettlementControllerTest {
     /***
      * Logging system.
@@ -103,7 +98,6 @@ public class SettlementControllerTest {
      */
     @Before
     public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
         model = new ModelMap();
         sessionData = new OauthLoginWebSessionData();
         // prepare mockito
@@ -116,18 +110,10 @@ public class SettlementControllerTest {
         ReflectionTestUtils.setField(controller, "settlementManager", settlementManager);
     }
 
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_TRANSACTIONS.xml", true);
-    }
 
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void testSettlement() {
         logger.debug("into testLogout method");
@@ -147,7 +133,6 @@ public class SettlementControllerTest {
     /**
      * 
      */
-    @Test
     public void testViewTransactions() throws Exception {
         logger.debug("into viewTransactions method");
         ReflectionTestUtils.setField(controller, "settlementManager", null);

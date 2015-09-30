@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmServiceProductType;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -86,7 +85,6 @@ public class ServiceProductTypeDaoImplTest {
      * Test method for
      * {@link es.upm.fiware.rss.dao.impl.SetRevenueShareConfDaoImpl#getRevenueModelsByProviderId(java.lang.String)}.
      */
-    @Test
     public void testGetRevenueModelsByProviderId() {
         // Call method to test
         BmServiceProductType c = serviceProductTypeDao.getByDefault(2);

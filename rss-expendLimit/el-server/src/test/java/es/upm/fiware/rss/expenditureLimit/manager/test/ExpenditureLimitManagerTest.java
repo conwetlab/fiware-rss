@@ -47,13 +47,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * .
- * 
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-@ContextConfiguration({ "classpath:database.xml" })
+
 public class ExpenditureLimitManagerTest {
 
     /**
@@ -96,28 +90,8 @@ public class ExpenditureLimitManagerTest {
     private final String userId = "userId01";
 
     /**
-     * Method to insert data before test.
-     * 
-     * @throws Exception
-     *             from db
-     */
-    @Before
-    public void setUp() throws Exception {
-        databaseLoader.cleanInsert("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
-     * @throws Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        databaseLoader.deleteAll("dbunit/CREATE_DATATEST_EXPLIMIT.xml", true);
-    }
-
-    /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into getGeneralProviderExpLimits method");
@@ -132,7 +106,6 @@ public class ExpenditureLimitManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
@@ -153,7 +126,6 @@ public class ExpenditureLimitManagerTest {
      * 
      * @throws RSSException
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimitsNoService() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
@@ -169,7 +141,6 @@ public class ExpenditureLimitManagerTest {
      * 
      * @throws RSSException
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralProviderExpLimitsNoAppProvider() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
@@ -183,7 +154,6 @@ public class ExpenditureLimitManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralProviderExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into deleteGeneralProviderExpLimits method");
@@ -194,7 +164,6 @@ public class ExpenditureLimitManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void getGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into getGeneralUserExpLimits method");
@@ -231,7 +200,6 @@ public class ExpenditureLimitManagerTest {
      * 
      * @throws RSSException
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralUserExpLimitsNoService() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
@@ -247,7 +215,6 @@ public class ExpenditureLimitManagerTest {
      * 
      * @throws RSSException
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void storeGeneralUserExpLimitsNoAppProvider() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into storeGeneralProviderExpLimits method");
@@ -261,7 +228,6 @@ public class ExpenditureLimitManagerTest {
     /**
      * 
      */
-    @Test
     @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteGeneralUserExpLimits() throws RSSException {
         ExpenditureLimitManagerTest.logger.debug("Into deleteGeneralUserExpLimits method");

@@ -44,7 +44,6 @@ import es.upm.fiware.rss.model.BmService;
 /**
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:database.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
@@ -85,7 +84,6 @@ public class ServiceDaoImplTest {
     /**
      * Test method for {@link es.upm.fiware.rss.dao.impl.ServiceDaoImpl#getServiceByName(java.lang.String)}.
      */
-    @Test
     public void testGetServiceByName() {
         // Call method to test
         BmService c = serviceDao.getServiceByName("ServiceTest1");
