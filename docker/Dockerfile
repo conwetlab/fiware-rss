@@ -3,7 +3,7 @@ MAINTAINER "Francisco de la Vega <fdelavega@fi.upm.es>"
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/
 
-RUN apt-get update && apt-get install -y git maven openjdk-7-jdk 
+RUN apt-get update && apt-get install -y git maven openjdk-7-jdk mysql-client 
 
 RUN git clone https://github.com/conwetlab/fiware-rss.git
 
