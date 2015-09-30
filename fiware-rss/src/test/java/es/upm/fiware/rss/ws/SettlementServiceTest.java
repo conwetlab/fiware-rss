@@ -20,6 +20,8 @@ import es.upm.fiware.rss.model.RSUser;
 import es.upm.fiware.rss.service.SettlementManager;
 import es.upm.fiware.rss.service.UserManager;
 import java.util.MissingFormatArgumentException;
+import javax.ws.rs.core.Response;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -58,7 +60,9 @@ public class SettlementServiceTest {
         when(userManager.getCurrentUser()).thenReturn(user);
         when(userManager.isAdmin()).thenReturn(true);
 
-        toTest.launchSettlement(aggregatorId, providerId, productClass);
+        Response response = toTest.launchSettlement(aggregatorId, providerId, productClass);
+
+        Assert.assertEquals(202, response.getStatus());
     }
 
     @Test
@@ -74,7 +78,9 @@ public class SettlementServiceTest {
         when(userManager.getCurrentUser()).thenReturn(user);
         when(userManager.isAdmin()).thenReturn(false);
 
-        toTest.launchSettlement(aggregatorId, providerId, productClass);
+        Response response = toTest.launchSettlement(aggregatorId, providerId, productClass);
+
+        Assert.assertEquals(202, response.getStatus());
     }
 
     @Test
@@ -91,7 +97,7 @@ public class SettlementServiceTest {
         when(userManager.getCurrentUser()).thenReturn(user);
         when(userManager.isAdmin()).thenReturn(false);
 
-        toTest.launchSettlement(aggregatorId, providerId, productClass);
+        Response response = toTest.launchSettlement(aggregatorId, providerId, productClass);
     }
 
 

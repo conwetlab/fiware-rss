@@ -1,19 +1,19 @@
-/**
- * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+ /**
+  * Copyright (C) 2015, CoNWeT Lab., Universidad Politécnica de Madrid
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU Affero General Public License as
+  * published by the Free Software Foundation, either version 3 of the
+  * License, or (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * GNU Affero General Public License for more details.
+  *
+  * You should have received a copy of the GNU Affero General Public License
+  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
 package es.upm.fiware.rss.ws;
 
 import es.upm.fiware.rss.model.Aggregator;
@@ -24,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingFormatArgumentException;
 import javax.ws.rs.core.Response;
+import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -57,7 +59,9 @@ public class AggregatorServiceTest {
         aggregator.setAggregatorId("aggregator@mail.com");
         aggregator.setAggregatorName("aggregatorName");
 
-        toTest.createAggregator(aggregator);
+        Response response = toTest.createAggregator(aggregator);
+
+        Assert.assertEquals(201 ,response.getStatus());
     }
 
     @Test
@@ -71,6 +75,8 @@ public class AggregatorServiceTest {
         aggregator.setAggregatorName("aggregatorName");
 
         toTest.createAggregator(aggregator);
+
+        fail();
     }
 
     @Test
@@ -88,6 +94,9 @@ public class AggregatorServiceTest {
         when(aggregatorManager.getAPIAggregators()).thenReturn(aggregators);
 
         Response response = toTest.getAggregators();
+
+        Assert.assertEquals(200 ,response.getStatus());
+        Assert.assertEquals(aggregators, response.getEntity());
     }
 
     @Test
@@ -105,6 +114,10 @@ public class AggregatorServiceTest {
         when(aggregatorManager.getAggregator("user@mail.com")).thenReturn(aggregator);
 
         Response response = toTest.getAggregators();
+
+        Assert.assertEquals(200 ,response.getStatus());
+        List listResponse = (List) response.getEntity();
+        Assert.assertEquals(aggregator, listResponse.get(0));
     }
 
 }

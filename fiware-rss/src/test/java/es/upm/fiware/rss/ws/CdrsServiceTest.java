@@ -81,6 +81,8 @@ public class CdrsServiceTest {
         when(cdrsManager.getCDRs(userId, providerId)).thenReturn(list);
 
         Response response = toTest.getCDRs(aggregatorId, providerId);
+
+        Assert.assertEquals(200, response.getStatus());
         Assert.assertEquals(list, response.getEntity());
     }
 
@@ -101,6 +103,8 @@ public class CdrsServiceTest {
         when(cdrsManager.getCDRs(userId, providerId)).thenReturn(list);
 
         Response response = toTest.getCDRs(null, providerId);
+
+        Assert.assertEquals(200, response.getStatus());
         Assert.assertEquals(list, response.getEntity());
     }
 

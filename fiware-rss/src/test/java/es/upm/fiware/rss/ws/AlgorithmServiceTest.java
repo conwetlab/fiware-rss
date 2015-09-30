@@ -42,6 +42,9 @@ public class AlgorithmServiceTest {
     @Test
     public void getAlgoritmsTest() throws Exception {
         Response response = toTest.getAlgoritms();
+
+        org.junit.Assert.assertEquals(200, response.getStatus());
         Assert.isInstanceOf(List.class, response.getEntity());
+
     }
 }

@@ -23,6 +23,9 @@ import es.upm.fiware.rss.service.UserManager;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingFormatArgumentException;
+import javax.ws.rs.core.Response;
+import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -66,7 +69,10 @@ public class ProviderServiceTest {
         when(userManager.getCurrentUser()).thenReturn(user);
         when(userManager.isAdmin()).thenReturn(true);
 
-        toTest.createProvider(provider);
+        Response response = toTest.createProvider(provider);
+
+        Assert.assertEquals(201 ,response.getStatus());
+
     }
 
     @Test
@@ -109,7 +115,9 @@ public class ProviderServiceTest {
         when(userManager.getCurrentUser()).thenReturn(user);
         when(userManager.isAdmin()).thenReturn(true);
 
-        toTest.createProvider(provider);
+        Response response = toTest.createProvider(provider);
+
+        Assert.assertEquals(201 ,response.getStatus());
     }
 
     @Test
@@ -127,12 +135,14 @@ public class ProviderServiceTest {
         when(userManager.isAdmin()).thenReturn(true);
         when(providerManager.getAPIProviders(queryId)).thenReturn(providers);
 
-        toTest.getProviders(queryId);
+        Response response = toTest.getProviders(queryId);
+
+        Assert.assertEquals(200 ,response.getStatus());
+        Assert.assertEquals(providers ,response.getEntity());
     }
 
     @Test
     public void getProvidersNoAdmin1Test() throws Exception {
-        String queryId = "aggregator@mail.com";
         String userId = "user@mail.com";
 
         RSUser user = new RSUser();
@@ -145,13 +155,16 @@ public class ProviderServiceTest {
         when(userManager.isAdmin()).thenReturn(false);
         when(providerManager.getAPIProviders(userId)).thenReturn(providers);
 
-        toTest.getProviders(null);
+        Response response = toTest.getProviders(null);
+
+        Assert.assertEquals(200 ,response.getStatus());
+        Assert.assertEquals(providers ,response.getEntity());
+
     }
 
     @Test
     public void getProvidersNoAdmin2Test() throws Exception {
         String queryId = "aggregator@mail.com";
-        String userId = "user@mail.com";
 
         RSUser user = new RSUser();
         user.setDisplayName("username");
@@ -163,7 +176,10 @@ public class ProviderServiceTest {
         when(userManager.isAdmin()).thenReturn(false);
         when(providerManager.getAPIProviders(queryId)).thenReturn(providers);
 
-        toTest.getProviders(queryId);
+        Response response = toTest.getProviders(queryId);
+
+        Assert.assertEquals(200 ,response.getStatus());
+        Assert.assertEquals(providers ,response.getEntity());
     }
 
     @Test

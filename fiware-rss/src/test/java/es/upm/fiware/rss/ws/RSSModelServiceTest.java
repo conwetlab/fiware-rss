@@ -101,8 +101,6 @@ public class RSSModelServiceTest {
         when(userManager.getCurrentUser()).thenReturn(user);
 
         toTest.deleteRSSModel(null, appProviderId, productClass);
-
-
     }
 
     @Test
@@ -122,6 +120,7 @@ public class RSSModelServiceTest {
         when(rssModelsManager.getRssModels(aggregatorId, appProviderId, productClass)).thenReturn(rssModels);
 
         Response response = toTest.getRssModels(appProviderId, productClass, aggregatorId);
+        Assert.assertEquals(200, response.getStatus());
         Assert.assertEquals(rssModels, response.getEntity());
     }
 
@@ -142,6 +141,8 @@ public class RSSModelServiceTest {
         when(rssModelsManager.getRssModels(aggregatorId, appProviderId, productClass)).thenReturn(rssModels);
 
         Response response = toTest.getRssModels(appProviderId, productClass, aggregatorId);
+
+        Assert.assertEquals(200, response.getStatus());
         Assert.assertEquals(rssModels, response.getEntity());
     }
 
@@ -162,7 +163,9 @@ public class RSSModelServiceTest {
         when(userManager.isAdmin()).thenReturn(false);
         when(rssModelsManager.getRssModels(aggregatorId, appProviderId, productClass)).thenReturn(rssModels);
 
-        toTest.getRssModels(appProviderId, productClass, aggregatorId);
+        Response response = toTest.getRssModels(appProviderId, productClass, aggregatorId);
+
+
     }
 
     @Test
@@ -178,7 +181,10 @@ public class RSSModelServiceTest {
         when(userManager.isAdmin()).thenReturn(true);
         when(rssModelsManager.updateRssModel(model)).thenReturn(model);
 
-        toTest.modifyRSSModel(model);
+        Response response = toTest.modifyRSSModel(model);
+
+        Assert.assertEquals(201, response.getStatus());
+        Assert.assertEquals(model, response.getEntity());
     }
 
     @Test
@@ -194,7 +200,12 @@ public class RSSModelServiceTest {
         when(userManager.isAdmin()).thenReturn(false);
         when(rssModelsManager.updateRssModel(model)).thenReturn(model);
 
-        toTest.modifyRSSModel(model);
+        Response response = toTest.modifyRSSModel(model);
+
+        Assert.assertEquals(201, response.getStatus());
+        Assert.assertEquals(model, response.getEntity());
+
+
     }
 
     @Test
