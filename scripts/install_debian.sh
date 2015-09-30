@@ -12,4 +12,4 @@ if [ -d "$INSPWD/fiware-rss" ]; then
     sudo apt-get install -y  maven
 fi
 
-service mysql restart
+sudo service mysql restart

@@ -11,5 +11,5 @@ if [ -d "$INSPWD/fiware-rss" ]; then
     sudo yum install -y  install maven
 fi
 
-service mysqld restart
-/usr/bin/mysql_secure_installation
+sudo service mysqld restart
+sudo /usr/bin/mysql_secure_installation

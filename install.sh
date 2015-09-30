@@ -78,7 +78,7 @@ sudo sed -i "s|config.callbackURL=.*$|config.callbackURL=$RSS_URL/fiware-rss/cal
 sudo cp $INSPWD/fiware-rss.war $TOMCATPATH/fiware-rss.war
 sudo cp $INSPWD/expenditureLimit.war $TOMCATPATH/expenditureLimit.war
 
-service tomcat7 restart
+sudo service tomcat7 restart
 
 echo "Waiting for table creation"
 sleep 60
