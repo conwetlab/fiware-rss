@@ -361,6 +361,59 @@ This API manages the following fields:
 
 + Response 202
 
+## Reports Collection [/fiware-rss/rss/settlement/reports{?aggregatorId}{?providerId}{?productClass}]
+
+API for the management of RS Reports generated during the settlement process. This API allows to retrieve RS Reports.
+
+This API manages the following fields:
+
+*  **ownerProviderId** - Provider Id of the owner of the model. This provider is the owner of the application and services whose revenues has been aggregated.
+*  **ownerValue** - Amount that has to be paid to the provider.
+*  **productClass** - Id of the Revenue Sharing Model that have been applied. This field represents a group of services or applications whose revenues are distributed in the same way 
+*  **algorithmType** - ID of the algorithm that have been used.
+*  **aggregatorId** - Id of the aggregator that represents the Store instance where the applications and services are offered, and thus, must receive part of the revenues
+*  **aggregatorValue** - Amount that has to be paid to the store owners.
+*  **currency**: Currency of the different amounts.
+*  **timestamp**: Timestamp of the reports.
+*  **stakeholders** - List of providers that are stakeholders of the applications and services included in a given product class, and thus, must receive part of the revenues. For each stakeholder the following fields are included:
+    * **stakeholderId** - provider Id of the Stakeholder
+    * **modelValue** - Amount that has to be paid to the concrete stakeholder
+
+### Get Reports [GET]
+
++ Parameters
+
+    + aggregatorId: fdelavega@conwet.com (optional) - Optional parameter used to get only reports with a given aggregator
+    + providerId: aarranz (optional) - Optional parameter used to get only reports with a given provider 
+    + productClass: orionServices (optional) - Optional parameter used to get only reports with a given product class
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer YOUR_OAUTH2_TOKEN
+
++ Response 200 (application/json)
+
+        [
+            {
+                "ownerProviderId": "fdelavega",
+                "ownerValue": 4578,
+                "productClass": "orionServices",
+                "algorithmType": "FIXED_PERCENTAGE",
+                "aggregatorId": "fdelavega@conwet.com",
+                "aggregatorValue": 3000,
+                "currency": EUR,
+                "timestamp": "2015-07-15T19:00:01"
+                "stakeholders": [
+                    {
+                        "stakeholderId": "aarranz",
+                        "modelValue": 2500
+                    }
+                ]
+            }
+        ]
+
 # Group Expenditure Limit Management
 
 API for the management of expenditure limits. This API allows to define a couple of limits that allow to control the maximun expenses of customers in different periods of time. This API allows to list, create, modify, and delete expenditure limits.
