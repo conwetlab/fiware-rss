@@ -285,7 +285,7 @@ To launch the process is needed to make a ``GET`` request using query strings to
 
 The result of the settlement process are a couple of reports that specify the concrete amount that has to paid to the concrete stakeholders involved. The reports can be accesed using the resource:
 
-* ``/fiware-rss/rss/reports``
+* ``/fiware-rss/rss/settlement/reports``
 
 RS Reports can be retrieved using a ``GET`` request. Following you can find a report serialized in JSON format. ::
 
