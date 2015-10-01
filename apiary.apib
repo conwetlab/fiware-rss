@@ -429,15 +429,16 @@ Note that only a limit can be defined for a given type and a given currency.
 
 This API allows to manage limits for both providers and users. It is important to remark that provider limits are used as the default limits applied, if the user has not defined its own limits.
 
-## Provider Limits Entry [/expenditureLimits/limits/{provider}{?service}{?currency}{?type}]
+## Provider Limits Entry [/expenditureLimits/limits/{aggregator}/{provider}{?service}{?currency}{?type}]
 
 
 ### Get Provider Limits [GET]
 
 + Parameters
 
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider whose limits are defined
-    + service: fiware (optional) - Optional parameter used to filter by service
+    + service: fiware - Id of the service where the limits are created
     + currency: EUR (optional) - Optional parameter used to filter by currency
     + type: weekly (optional) - Optional parameter used to filter by type
 
@@ -484,6 +485,7 @@ This API allows to manage limits for both providers and users. It is important t
 
 + Parameters
 
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider whose limits are defined
 
 + Request (application/json)
@@ -531,6 +533,7 @@ This API allows to manage limits for both providers and users. It is important t
 
 + Parameters
 
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider whose limits are defined
 
 + Request (application/json)
@@ -541,12 +544,13 @@ This API allows to manage limits for both providers and users. It is important t
 
 + Response 204
 
-## User Limits Entry [/expenditureLimits/limits/{provider}/{user}{?service}{?currency}{?type}]
+## User Limits Entry [/expenditureLimits/limits/{aggregator}/{provider}/{user}{?service}{?currency}{?type}]
 
 ### Get User Limits [GET]
 
 + Parameters
 
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider where limits are applied
     + user: fdelavega - User whose limits are defined
     + service: fiware (optional) - Optional parameter used to filter by service
@@ -596,6 +600,7 @@ This API allows to manage limits for both providers and users. It is important t
 
 + Parameters
 
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider where limits are applied
     + user: fdelavega - User whose limits are defined
 
@@ -644,6 +649,7 @@ This API allows to manage limits for both providers and users. It is important t
 
 + Parameters
 
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider where limits are applied
     + user: fdelavega - User whose limits are defined
 
@@ -661,6 +667,7 @@ API for the management of accumulated balances. Accumulated balances are the tot
 
 This API manages the following fields:
 *  **service** - Service where the limits are applied
+*  **aggregator** - Store where the provider belongs
 *  **appProvider** - Provider where limits are applied
 *  **accums** - List of accumulated balances for the existing expenditure limits
 *  **type** - Period of time of the balance. This field can contain perTransaction, daily, weekly, and monthly
@@ -692,6 +699,7 @@ This API manages the following fields:
 
         {
             "service": "fiware",
+            "aggregator": "fdelavega@conwet.com",
             "appProvider": "conwet",
             "accums": [
                 {
@@ -726,6 +734,7 @@ This API manages the following fields:
 
             {
                 "service": "fiware",
+                "aggregator": "fdelavega@conwet.com",
                 "appProvider": "conwet",
                 "chargeType": "C",
                 "currency": "EUR",
@@ -750,6 +759,7 @@ This API manages the following fields:
 
             {
                 "service": "fiware",
+                "aggregator": "fdelavega@conwet.com",
                 "appProvider": "conwet",
                 "chargeType": "C",
                 "currency": "EUR",
@@ -776,6 +786,7 @@ This API manages the following fields:
 
             {
                 "service": "fiware",
+                "aggregator": "fdelavega@conwet.com",
                 "appProvider": "conwet",
                 "currency": "EUR",
                 "type": "weekly"
