@@ -21,7 +21,7 @@ Register Store
 
 The administration interface allows to register new stores, which are charging information sources. To do that, it is required to include the email of the user of the FIWARE identity manager who admins the concrete store instance, and a display name for the store.
 
-Once an Store is registered, it is possible to send charging information to the RSS in order to perform the revenue sharing of its providers.
+Once a Store is registered, it is possible to send charging information to the RSS in order to perform the revenue sharing of its providers.
 
 .. image:: images/installation/rss_sanity_2.png
    :align: center
@@ -145,4 +145,179 @@ The settlement process generates a set of reports that specify how revenues must
 Programmer Guide
 ----------------
 
+The RSS offers its functionality as a REST API that can be used by developers to integrate revenue sharing functionality with their own solutions. This section covers the main aspects of the RSS API and the actions that can be performed with it.
+
+This section is not a detailed reference of the RSS API. You can find this documentation in:
+
+* `Apiary <http://docs.fiwarerss.apiary.io>`__
+* `GitHub pages <http://conwetlab.github.io/fiware-rss/>`__
+
+It is important to remark that the RSS is integrated with the FIWARE Identity Manager for authenticating and authorizing users. In this regard, all the requests made to the RSS API must include an `Authorization` header containing a valid OAuth2 token.
+
+Stores and Providers Management
+===============================
+
+The first step for a developer to integrate the RSS APIs is integrating the aggregator (Store admin) and provider APIs. These APIs are available at:
+
+* Aggregator: ``/fiware-rss/rss/aggregators``
+* Provider: ``/fiware-rss/rss/providers``
+
+Both resources support ``POST`` and ``GET`` operations for creating an retrieving entities using JSON.
+
+Following you can find the JSON serialization of an aggregator. ::
+
+  {
+      "aggregatorName": "WStore",
+      "aggregatorId": "fdelavega@conwet.com"
+  }
+
+The aggregator model contains the following fields:
+
+*  **aggregatorName** - Display name of the given aggregator
+*  **aggragtorId** - Email used to identify the user that is authorized to send changing information (typically an admin of a Store instance)
+
+Following you can find the JSON serialization of a provider. ::
+
+  {
+      "aggregatorId": "fdelavega@conwet.com",
+      "providerId": "conwet",
+      "providerName": "CoNWeT"
+  }
+
+The provider model contain the following fields:
+
+*  **aggregatorId** - Aggregator email that identifies the charging information source (Store instance)
+*  **providerId** - Id of the given provider. Note that this id only needs to be unique in the context of an aggregator, so the same providerId can be used for different providers if the aggregator is different
+*  **providerName** - Display name of the given provider
+
+Revenue Sharing Models Management
+=================================
+
+To be able to calculate the revenue sharing, it is required to have revenue sharing models. RS models are managed in the RSS API using the resource:
+
+* ``/fiware-rss/rss/models``
+
+These models can be created using a ``POST`` request, and retrieved with a ``GET`` request with JSON content type. Following you can find the JSON serialization of a revenue sharing model. ::
+
+  {
+      "ownerProviderId": "fdelavega",
+      "ownerValue": 60,
+      "productClass": "orionServices",
+      "algorithmType": "FIXED_PERCENTAGE",
+      "aggregatorId": "fdelavega@conwet.com",
+      "aggregatorValue": 20,
+      "stakeholders": [
+          {
+              "stakeholderId": "aarranz",
+              "modelValue": 20
+          }
+      ]
+  }    
+
+These models manage the following fields:
+
+*  **ownerProviderId** - Provider Id of the owner of the model. This provider is the owner of the application and services whose revenues will be distributed using the Revenue Sharing Model
+*  **ownerValue** - Value of the owner provider in the Revenue Sharing Model. The semantics of this field depends on the algorithm specified, for example if the algorithm is a fixed precentage, this field will contain the percetage of the revenue that belongs to the owner provider.
+*  **productClass** - Id of the Revenue Sharing Model. This field represents a group of services or applications whose revenues are distributed in the same way
+*  **algorithmType** - ID of the algorithm that is used in this model
+*  **aggregatorId** - Id of the aggregator that represents the Store instance where the applications and services are offered, and thus, must receive part of the revenues
+*  **aggregatorValue** - Value of the aggregator in the Revenue Sharing Model
+*  **stakeholders** - List of providers that are stakeholders of the applications and services included in a given product class, and thus, must receive part of the revenues. For each stakeholder the following fields are included:
+    * **stakeholderId** - provider Id of the Stakeholder
+    * **modelValue** - Value of the stakeholder in the Revenue Sharing Model
+
+Transactions Management
+=======================
+
+Once the RSS has RS models, it is needed to receive charging information. The different transactions that contain the charging information are managed in the RSS using CDR (Charging Detailed Records) documents. CDRs are managed in the RSS using the resource:
+
+* ``/fiware-rss/rss/cdrs``
+
+These CDRs are created using a ``POST`` request and retrieved using a ``GET`` request with JSON content type. Following, you can find the JSON serialization of a CDR. ::
+
+  {
+      "cdrSource": "fdelavega@conwet.com",
+      "productClass": "orionServices",
+      "correlationNumber": 112,
+      "timestamp": "2015-07-15T19:00:01.000Z",
+      "application": "OrionStarterKit",
+      "transactionType": "C",
+      "event": "use",
+      "referenceCode": "555b079d8e05ac213ff15827",
+      "description": "Usage of OrionStarterKit Offering",
+      "chargedAmount": 10,
+      "chargedTaxAmount": 3,
+      "currency": "EUR",
+      "customerId": "amagan",
+      "appProvider": "fdelavega"
+  }
+
+CDRs contain the following fields:
+
+*  **cdrSource** - Id of the aggregator that represent the Store instance that is generating the charging information
+*  **productClass** - Product Class used to identify the revenue sharing model that will be used to distribute the revenues generated in the current transaction
+*  **correlationNumber** - Correlation number of the transaction
+*  **timestamp** - Timestamp of the transaction
+*  **application** - Textual field with the id of the application or service that generates the transaction
+*  **transactionType** - Type of transaction. This field can contain "C" for charges and "R" for refunds
+*  **event** - Textual field that describes the event that generated the transaction (e.g pay-per-use)
+*  **referenceCode** - Reference code that identifies the purchase in the Store instance that generates the transaction
+*  **description** - Textual description of the transaction
+*  **chargedAmount** - Part of the total charged amount to be distributed. The total amount charged to the customer includes also the field chargedTaxAmount
+*  **chargedTaxAmount** - Part of the total charged amount that are taxes. The total amount charged to the customer includes also the field chargedAmount
+*  **currency** - Currency of the transaction
+*  **customerId** - Id of the customer that acquires the given service or application
+*  **appProvider** - provider Id of the owner of the charged applications or services
+
+Settlement Management
+=====================
+
+If some transactions have been received and there are RS models able to manage them, then, it is possible to launch the settlement process. The settlement process is launched using the resource:
+
+* ``/fiware-rss/rss/settlement``
+
+To launch the process is needed to make a ``GET`` request using query strings to filter the scope:
+
+* None: if no query string is provided the settlement process is launched for all the pending transactions.
+* aggregatorId: Id of a given aggregator. If this query string is provided the settlement process is launched  only for those pending transactions generated in the given store.
+* providerId: Id of a given provider. If this query string is provided the settlement process is launched  only for those pending transactions generated in the given store, and belonging to the given provider.
+* productClass: Product class of the RS models.  If this query string is provided the settlement process is launched  only for those pending transactions generated in the given store, belonging to the given provider, and with the given product class.
+
+The result of the settlement process are a couple of reports that specify the concrete amount that has to paid to the concrete stakeholders involved. The reports can be accesed using the resource:
+
+* ``/fiware-rss/rss/reports``
+
+RS Reports can be retrieved using a ``GET`` request. Following you can find a report serialized in JSON format. ::
+
+
+  {
+      "ownerProviderId": "fdelavega",
+      "ownerValue": 4578,
+      "productClass": "orionServices",
+      "algorithmType": "FIXED_PERCENTAGE",
+      "aggregatorId": "fdelavega@conwet.com",
+      "aggregatorValue": 3000,
+      "currency": EUR,
+      "timestamp": "2015-07-15T19:00:01"
+      "stakeholders": [
+          {
+              "stakeholderId": "aarranz",
+              "modelValue": 2500
+          }
+      ]
+  }    
+
+These reports contain the following fields:
+
+*  **ownerProviderId** - Provider Id of the owner of the model. This provider is the owner of the application and services whose revenues has been aggregated.
+*  **ownerValue** - Amount that has to be paid to the provider.
+*  **productClass** - Id of the Revenue Sharing Model that have been applied. This field represents a group of services or applications whose revenues are distributed in the same way
+*  **algorithmType** - ID of the algorithm that have been used.
+*  **aggregatorId** - Id of the aggregator that represents the Store instance where the applications and services are offered, and thus, must receive part of the revenues
+*  **aggregatorValue** - Amount that has to be paid to the store owners.
+*  **currency**: Currency of the different amounts.
+*  **timestamp**: Timestamp of the reports.
+*  **stakeholders** - List of providers that are stakeholders of the applications and services included in a given product class, and thus, must receive part of the revenues. For each stakeholder the following fields are included:
+    * **stakeholderId** - provider Id of the Stakeholder
+    * **modelValue** - Amount that has to be paid to the concrete stakeholder
 
