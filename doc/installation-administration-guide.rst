@@ -364,7 +364,9 @@ Databases
 
 In order to check that MySQL is running and that the `RSS` database has been set up, MySQL client can be used.
 
-* Open MySQL Client and enter `RSS` database: ::
+* Open MySQL Client and enter `RSS` database:
+
+::
 
   $ mysql -u root -proot RSS
   Reading table information for completion of table and column names
@@ -384,7 +386,10 @@ In order to check that MySQL is running and that the `RSS` database has been set
 
   mysql>
 
-* Check that tables has been created: ::
+
+* Check that tables has been created:
+
+::
 
   mysql> show tables;
   +-----------------------------+
