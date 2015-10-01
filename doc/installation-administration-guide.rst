@@ -341,100 +341,119 @@ The following process can be performed by a system administration in order to ve
 List of Running Processes
 =========================
 
-You can execute the command ``ps -ax | grep 'tomcat\|mongo\|virtuoso'`` to check that the Tomcat web server, the Mongo database, and Virtuoso Triple Store are running. It should show a message text similar to the following: ::
+You can execute the command ``ps -ax | grep 'tomcat\|mysql'`` to check that the Tomcat web server and the MySQL database. It should show a message text similar to the following: ::
 
-     1048 ?        Ssl    0:51 /usr/bin/mongod --config /etc/mongodb.conf
-     1112 pts/1    SNl    0:01 virtuoso-t -f
-     1152 ?        Sl     0:03 /usr/lib/jvm/java-8-oracle/bin/java -Djava.util.logging.config.file=/home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dhttp.nonProxyHosts=localhost|127.0.0.1|CONWETLABJORTIZ -Djava.endorsed.dirs=/home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26/endorsed -classpath /home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26/bin/bootstrap.jar:/home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26/bin/tomcat-juli.jar -Dcatalina.base=/home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26 -Dcatalina.home=/home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26 -Djava.io.tmpdir=/home/jortiz/conwet/Repository-RI/apache-tomcat-8.0.26/temp org.apache.catalina.startup.Bootstrap start
-     2031 pts/1    S+     0:00 grep --color=auto --exclude-dir=.bzr --exclude-dir=.cvs --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn tomcat\|mongo\|virtuoso
-
+  23397 ?        Ssl    0:00 /usr/sbin/mysqld
+  24459 ?        Sl     1:15 /usr/lib/jvm/java-7-openjdk-amd64/bin/java -Djava.util.logging.config.file=/var/lib/tomcat7/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.awt.headless=true -Xmx128m -XX:+UseConcMarkSweepGC -Djava.endorsed.dirs=/usr/share/tomcat7/endorsed -classpath /usr/share/tomcat7/bin/bootstrap.jar:/usr/share/tomcat7/bin/tomcat-juli.jar -Dcatalina.base=/var/lib/tomcat7 -Dcatalina.home=/usr/share/tomcat7 -Djava.io.tmpdir=/tmp/tomcat7-tomcat7-tmp org.apache.catalina.startup.Bootstrap start
+  24921 pts/0    S+     0:00 grep --color=auto tomcat\|mysql
 
 Network interfaces Up & Open
 ============================
 
 To check whether the ports in use are listening, execute the command ``netstat -ntpl``. The expected results must be somehow similar to the following: ::
 
-    tcp        0      0 127.0.0.1:28017         0.0.0.0:*               ESCUCHAR    -               
-    tcp        0      0 127.0.1.1:53            0.0.0.0:*               ESCUCHAR    -               
-    tcp        0      0 0.0.0.0:1111            0.0.0.0:*               ESCUCHAR    11271/virtuoso-t
-    tcp        0      0 127.0.0.1:631           0.0.0.0:*               ESCUCHAR    -               
-    tcp        0      0 0.0.0.0:8890            0.0.0.0:*               ESCUCHAR    11271/virtuoso-t
-    tcp        0      0 127.0.0.1:27017         0.0.0.0:*               ESCUCHAR    -               
-    tcp6       0      0 :::8080                 :::*                    ESCUCHAR    11286/java      
-    tcp6       0      0 ::1:631                 :::*                    ESCUCHAR    -               
-    tcp6       0      0 127.0.0.1:8005          :::*                    ESCUCHAR    11286/java      
-    tcp6       0      0 :::8009                 :::*                    ESCUCHAR    11286/java      
-
+  Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+  tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -               
+  tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      -               
+  tcp6       0      0 :::22                   :::*                    LISTEN      -               
+  tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      -               
+  tcp6       0      0 :::8080                 :::*                    LISTEN      -  
 
 Databases
 =========
 
-The last step in the sanity check (once that we have identified the processes and ports) is to check the databases that has to be up and accept queries. For that, we execute the following commands:
+In order to check that MySQL is running and that the `RSS` database has been set up, MySQL client can be used.
 
-* MongoDb ::
+* Open MySQL Client and enter `RSS` database: ::
 
-    $ mongo
-    MongoDB shell version: 2.4.9
-    connecting to: test
-    Welcome to the MongoDB shell.
-    For interactive help, type "help".
-    For more comprehensive documentation, see
-    http://docs.mongodb.org/
-    Questions? Try the support group
-    http://groups.google.com/group/mongodb-user
-    > db
+  $ mysql -u root -proot RSS
+  Reading table information for completion of table and column names
+  You can turn off this feature to get a quicker startup with -A
+
+  Welcome to the MySQL monitor.  Commands end with ; or \g.
+  Your MySQL connection id is 143
+  Server version: 5.5.41-0ubuntu0.14.04.1 (Ubuntu)
+
+  Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.
+
+  Oracle is a registered trademark of Oracle Corporation and/or its
+  affiliates. Other names may be trademarks of their respective
+  owners.
+
+  Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+  mysql>
+
+* Check that tables has been created: ::
+
+  mysql> show tables;
+  +-----------------------------+
+  | Tables_in_RSS               |
+  +-----------------------------+
+  | bm_country                  |
+  | bm_currency                 |
+  | bm_customer_type            |
+  | bm_language                 |
+  | bm_methods_of_payment       |
+  | bm_ob                       |
+  | bm_ob_country               |
+  | bm_ob_mop                   |
+  | bm_paymentbroker            |
+  | bm_pb_mop                   |
+  | bm_price_point              |
+  | bm_product                  |
+  | bm_product_vs_ob            |
+  | bm_servdeploy_mop           |
+  | bm_service                  |
+  | bm_service_deployment       |
+  | bm_service_product_type     |
+  | dbe_aggregator              |
+  | dbe_aggregator_appprovider  |
+  | dbe_appprovider             |
+  | dbe_appprovider_application |
+  | dbe_expend_control          |
+  | dbe_expend_limit            |
+  | dbe_system_properties       |
+  | dbe_transaction             |
+  | set_revenue_share_conf      |
+  | share_conf_provider         |
+  +-----------------------------+
+  27 rows in set (0.00 sec)
 
 
-It should show a message text similar to the following: ::
-
-    test
-
-
-* Virtuoso ::
-    
-    $isql
-    OpenLink Interactive SQL (Virtuoso), version 0.9849b.
-    Type HELP; for help and EXIT; to exit.
-    SQL> SPARQL SELECT DISTINCT ?g WHERE { GRAPH ?g { ?s ?q ?l }};
-
-
-It should show a message text similar to the following: ::
-
-    g
-    LONG VARCHAR
-    _______________________________________________________________________________
-
-    http://www.openlinksw.com/schemas/virtrdf#
-    http://www.w3.org/ns/ldp#
-    http://localhost:8890/sparql
-    http://localhost:8890/DAV/
-    http://www.w3.org/2002/07/owl#
-
-    5 Rows. -- 90 msec.
-
+.. note::
+   This Test is asumming that you are using the user *root* with password *root* and a database called *RSS*.
 
 --------------------
 Diagnosis Procedures
 --------------------
 
-The Diagnosis Procedures are the first steps that a System Administrator has to take to locate the source of an error in a GE. Once the nature of the error is identified by these tests, the system admin can resort to more concrete and specific testing to pinpoint the exact point of error and a possible solution.
+The Diagnosis Procedures are the first steps that a System Administrator will perform to locate the source of an error in the Application. It is to be considered a first line of support diagnosis; once identified, it can be passed onto a higher level for specific analysis. This however, is out of the scope of this section.
 
-The resource load of the Repository-RI strongly depends on the number of concurrent requests received as well as on the free main memory and disk space:
+The first step that can be follow in order to locate a problem is running the tests of the software: ::
 
-* Mimimum available main memory: 1 GB
-* Mimimum available hard disk space: 2 GB
+  $ mvn test -fae
+
+Apart from the tests specified in the standard sections that follow, the logs can provide relevant diagnosis information:
+
+* The logs of the RSS and RSModels API are stored in {Apache Tomcat Installation}/logs/fiware-rss/main.logs
+* The logs of the Balance Accumulate and Limit Management API are stored in {Apache Tomcat Installation}/logs/expendLimit/expendLimit.log
+
 
 Resource availability
 =====================
 
-State the amount of available resources in terms of RAM and hard disk that are necessary to have a healthy enabler. This means that bellow these thresholds the enabler is likely to experience problems or bad performance.
+The resource load of the RSS strongly depends on the number of concurrent requests received as well as on the free main memory and disk space. In this regard, the application will run correctly if the system adheres to the minimal requirements.  
 
 Resource consumption
 ====================
 
-Resource consumption strongly depends on the load, especially on the number of concurrent requests.
+There are two main processes consuming resources:
 
-The main memory consumption of the Tomcat application server should be between 48MB and 1024MB. These numbers can vary significantly if you use a different application server.
+* MySQL Server
+* 2 Apache Tomcat Server
+
+Resource consumption strongly depends on the load, especially on the number of concurrent transactions and in the number of concurrent requests by administrators. So, the expected resource consumption for these processes is quite low.
 
 I/O flows
 =========
