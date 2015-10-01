@@ -26,7 +26,7 @@ Operating System Support
 The RSS has been tested in the following Operating Systems:
 
 * Ubuntu 12.04, 14.04
-* CentOS 6.3, 6.5, 7.0
+* CentOS 7.0
 
 Software Requirements
 ===================== 
@@ -77,9 +77,10 @@ To use the installation script execute the following command: ::
 
 The installation script, installs MySQL and creates the root user. During this process you will be asked to provide a password for this user:
 
-* Ubuntu/Debian
+* Ubuntu
 
 .. image:: /images/installation/rss_inst.png
+   :align: center
 
 * CentOS ::
 
@@ -139,7 +140,7 @@ Then, the installation script creates the `RSS` database. In order to be able to
     root
     > Password:
 
-The RSS uses the `FIWARE Identity Manager <https://account.lab.fiware.org/>`__  for authenticating user. In this regard, the installation script asks you to provide valid OAuth2 credentials for your application. Additionally, it is also required to include the URL where the service is going to run (only host and port): ::
+The RSS uses the `FIWARE Identity Manager <https://account.lab.fiware.org/>`__  for authenticating users. In this regard, the installation script asks you to provide valid OAuth2 credentials for your application. Additionally, it is also required to include the URL where the service is going to run (only host and port). You can find more details on how register your RSS instance in the IdM in section *OAuth2 Configuration* ::
 
     ------------------------------------------------------------------------
     The RSS requires a FIWARE IdM to authenticate users. Please provide valid FIWARE credentials for this application
@@ -160,7 +161,7 @@ Installing Basic Dependencies
 
 The basic dependencies of the RSS can be easily installed using `apt-get` or `yum`, depending on the system. 
 
-* Ubuntu/Debian ::
+* Ubuntu ::
 
   # apt-get install -y openjdk-7-jdk tomcat7 mysql-client mysql-server
 
@@ -174,9 +175,9 @@ The basic dependencies of the RSS can be easily installed using `apt-get` or `yu
 Compiling Source Code
 +++++++++++++++++++++
 
-If you have downloaded the source code of the RSS from its GIT repository, you will need to compile the source. To do that it is needed to have `maven` installed.
+If you have downloaded the source code of the RSS from its GIT repository, you will need to compile the sources. To do that it is needed to have `maven` installed.
 
-* Ubuntu/Debian ::
+* Ubuntu ::
 
   # apt-get install maven
 
@@ -194,9 +195,28 @@ Once maven is installed, you can compile the source code executing the following
 Deploying the Software
 ----------------------
 
-The RSS reads its properties from `database.properties` and `oauth.properties` files, located at `/etc/default/rss`. 
+The RSS reads its properties from `database.properties` and `oauth.properties` files, located at `/etc/default/rss`, so the first step for deploying the RSS is creating this directory. ::
+
+  # mkdir /etc/default/rss
+
+Once this directory has been created, the next step is copying the properties files (located in the properties folder) to this location. ::
+
+  # cp properties/database.properties /etc/default/rss/database.properties 
+  # cp properties/oauth.properties /etc/default/rss/oauth.properties 
 
 The concrete values contained in the properties files are described in *Configuration* section.
+
+Finally, the last step is deploying the war files in Tomcat.
+
+* Ubuntu ::
+
+  # cp fiware-rss.war /var/lib/tomcat7/fiware-rss.war
+  # cp expenditureLimit.war /var/lib/tomcat7/expenditureLimit.war
+
+* CentOS ::
+
+  # cp fiware-rss.war /var/lib/tomcat/fiware-rss.war
+  # cp expenditureLimit.war /var/lib/tomcat/expenditureLimit.war
 
 -------------
 Configuration
@@ -207,7 +227,7 @@ This section explains how to configure the RSS. If you have used the provided sc
 Database Configuration
 ======================
 
-Database connection in configured in `/etc/default/rss/database.properties` which has the following structure: ::
+Database connection in configured in `/etc/default/rss/database.properties`, which has the following structure: ::
 
     ## Filter usage
     database.url=jdbc:mysql://localhost:3306/RSS
@@ -215,10 +235,24 @@ Database connection in configured in `/etc/default/rss/database.properties` whic
     database.password=root
     database.driverClassName=com.mysql.jdbc.Driver
 
+This file contains the following properties:
+
+* **database.url**: URL where the MySQL database is located. it includes the host, the port, and the database name.
+* **database.username**: User name used to access the database.
+* **database.password**: Password of the user used to access the database.
+* **database.dirverClassName**: Name of the driver class used to connect to the database
 
 
 OAuth2 Configuration
 ====================
+
+TThe RSS uses the `FIWARE Identity Manager <https://account.lab.fiware.org/>`__. In this regard, it is needed to register the application in this system in order to retrieve valid credentials. For registering the application is required to provide the following information:
+
+* A name.
+* A description.
+* The URL of the RSS. Must be something like `http://[HOST]:[PORT]/fiware-rss/`
+* The callback URL of the RSS. Must be something like `http://[HOST]:[PORT]/fiware-rss/callback?client_name=FIWAREClient`
+
 
 OAuth2 information is configured in `/etc/default/rss/oauth.properties`, which has the following structure: ::
 
@@ -234,6 +268,19 @@ OAuth2 information is configured in `/etc/default/rss/oauth.properties`, which h
     config.userInfoUrl=/user?access_token=
     config.grantedRole=Provider
 
+This file contains the following properties:
+
+* **config.baseUrl**: URL of the FIWARE Identity Manager used to authenticate users.
+* **config.logoutPath**: URL path used for logging out users from the RSS.
+* **config.client_id**: ID of the application in the identity manager.
+* **config.client_secret**: Secret of the application in the identity manager.
+* **config.callbackURL**: URL of the RSS used to receive authorization callbacks.
+* **config.callbackPath**: URL path of the RSS used to receive authorization callbacks.
+* **config.authorizeUrl**: URL path of the identity manager used for making authorization requests.
+* **config.accessTokenUrl**: URL path of the identity manager used for making access token requests.
+* **config.userInfoUrl**: URL path of the identity manager used for retrieving user information.
+* **config.grantedRole**: Role defined in the application in the identity manager for identifying admins of the RSS.
+
 -----------------------
 Sanity check procedures
 -----------------------
@@ -246,53 +293,50 @@ End to End testing
 ==================
 
 Although one End to End testing must be associated to the Integration Test, we can show here a quick testing to check that everything is up and running.
-The first test step involves creating a new resource as well as the implicit creation of a collection. The second test step checks if meta information in different file formats can be obtained.
+The following process can be performed by a system administration in order to verify the installation.
 
-Step 1 - Create the Resource
-----------------------------
+1. Access the URL of the RSS (http://HOST:PORT/fiware-rss). You should be redirected to the IdM in order to login.
 
-Create a file named resource.xml with resource content like this. ::
+.. image:: /images/installation/rss_sanity_1.png
+   :align: center
 
-    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <resource>
-	   <creator>Yo</creator>
-	   <creationDate></creationDate>
-	   <modificationDate></modificationDate>
-	   <name>Resource Example</name>
-	   <contentUrl>http://localhost:8080/FiwareRepository/v2/collec/collectionA/collectionB/ResourceExample</contentUrl>
-	   <contentFileName>http://whereistheresource.com/ResourceExample</contentFileName>
-    </resource>
+2. Register a new Store, providing the admin email and a display name.
 
+.. image:: /images/installation/rss_sanity_2.png
+   :align: center
 
-Send the request: ::
+3. Register a new provider, including an id and a display name, and selecting the previously registered store.
 
-    curl -v -H "Content-Type: application/xml" -X POST --data "@resource.xml" http://[SERVER_URL]:8080/FiwareRepository/v2/collec/
+.. image:: /images/installation/rss_sanity_3.png
+   :align: center
 
+4. Verify that the provider has been created by clicking on `View Providers in database`.
 
-You should receive a HTTP/1.1 201 as status code
+.. image:: /images/installation/rss_sanity_4.png
+   :align: center
 
-Create a file named resourceContent.txt with arbitrary content. ::
+.. image:: /images/installation/rss_sanity_5.png
+   :align: center
 
-    curl -v -H "Content-Type: text/plain" -X PUT --data "@resourceContent.txt" http://localhost:8080/FiwareRepository/v2/collec/collectionA/collectionB/ResourceExample
+5. Go back to the home page and click `Create RS model`.
 
-
-You should receive a HTTP/1.1 200 as status code
+.. image:: /images/installation/rss_sanity_6.png
+   :align: center
 
 
-Step 2 - Retrieve meta information
-----------------------------------
+6. Include a percentage value for the store and for the provider (The total must be equal to 100). Provide a product class for identifying the model and click on `Create`.
 
-Test HTML Response:
-
-Open ``http://[SERVER_URL]:8080/FiwareRepository/v2/collec/collectionA/`` in your web browser. You should receive meta information about the implicit created collection in HTML format.
-
-Test Text Response: ::
-
-    curl -v -H "Content-Type: text/plain" -X GET http://[SERVER_URL]:8080/FiwareRepository/v2/collectionA/collectionB/ResourceExample
+.. image:: /images/installation/rss_sanity_7.png
+   :align: center
 
 
-You should receive meta information about the implicit created collection in text format. 
-You may use curl to also test the other supported content types (``application/json``, ``application/rdf+xml``, ``text/turtle``, ``text/n3``, ``text/html``, ``text/plain``, ``application/xml``)
+7. Go back to the home page, and verify that the model has been created clicking on `View RS models in database`.
+
+.. image:: /images/installation/rss_sanity_8.png
+   :align: center
+
+.. image:: /images/installation/rss_sanity_9.png
+   :align: center
 
 List of Running Processes
 =========================
