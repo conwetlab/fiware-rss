@@ -26,7 +26,7 @@ The Revenue Settlement and Sharing System (RSS) GE is in charge of distributing 
 
 The instructions to install the RSS can be found at [the Installation Guide](http://fiware-rss.readthedocs.org/en/latest/installation-administration-guide.html). You can install the software in three different ways:
 
-* Using the provided war packages
+* Using the provided script (`install.sh`)
 * Using a [Docker Container](https://hub.docker.com/r/fiware/rss/)
 * Manually
 
