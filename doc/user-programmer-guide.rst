@@ -298,7 +298,7 @@ RS Reports can be retrieved using a ``GET`` request. Following you can find a re
       "aggregatorId": "fdelavega@conwet.com",
       "aggregatorValue": 3000,
       "currency": EUR,
-      "timestamp": "2015-07-15T19:00:01"
+      "timestamp": "2015-07-15T19:00:01",
       "stakeholders": [
           {
               "stakeholderId": "aarranz",
