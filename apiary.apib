@@ -431,7 +431,7 @@ Note that only a limit can be defined for a given type and a given currency.
 
 This API allows to manage limits for both providers and users. It is important to remark that provider limits are used as the default limits applied, if the user has not defined its own limits.
 
-## Provider Limits Entry [/expenditureLimits/limits/{aggregator}/{provider}{?service}{?currency}{?type}]
+## Provider Limits Entry [/expenditureLimit/limits/{aggregator}/{provider}{?service}{?currency}{?type}]
 
 
 ### Get Provider Limits [GET]
@@ -546,7 +546,7 @@ This API allows to manage limits for both providers and users. It is important t
 
 + Response 204
 
-## User Limits Entry [/expenditureLimits/limits/{aggregator}/{provider}/{user}{?service}{?currency}{?type}]
+## User Limits Entry [/expenditureLimit/limits/{aggregator}/{provider}/{user}{?service}{?currency}{?type}]
 
 ### Get User Limits [GET]
 
@@ -679,7 +679,7 @@ This API manages the following fields:
 *  **chargeType** - Type of transaction. This value can contain "C" for charges and "R" for refunds
 *  **amount** - Amount charged in a transaction
 
-## User balance Entry [/expenditureLimits/balance/{user}{?service}{?appProvider}{?currency}{?type}]
+## User balance Entry [/expenditureLimit/balance/{user}{?service}{?appProvider}{?currency}{?type}]
 
 ### Get User Balance [GET]
 
@@ -770,7 +770,7 @@ This API manages the following fields:
 
 + Response 200 
 
-## Reset User Balance Entry [/expenditureLimits/balance/{user}/reset]
+## Reset User Balance Entry [/expenditureLimit/balance/{user}/reset]
 
 ### Reset User Balance [PUT]
 
