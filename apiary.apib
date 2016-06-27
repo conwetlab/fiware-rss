@@ -537,6 +537,9 @@ This API allows to manage limits for both providers and users. It is important t
 
     + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider whose limits are defined
+    + service: fiware - Id of the service where the limits are created
+    + currency: EUR (optional) - Optional parameter used to filter by currency
+    + type: weekly (optional) - Optional parameter used to filter by type
 
 + Request (application/json)
 
@@ -555,7 +558,7 @@ This API allows to manage limits for both providers and users. It is important t
     + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider where limits are applied
     + user: fdelavega - User whose limits are defined
-    + service: fiware (optional) - Optional parameter used to filter by service
+    + service: fiware - Id of the service where the limits are created
     + currency: EUR (optional) - Optional parameter used to filter by currency
     + type: weekly (optional) - Optional parameter used to filter by type
 
@@ -654,6 +657,9 @@ This API allows to manage limits for both providers and users. It is important t
     + aggregator: fdelavega@conwet.com - Store where the provider belongs
     + provider: conwet - Provider where limits are applied
     + user: fdelavega - User whose limits are defined
+    + service: fiware - Id of the service where the limits are created
+    + currency: EUR (optional) - Optional parameter used to filter by currency
+    + type: weekly (optional) - Optional parameter used to filter by type
 
 + Request (application/json)
 
@@ -679,15 +685,16 @@ This API manages the following fields:
 *  **chargeType** - Type of transaction. This value can contain "C" for charges and "R" for refunds
 *  **amount** - Amount charged in a transaction
 
-## User balance Entry [/expenditureLimit/balance/{user}{?service}{?appProvider}{?currency}{?type}]
+## User balance Entry [/expenditureLimit/balance/{user}{?service}{?aggregator}{?appProvider}{?currency}{?type}]
 
 ### Get User Balance [GET]
 
 + Parameters
 
     + user: fdelavega - User owner of the accumulated balance
-    + service: fiware - (optional) Optional parameter used to filter by service
-    + appProvider: conwet (optional) - Optional parameter used to filter by provider
+    + service: fiware - Optional parameter used to filter by service
+    + aggregator: fdelavega@conwet.com - Store where the provider belongs
+    + appProvider: conwet - Optional parameter used to filter by provider
     + currency: EUR (optional) - Optional parameter used to filter by currency
     + type: weekly (optional) - Optional parameter used to filter by type
 
